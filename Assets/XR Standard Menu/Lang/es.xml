@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+	<!-- Main Menu -->
+	<string name="simVersion">V 0.0.0</string>
+	<string name="simName">XR Menu</string>
+	<string name="logout">CERRAR SESIÓN</string>
+	<string name="login">INICIAR SESIÓN</string>
+	<string name="play">COMENZAR</string>
+	<string name="settings">OPCIONES</string>
+	<string name="score">PUNTUACIÓN</string>
+	<string name="controls">CONTROLES</string>
+	<string name="exit">SALIR</string>
+	<!-- Login -->
+	<string name="welcomeToIA">¡Te damos la bienvenida!</string>
+	<string name="IAInformationPreLogin">Ingrese el código de activación y tu PIN para comenzar.</string>
+	<string name="IAInformationPostLogin">¡Datos ingresados exitosamente! Confirme para continuar.</string>
+	<string name="login_status">Ingresa código y PIN para continuar.</string>
+	<string name="activationCode">Código de Activación</string>
+	<string name="userPIN">PIN de Usuario</string>
+	<string name="confirm">INICIAR SESIÓN</string>
+	<string name="active">ACTIVADO</string>
+	<string name="error">ERROR</string>
+	<string name="expired">EXPIRADO</string>
+	<string name="verificar">VERIFICANDO...</string>
+	<string name="first_welcome">Bienvenido</string>
+	<string name="verifyingLicense">Comprobando licencia</string>
+	<string name="licenseExpiredMessage">Lo sentimos, su licencia ya no se encuentra vigente</string>
+	<!-- Scene Selector -->
+	<string name="sceneDescription">Descripción de escena</string>
+	<string name="selectYourScene">Zonas de Entrenamiento</string>
+	<string name="select">SELECCIONAR</string>
+	<string name="loading">Cargando. . .</string>
+	<!-- Settings -->
+	<string name="settingsTittle">Opciones</string>
+	<string name="music">Música</string>
+	<string name="subtitles">Subtítulos</string>
+	<string name="language">Idioma</string>
+	<string name="english">English</string>
+	<string name="spanish">Español</string>
+	<!-- Exit & LogOut -->
+	<string name="quitMessage">¿Está seguro/a de que quiere salir?</string>
+	<string name="logoutMessage">¿Está seguro/a de que quiere cerrar sesión?</string>
+	<string name="yes">SÍ</string>
+	<!-- Scores -->
+	<string name="loadingResults">Cargando resultados</string>
+	<string name="successfulSceneTitle">SIMULACIÓN EXITOSA</string>
+	<string name="failedSceneTitle">SIMULACIÓN FALLIDA</string>
+	<string name="SM_detailScreen_title_approbed">SIMULACIÓN EXITOSA</string>
+	<string name="SM_detailScreen_title_fail">SIMULACIÓN FALLIDA</string>
+	<string name="SM_detailScreen_descript_approbed">¡Felicidades! Ha completado la simulación de manera exitosa, alcanzando los objetivos principales.</string>
+	<string name="SM_detailScreen_descript_fail">No ha completado la simulación de manera exitosa. Observe qué objetivos no se cumplieron para poder mejorar en el próximo intento.</string>
+	<string name="successfulSceneDescriptionWithTime">¡Felicidades! Ha completado la simulación de manera exitosa, alcanzando los objetivos principales dentro del tiempo establecido.</string>
+	<string name="successfulSceneDescriptionWithoutTime">¡Felicidades! Ha completado la simulación de manera exitosa, alcanzando los objetivos principales.</string>
+	<string name="failedSceneDescription">No ha completado la simulación de manera exitosa. Observe qué objetivos no se cumplieron para poder mejorar en el próximo intento.</string>
+	<string name="uppercaseTime">TIEMPO</string>
+	<string name="lowercaseTime">Tiempo</string>
+	<string name="backToMenu">VOLVER AL MENÚ</string>
+	<string name="scores">PUNTUACIONES</string>
+	<string name="attempts">Intentos</string>
+	<string name="scene">Escena</string>
+	<string name="date">Fecha</string>
+	<string name="points">Puntos</string>
+	<string name="view">Ver</string>
+	<string name="back">VOLVER</string>
+	<string name="continue">CONTINUAR</string>
+	<!-- Custom scenes (for scores) -->
+	<string name="sceneName1">Nombre de Escena 1</string>
+	<string name="sceneName2">Nombre de Escena 2</string>
+	<string name="sceneName3">Nombre de Escena 3</string>
+	<!-- Add a string for every scene name in the project, with the same format as the above -->
+	<string name="sceneObjective1-1">Realizar el objetivo de escena 1</string>
+	<string name="sceneObjective1-2">Realizar el objetivo de escena 2</string>
+	<string name="sceneObjective1-3">Realizar el objetivo de escena 3</string>
+	<string name="sceneObjective1-4">Realizar el objetivo de escena 4</string>
+	<string name="sceneObjective1-5">Realizar el objetivo de escena 5</string>
+	<!-- Add a string for every scene objective in the project, with the same format as the above (scene-objective) -->
+	<!-- Controls -->
+	<string name="keyboard">Teclado</string>
+	<string name="joystick">Mando</string>
+	<string name="hands">MANOS</string>
+	<string name="uppercaseWheel">VOLANTE</string>
+	<string name="lowercaseWheel">Volante</string>
+	<string name="pedals">PEDALES</string>
+	<string name="spaceKey">Espacio</string>
+	<!-- Keyboard -->
+	<string name="jumpKey">Saltar</string>
+	<string name="click1Key">Click1</string>
+	<string name="click2Key">Click2</string>
+	<string name="returnToMenuKey">Volver al menú</string>
+	<string name="runKey">Correr</string>
+	<string name="crouchKey">Agacharse</string>
+	<string name="microphoneKey">Micrófono</string>
+	<string name="movementKey">Movimiento</string>
+	<!-- Joystick -->
+	<!-- The following list shows the default names of the steering wheel buttons, do not change any of them -->
+	<string name="psKey">PS</string>
+	<string name="r1Key">R1</string>
+	<string name="r2Key">R2</string>
+	<string name="r3Key">R3</string>
+	<string name="l1Key">L1</string>
+	<string name="l2Key">L2</string>
+	<string name="l3Key">L3</string>
+	<string name="upKey">Arriba</string>
+	<string name="downKey">Abajo</string>
+	<string name="rightKey">Derecha</string>
+	<string name="leftKey">Izquierda</string>
+	<string name="triangleKey">Triángulo</string>
+	<string name="squareKey">Cuadrado</string>
+	<string name="circleKey">Circulo</string>
+	<string name="crossKey">Equis</string>
+	<string name="touchPadKey">Pad Táctil</string>
+	<string name="shareKey">Compartir</string>
+	<string name="optionsKey">Opciones</string>
+	<!-- Here you must change the translations to the action you want the steering wheel/user to do -->
+	<string name="psInput">Entrada PS</string>
+	<string name="r1Input">Entrada R1</string>
+	<string name="r2Input">Entrada R2</string>
+	<string name="r3Input">Entrada R3</string>
+	<string name="l1Input">Entrada L1</string>
+	<string name="l2Input">Entrada L2</string>
+	<string name="l3Input">Entrada L3</string>
+	<string name="upInput">Entrada Arriba</string>
+	<string name="downInput">Entrada Abajo</string>
+	<string name="rightInput">Entrada Der</string>
+	<string name="leftInput">Entrada Izq</string>
+	<string name="triangleInput">Entrada Triángulo</string>
+	<string name="squareInput">Entrada Cuadrado</string>
+	<string name="circleInput">Entrada Circulo</string>
+	<string name="crossInput">Entrada Equis</string>
+	<string name="touchPadInput">Entrada Pad Táctil</string>
+	<string name="shareInput">Entrada Compartir</string>
+	<string name="optionsInput">Entrada Opciones</string>
+	<!-- VR -->
+	<!-- The following list shows the default names of the steering wheel buttons, do not change any of them -->
+	<string name="leftTriggerKey">Gatillo Izq</string>
+	<string name="rightTriggerKey">Gatillo Der</string>
+	<string name="xKey">Botón X</string>
+	<string name="yKey">Botón Y</string>
+	<string name="aKey">Botón A</string>
+	<string name="bKey">Botón B</string>
+	<string name="menuKey">Menú</string>
+	<string name="oculusKey">Oculus</string>
+	<string name="leftThumbstickKey">Analógico Izq</string>
+	<string name="rightThumbstickKey">Analógico Der</string>
+	<string name="leftGripKey">Agarre Izq</string>
+	<string name="rightGripKey">Agarre Der</string>
+	<!-- Here you must change the translations to the action you want the steering wheel/user to do -->
+	<string name="leftTriggerInput"> Entrada Gatillo Izq</string>
+	<string name="rightTriggerInput">Entrada Gatillo Der</string>
+	<string name="xInput">Entrada X</string>
+	<string name="yInput">Entrada Y</string>
+	<string name="aInput">Entrada A</string>
+	<string name="bInput">Entrada B</string>
+	<string name="menuInput">Entrada Menú</string>
+	<string name="oculusInput">Entrada Oculus</string>
+	<string name="leftThumbstickInput">Entrada Analógico Izq</string>
+	<string name="rightThumbstickInput">Entrada Analógico Der</string>
+	<string name="leftGripInput">Entrada Agarre Izq</string>
+	<string name="rightGripInput">Entrada Agarre Der</string>
+	<!-- Wheel -->
+	<!-- The following list shows the default names of the steering wheel buttons, do not change any of them -->
+	<string name="leftPaddle">Botón Paleta Izq</string>
+	<string name="rightPaddle">Botón Paleta Der</string>
+	<string name="upButton">Botón Arriba</string>
+	<string name="leftButton">Botón Izquierda</string>
+	<string name="rightButton">Botón Derecha</string>
+	<string name="downButton">Botón Abajo</string>
+	<string name="triangleButton">Botón Triángulo</string>
+	<string name="circleButton">Botón Circulo</string>
+	<string name="squareButton">Botón Cuadrado</string>
+	<string name="crossButton">Botón Equis</string>
+	<string name="l2Button">Botón L2</string>
+	<string name="r2Button">Botón R2</string>
+	<string name="l3Button">Botón L3</string>
+	<string name="r3Button">Botón R3</string>
+	<string name="+Button">Botón +</string>
+	<string name="-Button">Botón -</string>
+	<string name="enterButton">Botón Enter</string>
+	<string name="adjustmentDial">Dial de ajuste</string>
+	<string name="optionsButton">Botón Opciones</string>
+	<string name="shareButton">Botón Compartir</string>
+	<string name="psButton">Botón PS</string>
+	<!-- Here you must change the translations to the action you want the steering wheel/user to do -->
+	<string name="wheelInput1">Entrada 1</string>
+	<string name="wheelInput2">Entrada 2</string>
+	<string name="wheelInput3">Entrada 3</string>
+	<string name="wheelInput4">Entrada 4</string>
+	<string name="wheelInput5">Entrada 5</string>
+	<string name="wheelInput6">Entrada 6</string>
+	<string name="wheelInput7">Entrada 7</string>
+	<string name="wheelInput8">Entrada 8</string>
+	<string name="wheelInput9">Entrada 9</string>
+	<string name="wheelInput10">Entrada 10</string>
+	<string name="wheelInput11">Entrada 11</string>
+	<string name="wheelInput12">Entrada 12</string>
+	<string name="wheelInput13">Entrada 13</string>
+	<string name="wheelInput14">Entrada 14</string>
+	<string name="wheelInput15">Entrada 15</string>
+	<string name="wheelInput16">Entrada 16</string>
+	<string name="wheelInput17">Entrada 17</string>
+	<string name="wheelInput18">Entrada 18</string>
+	<string name="wheelInput19">Entrada 19</string>
+	<string name="wheelInput20">Entrada 20</string>
+	<string name="wheelInput21">Entrada 21</string>
+	<!-- Pedals  -->
+	<!-- The following list shows the default names of the steering wheel buttons, do not change any of them -->
+	<string name="pedal1">Pedal 1</string>
+	<string name="pedal2">Pedal 2</string>
+	<string name="pedal3">Pedal 3</string>
+	<!-- Here you must change the translations to the action you want the steering wheel/user to do -->
+	<string name="pedalInput1">Entrada Pedal 1</string>
+	<string name="pedalInput2">Entrada Pedal 2</string>
+	<string name="pedalInput3">Entrada Pedal 3</string>
+
+	<!-- Add a string for every translatable text in the project, with the same format as the above -->
+
+	<string name="advice_packagenotintalled">Contenido no instalado</string>
+
+	<string name="sceneTitle_induction">Inducción</string>
+	<string name="sceneTitle_extinguisher">Uso de Extintores</string>
+	<string name="sceneTitle_evacuation">Evacuación</string>
+	<string name="sceneTitle_labeling">Etiquetado de Químicos</string>
+	<string name="sceneTitle_heightrisk">Riesgo en Altura</string>
+	<string name="sceneTitle_confinedspace">Riesgo en Espacio Confinado</string>
+	<string name="sceneTitle_electricalrisk">Etiquetado Eléctrico</string>
+	<string name="sceneTitle_trivia">Trivia</string>
+
+	<string name="sceneSummary_induction">Explorar el entorno de trabajo y familiarizarse con los equipos de protección personal y de seguridad.</string>
+	<string name="sceneSummary_extinguisher">Aprender a usar los extintores de incendios correctamente.</string>
+	<string name="sceneSummary_evacuation">Aprender a evacuar un edificio.</string>
+	<string name="sceneSummary_labeling">Aprender a etiquetar los químicos correctamente.</string>
+	<string name="sceneSummary_heightrisk">Aprender a identificar los riesgos en altura y a usar los equipos de protección personal.</string>
+	<string name="sceneSummary_confinedspace">Aprender a identificar los riesgos en espacio confinado y a usar los equipos de protección personal.</string>
+	<string name="sceneSummary_electricalrisk">Aprender a identificar los riesgos eléctricos y a usar los equipos de protección personal.</string>
+	<string name="sceneSummary_trivia">Pon a prueba tus conocimientos sobre riesgos laborales.</string>
+
+	
+</resources>

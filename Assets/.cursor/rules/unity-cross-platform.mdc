@@ -1,0 +1,75 @@
+---
+description: "Unity cross-platform development for PC and Android"
+alwaysApply: true
+---
+
+# Cross-Platform Development (PC & Android)
+
+This architecture is designed for **PC and Android** deployment. All code must work on both platforms.
+
+## Platform-Agnostic Principles
+1. Write code that works identically on PC and Android by default
+2. Use Unity's cross-platform APIs (they handle platform differences internally)
+3. ONLY use preprocessor directives when absolutely necessary
+4. Test mentally: "Will this work on both platforms?"
+
+## File Access Rules
+
+| Use Case | API | Notes |
+|----------|-----|-------|
+| Load assets at runtime | `Resources.Load<T>()` | Works on PC & Android |
+| Save/Load user data | `Application.persistentDataPath` | Unity handles path per platform |
+| Read-only bundled files | `Resources/` folder | NOT StreamingAssets |
+| PlayerPrefs | `PlayerPrefs` | Works identically on both |
+
+## AVOID on Cross-Platform
+- `System.IO.File` for reading bundled assets (fails on Android APK)
+- `Application.streamingAssetsPath` with `File.ReadAllText` (Android requires UnityWebRequest)
+- Hardcoded file paths with backslashes
+- Platform-specific APIs without preprocessor guards
+
+## When Preprocessor Directives ARE Needed
+Use ONLY for truly platform-specific features:
+
+```csharp
+#region Platform Specific
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+private void HandleAndroidBackButton()
+{
+    if (Input.GetKeyDown(KeyCode.Escape))
+        ShowExitDialog();
+}
+#endif
+
+#if UNITY_STANDALONE
+private void HandleWindowResize()
+{
+    Screen.SetResolution(width, height, fullscreen);
+}
+#endif
+
+#endregion
+```
+
+## Input Considerations
+- Design for both touch (Android) and mouse/keyboard (PC)
+- Button sizes: minimum 48x48 pixels for touch targets
+- Consider UI scaling for different screen densities
+
+## Performance Considerations
+- Android: be mindful of memory, battery, thermal throttling
+- Use object pooling for frequently spawned objects
+- Optimize draw calls (batching, atlases)
+
+## ALWAYS
+1. Use `Resources.Load<T>()` for runtime asset loading
+2. Use `Application.persistentDataPath` for save files
+3. Use `JsonUtility` for serialization
+4. Write platform-agnostic code by default
+
+## NEVER
+1. Use `File.ReadAllText` on StreamingAssets (breaks Android)
+2. Use preprocessor directives unless absolutely platform-specific
+3. Hardcode file paths with backslashes
+4. Assume desktop-only features work on mobile

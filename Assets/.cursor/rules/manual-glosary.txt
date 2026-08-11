@@ -1,0 +1,10 @@
+Util_ -> Utilidades, funcionalidad unica
+SDB_ -> Base de datos simulada, guarda datos primitivos o visuales para usarlos desde referencias estáticas
+ref_ -> referencias, intermediario entre un Manager y los objetos del mundo, guarda referencias de un apartado único
+I_ -> Interfaces
+[no prefix] -> Individual script, uso preferente en sistemas de bajo alcance
+
+Manager -> Maneja interacciones, scripts y tiene todo el "grueso" de un sistema de media-alta complejidad
+ControlCenter -> Cerebro de la app, centraliza managers y los conecta entre sí, maneja fallbacks, persiste entre escenas, entre otros
+
+XRS -> XR Suplement, suplemento para sistemas de paquetes XR

@@ -1,0 +1,53 @@
+---
+description: "Unity C# code style: no comments, region grouping, self-documenting code"
+alwaysApply: true
+---
+
+# Unity C# Code Style Rules
+
+## NO COMMENTS POLICY
+- NEVER generate comments of any type (no //, no /* */, no ///, no XML docs)
+- Code must be self-documenting through clear naming
+- Use descriptive variable, method, and class names instead of comments
+- The only exception: #region names
+
+## NO DOCUMENTATION FILES
+- NEVER create README.md, CHANGELOG.md, or any .md files
+- NEVER create documentation files of any type
+- NEVER create .txt documentation files
+- Code is the only documentation needed
+
+## REGION GROUPING
+- Group related functions using #region/#endregion
+- Region names should be descriptive and use Title Case
+- Examples: "Networking Config", "Event Handlers", "Initialization", "Public API"
+
+```csharp
+#region Networking Config
+
+public void SetupConnection() { }
+public void ConfigureTimeout() { }
+public void SetRetryPolicy() { }
+
+#endregion
+
+#region Event Handlers
+
+private void OnPlayerJoined() { }
+private void OnPlayerLeft() { }
+
+#endregion
+```
+
+## ALWAYS
+1. NO COMMENTS - code must be self-documenting
+2. Use #region to group related functions
+3. Use descriptive names for variables, methods, classes
+4. Follow naming conventions: SDB_, ref_, Util_ prefixes
+
+## NEVER
+1. Generate comments of any kind (no //, /*, ///, XML docs)
+2. Create README.md, CHANGELOG.md, or any documentation files
+3. Create .md or .txt documentation files
+4. Use vague or abbreviated names
+5. Leave code without proper region grouping
