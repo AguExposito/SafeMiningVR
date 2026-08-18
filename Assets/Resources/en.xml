@@ -74,7 +74,7 @@
 	<string name="loto_obj_loto_sequence">Complete LOTO sequence</string>
 	<string name="loto_obj_zero_energy">Zero energy verification</string>
 	<string name="loto_briefing_title">LOTO Training</string>
-	<string name="loto_briefing_body">This simulation has three sequential scenarios: PPE selection, hazard inspection, and energy lockout/tagout on a conveyor belt.</string>
+	<string name="loto_briefing_body">Complete three sequential scenarios before intervening on the equipment: PPE donning, pre-operational hazard inspection, and lockout/tagout (LOTO).</string>
 	<string name="loto_briefing_begin">Begin</string>
 	<string name="loto_hud_active_objective">Active objective</string>
 	<string name="loto_hud_scenario_label">Scenario {0}/{1}</string>

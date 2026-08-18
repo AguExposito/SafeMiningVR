@@ -318,6 +318,12 @@ public class PlayerHudManager : MonoBehaviour
             playerHud.exitConfirmNo.onClick.RemoveAllListeners();
             playerHud.exitConfirmNo.onClick.AddListener(() => orchestrator?.CancelExit());
         }
+
+        if (playerHud != null && playerHud.sessionSummaryContinueButton != null)
+        {
+            playerHud.sessionSummaryContinueButton.onClick.RemoveAllListeners();
+            playerHud.sessionSummaryContinueButton.onClick.AddListener(() => orchestrator?.CompleteSimulation());
+        }
     }
 
     #endregion

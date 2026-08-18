@@ -71,7 +71,7 @@
 	<string name="loto_obj_loto_sequence">Secuencia LOTO completa</string>
 	<string name="loto_obj_zero_energy">Verificación de energía cero</string>
 	<string name="loto_briefing_title">Capacitación LOTO</string>
-	<string name="loto_briefing_body">Esta simulación consta de tres escenarios secuenciales: selección de EPP, inspección de riesgos y bloqueo/etiquetado de energía en una correa transportadora.</string>
+	<string name="loto_briefing_body">Completá tres escenarios secuenciales antes de intervenir el equipo: equipamiento de EPP, inspección preoperacional e identificación de riesgos, y aplicación de bloqueo y etiquetado (LOTO).</string>
 	<string name="loto_briefing_begin">Comenzar</string>
 	<string name="loto_hud_active_objective">Objetivo activo</string>
 	<string name="loto_hud_scenario_label">Escenario {0}/{1}</string>

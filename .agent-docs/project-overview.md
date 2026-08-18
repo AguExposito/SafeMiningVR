@@ -7,14 +7,16 @@
 - **Target device:** Meta Quest 3S (Android ARM64)
 - **Render pipeline:** URP 17.3
 
-## Current state (Fase 0 — roadmap v2)
+## Current state (Fase 1 — HUD + briefing in S1)
 
-- **Roadmap:** Fase 0 complete (Unity MCP + Meta VR MCP + clean console gate). Gameplay S1–S3 remains a greybox prototype pending Fase 1+
+- **Roadmap:** Fase 0 complete. Fase 1 complete: authored HUD/briefing in `VR-LOTO-S1`. S2/S3 authored scenes and EPP gameplay are later phases.
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
 - **Entry scene:** `StandardMainMenu.unity` (build index 0)
-- **Simulation hub:** `VR-LOTO-Placeholder.unity` (build index 1) — briefing + HUD + S1 EPP + S2 hazard inspection + S3 LOTO (runtime greybox; not the authored-scene target)
-- **Orchestration:** `SimulationOrchestratorManager` + `PlayerHudManager` + S1/S2/S3 scenario controllers + managers
-- **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR` (`GetProjectRoot`, `ReadConsole` Errors = 0). Meta VR MCP `ready` (OpenXR Quest docs search). Rule: `Assets/.cursor/rules/safemining-mcp-console.mdc`
+- **Simulation scene:** `VR-LOTO-S1.unity` (build index 1) — briefing → HUD 1/3 → Menú back to menu. Vestuario EPP is not spawned yet.
+- **Legacy hub:** `VR-LOTO-Placeholder.unity` remains on disk, **out of Build Settings**
+- **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster`, no CanvasScaler)
+- **Bootstrap:** `LotoS1SceneBootstrap` with serialized HUD/briefing refs. `LotoHubBootstrap` stays on Placeholder only.
+- **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`. Rule: `Assets/.cursor/rules/safemining-mcp-console.mdc`
 
 ## Architecture
 

@@ -328,7 +328,6 @@ public class IBManager : MonoBehaviour
     {
         if (refLogin == null)
         {
-            LogError("SetupLoginFlowForCurrentScene", "No se encontro ref_Login en la escena.");
             return;
         }
         SetLogoutMenuPanelVisible(connectionMode != ConnectionMode.Offline);

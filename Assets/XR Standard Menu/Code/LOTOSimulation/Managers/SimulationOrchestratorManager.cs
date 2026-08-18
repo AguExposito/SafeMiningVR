@@ -49,7 +49,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
     {
         if (ControlCenter.Instance == null)
         {
-            Debug.LogError("[SimulationOrchestratorManager] ControlCenter.Instance is null.");
+            Debug.LogWarning("[SimulationOrchestratorManager] ControlCenter.Instance is null. Open S1 from the main menu.");
             return;
         }
 
@@ -66,14 +66,20 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
         activeStartTime = Time.time;
         SetState(LotoSimulationState.Active);
-        EnterScenario1();
+        EnterScenario(LotoSimulationConstants.ScenarioEpp);
+
+        LotoScenario1Controller scenarioController = FindFirstObjectByType<LotoScenario1Controller>(FindObjectsInactive.Include);
+        if (scenarioController != null)
+        {
+            scenarioController.Begin();
+        }
     }
 
     public void EnterScenario1()
     {
         EnterScenario(LotoSimulationConstants.ScenarioEpp);
 
-        LotoScenario1Controller scenarioController = FindFirstObjectByType<LotoScenario1Controller>();
+        LotoScenario1Controller scenarioController = FindFirstObjectByType<LotoScenario1Controller>(FindObjectsInactive.Include);
         if (scenarioController == null)
         {
             GameObject controllerObject = new GameObject("LotoScenario1Controller");
@@ -92,7 +98,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
         EnterScenario(LotoSimulationConstants.ScenarioInspection);
 
-        LotoScenario2Controller scenarioController = FindFirstObjectByType<LotoScenario2Controller>();
+        LotoScenario2Controller scenarioController = FindFirstObjectByType<LotoScenario2Controller>(FindObjectsInactive.Include);
         if (scenarioController == null)
         {
             GameObject controllerObject = new GameObject("LotoScenario2Controller");
@@ -104,7 +110,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
     public void OnScenario2Completed()
     {
-        HazardInspectionManager manager = FindFirstObjectByType<HazardInspectionManager>();
+        HazardInspectionManager manager = FindFirstObjectByType<HazardInspectionManager>(FindObjectsInactive.Include);
         if (manager != null && !manager.IsReadyToAdvance)
         {
             return;
@@ -116,7 +122,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
     public void OnScenario1Completed()
     {
-        EppEquipmentManager manager = FindFirstObjectByType<EppEquipmentManager>();
+        EppEquipmentManager manager = FindFirstObjectByType<EppEquipmentManager>(FindObjectsInactive.Include);
         if (manager != null && !manager.IsReadyToAdvance)
         {
             return;
@@ -142,7 +148,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
     {
         EnterScenario(LotoSimulationConstants.ScenarioLoto);
 
-        LotoScenario3Controller scenarioController = FindFirstObjectByType<LotoScenario3Controller>();
+        LotoScenario3Controller scenarioController = FindFirstObjectByType<LotoScenario3Controller>(FindObjectsInactive.Include);
         if (scenarioController == null)
         {
             GameObject controllerObject = new GameObject("LotoScenario3Controller");
