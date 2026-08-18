@@ -436,6 +436,111 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4338ca3af69369b419af7847ccc1ed3e, type: 3}
+--- !u!1001 &1207715443
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1724800904}
+    m_Modifications:
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609160342500124123, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_Name
+      value: PREF_S3_ConveyorStation
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8632191327435201343, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8047302690761745954, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8770461980543513327, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 864195399000182810, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3953605771681972355, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4415213577144925373, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3888049954244851902, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7668968647201405209, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6593670424652131169, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+--- !u!114 &1207715444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7315162582010602378, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 1207715443}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207715446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a2b94f7e874d7bacd0a57364f858f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoSequenceManager
+--- !u!4 &1207715445 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 1207715443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1207715446 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6609160342500124123, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 1207715443}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1239693562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -844,6 +949,7 @@ GameObject:
   - component: {fileID: 1724800904}
   - component: {fileID: 1724800902}
   - component: {fileID: 1724800905}
+  - component: {fileID: 1724800906}
   m_Layer: 0
   m_Name: LOTO_S3Root
   m_TagString: Untagged
@@ -882,6 +988,7 @@ Transform:
   m_Children:
   - {fileID: 889087095}
   - {fileID: 1239693564}
+  - {fileID: 1207715445}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1724800905
@@ -901,6 +1008,21 @@ MonoBehaviour:
   panelFollowTarget: {fileID: 0}
   scenarioIndex: 3
   startWithBriefing: 0
+  scenario3Controller: {fileID: 1724800906}
+--- !u!114 &1724800906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724800901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd47cbe6c6ad4290bfdfed3297a8cc28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoScenario3Controller
+  s3ZoneRoot: {fileID: 1207715446}
+  sequenceManager: {fileID: 1207715444}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

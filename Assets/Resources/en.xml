@@ -97,6 +97,13 @@
 	<string name="loto_s3_success_zero_energy">Zero energy verification successful.</string>
 	<string name="loto_s3_summary_title">LOTO session summary</string>
 	<string name="loto_s3_summary_body">Objectives achieved: {0}/{1}. Result: {2}.</string>
+	<string name="loto_lock_personal">PERSONAL LOCKOUT</string>
+	<string name="loto_lock_visitor">VISITOR</string>
+	<string name="loto_lock_group">GROUP</string>
+	<string name="loto_tag_danger">DANGER DO NOT OPERATE</string>
+	<string name="loto_tag_inspected">INSPECTED</string>
+	<string name="loto_tag_operational">EQUIPMENT OPERATIONAL</string>
+	<string name="loto_tag_maintenance">MAINTENANCE COMPLETE</string>
 	<string name="loto_s1_intro">Welcome to the locker room. Select and wear mandatory PPE before entering the plant.</string>
 	<string name="loto_s1_step_select">Select the 5 mandatory PPE items and place them on your body.</string>
 	<string name="loto_s1_step_reject">Identify defective PPE and place it in the reject bin.</string>

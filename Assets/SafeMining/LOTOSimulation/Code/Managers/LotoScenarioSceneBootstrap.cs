@@ -8,6 +8,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
     [SerializeField] private Transform panelFollowTarget;
     [SerializeField] private int scenarioIndex = 1;
     [SerializeField] private bool startWithBriefing = true;
+    [SerializeField] private LotoScenario3Controller scenario3Controller;
 
     private PlayerHudManager playerHudManager;
 
@@ -56,6 +57,11 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         }
 
         orchestrator.NotifyAuthoredSceneLoaded(scenarioIndex);
+
+        if (scenario3Controller != null)
+        {
+            scenario3Controller.Begin();
+        }
     }
 
     private void ResolveFollowTarget()

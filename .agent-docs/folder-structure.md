@@ -11,7 +11,8 @@ Assets/SafeMining/
 │   ├── Prefabs/
 │   │   ├── PREF_LotoPlayerHUD.prefab
 │   │   ├── PREF_LotoBriefingPanel.prefab
-│   │   └── PREF_LotoObjectiveRow.prefab
+│   │   ├── PREF_LotoObjectiveRow.prefab
+│   │   └── PREF_S3_ConveyorStation.prefab
 │   ├── Art/
 │   │   ├── Materials/
 │   │   ├── Models/
@@ -20,6 +21,8 @@ Assets/SafeMining/
 │       ├── SafeMining.LOTOSimulation.asmdef
 │       ├── Managers/
 │       │   ├── LotoScenarioSceneBootstrap.cs
+│       │   ├── LotoScenario3Controller.cs
+│       │   ├── LotoSequenceManager.cs
 │       │   ├── SyncQueueManager.cs
 │       │   └── SimulationSessionManager.cs
 │       ├── Data/

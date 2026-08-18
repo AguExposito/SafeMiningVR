@@ -16,15 +16,12 @@ public class LotoBreakerInteractable : MonoBehaviour
     private void Awake()
     {
         breakerRef = GetComponent<ref_LotoBreaker>();
-        if (sequenceManager == null)
-        {
-            sequenceManager = FindFirstObjectByType<LotoSequenceManager>();
-        }
-
         if (breakerRef != null && breakerRef.interactable != null)
         {
             breakerRef.interactable.selectEntered.AddListener(OnSelected);
         }
+
+        ApplyVisual();
     }
 
     private void OnDestroy()
@@ -44,6 +41,14 @@ public class LotoBreakerInteractable : MonoBehaviour
         sequenceManager = manager;
     }
 
+    public void SetInteractableEnabled(bool enabled)
+    {
+        if (breakerRef != null && breakerRef.interactable != null)
+        {
+            breakerRef.interactable.enabled = enabled;
+        }
+    }
+
     private void OnSelected(SelectEnterEventArgs args)
     {
         if (sequenceManager == null || breakerRef == null || breakerRef.isOff)
@@ -51,14 +56,18 @@ public class LotoBreakerInteractable : MonoBehaviour
             return;
         }
 
+        if (!sequenceManager.TryToggleBreakerOff())
+        {
+            return;
+        }
+
         breakerRef.isOff = true;
         ApplyVisual();
-        sequenceManager.TryToggleBreakerOff();
     }
 
     private void ApplyVisual()
     {
-        if (breakerRef.breakerRenderer != null)
+        if (breakerRef != null && breakerRef.breakerRenderer != null)
         {
             breakerRef.breakerRenderer.material.color = breakerRef.isOff ? offColor : onColor;
         }

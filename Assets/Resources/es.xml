@@ -94,6 +94,13 @@
 	<string name="loto_s3_success_zero_energy">Verificación de energía cero exitosa.</string>
 	<string name="loto_s3_summary_title">Resumen de sesión LOTO</string>
 	<string name="loto_s3_summary_body">Objetivos logrados: {0}/{1}. Resultado: {2}.</string>
+	<string name="loto_lock_personal">PERSONAL LOCKOUT</string>
+	<string name="loto_lock_visitor">VISITOR</string>
+	<string name="loto_lock_group">GRUPAL</string>
+	<string name="loto_tag_danger">PELIGRO NO OPERAR</string>
+	<string name="loto_tag_inspected">INSPECCIONADO</string>
+	<string name="loto_tag_operational">EQUIPO OPERATIVO</string>
+	<string name="loto_tag_maintenance">MANTENIMIENTO TERMINADO</string>
 	<string name="loto_s1_intro">Bienvenido al vestuario. Seleccione y colóquese el EPP obligatorio antes de ingresar a planta.</string>
 	<string name="loto_s1_step_select">Seleccione los 5 elementos de EPP obligatorios y colóquelos en su cuerpo.</string>
 	<string name="loto_s1_step_reject">Identifique el EPP defectuoso y deposítelo en el contenedor de rechazados.</string>

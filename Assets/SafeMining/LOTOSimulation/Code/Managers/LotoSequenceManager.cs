@@ -1,20 +1,26 @@
 using System;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class LotoSequenceManager : MonoBehaviour
 {
     public event Action<LotoSequenceStep> OnStepChanged;
     public event Action<string> OnHintSubtitle;
+    public event Action<bool> OnSequenceCompleted;
 
     [SerializeField] private BeltAnimator beltAnimator;
     [SerializeField] private Transform lockSnapAnchor;
     [SerializeField] private Transform tagSnapAnchor;
+    [SerializeField] private XRSocketInteractor lockSocket;
 
     private LotoSequenceStep currentStep = LotoSequenceStep.BeltRunning;
     private bool sequenceObjectiveScored;
     private bool zeroEnergyObjectiveScored;
     private GameObject placedLock;
     private GameObject placedTag;
+    private XRSocketInteractor activeTagSocket;
 
     public LotoSequenceStep CurrentStep => currentStep;
     public Transform LockSnapAnchor => lockSnapAnchor;
@@ -22,13 +28,41 @@ public class LotoSequenceManager : MonoBehaviour
     public bool HasPlacedLock => placedLock != null;
     public bool HasPlacedTag => placedTag != null;
 
+    #region Lifecycle
+
+    private void OnEnable()
+    {
+        if (lockSocket != null)
+        {
+            lockSocket.selectEntered.AddListener(OnLockSocketed);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (lockSocket != null)
+        {
+            lockSocket.selectEntered.RemoveListener(OnLockSocketed);
+        }
+
+        UnbindTagSocket();
+    }
+
+    #endregion
+
     #region Public API
 
     public void Configure(BeltAnimator animator, Transform lockAnchor, Transform tagAnchor)
     {
+        Configure(animator, lockAnchor, tagAnchor, lockSocket);
+    }
+
+    public void Configure(BeltAnimator animator, Transform lockAnchor, Transform tagAnchor, XRSocketInteractor socket)
+    {
         beltAnimator = animator;
         lockSnapAnchor = lockAnchor;
         tagSnapAnchor = tagAnchor;
+        lockSocket = socket;
     }
 
     public void Begin()
@@ -37,6 +71,8 @@ public class LotoSequenceManager : MonoBehaviour
         sequenceObjectiveScored = false;
         zeroEnergyObjectiveScored = false;
         ClearPlacedProps();
+        UnbindTagSocket();
+        SetLockSocketActive(false);
         SetBeltRunning(true);
         NotifyStep(LotoSequenceStep.BeltRunning, "loto_s3_intro");
     }
@@ -55,23 +91,25 @@ public class LotoSequenceManager : MonoBehaviour
         NotifyStep(LotoSequenceStep.BeltStopped, "loto_s3_step_isolate");
     }
 
-    public void TryToggleBreakerOff()
+    public bool TryToggleBreakerOff()
     {
         if (currentStep == LotoSequenceStep.BeltRunning)
         {
             Reject("loto_s3_reject_order", "breaker_before_stop");
-            return;
+            return false;
         }
 
         if (currentStep != LotoSequenceStep.BeltStopped)
         {
             Reject("loto_s3_reject_order", "breaker_invalid_state");
-            return;
+            return false;
         }
 
         currentStep = LotoSequenceStep.EnergyIsolated;
+        SetLockSocketActive(true);
         EmitEvent("breaker_off", true);
         NotifyStep(LotoSequenceStep.EnergyIsolated, "loto_s3_step_lock");
+        return true;
     }
 
     public bool TryApplyLock(LotoLockType lockType, GameObject lockObject)
@@ -88,17 +126,29 @@ public class LotoSequenceManager : MonoBehaviour
             return false;
         }
 
-        if (lockSnapAnchor == null || lockObject == null)
+        if (lockObject == null)
         {
             return false;
         }
 
-        SnapToAnchor(lockObject, lockSnapAnchor);
+        if (lockSnapAnchor != null && (lockSocket == null || !lockSocket.hasSelection))
+        {
+            SnapToAnchor(lockObject, lockSnapAnchor);
+        }
+
         placedLock = lockObject;
         DisableGrab(lockObject);
         currentStep = LotoSequenceStep.LockApplied;
         EmitEvent("lock_personal", true);
         NotifyStep(LotoSequenceStep.LockApplied, "loto_s3_step_tag");
+
+        ref_LotoLock lockRef = lockObject.GetComponent<ref_LotoLock>();
+        if (lockRef != null && lockRef.tagSocket != null)
+        {
+            tagSnapAnchor = lockRef.tagSocket.transform;
+            BindTagSocket(lockRef.tagSocket);
+        }
+
         return true;
     }
 
@@ -122,7 +172,11 @@ public class LotoSequenceManager : MonoBehaviour
             return false;
         }
 
-        SnapToAnchor(tagObject, anchor);
+        if (activeTagSocket == null || !activeTagSocket.hasSelection)
+        {
+            SnapToAnchor(tagObject, anchor);
+        }
+
         placedTag = tagObject;
         DisableGrab(tagObject);
         currentStep = LotoSequenceStep.TagApplied;
@@ -161,12 +215,84 @@ public class LotoSequenceManager : MonoBehaviour
         OnHintSubtitle?.Invoke(Translate("loto_s3_success_zero_energy"));
         NotifyOrchestratorSubtitle("loto_s3_success_zero_energy");
         OnStepChanged?.Invoke(currentStep);
+        OnSequenceCompleted?.Invoke(true);
+    }
 
-        LotoScenario3Controller scenario = FindFirstObjectByType<LotoScenario3Controller>();
-        if (scenario != null)
+    #endregion
+
+    #region Sockets
+
+    private void OnLockSocketed(SelectEnterEventArgs args)
+    {
+        if (args.interactableObject == null)
         {
-            scenario.OnSequenceCompleted(true);
+            return;
         }
+
+        Transform target = args.interactableObject.transform;
+        ref_LotoLock lockRef = target.GetComponent<ref_LotoLock>();
+        if (lockRef == null || !TryApplyLock(lockRef.lockType, target.gameObject))
+        {
+            Eject(lockSocket, args.interactableObject);
+        }
+    }
+
+    private void OnTagSocketed(SelectEnterEventArgs args)
+    {
+        if (args.interactableObject == null)
+        {
+            return;
+        }
+
+        Transform target = args.interactableObject.transform;
+        ref_LotoTag tagRef = target.GetComponent<ref_LotoTag>();
+        if (tagRef == null || !TryApplyTag(tagRef.tagType, target.gameObject))
+        {
+            Eject(activeTagSocket, args.interactableObject);
+        }
+    }
+
+    private void SetLockSocketActive(bool active)
+    {
+        if (lockSocket != null)
+        {
+            lockSocket.socketActive = active;
+        }
+    }
+
+    private void BindTagSocket(XRSocketInteractor socket)
+    {
+        UnbindTagSocket();
+        activeTagSocket = socket;
+        if (activeTagSocket == null)
+        {
+            return;
+        }
+
+        activeTagSocket.selectEntered.AddListener(OnTagSocketed);
+        activeTagSocket.socketActive = true;
+    }
+
+    private void UnbindTagSocket()
+    {
+        if (activeTagSocket == null)
+        {
+            return;
+        }
+
+        activeTagSocket.selectEntered.RemoveListener(OnTagSocketed);
+        activeTagSocket.socketActive = false;
+        activeTagSocket = null;
+    }
+
+    private static void Eject(XRSocketInteractor socket, IXRSelectInteractable interactable)
+    {
+        if (socket == null || interactable == null || socket.interactionManager == null)
+        {
+            return;
+        }
+
+        socket.interactionManager.SelectExit(socket, interactable);
     }
 
     #endregion
@@ -302,10 +428,10 @@ public class LotoSequenceManager : MonoBehaviour
 
     private static void DisableGrab(GameObject target)
     {
-        Collider[] colliders = target.GetComponentsInChildren<Collider>();
-        for (int i = 0; i < colliders.Length; i++)
+        XRGrabInteractable grab = target.GetComponent<XRGrabInteractable>();
+        if (grab != null)
         {
-            colliders[i].enabled = false;
+            grab.enabled = false;
         }
 
         Rigidbody body = target.GetComponent<Rigidbody>();

@@ -14,11 +14,6 @@ public class LotoControlButtonInteractable : MonoBehaviour
     private void Awake()
     {
         buttonRef = GetComponent<ref_LotoControlButton>();
-        if (sequenceManager == null)
-        {
-            sequenceManager = FindFirstObjectByType<LotoSequenceManager>();
-        }
-
         if (buttonRef != null && buttonRef.interactable != null)
         {
             buttonRef.interactable.selectEntered.AddListener(OnSelected);
@@ -44,7 +39,7 @@ public class LotoControlButtonInteractable : MonoBehaviour
 
     private void OnSelected(SelectEnterEventArgs args)
     {
-        if (sequenceManager == null)
+        if (sequenceManager == null || buttonRef == null)
         {
             return;
         }
@@ -52,11 +47,10 @@ public class LotoControlButtonInteractable : MonoBehaviour
         if (buttonRef.isStartButton)
         {
             sequenceManager.TryStartVerification();
+            return;
         }
-        else
-        {
-            sequenceManager.TryStopConveyor();
-        }
+
+        sequenceManager.TryStopConveyor();
     }
 
     #endregion
