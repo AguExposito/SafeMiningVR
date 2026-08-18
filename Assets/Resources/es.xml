@@ -2,7 +2,7 @@
 <resources>
 	<!-- Main Menu -->
 	<string name="simVersion">V 1.0.0</string>
-	<string name="simName">XR Menu</string>
+	<string name="simName">SafeMining VR</string>
 	<string name="logout">CERRAR SESIÓN</string>
 	<string name="login">INICIAR SESIÓN</string>
 	<string name="play">COMENZAR</string>
@@ -61,16 +61,58 @@
 	<string name="back">VOLVER</string>
 	<string name="continue">CONTINUAR</string>
 	<!-- Custom scenes (for scores) -->
-	<string name="sceneName1">Nombre de Escena 1</string>
-	<string name="sceneName2">Nombre de Escena 2</string>
-	<string name="sceneName3">Nombre de Escena 3</string>
-	<!-- Add a string for every scene name in the project, with the same format as the above -->
-	<string name="sceneObjective1-1">Realizar el objetivo de escena 1</string>
-	<string name="sceneObjective1-2">Realizar el objetivo de escena 2</string>
-	<string name="sceneObjective1-3">Realizar el objetivo de escena 3</string>
-	<string name="sceneObjective1-4">Realizar el objetivo de escena 4</string>
-	<string name="sceneObjective1-5">Realizar el objetivo de escena 5</string>
-	<!-- Add a string for every scene objective in the project, with the same format as the above (scene-objective) -->
+	<string name="loto_simulation">Bloqueo/Etiquetado de Energía</string>
+	<string name="loto_simulation_summary">Capacitación LOTO: EPP, inspección de riesgos y bloqueo de energía en correa transportadora.</string>
+	<string name="loto_placeholder_title">Simulación LOTO — En construcción</string>
+	<string name="loto_placeholder_return">Volver al menú</string>
+	<string name="loto_obj_epp_selection">Selección correcta de EPP</string>
+	<string name="loto_obj_epp_defect">Identificación de EPP defectuoso</string>
+	<string name="loto_obj_hazard_report">Reporte de condiciones inseguras</string>
+	<string name="loto_obj_loto_sequence">Secuencia LOTO completa</string>
+	<string name="loto_obj_zero_energy">Verificación de energía cero</string>
+	<string name="loto_briefing_title">Capacitación LOTO</string>
+	<string name="loto_briefing_body">Esta simulación consta de tres escenarios secuenciales: selección de EPP, inspección de riesgos y bloqueo/etiquetado de energía en una correa transportadora.</string>
+	<string name="loto_briefing_begin">Comenzar</string>
+	<string name="loto_hud_active_objective">Objetivo activo</string>
+	<string name="loto_hud_scenario_label">Escenario {0}/{1}</string>
+	<string name="loto_hud_menu">Menú</string>
+	<string name="loto_exit_confirm_title">¿Salir de la simulación?</string>
+	<string name="loto_exit_confirm_body">La sesión quedará incompleta. Se guardará el avance parcial y podrás revisarlo en el lobby.</string>
+	<string name="loto_exit_confirm_yes">Salir</string>
+	<string name="loto_exit_confirm_no">Continuar</string>
+	<string name="loto_subtitle_welcome">Bienvenido al vestuario S1. Revisa tu EPP antes de ingresar a planta.</string>
+	<string name="loto_s3_intro">Se detectó una anomalía en un rodillo. Detenga la correa y aplique LOTO antes de intervenir.</string>
+	<string name="loto_s3_step_stop">Detenga la correa en la estación de control.</string>
+	<string name="loto_s3_step_isolate">Abra el tablero y coloque el interruptor de aislamiento en OFF.</string>
+	<string name="loto_s3_step_lock">Coloque el candado rojo de bloqueo personal en el hasp LOTO.</string>
+	<string name="loto_s3_step_tag">Coloque la etiqueta PELIGRO NO OPERAR en el candado.</string>
+	<string name="loto_s3_step_verify">Presione START para verificar energía cero. La correa no debe moverse.</string>
+	<string name="loto_s3_reject_wrong_lock">Use el candado rojo de bloqueo personal, no visitante ni grupal.</string>
+	<string name="loto_s3_reject_wrong_tag">Use la etiqueta PELIGRO NO OPERAR.</string>
+	<string name="loto_s3_reject_order">Complete los pasos LOTO en orden antes de continuar.</string>
+	<string name="loto_s3_alert_incomplete">LOTO incompleto. No es seguro energizar el equipo.</string>
+	<string name="loto_s3_success_zero_energy">Verificación de energía cero exitosa.</string>
+	<string name="loto_s3_summary_title">Resumen de sesión LOTO</string>
+	<string name="loto_s3_summary_body">Objetivos logrados: {0}/{1}. Resultado: {2}.</string>
+	<string name="loto_s1_intro">Bienvenido al vestuario. Seleccione y colóquese el EPP obligatorio antes de ingresar a planta.</string>
+	<string name="loto_s1_step_select">Seleccione los 5 elementos de EPP obligatorios y colóquelos en su cuerpo.</string>
+	<string name="loto_s1_step_reject">Identifique el EPP defectuoso y deposítelo en el contenedor de rechazados.</string>
+	<string name="loto_s1_step_ready">EPP completo. Continúe hacia la inspección de riesgos.</string>
+	<string name="loto_s1_reject_defective">Este EPP está en mal estado. No debe utilizarse. Deposítelo en el contenedor de rechazados.</string>
+	<string name="loto_s1_success_equipped">EPP obligatorio completo (5/5).</string>
+	<string name="loto_s1_success_defect">EPP defectuoso identificado correctamente.</string>
+	<string name="loto_s1_optional_item">Este EPP no es obligatorio para esta tarea.</string>
+	<string name="loto_s2_intro">Inspección preoperacional. Reporte todas las condiciones inseguras cerca de la correa detenida.</string>
+	<string name="loto_s2_progress_hint">Reporte las 4 condiciones inseguras antes de continuar.</string>
+	<string name="loto_s2_step_ready">Inspección completa. Continúe hacia el área de LOTO.</string>
+	<string name="loto_s2_complete_with_penalty">Riesgos reportados, pero los falsos positivos redujeron su puntaje.</string>
+	<string name="loto_s2_false_positive">Este elemento es seguro. Los reportes incorrectos reducen su puntaje.</string>
+	<string name="loto_s2_timeout_hint">Busque material derramado, herramientas abandonadas, señalización caída y extintor obstruido.</string>
+	<string name="loto_s2_report_spill">Material derramado en zona de tránsito reportado.</string>
+	<string name="loto_s2_report_tools">Herramientas abandonadas reportadas.</string>
+	<string name="loto_s2_report_signage">Señalización caída o deteriorada reportada.</string>
+	<string name="loto_s2_report_extinguisher">Extintor obstruido reportado.</string>
+	<string name="loto_s2_report_generic">Condición insegura reportada.</string>
 	<!-- Controls -->
 	<string name="keyboard">Teclado</string>
 	<string name="joystick">Mando</string>
@@ -210,19 +252,6 @@
 	<string name="pedalInput3">Entrada Pedal 3</string>
 
 	<!-- Add a string for every translatable text in the project, with the same format as the above -->
-	<string name="scene_score_1">Score Test 1</string>
-	<string name="scene_score_2">Score Test 2</string>
-	<string name="scene_score_3">Score Test 3</string>
-	<string name="objective_1_0">Test Objetive 1</string>
-	<string name="objective_1_1">Test Objetive 2</string>
-	<string name="objective_1_2">Test Objetive 3</string>
-	<string name="objective_2_0">Test Objetive 1</string>
-	<string name="objective_2_1">Test Objetive 2</string>
-	<string name="objective_2_2">Test Objetive 3</string>
-	<string name="objective_3_0">Test Objetive 1</string>
-	<string name="objective_3_1">Test Objetive 2</string>
-	<string name="objective_3_2">Test Objetive 3</string>
-
 
 	<string name="advice_packagenotintalled">Contenido no instalado</string>
 

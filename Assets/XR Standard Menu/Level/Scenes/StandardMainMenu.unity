@@ -7128,7 +7128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6660637007872443737, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7597286268348370927, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_text
@@ -8017,7 +8017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IBManager
   connectionMode: 0
-  simulatorType: 0
+  simulatorType: 2
   urlType: 2
   sessionStartMode: 0
   sendResultsToCloud: 0
@@ -8148,7 +8148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6660637007872443737, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7597286268348370927, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_text
@@ -21164,14 +21164,11 @@ PrefabInstance:
     - target: {fileID: 1365934533977485621, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 250d393990e11b741b1ffd160653c0d2, type: 3}
+      objectReference: {fileID: 21300000, guid: b2c3d4e5f6a7890123456789abcdef01, type: 3}
     - target: {fileID: 3433749450350931208, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_text
-      value: "Capacitate en la identificaci\xF3n y prevenci\xF3n de riesgos ergon\xF3micos
-        en entornos de oficina y f\xE1brica. A trav\xE9s de seis escenas interactivas,
-        aprende a organizar tu puesto de trabajo, ajustar equipos, realizar pausas
-        activas, tomar decisiones ergon\xF3micas correctas y manipular cargas de
-        manera segura."
+      value: "Capacitaci\xF3n LOTO: EPP, inspecci\xF3n de riesgos y bloqueo de energ\xEDa
+        en correa transportadora."
       objectReference: {fileID: 0}
     - target: {fileID: 3433749450350931208, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_fontAsset
@@ -21187,7 +21184,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 673c0436f3ac26e439b7f6769a553ce3, type: 3}
     - target: {fileID: 6660637007872443737, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_Name
-      value: SceneSample
+      value: LOTO Simulation
       objectReference: {fileID: 0}
     - target: {fileID: 6660637007872443737, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_IsActive
@@ -21195,7 +21192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7597286268348370927, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_text
-      value: "Riesgo Ergon\xF3mico"
+      value: "Bloqueo/Etiquetado de Energ\xEDa"
       objectReference: {fileID: 0}
     - target: {fileID: 7597286268348370927, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_fontAsset
@@ -24025,7 +24022,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5118016306806223366}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b15f82cc229284894964d2d30806969d, type: 3}
   m_Name: 
@@ -31210,7 +31207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &9002846114510866984
 GameObject:
   m_ObjectHideFlags: 0

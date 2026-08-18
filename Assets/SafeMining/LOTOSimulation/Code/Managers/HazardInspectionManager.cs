@@ -1,0 +1,273 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HazardInspectionManager : MonoBehaviour
+{
+    public event Action<int, int> OnProgressChanged;
+    public event Action<string> OnHintSubtitle;
+
+    private static readonly HazardType[] RequiredHazards =
+    {
+        HazardType.SpilledMaterial,
+        HazardType.AbandonedTools,
+        HazardType.FallenSignage,
+        HazardType.ObstructedExtinguisher
+    };
+
+    private readonly HashSet<HazardType> reportedHazards = new HashSet<HazardType>();
+    private readonly List<ref_HazardSpot> pendingRealSpots = new List<ref_HazardSpot>();
+
+    private bool objectiveScored;
+    private int falsePositiveCount;
+    private Coroutine hintCoroutine;
+
+    public int ReportedCount => reportedHazards.Count;
+    public int RequiredTotal => RequiredHazards.Length;
+    public int FalsePositiveCount => falsePositiveCount;
+
+    public bool IsReadyToAdvance =>
+        reportedHazards.Count >= RequiredHazards.Length && objectiveScored;
+
+    #region Public API
+
+    public void Begin()
+    {
+        reportedHazards.Clear();
+        pendingRealSpots.Clear();
+        objectiveScored = false;
+        falsePositiveCount = 0;
+
+        if (hintCoroutine != null)
+        {
+            StopCoroutine(hintCoroutine);
+            hintCoroutine = null;
+        }
+
+        NotifyProgress();
+        NotifyOrchestratorSubtitle("loto_s2_intro");
+        hintCoroutine = StartCoroutine(HintTimeoutRoutine());
+    }
+
+    public void RegisterSpawnedSpot(ref_HazardSpot spot)
+    {
+        if (spot == null)
+        {
+            return;
+        }
+
+        if (HazardTypeRules.IsRequiredHazard(spot.hazardType))
+        {
+            pendingRealSpots.Add(spot);
+        }
+    }
+
+    public bool TryReport(ref_HazardSpot spot)
+    {
+        if (spot == null || spot.IsReported)
+        {
+            return false;
+        }
+
+        if (HazardTypeRules.IsDecoy(spot.hazardType))
+        {
+            falsePositiveCount++;
+            spot.SetReported(true);
+            EmitEvent("hazard_false_positive", false, spot.hazardType);
+            NotifyOrchestratorSubtitle("loto_s2_false_positive");
+            return false;
+        }
+
+        if (reportedHazards.Contains(spot.hazardType))
+        {
+            return false;
+        }
+
+        reportedHazards.Add(spot.hazardType);
+        pendingRealSpots.Remove(spot);
+        spot.SetReported(true);
+        EmitEvent("hazard_report", true, spot.hazardType);
+        NotifyProgress();
+
+        string subtitleKey = GetReportSubtitleKey(spot.hazardType);
+        NotifyOrchestratorSubtitle(subtitleKey);
+
+        if (reportedHazards.Count >= RequiredHazards.Length)
+        {
+            ScoreObjective();
+            NotifyOrchestratorSubtitle(falsePositiveCount > 0
+                ? "loto_s2_complete_with_penalty"
+                : "loto_s2_step_ready");
+        }
+
+        return true;
+    }
+
+    public void TryContinue()
+    {
+        if (!IsReadyToAdvance)
+        {
+            NotifyOrchestratorSubtitle("loto_s2_progress_hint");
+            return;
+        }
+
+        LotoScenario2Controller scenario = FindFirstObjectByType<LotoScenario2Controller>();
+        if (scenario != null)
+        {
+            scenario.OnInspectionCompleted();
+        }
+    }
+
+    #endregion
+
+    #region Scoring
+
+    private void ScoreObjective()
+    {
+        if (objectiveScored)
+        {
+            return;
+        }
+
+        objectiveScored = true;
+        bool achieved = falsePositiveCount == 0;
+        SetObjective(achieved);
+
+        if (hintCoroutine != null)
+        {
+            StopCoroutine(hintCoroutine);
+            hintCoroutine = null;
+        }
+    }
+
+    private static void SetObjective(bool achieved)
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
+        {
+            return;
+        }
+
+        ControlCenter.Instance.scoreManager.AchiveObjective(
+            LotoSimulationConstants.LotoSimScoreIndex,
+            LotoSimulationConstants.ObjectiveHazardReportIndex,
+            achieved);
+
+        if (ControlCenter.Instance.simulationOrchestratorManager != null)
+        {
+            ControlCenter.Instance.simulationOrchestratorManager.NotifyObjectiveVisualUpdate(
+                LotoSimulationConstants.ObjectiveHazardReportIndex,
+                achieved);
+        }
+    }
+
+    #endregion
+
+    #region Hints
+
+    private IEnumerator HintTimeoutRoutine()
+    {
+        yield return new WaitForSeconds(LotoSimulationConstants.HazardHintTimeoutSeconds);
+
+        if (IsReadyToAdvance)
+        {
+            yield break;
+        }
+
+        NotifyOrchestratorSubtitle("loto_s2_timeout_hint");
+        PulseUnreportedSpots();
+    }
+
+    private void PulseUnreportedSpots()
+    {
+        for (int i = 0; i < pendingRealSpots.Count; i++)
+        {
+            ref_HazardSpot spot = pendingRealSpots[i];
+            if (spot != null && !spot.IsReported)
+            {
+                spot.PulseHint();
+            }
+        }
+    }
+
+    #endregion
+
+    #region Events
+
+    private void EmitEvent(string optionId, bool success, HazardType type)
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null)
+        {
+            return;
+        }
+
+        string sessionId = string.Empty;
+        if (ControlCenter.Instance.simulationSessionManager != null &&
+            ControlCenter.Instance.simulationSessionManager.CurrentSession != null)
+        {
+            sessionId = ControlCenter.Instance.simulationSessionManager.CurrentSession.sessionId;
+        }
+
+        SimulationEventRecord record = new SimulationEventRecord
+        {
+            sessionId = sessionId,
+            eventType = "hazard_inspection",
+            objectiveId = LotoObjectiveIds.HazardReport,
+            optionId = $"{optionId}_{type}",
+            timestampUtc = DateTime.UtcNow.ToString("o"),
+            success = success
+        };
+
+        PendingSyncEntry entry = new PendingSyncEntry
+        {
+            entryType = PendingSyncEntry.EntryTypeEvent,
+            payloadJson = JsonUtility.ToJson(record)
+        };
+        ControlCenter.Instance.syncQueueManager.Enqueue(entry);
+    }
+
+    private void NotifyProgress()
+    {
+        OnProgressChanged?.Invoke(reportedHazards.Count, RequiredHazards.Length);
+    }
+
+    private static string GetReportSubtitleKey(HazardType type)
+    {
+        switch (type)
+        {
+            case HazardType.SpilledMaterial:
+                return "loto_s2_report_spill";
+            case HazardType.AbandonedTools:
+                return "loto_s2_report_tools";
+            case HazardType.FallenSignage:
+                return "loto_s2_report_signage";
+            case HazardType.ObstructedExtinguisher:
+                return "loto_s2_report_extinguisher";
+            default:
+                return "loto_s2_report_generic";
+        }
+    }
+
+    private void NotifyOrchestratorSubtitle(string key)
+    {
+        string translated = Translate(key);
+        OnHintSubtitle?.Invoke(translated);
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
+        {
+            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated);
+        }
+    }
+
+    private static string Translate(string key)
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null)
+        {
+            return key;
+        }
+
+        string translated = ControlCenter.Instance.languageManager.GetText(key);
+        return string.IsNullOrEmpty(translated) ? key : translated;
+    }
+
+    #endregion
+}

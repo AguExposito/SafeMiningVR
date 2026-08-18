@@ -1,0 +1,622 @@
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerHudManager : MonoBehaviour
+{
+    [SerializeField] private Sprite objectivePendingSprite;
+    [SerializeField] private Sprite objectiveAchievedSprite;
+    [SerializeField] private Color primaryPanelColor = new Color(0.102f, 0.212f, 0.365f, 0.92f);
+    [SerializeField] private Color secondaryAccentColor = new Color(0.976f, 0.451f, 0.086f, 1f);
+
+    private ref_PlayerHUD playerHud;
+    private ref_BriefingPanel briefingPanel;
+    private SimulationOrchestratorManager orchestrator;
+    private readonly List<ref_LotoObjectiveRow> objectiveRows = new List<ref_LotoObjectiveRow>();
+    private float nextTimerRefreshTime;
+
+    #region Initialization
+
+    public void Initialize(ref_PlayerHUD hud, ref_BriefingPanel briefing, SimulationOrchestratorManager orchestratorManager)
+    {
+        playerHud = hud;
+        briefingPanel = briefing;
+        orchestrator = orchestratorManager;
+        ApplyBrandColors();
+        BindButtons();
+        RefreshButtonLabels();
+        BuildObjectiveRows();
+        SubscribeOrchestratorEvents();
+        ApplyState(orchestrator != null ? orchestrator.CurrentState : LotoSimulationState.Initializing);
+        RefreshBriefingTexts();
+        RefreshScenarioIndicator(1, LotoSimulationConstants.TotalScenarios);
+        RefreshActiveObjectiveTitle();
+        RefreshTimerDisplay();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeOrchestratorEvents();
+    }
+
+    #endregion
+
+    #region Lifecycle
+
+    private void Update()
+    {
+        if (orchestrator == null || playerHud == null)
+        {
+            return;
+        }
+
+        if (Time.unscaledTime < nextTimerRefreshTime)
+        {
+            return;
+        }
+
+        nextTimerRefreshTime = Time.unscaledTime + LotoSimulationConstants.HudTimerRefreshInterval;
+        RefreshTimerDisplay();
+    }
+
+    private void RefreshButtonLabels()
+    {
+        EnsureButtonLabel(briefingPanel?.beginButton, "loto_briefing_begin");
+        EnsureButtonLabel(playerHud?.menuButton, "loto_hud_menu");
+        EnsureButtonLabel(playerHud?.exitConfirmYes, "loto_exit_confirm_yes");
+        EnsureButtonLabel(playerHud?.exitConfirmNo, "loto_exit_confirm_no");
+    }
+
+    private void EnsureButtonLabel(Button button, string translationKey)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
+        if (label == null)
+        {
+            GameObject labelObject = new GameObject("Label", typeof(RectTransform));
+            labelObject.transform.SetParent(button.transform, false);
+            RectTransform labelTransform = labelObject.GetComponent<RectTransform>();
+            labelTransform.anchorMin = Vector2.zero;
+            labelTransform.anchorMax = Vector2.one;
+            labelTransform.offsetMin = Vector2.zero;
+            labelTransform.offsetMax = Vector2.zero;
+            label = labelObject.AddComponent<TextMeshProUGUI>();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 22;
+            label.color = Color.white;
+        }
+
+        label.text = GetTranslation(translationKey);
+    }
+
+    #endregion
+
+    #region Orchestrator Events
+
+    private void SubscribeOrchestratorEvents()
+    {
+        if (orchestrator == null)
+        {
+            return;
+        }
+
+        orchestrator.OnStateChanged += HandleStateChanged;
+        orchestrator.OnScenarioChanged += HandleScenarioChanged;
+        orchestrator.OnObjectiveVisualUpdate += HandleObjectiveVisualUpdate;
+        orchestrator.OnSubtitleChanged += HandleSubtitleChanged;
+        orchestrator.OnSessionSummaryRequested += HandleSessionSummaryRequested;
+    }
+
+    private void UnsubscribeOrchestratorEvents()
+    {
+        if (orchestrator == null)
+        {
+            return;
+        }
+
+        orchestrator.OnStateChanged -= HandleStateChanged;
+        orchestrator.OnScenarioChanged -= HandleScenarioChanged;
+        orchestrator.OnObjectiveVisualUpdate -= HandleObjectiveVisualUpdate;
+        orchestrator.OnSubtitleChanged -= HandleSubtitleChanged;
+        orchestrator.OnSessionSummaryRequested -= HandleSessionSummaryRequested;
+    }
+
+    private void HandleStateChanged(LotoSimulationState state)
+    {
+        ApplyState(state);
+    }
+
+    private void HandleScenarioChanged(int currentScenario, int totalScenarios)
+    {
+        RefreshScenarioIndicator(currentScenario, totalScenarios);
+        RefreshActiveObjectiveTitle();
+    }
+
+    private void HandleSessionSummaryRequested(bool success)
+    {
+        EnsureSessionSummaryPanel();
+        RefreshSessionSummary(success);
+    }
+
+    private void HandleObjectiveVisualUpdate(int objectiveIndex, bool achieved)
+    {
+        RefreshObjectiveRow(objectiveIndex, achieved);
+    }
+
+    private void HandleSubtitleChanged(string subtitle)
+    {
+        if (playerHud != null && playerHud.subtitleText != null)
+        {
+            playerHud.subtitleText.text = subtitle;
+        }
+    }
+
+    #endregion
+
+    #region UI State
+
+    private void ApplyState(LotoSimulationState state)
+    {
+        if (briefingPanel != null && briefingPanel.rootPanel != null)
+        {
+            briefingPanel.rootPanel.SetActive(state == LotoSimulationState.Briefing);
+        }
+
+        if (playerHud != null && playerHud.rootPanel != null)
+        {
+            bool showHud = state == LotoSimulationState.Active ||
+                           state == LotoSimulationState.ExitConfirm ||
+                           state == LotoSimulationState.SessionSummary;
+            playerHud.rootPanel.SetActive(showHud);
+        }
+
+        if (playerHud != null && playerHud.exitConfirmPanel != null)
+        {
+            playerHud.exitConfirmPanel.SetActive(state == LotoSimulationState.ExitConfirm);
+        }
+
+        if (playerHud != null && playerHud.sessionSummaryPanel != null)
+        {
+            playerHud.sessionSummaryPanel.SetActive(state == LotoSimulationState.SessionSummary);
+        }
+
+        if (state == LotoSimulationState.Briefing)
+        {
+            RefreshBriefingTexts();
+        }
+
+        if (state == LotoSimulationState.Active)
+        {
+            RefreshActiveObjectiveTitle();
+            RefreshAllObjectiveRows();
+            RefreshTimerDisplay();
+        }
+
+        if (state == LotoSimulationState.ExitConfirm)
+        {
+            RefreshExitConfirmTexts();
+        }
+    }
+
+    private void EnsureSessionSummaryPanel()
+    {
+        if (playerHud == null || playerHud.rootPanel == null)
+        {
+            return;
+        }
+
+        if (playerHud.sessionSummaryPanel != null)
+        {
+            return;
+        }
+
+        GameObject panel = new GameObject("SessionSummaryPanel", typeof(RectTransform));
+        panel.transform.SetParent(playerHud.rootPanel.transform, false);
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.15f, 0.2f);
+        rect.anchorMax = new Vector2(0.85f, 0.75f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        Image background = panel.AddComponent<Image>();
+        background.color = new Color(0.102f, 0.212f, 0.365f, 0.95f);
+
+        playerHud.sessionSummaryPanel = panel;
+        playerHud.sessionSummaryTitleText = CreateSummaryText(panel.transform, "Title", new Vector2(0.5f, 0.78f), 28);
+        playerHud.sessionSummaryBodyText = CreateSummaryText(panel.transform, "Body", new Vector2(0.5f, 0.5f), 22);
+        playerHud.sessionSummaryBodyText.alignment = TextAlignmentOptions.Top;
+
+        GameObject buttonObject = new GameObject("ContinueButton", typeof(RectTransform));
+        buttonObject.transform.SetParent(panel.transform, false);
+        RectTransform buttonRect = buttonObject.GetComponent<RectTransform>();
+        buttonRect.anchorMin = new Vector2(0.3f, 0.08f);
+        buttonRect.anchorMax = new Vector2(0.7f, 0.2f);
+        buttonRect.offsetMin = Vector2.zero;
+        buttonRect.offsetMax = Vector2.zero;
+        Image buttonImage = buttonObject.AddComponent<Image>();
+        buttonImage.color = new Color(0.976f, 0.451f, 0.086f, 1f);
+        playerHud.sessionSummaryContinueButton = buttonObject.AddComponent<Button>();
+        playerHud.sessionSummaryContinueButton.onClick.AddListener(() => orchestrator?.CompleteSimulation());
+        CreateSummaryText(buttonObject.transform, "Label", new Vector2(0.5f, 0.5f), 20).text = GetTranslation("backToMenu");
+    }
+
+    private static TMP_Text CreateSummaryText(Transform parent, string name, Vector2 anchor, float fontSize)
+    {
+        GameObject textObject = new GameObject(name, typeof(RectTransform));
+        textObject.transform.SetParent(parent, false);
+        RectTransform rect = textObject.GetComponent<RectTransform>();
+        rect.anchorMin = anchor;
+        rect.anchorMax = anchor;
+        rect.sizeDelta = new Vector2(500f, 120f);
+        rect.anchoredPosition = Vector2.zero;
+        TMP_Text text = textObject.AddComponent<TextMeshProUGUI>();
+        text.alignment = TextAlignmentOptions.Center;
+        text.fontSize = fontSize;
+        text.color = Color.white;
+        return text;
+    }
+
+    private void RefreshSessionSummary(bool success)
+    {
+        if (playerHud == null)
+        {
+            return;
+        }
+
+        SceneScore activeScore = GetActiveSceneScore();
+        int achievedCount = 0;
+        if (activeScore != null && activeScore.objectives != null)
+        {
+            for (int i = 0; i < activeScore.objectives.Count; i++)
+            {
+                if (activeScore.objectives[i] != null && activeScore.objectives[i].isAchivied)
+                {
+                    achievedCount++;
+                }
+            }
+        }
+
+        if (playerHud.sessionSummaryTitleText != null)
+        {
+            playerHud.sessionSummaryTitleText.text = GetTranslation("loto_s3_summary_title");
+        }
+
+        if (playerHud.sessionSummaryBodyText != null)
+        {
+            string template = GetTranslation("loto_s3_summary_body");
+            playerHud.sessionSummaryBodyText.text = string.Format(template, achievedCount, activeScore != null ? activeScore.objectives.Count : 5, success ? GetTranslation("SM_detailScreen_title_approbed") : GetTranslation("SM_detailScreen_title_fail"));
+        }
+    }
+
+    private void BindButtons()
+    {
+        if (briefingPanel != null && briefingPanel.beginButton != null)
+        {
+            briefingPanel.beginButton.onClick.RemoveAllListeners();
+            briefingPanel.beginButton.onClick.AddListener(() => orchestrator?.DismissBriefing());
+        }
+
+        if (playerHud != null && playerHud.menuButton != null)
+        {
+            playerHud.menuButton.onClick.RemoveAllListeners();
+            playerHud.menuButton.onClick.AddListener(() => orchestrator?.RequestExitToMenu());
+        }
+
+        if (playerHud != null && playerHud.exitConfirmYes != null)
+        {
+            playerHud.exitConfirmYes.onClick.RemoveAllListeners();
+            playerHud.exitConfirmYes.onClick.AddListener(() => orchestrator?.ConfirmExit());
+        }
+
+        if (playerHud != null && playerHud.exitConfirmNo != null)
+        {
+            playerHud.exitConfirmNo.onClick.RemoveAllListeners();
+            playerHud.exitConfirmNo.onClick.AddListener(() => orchestrator?.CancelExit());
+        }
+    }
+
+    #endregion
+
+    #region Objective Rows
+
+    private void BuildObjectiveRows()
+    {
+        objectiveRows.Clear();
+        if (playerHud == null || playerHud.objectivesContainer == null || playerHud.objectiveRowPrefab == null)
+        {
+            return;
+        }
+
+        for (int i = playerHud.objectivesContainer.childCount - 1; i >= 0; i--)
+        {
+            Destroy(playerHud.objectivesContainer.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < LotoObjectiveIds.AllObjectiveIds.Length; i++)
+        {
+            GameObject rowObject = Instantiate(playerHud.objectiveRowPrefab, playerHud.objectivesContainer);
+            ref_LotoObjectiveRow row = rowObject.GetComponent<ref_LotoObjectiveRow>();
+            if (row == null)
+            {
+                continue;
+            }
+
+            if (row.title != null)
+            {
+                row.title.text = GetTranslation(LotoObjectiveIds.AllObjectiveIds[i]);
+            }
+
+            objectiveRows.Add(row);
+            RefreshObjectiveRow(i, false);
+        }
+    }
+
+    private void RefreshAllObjectiveRows()
+    {
+        SceneScore activeScore = GetActiveSceneScore();
+        for (int i = 0; i < objectiveRows.Count; i++)
+        {
+            bool achieved = activeScore != null &&
+                            activeScore.objectives != null &&
+                            i < activeScore.objectives.Count &&
+                            activeScore.objectives[i].isAchivied;
+            RefreshObjectiveRow(i, achieved);
+        }
+    }
+
+    private void RefreshObjectiveRow(int objectiveIndex, bool achieved)
+    {
+        if (objectiveIndex < 0 || objectiveIndex >= objectiveRows.Count)
+        {
+            return;
+        }
+
+        ref_LotoObjectiveRow row = objectiveRows[objectiveIndex];
+        if (row == null || row.statusIcon == null)
+        {
+            return;
+        }
+
+        row.statusIcon.sprite = achieved ? GetAchievedSprite() : GetPendingSprite();
+        row.statusIcon.color = achieved ? new Color(0.133f, 0.773f, 0.369f, 1f) : Color.white;
+    }
+
+    #endregion
+
+    #region Display Refresh
+
+    private void RefreshBriefingTexts()
+    {
+        if (briefingPanel == null)
+        {
+            return;
+        }
+
+        if (briefingPanel.titleText != null)
+        {
+            briefingPanel.titleText.text = GetTranslation("loto_briefing_title");
+        }
+
+        if (briefingPanel.bodyText != null)
+        {
+            briefingPanel.bodyText.text = GetTranslation("loto_briefing_body");
+        }
+    }
+
+    private void RefreshExitConfirmTexts()
+    {
+        if (playerHud == null || playerHud.exitConfirmPanel == null)
+        {
+            return;
+        }
+
+        if (playerHud.exitConfirmTitleText != null)
+        {
+            playerHud.exitConfirmTitleText.text = GetTranslation("loto_exit_confirm_title");
+        }
+
+        if (playerHud.exitConfirmBodyText != null)
+        {
+            playerHud.exitConfirmBodyText.text = GetTranslation("loto_exit_confirm_body");
+        }
+    }
+
+    private void RefreshActiveObjectiveTitle()
+    {
+        if (playerHud == null || playerHud.activeObjectiveTitle == null || orchestrator == null)
+        {
+            return;
+        }
+
+        string label = GetTranslation("loto_hud_active_objective");
+        string objectiveId = ResolveActiveObjectiveId();
+        string objective = GetTranslation(objectiveId);
+        playerHud.activeObjectiveTitle.text = $"{label}: {objective}";
+    }
+
+    private string ResolveActiveObjectiveId()
+    {
+        if (orchestrator == null)
+        {
+            return LotoObjectiveIds.EppSelection;
+        }
+
+        if (orchestrator.CurrentScenarioIndex == LotoSimulationConstants.ScenarioEpp)
+        {
+            SceneScore activeScore = GetActiveSceneScore();
+            if (activeScore != null &&
+                activeScore.objectives != null &&
+                activeScore.objectives.Count > LotoSimulationConstants.ObjectiveEppSelectionIndex &&
+                activeScore.objectives[LotoSimulationConstants.ObjectiveEppSelectionIndex].isAchivied)
+            {
+                return LotoObjectiveIds.EppDefect;
+            }
+
+            return LotoObjectiveIds.EppSelection;
+        }
+
+        if (orchestrator.CurrentScenarioIndex == LotoSimulationConstants.ScenarioInspection)
+        {
+            return LotoObjectiveIds.HazardReport;
+        }
+
+        if (orchestrator.CurrentScenarioIndex >= LotoSimulationConstants.ScenarioLoto)
+        {
+            SceneScore activeScore = GetActiveSceneScore();
+            if (activeScore != null &&
+                activeScore.objectives != null &&
+                activeScore.objectives.Count > LotoSimulationConstants.ObjectiveLotoSequenceIndex &&
+                activeScore.objectives[LotoSimulationConstants.ObjectiveLotoSequenceIndex].isAchivied)
+            {
+                return LotoObjectiveIds.ZeroEnergy;
+            }
+
+            return LotoObjectiveIds.LotoSequence;
+        }
+
+        return LotoObjectiveIds.EppSelection;
+    }
+
+    private void RefreshScenarioIndicator(int currentScenario, int totalScenarios)
+    {
+        if (playerHud == null || playerHud.scenarioIndicatorText == null)
+        {
+            return;
+        }
+
+        string template = GetTranslation("loto_hud_scenario_label");
+        playerHud.scenarioIndicatorText.text = string.Format(template, currentScenario, totalScenarios);
+    }
+
+    private void RefreshTimerDisplay()
+    {
+        if (playerHud == null || orchestrator == null)
+        {
+            return;
+        }
+
+        float elapsed = orchestrator.GetActiveElapsedSeconds();
+        if (playerHud.timerText != null)
+        {
+            playerHud.timerText.text = FormatElapsedTime(elapsed);
+        }
+
+        if (playerHud.timerFill != null)
+        {
+            playerHud.timerFill.fillAmount = Mathf.Clamp01(elapsed / 1800f);
+        }
+    }
+
+    private void ApplyBrandColors()
+    {
+        if (playerHud == null)
+        {
+            return;
+        }
+
+        Color primary = Brand.Primary;
+        Color secondary = Brand.Secondary;
+        if (primary.a <= 0f)
+        {
+            primary = primaryPanelColor;
+        }
+
+        if (secondary.a <= 0f)
+        {
+            secondary = secondaryAccentColor;
+        }
+
+        Image[] images = playerHud.GetComponentsInChildren<Image>(true);
+        for (int i = 0; i < images.Length; i++)
+        {
+            if (images[i] == null || images[i] == playerHud.timerFill)
+            {
+                continue;
+            }
+
+            if (images[i].gameObject.name.Contains("Header") || images[i].gameObject.name.Contains("Panel"))
+            {
+                images[i].color = primary;
+            }
+        }
+
+        if (playerHud.menuButton != null)
+        {
+            Image menuImage = playerHud.menuButton.GetComponent<Image>();
+            if (menuImage != null)
+            {
+                menuImage.color = secondary;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private SceneScore GetActiveSceneScore()
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
+        {
+            return null;
+        }
+
+        return ControlCenter.Instance.scoreManager.GetActiveSceneScore(LotoSimulationConstants.LotoSimScoreIndex);
+    }
+
+    private Sprite GetPendingSprite()
+    {
+        if (objectivePendingSprite != null)
+        {
+            return objectivePendingSprite;
+        }
+
+        if (SBD_Images.Instance != null)
+        {
+            return SBD_Images.Instance.UI_objective_failed;
+        }
+
+        return null;
+    }
+
+    private Sprite GetAchievedSprite()
+    {
+        if (objectiveAchievedSprite != null)
+        {
+            return objectiveAchievedSprite;
+        }
+
+        if (SBD_Images.Instance != null)
+        {
+            return SBD_Images.Instance.UI_objective_achivied;
+        }
+
+        return null;
+    }
+
+    private static string GetTranslation(string key)
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null || string.IsNullOrEmpty(key))
+        {
+            return key;
+        }
+
+        string translated = ControlCenter.Instance.languageManager.GetText(key);
+        return string.IsNullOrEmpty(translated) ? key : translated;
+    }
+
+    private static string FormatElapsedTime(float elapsedSeconds)
+    {
+        int totalSeconds = Mathf.Max(0, Mathf.FloorToInt(elapsedSeconds));
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return $"{minutes:00}:{seconds:00}";
+    }
+
+    #endregion
+}

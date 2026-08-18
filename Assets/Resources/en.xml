@@ -2,7 +2,7 @@
 <resources>
 	<!-- Main Menu -->
 	<string name="simVersion">V 1.0.0</string>
-	<string name="simName">XR Menu</string>
+	<string name="simName">SafeMining VR</string>
 	<string name="logout">LOGOUT</string>
 	<string name="login">LOGIN</string>
 	<string name="play">START</string>
@@ -64,16 +64,58 @@
 	<string name="back">BACK</string>
 	<string name="continue">CONTINUE</string>
 	<!-- Custom scenes (for scores) -->
-	<string name="sceneName1">Scene Name 1</string>
-	<string name="sceneName2">Scene Name 2</string>
-	<string name="sceneName3">Scene Name 3</string>
-	<!-- Add a string for every scene name in the project, with the same format as the above -->
-	<string name="sceneObjective1-1">Do the scene objective 1</string>
-	<string name="sceneObjective1-2">Do the scene objective 2</string>
-	<string name="sceneObjective1-3">Do the scene objective 3</string>
-	<string name="sceneObjective1-4">Do the scene objective 4</string>
-	<string name="sceneObjective1-5">Do the scene objective 5</string>
-	<!-- Add a string for every scene objective in the project, with the same format as the above (scene-objective) -->
+	<string name="loto_simulation">Lockout/Tagout</string>
+	<string name="loto_simulation_summary">LOTO training: PPE, hazard inspection, and energy lockout on a conveyor belt.</string>
+	<string name="loto_placeholder_title">LOTO Simulation — Under construction</string>
+	<string name="loto_placeholder_return">Return to menu</string>
+	<string name="loto_obj_epp_selection">Correct PPE selection</string>
+	<string name="loto_obj_epp_defect">Defective PPE identification</string>
+	<string name="loto_obj_hazard_report">Unsafe condition reporting</string>
+	<string name="loto_obj_loto_sequence">Complete LOTO sequence</string>
+	<string name="loto_obj_zero_energy">Zero energy verification</string>
+	<string name="loto_briefing_title">LOTO Training</string>
+	<string name="loto_briefing_body">This simulation has three sequential scenarios: PPE selection, hazard inspection, and energy lockout/tagout on a conveyor belt.</string>
+	<string name="loto_briefing_begin">Begin</string>
+	<string name="loto_hud_active_objective">Active objective</string>
+	<string name="loto_hud_scenario_label">Scenario {0}/{1}</string>
+	<string name="loto_hud_menu">Menu</string>
+	<string name="loto_exit_confirm_title">Leave simulation?</string>
+	<string name="loto_exit_confirm_body">The session will remain incomplete. Partial progress will be saved and available in the lobby.</string>
+	<string name="loto_exit_confirm_yes">Leave</string>
+	<string name="loto_exit_confirm_no">Continue</string>
+	<string name="loto_subtitle_welcome">Welcome to S1 locker room. Check your PPE before entering the plant.</string>
+	<string name="loto_s3_intro">A roller anomaly was detected. Stop the belt and apply LOTO before intervening.</string>
+	<string name="loto_s3_step_stop">Stop the conveyor at the control station.</string>
+	<string name="loto_s3_step_isolate">Open the panel and switch the isolation breaker to OFF.</string>
+	<string name="loto_s3_step_lock">Place the red personal lockout padlock on the LOTO hasp.</string>
+	<string name="loto_s3_step_tag">Attach the DANGER DO NOT OPERATE tag to the lock.</string>
+	<string name="loto_s3_step_verify">Press START to verify zero energy. The belt must not move.</string>
+	<string name="loto_s3_reject_wrong_lock">Use the red personal lockout padlock, not visitor or group locks.</string>
+	<string name="loto_s3_reject_wrong_tag">Use the DANGER DO NOT OPERATE tag.</string>
+	<string name="loto_s3_reject_order">Complete the LOTO steps in order before continuing.</string>
+	<string name="loto_s3_alert_incomplete">Incomplete LOTO. It is not safe to energize the equipment.</string>
+	<string name="loto_s3_success_zero_energy">Zero energy verification successful.</string>
+	<string name="loto_s3_summary_title">LOTO session summary</string>
+	<string name="loto_s3_summary_body">Objectives achieved: {0}/{1}. Result: {2}.</string>
+	<string name="loto_s1_intro">Welcome to the locker room. Select and wear mandatory PPE before entering the plant.</string>
+	<string name="loto_s1_step_select">Select the 5 mandatory PPE items and place them on your body.</string>
+	<string name="loto_s1_step_reject">Identify defective PPE and place it in the reject bin.</string>
+	<string name="loto_s1_step_ready">PPE complete. Continue to the hazard inspection area.</string>
+	<string name="loto_s1_reject_defective">This PPE is in poor condition. Do not use it. Place it in the reject bin.</string>
+	<string name="loto_s1_success_equipped">Mandatory PPE complete (5/5).</string>
+	<string name="loto_s1_success_defect">Defective PPE identified correctly.</string>
+	<string name="loto_s1_optional_item">This PPE item is not required for this task.</string>
+	<string name="loto_s2_intro">Pre-operational inspection. Report all unsafe conditions near the stopped conveyor.</string>
+	<string name="loto_s2_progress_hint">Report all 4 unsafe conditions before continuing.</string>
+	<string name="loto_s2_step_ready">Inspection complete. Continue to the LOTO area.</string>
+	<string name="loto_s2_complete_with_penalty">All hazards reported, but false positives reduced your score.</string>
+	<string name="loto_s2_false_positive">This element is safe. False reports reduce your score.</string>
+	<string name="loto_s2_timeout_hint">Look for spilled material, abandoned tools, fallen signage, and obstructed fire equipment.</string>
+	<string name="loto_s2_report_spill">Spilled material in transit zone reported.</string>
+	<string name="loto_s2_report_tools">Abandoned tools reported.</string>
+	<string name="loto_s2_report_signage">Fallen or damaged signage reported.</string>
+	<string name="loto_s2_report_extinguisher">Obstructed fire extinguisher reported.</string>
+	<string name="loto_s2_report_generic">Unsafe condition reported.</string>
 	<!-- Controls -->
 	<string name="keyboard">Keyboard</string>
 	<string name="joystick">Joystick</string>

@@ -208,25 +208,27 @@ public class IBManager : MonoBehaviour
 
     public void HandleSceneViewerSelect(UIContentCarousel carousel)
     {
+        int carouselIndex = carousel != null ? carousel.currentIndex : 0;
         if (simulatorType == SimulatorType.Hub)
         {
-            OpenHubSimulatorByCarouselIndex(carousel != null ? carousel.currentIndex : 0);
+            if (ShouldLaunchExternalHub(carouselIndex))
+            {
+                OpenHubSimulatorByCarouselIndex(carouselIndex);
+                return;
+            }
+
+            LogInfo("HandleSceneViewerSelect", $"Hub sin paquete externo para index={carouselIndex}. Cargando simulacion local.");
+            LoadLocalSimulationScene();
             return;
         }
         if (simulatorType == SimulatorType.PackagePart)
         {
-            int selectedIndex = carousel != null ? carousel.currentIndex : 0;
-            int targetBuildIndex = Mathf.Max(0, packagePartCarouselSceneOffset + selectedIndex);
-            if (ControlCenter.Instance != null && ControlCenter.Instance.scoreManager != null)
-            {
-                ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(targetBuildIndex);
-            }
+            int targetBuildIndex = Mathf.Max(0, packagePartCarouselSceneOffset + carouselIndex);
+            LoadSimulationSceneByBuildIndex(targetBuildIndex);
             return;
         }
-        if (ControlCenter.Instance != null && ControlCenter.Instance.scoreManager != null)
-        {
-            ControlCenter.Instance.scoreManager.LoadSceneByCarouselIndex();
-        }
+
+        LoadLocalSimulationScene();
     }
 
     public void RefreshHubContentAvailability()
@@ -244,7 +246,9 @@ public class IBManager : MonoBehaviour
             {
                 continue;
             }
-            bool showNotInstalled = simulatorType == SimulatorType.Hub && !IsHubSimulatorInstalled(i);
+            bool showNotInstalled = simulatorType == SimulatorType.Hub &&
+                                   ShouldLaunchExternalHub(i) &&
+                                   !IsHubSimulatorInstalled(i);
             carouselElement.contentNotInstalled.SetActive(showNotInstalled);
         }
     }
@@ -1099,6 +1103,34 @@ public class IBManager : MonoBehaviour
             LogError("OpenHubSimulatorByCarouselIndex", $"No se pudo abrir simulador en Windows. ex={ex}");
         }
 #endif
+    }
+
+    private bool ShouldLaunchExternalHub(int carouselIndex)
+    {
+        if (connectionMode == ConnectionMode.Offline)
+        {
+            return false;
+        }
+
+        HubSimulatorLaunchData launchData = ResolveHubLaunchData(carouselIndex);
+        return launchData != null && !string.IsNullOrWhiteSpace(launchData.packageName);
+    }
+
+    private void LoadLocalSimulationScene()
+    {
+        SetCurrentCarouselNotInstalledVisible(false);
+        LoadSimulationSceneByBuildIndex(LotoSimulationConstants.LotoHubBuildIndex);
+    }
+
+    private void LoadSimulationSceneByBuildIndex(int buildIndex)
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
+        {
+            LogError("LoadSimulationSceneByBuildIndex", "ScoreManager no disponible.");
+            return;
+        }
+
+        ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(buildIndex);
     }
 
     private HubSimulatorLaunchData ResolveHubLaunchData(int carouselIndex)

@@ -100,6 +100,57 @@ public class ControlCenter : MonoBehaviour
         }
         set => _ibManager = value;
     }
+    private protected SyncQueueManager _syncQueueManager;
+    public SyncQueueManager syncQueueManager
+    {
+        get
+        {
+            if (_syncQueueManager == null)
+            {
+                _syncQueueManager = gameObject.GetComponent<SyncQueueManager>();
+                if (_syncQueueManager == null)
+                {
+                    _syncQueueManager = gameObject.AddComponent<SyncQueueManager>();
+                }
+            }
+            return _syncQueueManager;
+        }
+        set => _syncQueueManager = value;
+    }
+    private protected SimulationSessionManager _simulationSessionManager;
+    public SimulationSessionManager simulationSessionManager
+    {
+        get
+        {
+            if (_simulationSessionManager == null)
+            {
+                _simulationSessionManager = gameObject.GetComponent<SimulationSessionManager>();
+                if (_simulationSessionManager == null)
+                {
+                    _simulationSessionManager = gameObject.AddComponent<SimulationSessionManager>();
+                }
+            }
+            return _simulationSessionManager;
+        }
+        set => _simulationSessionManager = value;
+    }
+    private protected SimulationOrchestratorManager _simulationOrchestratorManager;
+    public SimulationOrchestratorManager simulationOrchestratorManager
+    {
+        get
+        {
+            if (_simulationOrchestratorManager == null)
+            {
+                _simulationOrchestratorManager = gameObject.GetComponent<SimulationOrchestratorManager>();
+                if (_simulationOrchestratorManager == null)
+                {
+                    _simulationOrchestratorManager = gameObject.AddComponent<SimulationOrchestratorManager>();
+                }
+            }
+            return _simulationOrchestratorManager;
+        }
+        set => _simulationOrchestratorManager = value;
+    }
     #endregion
 
     [Header("Branding")]
@@ -168,6 +219,9 @@ public class ControlCenter : MonoBehaviour
     void InitializeManagers()
     {
         persistantDataManager.Initialize();
+        syncQueueManager.Initialize();
+        simulationSessionManager.Initialize();
+        simulationOrchestratorManager.Initialize();
         loadManager.Initialize();
         languageManager.Initialize();
         soundManager.Initialize();

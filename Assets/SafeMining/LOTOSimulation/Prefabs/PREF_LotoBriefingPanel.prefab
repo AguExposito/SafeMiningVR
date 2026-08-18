@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2000
+GameObject:
+  m_Component:
+  - component: {fileID: 2001}
+  - component: {fileID: 2002}
+  - component: {fileID: 2003}
+  m_Layer: 5
+  m_Name: PREF_LotoBriefingPanel
+--- !u!224 &2001
+RectTransform:
+  m_GameObject: {fileID: 2000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 800, y: 500}
+--- !u!223 &2002
+Canvas:
+  m_GameObject: {fileID: 2000}
+  m_RenderMode: 2
+--- !u!114 &2003
+MonoBehaviour:
+  m_GameObject: {fileID: 2000}
+  m_Script: {fileID: 11500000, guid: f2a3b4c5d6e789012345678901abcdef, type: 3}
+  rootPanel: {fileID: 2000}
+  titleText: {fileID: 2012}
+  bodyText: {fileID: 2022}
+  beginButton: {fileID: 2033}

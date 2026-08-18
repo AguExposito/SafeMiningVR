@@ -22,7 +22,7 @@ namespace NJ
                         T previousValue = _value;
                         _value = value;
 
-                        Debug.LogError($"Valor cambiado de {previousValue} a {value}");
+                        Debug.Log($"Valor cambiado de {previousValue} a {value}");
 
                         OnValueChanged?.Invoke(_value);
                         OnValueChangedWithPrevious?.Invoke(_value, previousValue);

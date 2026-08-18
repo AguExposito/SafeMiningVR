@@ -1,0 +1,57 @@
+---
+description: "SafeMining VR backend sync: DTOs, offline queue, EA entity mapping, IBManager compatibility"
+globs: Assets/SafeMining/**/*.cs
+alwaysApply: false
+---
+
+# SafeMining Online Sync
+
+## Offline-first
+
+MVP runs with `IBManager.ConnectionMode.Offline`. All session data must persist locally before any HTTP attempt.
+
+## Local files (persistentDataPath)
+
+| File | Purpose |
+|---|---|
+| `ScorePersistantData.json` | Existing ScoreManager history |
+| `PendingSyncQueue.json` | Outbound sync queue |
+| `SimulationSessionContext.json` | Active/completed session context |
+
+## DTO to Enterprise Architect mapping
+
+| Unity DTO | EA Entity |
+|---|---|
+| `SimulationSessionContext` | `IntentoCapacitacionCapacitado` |
+| `SimulationEventRecord` | `EleccionOpcionCapacitacion` |
+| `SimulationObjectiveResult` | `OBJETIVOSCapacitacion` / partial result |
+| `SimulationResultPayload` | `resultadoIntentoCapacitacion` |
+
+## API contracts (future — Fase 7)
+
+- `POST /api/vr/sessions/start` — create attempt, return intentoId
+- `POST /api/vr/sessions/{id}/events` — record interaction
+- `POST /api/vr/sessions/{id}/complete` — finalize score and approval
+- `POST /api/vr/sessions/sync` — batch deferred entries (24h window per HU-220 CA8)
+
+## Adapter pattern
+
+- `ISimulationBackendAdapter` — abstraction
+- `OfflineBackendAdapter` — queue only, no HTTP
+- `SafeMiningBackendAdapter` — REST stub until backend ready
+
+## IBManager legacy
+
+Keep `IBManager.SendScoreToCloud` and `/crearSimReporte` intact. New sync layer runs in parallel via `SyncQueueManager`. Do not break offline menu flow.
+
+## ALWAYS
+
+1. Use `JsonUtility` with wrapper classes for lists
+2. Purge sync entries older than 24 hours on flush
+3. Enqueue on `ScoreManager.EndScene` via `EnqueueCompleteFromSceneScore`
+
+## NEVER
+
+1. Block gameplay when network unavailable
+2. Delete local score history on sync failure
+3. Send PII beyond participantId/sessionId defined in session context

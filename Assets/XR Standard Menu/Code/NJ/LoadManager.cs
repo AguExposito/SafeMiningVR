@@ -282,6 +282,11 @@ public class LoadManager : MonoBehaviour
         await ExecuteWithLoading(LoadingMode.Blur, 
             async () => {
                 var asyncOperation = SceneManager.LoadSceneAsync(val);
+                if (asyncOperation == null)
+                {
+                    Debug.LogError($"[LoadManager] No se pudo cargar build index {val}.");
+                    return;
+                }
                 while (!asyncOperation.isDone)
                 {
                     await Task.Yield();

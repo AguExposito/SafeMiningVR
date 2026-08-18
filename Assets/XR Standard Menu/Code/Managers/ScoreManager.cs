@@ -68,25 +68,45 @@ public class ScoreManager : MonoBehaviour
 
     #region Public API
 
-    public async void LoadSceneByCarouselIndex(){
+    public void LoadSceneByCarouselIndex(){
         if (uIContentCarousel == null)
         {
             uIContentCarousel = ComponentFinder.FindComponentInScene<UIContentCarousel>();
         }
-        if (uIContentCarousel == null)
+        int targetBuildIndex = LotoSimulationConstants.LotoHubBuildIndex;
+        if (uIContentCarousel != null)
         {
-            return;
+            int requestedIndex = uIContentCarousel.currentIndex + 1;
+            if (IsBuildIndexLoadable(requestedIndex))
+            {
+                targetBuildIndex = requestedIndex;
+            }
         }
-        await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(uIContentCarousel.currentIndex+1);
+        LoadSceneByBuildIndex(targetBuildIndex);
     }
 
     public async void LoadSceneByBuildIndex(int buildIndex)
     {
-        if (buildIndex < 0)
+        if (!IsBuildIndexLoadable(buildIndex))
+        {
+            buildIndex = LotoSimulationConstants.LotoHubBuildIndex;
+        }
+        if (!IsBuildIndexLoadable(buildIndex) || ControlCenter.Instance == null || ControlCenter.Instance.loadManager == null)
         {
             return;
         }
         await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(buildIndex);
+    }
+
+    private static bool IsBuildIndexLoadable(int buildIndex)
+    {
+        if (buildIndex < 0 || buildIndex >= SceneManager.sceneCountInBuildSettings)
+        {
+            return false;
+        }
+
+        string scenePath = SceneUtility.GetScenePathByBuildIndex(buildIndex);
+        return !string.IsNullOrEmpty(scenePath);
     }
 
     public void InitializeScene(int index)
@@ -142,6 +162,10 @@ public class ScoreManager : MonoBehaviour
         state.sceneScore.points = CountAchieved(state.sceneScore.objectives);
         state.sceneScore.approbalRate = CalculateApprobalRate(state.sceneScore.objectives);
         SceneScore savedScene = SaveSceneResult(state.sceneScore, index);
+        if (ControlCenter.Instance != null && ControlCenter.Instance.syncQueueManager != null)
+        {
+            ControlCenter.Instance.syncQueueManager.EnqueueCompleteFromSceneScore(savedScene, elapsedTime, startDate, endDate);
+        }
         if (ControlCenter.Instance != null && ControlCenter.Instance.ibManager != null)
         {
             _ = SendScoreToIAWithDebugAsync(savedScene, elapsedTime, startDate, endDate);
@@ -162,6 +186,28 @@ public class ScoreManager : MonoBehaviour
     {
         _lobbySetupDoneThisLoad = false;
         SetupLobbyScoreView();
+    }
+
+    public bool TryGetActiveSceneElapsed(int sceneIndex, out float elapsedSeconds)
+    {
+        elapsedSeconds = 0f;
+        if (!activeSceneScores.TryGetValue(sceneIndex, out ActiveSceneScoreState state))
+        {
+            return false;
+        }
+
+        elapsedSeconds = Mathf.Max(0f, Time.time - state.startTime);
+        return true;
+    }
+
+    public SceneScore GetActiveSceneScore(int sceneIndex)
+    {
+        if (!activeSceneScores.TryGetValue(sceneIndex, out ActiveSceneScoreState state))
+        {
+            return null;
+        }
+
+        return state.sceneScore;
     }
 
     [ContextMenu("Debug/1 Initialize Random Scene Score")]

@@ -13,51 +13,19 @@ MonoBehaviour:
   m_Name: SimScore
   m_EditorClassIdentifier: Assembly-CSharp::SimScore
   sceneScores:
-  - id: scene_score_0
+  - id: loto_simulation
     attempts: 0
     date: 
     time: 00:00
     points: 0
     objectives:
-    - id: objective_0_0
+    - id: loto_obj_epp_selection
       isAchivied: 0
-    - id: objective_0_1
+    - id: loto_obj_epp_defect
       isAchivied: 0
-    - id: objective_0_2
+    - id: loto_obj_hazard_report
       isAchivied: 0
-    - id: objective_0_3
+    - id: loto_obj_loto_sequence
       isAchivied: 0
-    - id: objective_0_4
-      isAchivied: 0
-  - id: scene_score_1
-    attempts: 0
-    date: 
-    time: 00:00
-    points: 0
-    objectives:
-    - id: objective_1_0
-      isAchivied: 0
-    - id: objective_1_1
-      isAchivied: 0
-    - id: objective_1_2
-      isAchivied: 0
-    - id: objective_1_3
-      isAchivied: 0
-    - id: objective_1_4
-      isAchivied: 0
-  - id: scene_score_2
-    attempts: 0
-    date: 
-    time: 00:00
-    points: 0
-    objectives:
-    - id: objective_2_0
-      isAchivied: 0
-    - id: objective_2_1
-      isAchivied: 0
-    - id: objective_2_2
-      isAchivied: 0
-    - id: objective_2_3
-      isAchivied: 0
-    - id: objective_2_4
+    - id: loto_obj_zero_energy
       isAchivied: 0

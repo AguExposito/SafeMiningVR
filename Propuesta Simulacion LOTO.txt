@@ -1,0 +1,101 @@
+LOTO
+Escenario 1: Equipamiento de EPP
+
+El participante ingresa a un vestuario o punto de control previo al acceso a planta. Frente a él encuentra un casillero con distintos elementos de protección personal, algunos correctos y otros en mal estado o no requeridos para la tarea.
+
+Objetivo: seleccionar y colocarse el EPP obligatorio antes de ingresar al área operacional.
+
+Conductas evaluadas:
+- Selección correcta de EPP.
+- Identificación de EPP defectuoso.
+
+Escenario 2: Inspección Preoperacional e Identificación de Riesgos
+
+El participante llega a una zona cercana a una correa transportadora detenida para realizar una inspección visual. Durante el recorrido observa diversas condiciones del entorno, algunas seguras y otras que representan riesgos potenciales.
+
+Entre ellas pueden encontrarse:
+
+Material derramado en una zona de tránsito.
+Herramientas abandonadas.
+Señalización caída o deteriorada.
+Extintor parcialmente obstruido.
+
+Objetivo: identificar y reportar las condiciones inseguras antes de iniciar cualquier trabajo.
+
+Conductas evaluadas:
+
+- Observación del entorno.
+- Reconocimiento de peligros.
+- Reporte oportuno de condiciones inseguras. (Al reportarlas se interactúa y desaparecen o se ordenan los elementos)
+
+Escenario 3: Aplicación de Bloqueo y Etiquetado (LOTO)
+
+Luego de detectar una anomalía en un rodillo de la correa, el participante recibe la instrucción de preparar el equipo para una inspección segura. Frente a él se encuentra un tablero eléctrico con el punto de aislamiento correspondiente.
+
+Debe ejecutar la secuencia de control de energías peligrosas antes de acercarse al equipo.
+
+Objetivo: asegurar que el equipo no pueda ponerse en marcha de forma inesperada durante la intervención.
+
+Conductas evaluadas:
+
+- Detención del equipo.
+- Aislamiento de energía.
+- Instalación de candado y tarjeta.
+- Verificación de energía cero.
+
+Antes de acercarse al equipo el usuario debe:
+
+- Detener la correa.
+- Abrir el interruptor de aislamiento.
+- Colocar candado de bloqueo.
+- Colocar tarjeta de identificación.
+- Intentar arrancar el equipo para verificar energía cero.
+
+
+Elementos:
+Correa transportadora
+Estación de control, al lado de la correa (ON/OFF)
+Tablero eléctrico,
+interruptor principal (aisla el equipo de la corriente, ON/OFF)
+*punto de bloqueo LOTO (Orificio de bloqueo para Candado) 
+
+Elementos extra (con tipos re simplificados)
+Candado
+Candado Rojo - PERSONAL LOCKOUT (Correcto)
+Candado Azul - VISITOR
+Candado Amarillo - GRUPAL
+
+Luego de colocar el candado se debe colocar una etiqueta en la argolla del mismo (se fija automáticamente)
+Etiqueta
+PELIGRO NO OPERAR (Correcto)
+INSPECCIONADO
+EQUIPO OPERATIVO
+MANTENIMIENTO TERMINADO
+
+Finalmente el usuario hace la Verificación de Energía Cero, presiona el mismo botón START utilizado para operar la correa. Nada ocurre.
+La correa no se mueve. (Final Feliz)
+
+Si olvidó un paso Por ejemplo no colocó el candado. Al presionar START: La correa intenta arrancar. Se genera alerta. (Final Malo 1, opcional)
+
+Si no se equipó los EPP (guantes) se electrocuta (Final Malo 2, opcional)
+
+EPPs:
+Casco de seguridad
+Lentes de seguridad
+Protector auditivo
+Chaleco reflectante
+Guantes
+Botas de seguridad 
+
+
+Justificación Escenario 2
+https://www.youtube.com/watch?v=TIluVXT0c1s --> https://www.youtube.com/watch?v=Itl0yX1OoPo (re graciosa la anim, no vale la pena verlo)
+Procedimiento LOTO https://www.youtube.com/watch?v=36g_1vOVU14&t=336s
+
+El video que más recomiendo ver para el procedimiento LOTO (Candados y etiquetas)
+https://www.youtube.com/watch?v=8VNR4Sw5Xmc 
+
+
+Assets a tener en cuenta:
+Cinta transportadora: https://sketchfab.com/3d-models/conveyor-belt-55f0d0f9b3384ea4b49cfc8aef97dcf9
+Panel eléctrico: https://sketchfab.com/3d-models/industrial-electrical-box-de13c96dad014bf098df03030f314fee

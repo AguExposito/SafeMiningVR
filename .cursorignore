@@ -1,0 +1,18 @@
+﻿Library/
+Temp/
+Logs/
+UserSettings/
+obj/
+Build/
+Builds/
+MemoryCaptures/
+Recordings/
+*.apk
+*.aab
+Doc_SMVR/*.eap
+Doc_SMVR/*.EAP
+Doc_SMVR/*.docx
+Assets/Samples/
+Assets/TextMesh Pro/Examples & Extras/
+Assets/VRTemplateAssets/
+Assets/MRTemplateAssets/

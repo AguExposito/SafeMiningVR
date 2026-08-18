@@ -1,0 +1,274 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using UnityEngine;
+
+public class SyncQueueManager : MonoBehaviour
+{
+    public event Action OnSyncCompleted;
+    public event Action<string> OnSyncFailed;
+
+    private const double SyncRetentionHours = 24d;
+
+    private ISimulationBackendAdapter activeAdapter;
+    private PendingSyncQueueData queueData;
+    private string queueFilePath;
+
+    #region Initialization
+
+    public void Initialize()
+    {
+        queueFilePath = Path.Combine(Application.persistentDataPath, "PendingSyncQueue.json");
+        activeAdapter = ResolveActiveAdapter();
+        LoadQueue();
+        PurgeExpiredEntries();
+    }
+
+    #endregion
+
+    #region Public API
+
+    public void Enqueue(PendingSyncEntry entry)
+    {
+        if (entry == null)
+        {
+            return;
+        }
+        if (string.IsNullOrEmpty(entry.entryId))
+        {
+            entry.entryId = Guid.NewGuid().ToString("N");
+        }
+        if (string.IsNullOrEmpty(entry.queuedAtUtc))
+        {
+            entry.queuedAtUtc = DateTime.UtcNow.ToString("o");
+        }
+        if (queueData.entries == null)
+        {
+            queueData.entries = new List<PendingSyncEntry>();
+        }
+        queueData.entries.Add(entry);
+        SaveQueue();
+    }
+
+    public void EnqueueCompleteFromSceneScore(SceneScore sceneScore, float elapsedSeconds, DateTime startDate, DateTime endDate)
+    {
+        SimulationResultPayload payload = BuildResultPayload(sceneScore, elapsedSeconds, endDate);
+        string sessionId = ResolveSessionId();
+        payload.sessionId = sessionId;
+        PendingSyncEntry entry = new PendingSyncEntry
+        {
+            entryType = PendingSyncEntry.EntryTypeComplete,
+            payloadJson = JsonUtility.ToJson(payload)
+        };
+        Enqueue(entry);
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
+        {
+            ControlCenter.Instance.simulationSessionManager.CompleteCurrentSession(payload);
+        }
+        _ = TryFlushQueueAsync();
+    }
+
+    public async Task TryFlushQueueAsync()
+    {
+        if (activeAdapter == null || !activeAdapter.IsAvailable)
+        {
+            return;
+        }
+        PurgeExpiredEntries();
+        if (queueData.entries == null || queueData.entries.Count == 0)
+        {
+            return;
+        }
+        List<PendingSyncEntry> pendingEntries = new List<PendingSyncEntry>(queueData.entries);
+        List<PendingSyncEntry> completedEntries = new List<PendingSyncEntry>();
+        for (int i = 0; i < pendingEntries.Count; i++)
+        {
+            PendingSyncEntry entry = pendingEntries[i];
+            bool success = await ProcessEntryAsync(entry);
+            if (success)
+            {
+                completedEntries.Add(entry);
+            }
+            else
+            {
+                entry.retryCount++;
+                entry.lastError = "Sync attempt failed";
+            }
+        }
+        for (int i = 0; i < completedEntries.Count; i++)
+        {
+            queueData.entries.Remove(completedEntries[i]);
+        }
+        SaveQueue();
+        if (completedEntries.Count > 0)
+        {
+            OnSyncCompleted?.Invoke();
+        }
+        else if (pendingEntries.Count > 0)
+        {
+            OnSyncFailed?.Invoke("No entries synced");
+        }
+    }
+
+    public void PurgeExpiredEntries()
+    {
+        if (queueData.entries == null || queueData.entries.Count == 0)
+        {
+            return;
+        }
+        DateTime cutoff = DateTime.UtcNow.AddHours(-SyncRetentionHours);
+        queueData.entries.RemoveAll(entry =>
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.queuedAtUtc))
+            {
+                return true;
+            }
+            if (!DateTime.TryParse(entry.queuedAtUtc, out DateTime queuedAt))
+            {
+                return false;
+            }
+            return queuedAt.ToUniversalTime() < cutoff;
+        });
+        SaveQueue();
+    }
+
+    #endregion
+
+    #region Queue Persistence
+
+    private void LoadQueue()
+    {
+        queueData = new PendingSyncQueueData();
+        if (!File.Exists(queueFilePath))
+        {
+            SaveQueue();
+            return;
+        }
+        try
+        {
+            string json = File.ReadAllText(queueFilePath);
+            PendingSyncQueueData loaded = JsonUtility.FromJson<PendingSyncQueueData>(json);
+            if (loaded != null && loaded.entries != null)
+            {
+                queueData = loaded;
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError($"[SyncQueueManager] Load failed: {exception.Message}");
+        }
+    }
+
+    private void SaveQueue()
+    {
+        try
+        {
+            if (queueData.entries == null)
+            {
+                queueData.entries = new List<PendingSyncEntry>();
+            }
+            string json = JsonUtility.ToJson(queueData, true);
+            File.WriteAllText(queueFilePath, json);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError($"[SyncQueueManager] Save failed: {exception.Message}");
+        }
+    }
+
+    #endregion
+
+    #region Adapter Processing
+
+    private ISimulationBackendAdapter ResolveActiveAdapter()
+    {
+        if (ControlCenter.Instance != null && ControlCenter.Instance.ibManager != null && ControlCenter.Instance.ibManager.ShouldSendResults())
+        {
+            return new SafeMiningBackendAdapter();
+        }
+        return new OfflineBackendAdapter();
+    }
+
+    private async Task<bool> ProcessEntryAsync(PendingSyncEntry entry)
+    {
+        if (entry == null || string.IsNullOrEmpty(entry.payloadJson))
+        {
+            return false;
+        }
+        switch (entry.entryType)
+        {
+            case PendingSyncEntry.EntryTypeStart:
+                SimulationSessionContext startContext = JsonUtility.FromJson<SimulationSessionContext>(entry.payloadJson);
+                return startContext != null && await activeAdapter.StartSessionAsync(startContext);
+            case PendingSyncEntry.EntryTypeEvent:
+                SimulationEventRecord eventRecord = JsonUtility.FromJson<SimulationEventRecord>(entry.payloadJson);
+                return eventRecord != null && await activeAdapter.RecordEventAsync(eventRecord);
+            case PendingSyncEntry.EntryTypeComplete:
+                SimulationResultPayload completePayload = JsonUtility.FromJson<SimulationResultPayload>(entry.payloadJson);
+                return completePayload != null && await activeAdapter.CompleteSessionAsync(completePayload);
+            default:
+                return false;
+        }
+    }
+
+    #endregion
+
+    #region Payload Mapping
+
+    private static SimulationResultPayload BuildResultPayload(SceneScore sceneScore, float elapsedSeconds, DateTime endDate)
+    {
+        SimulationResultPayload payload = new SimulationResultPayload
+        {
+            durationSeconds = Mathf.Max(0, Mathf.RoundToInt(elapsedSeconds)),
+            finishedAtUtc = endDate.ToUniversalTime().ToString("o"),
+            completionStatus = "Completed"
+        };
+        if (sceneScore == null || sceneScore.objectives == null)
+        {
+            payload.objectives = Array.Empty<SimulationObjectiveResult>();
+            payload.scoreTotal = 0;
+            payload.approved = false;
+            return payload;
+        }
+        List<SimulationObjectiveResult> objectiveResults = new List<SimulationObjectiveResult>();
+        float weightedScore = 0f;
+        for (int i = 0; i < sceneScore.objectives.Count; i++)
+        {
+            ObjectiveScore objective = sceneScore.objectives[i];
+            if (objective == null)
+            {
+                continue;
+            }
+            int weight = LotoObjectiveIds.GetWeightPercent(objective.id);
+            float partial = objective.isAchivied ? weight : 0f;
+            weightedScore += partial;
+            objectiveResults.Add(new SimulationObjectiveResult
+            {
+                objectiveId = objective.id,
+                achieved = objective.isAchivied,
+                weightPercent = weight,
+                scorePartial = partial
+            });
+        }
+        payload.objectives = objectiveResults.ToArray();
+        payload.scoreTotal = Mathf.Clamp(Mathf.RoundToInt(weightedScore), 0, 100);
+        payload.approved = payload.scoreTotal >= LotoObjectiveIds.DefaultApprovalThresholdPercent;
+        return payload;
+    }
+
+    private static string ResolveSessionId()
+    {
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
+        {
+            SimulationSessionContext session = ControlCenter.Instance.simulationSessionManager.CurrentSession;
+            if (session != null && !string.IsNullOrEmpty(session.sessionId))
+            {
+                return session.sessionId;
+            }
+        }
+        return Guid.NewGuid().ToString("N");
+    }
+
+    #endregion
+}

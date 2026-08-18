@@ -1,0 +1,54 @@
+---
+description: "SafeMining VR HUD and UI: brand colors, world-space canvas, Quest 3S legibility"
+globs: Assets/SafeMining/**/*.{cs,prefab,unity}
+alwaysApply: false
+---
+
+# SafeMining VR HUD and UI
+
+## Brand colors
+
+| Token | Hex | Usage |
+|---|---|---|
+| Primary | `#1A365D` | HUD backgrounds, headers |
+| Secondary | `#F97316` | CTAs, active progress |
+| Tertiary | `#334155` | Borders, secondary text |
+| Neutral | `#F9FAFB` | Text on dark panels |
+| Success | `#22C55E` | Objective achieved |
+| Error | `#EF4444` | Failures, alerts |
+
+Use `Brand.PrimaryColor`, `Brand.SecondaryColor` from BrandConfig when applying at runtime.
+
+## World-space canvas (Quest 3S)
+
+- Distance: 1.5–2m from player
+- Scale: ~0.001 on canvas transform
+- Minimum touch target: 48×48 px equivalent
+- Minimum body text: ~24pt TMP at default scale
+- Contrast ratio ≥ 4.5:1 for text on panels
+
+## HUD layout (target Slice 1)
+
+- Top-left: active objective + checklist (5 objectives)
+- Top-right: session timer + scenario indicator (1/3, 2/3, 3/3)
+- Bottom: subtitles / briefing (`TranslatableText`)
+- Menu button with confirmation dialog
+
+## Comfort
+
+- Prefer teleport over smooth locomotion
+- Avoid full-screen flashing on errors
+- Panel follow: use `Util_PanelFollower` pattern from XR Standard Menu
+- Billboarding: subtle, not every frame if performance-critical
+
+## ALWAYS
+
+1. Bind text via `TranslatableText` + `translationID` in es.xml/en.xml
+2. Reuse sprites from `Assets/SafeMining/Shared/UI/` when available
+3. Test UI at Quest resolution (1832×1920 per eye approximate)
+
+## NEVER
+
+1. Use screen-space overlay canvas for in-simulation HUD
+2. Hardcode Spanish strings in simulation scripts
+3. Use motion-heavy animations on persistent HUD elements
