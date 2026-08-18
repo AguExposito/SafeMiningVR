@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S1.unity
     guid: 876cbb5483b737442a35f7748429dfbb
+  - enabled: 1
+    path: Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S2.unity
+    guid: c6584956dea69f643971244028513528
+  - enabled: 1
+    path: Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S3.unity
+    guid: b9ea3db389947684b90620393719ddd3
   m_configObjects:
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 21f49d6458a27404497558ce7d5ec835, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f8ad31db96e9dd449a141a0b1f70725b, type: 2}

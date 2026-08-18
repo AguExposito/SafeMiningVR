@@ -842,8 +842,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1724800904}
-  - component: {fileID: 1724800903}
   - component: {fileID: 1724800902}
+  - component: {fileID: 1724800905}
   m_Layer: 0
   m_Name: LOTO_S1Root
   m_TagString: Untagged
@@ -867,21 +867,6 @@ MonoBehaviour:
   objectiveAchievedSprite: {fileID: 0}
   primaryPanelColor: {r: 0.102, g: 0.212, b: 0.365, a: 0.92}
   secondaryAccentColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
---- !u!114 &1724800903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1724800901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 089f5173e97444c4e85aa91060049e94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LotoS1SceneBootstrap
-  playerHud: {fileID: 889087094}
-  briefingPanel: {fileID: 1239693563}
-  panelFollowTarget: {fileID: 0}
 --- !u!4 &1724800904
 Transform:
   m_ObjectHideFlags: 0
@@ -899,6 +884,23 @@ Transform:
   - {fileID: 1239693564}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1724800905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724800901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be634567d8fead439759535bfe40628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoScenarioSceneBootstrap
+  playerHud: {fileID: 889087094}
+  briefingPanel: {fileID: 1239693563}
+  panelFollowTarget: {fileID: 0}
+  scenarioIndex: 1
+  startWithBriefing: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

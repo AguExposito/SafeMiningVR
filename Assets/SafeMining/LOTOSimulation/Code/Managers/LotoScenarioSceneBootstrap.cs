@@ -1,11 +1,13 @@
 using UnityEngine;
 using XRStandardMenu;
 
-public class LotoS1SceneBootstrap : MonoBehaviour
+public class LotoScenarioSceneBootstrap : MonoBehaviour
 {
     [SerializeField] private ref_PlayerHUD playerHud;
     [SerializeField] private ref_BriefingPanel briefingPanel;
     [SerializeField] private Transform panelFollowTarget;
+    [SerializeField] private int scenarioIndex = 1;
+    [SerializeField] private bool startWithBriefing = true;
 
     private PlayerHudManager playerHudManager;
 
@@ -27,7 +29,7 @@ public class LotoS1SceneBootstrap : MonoBehaviour
 
         if (ControlCenter.Instance == null)
         {
-            Debug.LogWarning("[LOTO] ControlCenter.Instance is null. Open S1 from the main menu.");
+            Debug.LogWarning("[LOTO] ControlCenter.Instance is null. Open this scene from the main menu.");
             return;
         }
 
@@ -41,12 +43,19 @@ public class LotoS1SceneBootstrap : MonoBehaviour
         playerHudManager = GetComponent<PlayerHudManager>();
         if (playerHudManager == null)
         {
-            Debug.LogWarning("[LOTO] PlayerHudManager is missing on LotoS1SceneBootstrap.");
+            Debug.LogWarning("[LOTO] PlayerHudManager is missing on LotoScenarioSceneBootstrap.");
             return;
         }
 
         playerHudManager.Initialize(playerHud, briefingPanel, orchestrator);
-        orchestrator.BeginSimulation();
+
+        if (startWithBriefing)
+        {
+            orchestrator.BeginSimulation();
+            return;
+        }
+
+        orchestrator.NotifyAuthoredSceneLoaded(scenarioIndex);
     }
 
     private void ResolveFollowTarget()

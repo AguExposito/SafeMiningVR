@@ -4,7 +4,9 @@
 Assets/SafeMining/
 ├── LOTOSimulation/
 │   ├── Scenes/
-│   │   ├── VR-LOTO-S1.unity          — build index 1 (Fase 1 HUD/briefing)
+│   │   ├── VR-LOTO-S1.unity          — build index 1 (briefing + HUD 1/3)
+│   │   ├── VR-LOTO-S2.unity          — build index 2 (HUD 2/3)
+│   │   ├── VR-LOTO-S3.unity          — build index 3 (HUD 3/3)
 │   │   └── VR-LOTO-Placeholder.unity — on disk, not in build
 │   ├── Prefabs/
 │   │   ├── PREF_LotoPlayerHUD.prefab
@@ -17,7 +19,7 @@ Assets/SafeMining/
 │   └── Code/
 │       ├── SafeMining.LOTOSimulation.asmdef
 │       ├── Managers/
-│       │   ├── LotoS1SceneBootstrap.cs
+│       │   ├── LotoScenarioSceneBootstrap.cs
 │       │   ├── SyncQueueManager.cs
 │       │   └── SimulationSessionManager.cs
 │       ├── Data/

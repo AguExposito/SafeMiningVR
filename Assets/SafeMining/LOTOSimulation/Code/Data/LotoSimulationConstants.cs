@@ -2,6 +2,9 @@ public static class LotoSimulationConstants
 {
     public const int MainMenuBuildIndex = 0;
     public const int LotoHubBuildIndex = 1;
+    public const int Scenario1BuildIndex = 1;
+    public const int Scenario2BuildIndex = 2;
+    public const int Scenario3BuildIndex = 3;
     public const int LotoSimScoreIndex = 0;
     public const int TotalScenarios = 3;
     public const float HudTimerRefreshInterval = 0.25f;

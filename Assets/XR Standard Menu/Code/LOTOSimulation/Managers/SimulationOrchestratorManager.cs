@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum LotoSimulationState
 {
@@ -97,15 +98,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         EnterScenario(LotoSimulationConstants.ScenarioInspection);
-
-        LotoScenario2Controller scenarioController = FindFirstObjectByType<LotoScenario2Controller>(FindObjectsInactive.Include);
-        if (scenarioController == null)
-        {
-            GameObject controllerObject = new GameObject("LotoScenario2Controller");
-            scenarioController = controllerObject.AddComponent<LotoScenario2Controller>();
-        }
-
-        scenarioController.Begin();
+        LoadScenarioSceneIfNeeded(LotoSimulationConstants.Scenario2BuildIndex);
     }
 
     public void OnScenario2Completed()
@@ -146,16 +139,34 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
     public void EnterScenario3()
     {
-        EnterScenario(LotoSimulationConstants.ScenarioLoto);
-
-        LotoScenario3Controller scenarioController = FindFirstObjectByType<LotoScenario3Controller>(FindObjectsInactive.Include);
-        if (scenarioController == null)
+        if (!CanAdvanceToScenario(LotoSimulationConstants.ScenarioLoto))
         {
-            GameObject controllerObject = new GameObject("LotoScenario3Controller");
-            scenarioController = controllerObject.AddComponent<LotoScenario3Controller>();
+            return;
         }
 
-        scenarioController.Begin();
+        EnterScenario(LotoSimulationConstants.ScenarioLoto);
+        LoadScenarioSceneIfNeeded(LotoSimulationConstants.Scenario3BuildIndex);
+    }
+
+    public void NotifyAuthoredSceneLoaded(int scenarioIndex)
+    {
+        InitializeSessionScore();
+        currentScenarioIndex = scenarioIndex;
+
+        if (currentState != LotoSimulationState.Active &&
+            currentState != LotoSimulationState.ExitConfirm &&
+            currentState != LotoSimulationState.SessionSummary)
+        {
+            if (activeStartTime <= 0f)
+            {
+                activeStartTime = Time.time;
+            }
+
+            SetState(LotoSimulationState.Active);
+        }
+
+        OnScenarioChanged?.Invoke(currentScenarioIndex, LotoSimulationConstants.TotalScenarios);
+        NotifySubtitleForScenario(scenarioIndex);
     }
 
     public bool CanAdvanceToScenario(int scenarioIndex)
@@ -275,6 +286,19 @@ public class SimulationOrchestratorManager : MonoBehaviour
     public void NotifyObjectiveVisualUpdate(int objectiveIndex, bool achieved)
     {
         OnObjectiveVisualUpdate?.Invoke(objectiveIndex, achieved);
+    }
+
+    private async void LoadScenarioSceneIfNeeded(int buildIndex)
+    {
+        if (SceneManager.GetActiveScene().buildIndex == buildIndex)
+        {
+            return;
+        }
+
+        if (ControlCenter.Instance != null && ControlCenter.Instance.loadManager != null)
+        {
+            await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(buildIndex);
+        }
     }
 
     private void NotifySubtitleForScenario(int scenarioIndex)
