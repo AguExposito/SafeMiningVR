@@ -123,7 +123,9 @@
 	<string name="loto_s2_step_ready">Inspección completa. Continúe hacia el área de LOTO.</string>
 	<string name="loto_s2_complete_with_penalty">Riesgos reportados, pero los falsos positivos redujeron su puntaje.</string>
 	<string name="loto_s2_false_positive">Este elemento es seguro. Los reportes incorrectos reducen su puntaje.</string>
-	<string name="loto_s2_timeout_hint">Busque material derramado, herramientas abandonadas, señalización caída y extintor obstruido.</string>
+	<string name="loto_s2_timeout_hint">Aún hay condiciones inseguras sin reportar. Observe el área con más detalle.</string>
+	<string name="loto_s2_roller_anomaly">Se detectó una anomalía en un rodillo de la correa. Prepare el equipo para una intervención segura.</string>
+	<string name="loto_s2_exit">Continuar a LOTO</string>
 	<string name="loto_s2_report_spill">Material derramado en zona de tránsito reportado.</string>
 	<string name="loto_s2_report_tools">Herramientas abandonadas reportadas.</string>
 	<string name="loto_s2_report_signage">Señalización caída o deteriorada reportada.</string>

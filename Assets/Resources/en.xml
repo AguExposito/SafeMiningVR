@@ -126,7 +126,9 @@
 	<string name="loto_s2_step_ready">Inspection complete. Continue to the LOTO area.</string>
 	<string name="loto_s2_complete_with_penalty">All hazards reported, but false positives reduced your score.</string>
 	<string name="loto_s2_false_positive">This element is safe. False reports reduce your score.</string>
-	<string name="loto_s2_timeout_hint">Look for spilled material, abandoned tools, fallen signage, and obstructed fire equipment.</string>
+	<string name="loto_s2_timeout_hint">Unsafe conditions remain unreported. Look more closely around the area.</string>
+	<string name="loto_s2_roller_anomaly">An anomaly was detected on a conveyor roller. Prepare the equipment for a safe intervention.</string>
+	<string name="loto_s2_exit">Continue to LOTO</string>
 	<string name="loto_s2_report_spill">Spilled material in transit zone reported.</string>
 	<string name="loto_s2_report_tools">Abandoned tools reported.</string>
 	<string name="loto_s2_report_signage">Fallen or damaged signage reported.</string>

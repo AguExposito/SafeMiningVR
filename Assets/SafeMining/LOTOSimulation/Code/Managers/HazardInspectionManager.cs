@@ -16,6 +16,8 @@ public class HazardInspectionManager : MonoBehaviour
         HazardType.ObstructedExtinguisher
     };
 
+    [SerializeField] private LotoScenario2Controller scenarioController;
+
     private readonly HashSet<HazardType> reportedHazards = new HashSet<HazardType>();
     private readonly List<ref_HazardSpot> pendingRealSpots = new List<ref_HazardSpot>();
 
@@ -27,10 +29,14 @@ public class HazardInspectionManager : MonoBehaviour
     public int RequiredTotal => RequiredHazards.Length;
     public int FalsePositiveCount => falsePositiveCount;
 
-    public bool IsReadyToAdvance =>
-        reportedHazards.Count >= RequiredHazards.Length && objectiveScored;
+    public bool IsReadyToAdvance => reportedHazards.Count >= RequiredHazards.Length;
 
     #region Public API
+
+    public void Configure(LotoScenario2Controller controller)
+    {
+        scenarioController = controller;
+    }
 
     public void Begin()
     {
@@ -43,6 +49,12 @@ public class HazardInspectionManager : MonoBehaviour
         {
             StopCoroutine(hintCoroutine);
             hintCoroutine = null;
+        }
+
+        ref_HazardSpot[] spots = GetComponentsInChildren<ref_HazardSpot>(true);
+        for (int i = 0; i < spots.Length; i++)
+        {
+            RegisterSpawnedSpot(spots[i]);
         }
 
         NotifyProgress();
@@ -89,9 +101,7 @@ public class HazardInspectionManager : MonoBehaviour
         spot.SetReported(true);
         EmitEvent("hazard_report", true, spot.hazardType);
         NotifyProgress();
-
-        string subtitleKey = GetReportSubtitleKey(spot.hazardType);
-        NotifyOrchestratorSubtitle(subtitleKey);
+        NotifyOrchestratorSubtitle(GetReportSubtitleKey(spot.hazardType));
 
         if (reportedHazards.Count >= RequiredHazards.Length)
         {
@@ -112,10 +122,10 @@ public class HazardInspectionManager : MonoBehaviour
             return;
         }
 
-        LotoScenario2Controller scenario = FindFirstObjectByType<LotoScenario2Controller>();
-        if (scenario != null)
+        NotifyOrchestratorSubtitle("loto_s2_roller_anomaly");
+        if (scenarioController != null)
         {
-            scenario.OnInspectionCompleted();
+            scenarioController.OnInspectionCompleted();
         }
     }
 
@@ -131,8 +141,7 @@ public class HazardInspectionManager : MonoBehaviour
         }
 
         objectiveScored = true;
-        bool achieved = falsePositiveCount == 0;
-        SetObjective(achieved);
+        SetObjective(true);
 
         if (hintCoroutine != null)
         {

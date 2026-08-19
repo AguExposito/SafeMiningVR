@@ -39,7 +39,7 @@ public class LotoS2HazardSmokeTest : MonoBehaviour
         Report(HazardType.AbandonedTools);
         Report(HazardType.FallenSignage);
         Report(HazardType.ObstructedExtinguisher);
-        Debug.Log("[LOTO-S2-SMOKE] False positive path invoked without exceptions.");
+        Debug.Log("[LOTO-S2-SMOKE] Single false positive path invoked without exceptions.");
     }
 
     private void Report(HazardType type)

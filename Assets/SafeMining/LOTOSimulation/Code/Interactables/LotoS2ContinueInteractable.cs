@@ -16,11 +16,6 @@ public class LotoS2ContinueInteractable : MonoBehaviour
             interactable = GetComponent<XRSimpleInteractable>();
         }
 
-        if (inspectionManager == null)
-        {
-            inspectionManager = FindFirstObjectByType<HazardInspectionManager>();
-        }
-
         if (interactable != null)
         {
             interactable.selectEntered.AddListener(OnSelected);

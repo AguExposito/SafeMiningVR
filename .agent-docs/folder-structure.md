@@ -5,7 +5,7 @@ Assets/SafeMining/
 ├── LOTOSimulation/
 │   ├── Scenes/
 │   │   ├── VR-LOTO-S1.unity          — build index 1 (briefing + HUD 1/3 + PREF_S1_Locker)
-│   │   ├── VR-LOTO-S2.unity          — build index 2 (HUD 2/3)
+│   │   ├── VR-LOTO-S2.unity          — build index 2 (HUD 2/3 + PREF_S2_InspectionYard)
 │   │   ├── VR-LOTO-S3.unity          — build index 3 (HUD 3/3)
 │   │   └── VR-LOTO-Placeholder.unity — on disk, not in build
 │   ├── Prefabs/
@@ -13,6 +13,7 @@ Assets/SafeMining/
 │   │   ├── PREF_LotoBriefingPanel.prefab
 │   │   ├── PREF_LotoObjectiveRow.prefab
 │   │   ├── PREF_S1_Locker.prefab
+│   │   ├── PREF_S2_InspectionYard.prefab
 │   │   └── PREF_S3_ConveyorStation.prefab
 │   ├── Art/
 │   │   ├── Materials/
@@ -23,8 +24,10 @@ Assets/SafeMining/
 │       ├── Managers/
 │       │   ├── LotoScenarioSceneBootstrap.cs
 │       │   ├── LotoScenario1Controller.cs
+│       │   ├── LotoScenario2Controller.cs
 │       │   ├── LotoScenario3Controller.cs
 │       │   ├── EppEquipmentManager.cs
+│       │   ├── HazardInspectionManager.cs
 │       │   ├── LotoSequenceManager.cs
 │       │   ├── SyncQueueManager.cs
 │       │   └── SimulationSessionManager.cs

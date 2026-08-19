@@ -7,15 +7,15 @@
 - **Target device:** Meta Quest 3S (Android ARM64)
 - **Render pipeline:** URP 17.3
 
-## Current state (Fase 3 complete — S1 EPP vestuario)
+## Current state (Fase 4 complete — S2 inspección HU-222)
 
-- **Roadmap:** Fase 0–3 complete. Fase 3: authored `PREF_S1_Locker` in `VR-LOTO-S1` with HU-221 happy path (inspect, wear 5/5 good PPE on body sockets, discard defective, gate to S2). S2 inspection remains Fase 4.
+- **Roadmap:** Fase 0–4 complete. Fase 4: authored `PREF_S2_InspectionYard` in `VR-LOTO-S2` with HU-222 happy path (report 4 distinct hazards that remediate, decoys do not block S3, gate 4/4 → LoadScene 3). S3 LOTO station remains Fase 2; session summary/RN02 is Fase 5.
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
 - **Entry scene:** `StandardMainMenu.unity` (build index 0)
-- **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD 1/3 + locker EPP), `VR-LOTO-S2` (2, HUD 2/3 empty floor), `VR-LOTO-S3` (3, HUD 3/3 + LOTO station).
+- **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD 1/3 + locker EPP), `VR-LOTO-S2` (2, HUD 2/3 + inspection yard), `VR-LOTO-S3` (3, HUD 3/3 + LOTO station).
 - **Legacy hub:** `VR-LOTO-Placeholder.unity` remains on disk, **out of Build Settings**
 - **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster`, no CanvasScaler)
-- **Bootstrap:** `LotoScenarioSceneBootstrap` with serialized HUD refs; S1 serializes `LotoScenario1Controller`; S3 serializes `LotoScenario3Controller`. `LotoHubBootstrap` stays on Placeholder only.
+- **Bootstrap:** `LotoScenarioSceneBootstrap` with serialized HUD refs; S1 serializes `LotoScenario1Controller`; S2 serializes `LotoScenario2Controller`; S3 serializes `LotoScenario3Controller`. `LotoHubBootstrap` stays on Placeholder only.
 - **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`. Rule: `Assets/.cursor/rules/safemining-mcp-console.mdc`
 
 ## Architecture

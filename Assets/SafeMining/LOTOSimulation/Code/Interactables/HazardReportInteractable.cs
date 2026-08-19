@@ -20,11 +20,6 @@ public class HazardReportInteractable : MonoBehaviour
             interactable = GetComponent<XRSimpleInteractable>();
         }
 
-        if (inspectionManager == null)
-        {
-            inspectionManager = FindFirstObjectByType<HazardInspectionManager>();
-        }
-
         if (spotRef != null)
         {
             spotRef.CacheOriginalColor();
@@ -59,7 +54,7 @@ public class HazardReportInteractable : MonoBehaviour
 
     private void OnSelected(SelectEnterEventArgs args)
     {
-        if (inspectionManager == null || spotRef == null)
+        if (inspectionManager == null || spotRef == null || spotRef.IsReported)
         {
             return;
         }
