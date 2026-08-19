@@ -97,6 +97,10 @@
 	<string name="loto_s3_success_zero_energy">Zero energy verification successful.</string>
 	<string name="loto_s3_summary_title">LOTO session summary</string>
 	<string name="loto_s3_summary_body">Objectives achieved: {0}/{1}. Result: {2}.</string>
+	<string name="loto_summary_score">Score: {0}/100</string>
+	<string name="loto_summary_approved">Approved</string>
+	<string name="loto_summary_not_approved">Not approved</string>
+	<string name="loto_summary_objective_line">{0}: {1}/{2}</string>
 	<string name="loto_lock_personal">PERSONAL LOCKOUT</string>
 	<string name="loto_lock_visitor">VISITOR</string>
 	<string name="loto_lock_group">GROUP</string>

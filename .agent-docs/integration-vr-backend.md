@@ -4,6 +4,7 @@
 
 - Offline-first: all results saved locally before HTTP
 - Deferred sync window: 24 hours (HU-220 CA8)
+- Queue is **not** flushed while the HTTP adapter is unavailable (`OfflineBackendAdapter.IsAvailable = false`; `SafeMiningBackendAdapter` stays a stub until Fase 7). Entries remain in `PendingSyncQueue.json` until a real adapter is available or the 24h purge.
 - Legacy IBManager `/crearSimReporte` preserved; new API runs in parallel
 
 ## Endpoints (proposed — Fase 7)
@@ -70,7 +71,7 @@
 
 | Class | Phase |
 |---|---|
-| `OfflineBackendAdapter` | Fase 0 — active |
+| `OfflineBackendAdapter` | Fase 5 — local persist only (`IsAvailable` false so the queue is not drained) |
 | `SafeMiningBackendAdapter` | Fase 7 — stub |
 
 ## Auth flow (future)

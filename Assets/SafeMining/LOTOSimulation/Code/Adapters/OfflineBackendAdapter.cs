@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class OfflineBackendAdapter : ISimulationBackendAdapter
 {
-    public bool IsAvailable => true;
+    public bool IsAvailable => false;
 
     public Task<bool> StartSessionAsync(SimulationSessionContext context)
     {

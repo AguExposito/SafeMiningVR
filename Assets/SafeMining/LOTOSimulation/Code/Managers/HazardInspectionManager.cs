@@ -86,6 +86,11 @@ public class HazardInspectionManager : MonoBehaviour
         {
             falsePositiveCount++;
             spot.SetReported(true);
+            if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
+            {
+                ControlCenter.Instance.simulationSessionManager.RecordHazardFalsePositive();
+            }
+
             EmitEvent("hazard_false_positive", false, spot.hazardType);
             NotifyOrchestratorSubtitle("loto_s2_false_positive");
             return false;

@@ -8,7 +8,7 @@ public static class LotoObjectiveIds
 
     public const string SimulationSceneId = "loto_simulation";
 
-    public const int DefaultApprovalThresholdPercent = 75;
+    public const int DefaultApprovalThresholdPercent = 60;
 
     public static readonly string[] AllObjectiveIds =
     {

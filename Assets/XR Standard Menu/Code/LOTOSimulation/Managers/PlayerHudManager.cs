@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -140,7 +142,7 @@ public class PlayerHudManager : MonoBehaviour
     private void HandleSessionSummaryRequested(bool success)
     {
         EnsureSessionSummaryPanel();
-        RefreshSessionSummary(success);
+        RefreshSessionSummary();
     }
 
     private void HandleObjectiveVisualUpdate(int objectiveIndex, bool achieved)
@@ -200,6 +202,11 @@ public class PlayerHudManager : MonoBehaviour
         if (state == LotoSimulationState.ExitConfirm)
         {
             RefreshExitConfirmTexts();
+        }
+
+        if (state == LotoSimulationState.SessionSummary)
+        {
+            RefreshSessionSummary();
         }
     }
 
@@ -261,7 +268,7 @@ public class PlayerHudManager : MonoBehaviour
         return text;
     }
 
-    private void RefreshSessionSummary(bool success)
+    private void RefreshSessionSummary()
     {
         if (playerHud == null)
         {
@@ -269,17 +276,18 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         SceneScore activeScore = GetActiveSceneScore();
-        int achievedCount = 0;
-        if (activeScore != null && activeScore.objectives != null)
+        int falsePositiveCount = 0;
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
         {
-            for (int i = 0; i < activeScore.objectives.Count; i++)
-            {
-                if (activeScore.objectives[i] != null && activeScore.objectives[i].isAchivied)
-                {
-                    achievedCount++;
-                }
-            }
+            falsePositiveCount = ControlCenter.Instance.simulationSessionManager.GetFalsePositiveCount();
         }
+
+        SimulationResultPayload payload = LotoSessionScore.Build(
+            activeScore,
+            falsePositiveCount,
+            orchestrator != null ? orchestrator.GetActiveElapsedSeconds() : 0f,
+            DateTime.UtcNow,
+            LotoSessionScore.CompletionCompleted);
 
         if (playerHud.sessionSummaryTitleText != null)
         {
@@ -288,9 +296,40 @@ public class PlayerHudManager : MonoBehaviour
 
         if (playerHud.sessionSummaryBodyText != null)
         {
-            string template = GetTranslation("loto_s3_summary_body");
-            playerHud.sessionSummaryBodyText.text = string.Format(template, achievedCount, activeScore != null ? activeScore.objectives.Count : 5, success ? GetTranslation("SM_detailScreen_title_approbed") : GetTranslation("SM_detailScreen_title_fail"));
+            playerHud.sessionSummaryBodyText.text = FormatSessionSummaryBody(payload);
         }
+
+        EnsureButtonLabel(playerHud.sessionSummaryContinueButton, "backToMenu");
+    }
+
+    private static string FormatSessionSummaryBody(SimulationResultPayload payload)
+    {
+        StringBuilder builder = new StringBuilder();
+        int scoreTotal = payload != null ? payload.scoreTotal : 0;
+        bool approved = payload != null && payload.approved;
+        builder.AppendLine(string.Format(GetTranslation("loto_summary_score"), scoreTotal));
+        builder.AppendLine(approved ? GetTranslation("loto_summary_approved") : GetTranslation("loto_summary_not_approved"));
+        if (payload == null || payload.objectives == null)
+        {
+            return builder.ToString();
+        }
+
+        for (int i = 0; i < payload.objectives.Length; i++)
+        {
+            SimulationObjectiveResult objective = payload.objectives[i];
+            if (objective == null)
+            {
+                continue;
+            }
+
+            builder.AppendLine(string.Format(
+                GetTranslation("loto_summary_objective_line"),
+                GetTranslation(objective.objectiveId),
+                Mathf.RoundToInt(objective.scorePartial),
+                objective.weightPercent));
+        }
+
+        return builder.ToString();
     }
 
     private void BindButtons()

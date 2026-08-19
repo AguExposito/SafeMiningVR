@@ -30,14 +30,16 @@ public class SimulationSessionManager : MonoBehaviour
 
     private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == 0)
+        if (scene.buildIndex != LotoSimulationConstants.Scenario1BuildIndex)
         {
             return;
         }
+
         if (currentSession != null && currentSession.isActive)
         {
             return;
         }
+
         StartNewSession();
     }
 
@@ -47,11 +49,17 @@ public class SimulationSessionManager : MonoBehaviour
 
     public void StartNewSession()
     {
+        if (currentSession != null && currentSession.isActive)
+        {
+            return;
+        }
+
         string participantId = string.Empty;
         if (ControlCenter.Instance != null && ControlCenter.Instance.persistantDataManager != null)
         {
             participantId = ControlCenter.Instance.persistantDataManager.userPersistantData.participantID;
         }
+
         currentSession = new SimulationSessionContext
         {
             sessionId = Guid.NewGuid().ToString("N"),
@@ -61,11 +69,33 @@ public class SimulationSessionManager : MonoBehaviour
             participantId = participantId,
             startedAtUtc = DateTime.UtcNow.ToString("o"),
             simulationVersion = Application.version,
-            isActive = true
+            isActive = true,
+            falsePositiveCount = 0
         };
         SaveSessionContext();
         EnqueueSessionStart();
         Debug.Log($"[SimulationSessionManager] Session started id={currentSession.sessionId}");
+    }
+
+    public void RecordHazardFalsePositive()
+    {
+        if (currentSession == null || !currentSession.isActive)
+        {
+            return;
+        }
+
+        currentSession.falsePositiveCount++;
+        SaveSessionContext();
+    }
+
+    public int GetFalsePositiveCount()
+    {
+        if (currentSession == null)
+        {
+            return 0;
+        }
+
+        return currentSession.falsePositiveCount;
     }
 
     public void CompleteCurrentSession(SimulationResultPayload result)
@@ -74,11 +104,13 @@ public class SimulationSessionManager : MonoBehaviour
         {
             return;
         }
+
         currentSession.isActive = false;
         if (result != null && string.IsNullOrEmpty(result.sessionId))
         {
             result.sessionId = currentSession.sessionId;
         }
+
         SaveSessionContext();
         Debug.Log($"[SimulationSessionManager] Session completed id={currentSession.sessionId}");
     }
@@ -93,6 +125,7 @@ public class SimulationSessionManager : MonoBehaviour
         {
             return;
         }
+
         try
         {
             string json = File.ReadAllText(sessionContextFilePath);
@@ -104,7 +137,7 @@ public class SimulationSessionManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SimulationSessionManager] Load failed: {exception.Message}");
+            Debug.LogWarning($"[SimulationSessionManager] Load failed: {exception.Message}");
         }
     }
 
@@ -114,6 +147,7 @@ public class SimulationSessionManager : MonoBehaviour
         {
             return;
         }
+
         try
         {
             string json = JsonUtility.ToJson(currentSession, true);
@@ -121,7 +155,7 @@ public class SimulationSessionManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SimulationSessionManager] Save failed: {exception.Message}");
+            Debug.LogWarning($"[SimulationSessionManager] Save failed: {exception.Message}");
         }
     }
 
@@ -135,6 +169,7 @@ public class SimulationSessionManager : MonoBehaviour
         {
             return;
         }
+
         PendingSyncEntry entry = new PendingSyncEntry
         {
             entryType = PendingSyncEntry.EntryTypeStart,

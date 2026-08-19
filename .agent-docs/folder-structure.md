@@ -33,6 +33,7 @@ Assets/SafeMining/
 │       │   └── SimulationSessionManager.cs
 │       ├── Data/
 │       │   ├── LotoObjectiveIds.cs
+│       │   ├── LotoSessionScore.cs
 │       │   ├── SimulationSessionContext.cs
 │       │   ├── SimulationEventRecord.cs
 │       │   ├── SimulationObjectiveResult.cs

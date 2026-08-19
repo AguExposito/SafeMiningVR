@@ -58,7 +58,7 @@ public class LotoScenario3Controller : MonoBehaviour
             return;
         }
 
-        ControlCenter.Instance.simulationOrchestratorManager.ShowSessionSummary(success);
+        ControlCenter.Instance.simulationOrchestratorManager.ShowSessionSummary();
     }
 
     #endregion

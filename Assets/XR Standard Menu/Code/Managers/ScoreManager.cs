@@ -150,6 +150,11 @@ public class ScoreManager : MonoBehaviour
 
     public void EndScene(int index)
     {
+        EndScene(index, LotoSessionScore.CompletionCompleted);
+    }
+
+    public void EndScene(int index, string completionStatus)
+    {
         if (!activeSceneScores.TryGetValue(index, out ActiveSceneScoreState state))
         {
             return;
@@ -159,13 +164,29 @@ public class ScoreManager : MonoBehaviour
         DateTime startDate = endDate.AddSeconds(-Mathf.Max(0f, elapsedTime));
         state.sceneScore.time = FormatElapsedTime(elapsedTime);
         state.sceneScore.date = endDate.ToString("dd/MM/yy");
-        state.sceneScore.points = CountAchieved(state.sceneScore.objectives);
-        state.sceneScore.approbalRate = CalculateApprobalRate(state.sceneScore.objectives);
-        SceneScore savedScene = SaveSceneResult(state.sceneScore, index);
+        SimulationResultPayload payload = null;
         if (ControlCenter.Instance != null && ControlCenter.Instance.syncQueueManager != null)
         {
-            ControlCenter.Instance.syncQueueManager.EnqueueCompleteFromSceneScore(savedScene, elapsedTime, startDate, endDate);
+            payload = ControlCenter.Instance.syncQueueManager.EnqueueCompleteFromSceneScore(
+                state.sceneScore,
+                elapsedTime,
+                startDate,
+                endDate,
+                completionStatus);
         }
+
+        if (payload != null)
+        {
+            state.sceneScore.points = payload.scoreTotal;
+            state.sceneScore.approbalRate = payload.scoreTotal;
+        }
+        else
+        {
+            state.sceneScore.points = CountAchieved(state.sceneScore.objectives);
+            state.sceneScore.approbalRate = CalculateApprobalRate(state.sceneScore.objectives);
+        }
+
+        SceneScore savedScene = SaveSceneResult(state.sceneScore, index);
         if (ControlCenter.Instance != null && ControlCenter.Instance.ibManager != null)
         {
             _ = SendScoreToIAWithDebugAsync(savedScene, elapsedTime, startDate, endDate);

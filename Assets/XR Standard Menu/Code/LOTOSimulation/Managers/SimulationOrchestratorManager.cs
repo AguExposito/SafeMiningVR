@@ -55,6 +55,11 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         InitializeSessionScore();
+        if (ControlCenter.Instance.simulationSessionManager != null)
+        {
+            ControlCenter.Instance.simulationSessionManager.StartNewSession();
+        }
+
         EnterBriefingState();
     }
 
@@ -199,10 +204,28 @@ public class SimulationOrchestratorManager : MonoBehaviour
         OnSubtitleChanged?.Invoke(subtitle);
     }
 
-    public void ShowSessionSummary(bool success)
+    public void ShowSessionSummary()
     {
         SetState(LotoSimulationState.SessionSummary);
-        OnSessionSummaryRequested?.Invoke(success);
+        SceneScore activeScore = null;
+        if (ControlCenter.Instance != null && ControlCenter.Instance.scoreManager != null)
+        {
+            activeScore = ControlCenter.Instance.scoreManager.GetActiveSceneScore(LotoSimulationConstants.LotoSimScoreIndex);
+        }
+
+        int falsePositiveCount = 0;
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
+        {
+            falsePositiveCount = ControlCenter.Instance.simulationSessionManager.GetFalsePositiveCount();
+        }
+
+        SimulationResultPayload payload = LotoSessionScore.Build(
+            activeScore,
+            falsePositiveCount,
+            GetActiveElapsedSeconds(),
+            DateTime.UtcNow,
+            LotoSessionScore.CompletionCompleted);
+        OnSessionSummaryRequested?.Invoke(payload.approved);
         OnSubtitleChanged?.Invoke(GetTranslation("loto_s3_summary_title"));
     }
 
@@ -214,12 +237,8 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         SetState(LotoSimulationState.Exiting);
-        FinalizeSessionScore();
-
-        if (ControlCenter.Instance != null && ControlCenter.Instance.loadManager != null)
-        {
-            await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(LotoSimulationConstants.MainMenuBuildIndex);
-        }
+        FinalizeSessionScore(LotoSessionScore.CompletionCompleted);
+        await LoadMainMenu();
     }
 
     public void RequestExitToMenu()
@@ -250,12 +269,8 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         SetState(LotoSimulationState.Exiting);
-        FinalizeSessionScore();
-
-        if (ControlCenter.Instance != null && ControlCenter.Instance.loadManager != null)
-        {
-            await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(LotoSimulationConstants.MainMenuBuildIndex);
-        }
+        FinalizeSessionScore(LotoSessionScore.CompletionAbandoned);
+        await LoadMainMenu();
     }
 
     public float GetActiveElapsedSeconds()
@@ -309,6 +324,22 @@ public class SimulationOrchestratorManager : MonoBehaviour
         SceneManager.LoadScene(buildIndex);
     }
 
+    private async System.Threading.Tasks.Task LoadMainMenu()
+    {
+        bool canShowWaiter = ControlCenter.Instance != null &&
+            ControlCenter.Instance.loadManager != null &&
+            SBD_Prefab.Instance != null &&
+            SBD_Prefab.Instance.UI_Waiter_normal != null;
+
+        if (canShowWaiter)
+        {
+            await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(LotoSimulationConstants.MainMenuBuildIndex);
+            return;
+        }
+
+        SceneManager.LoadScene(LotoSimulationConstants.MainMenuBuildIndex);
+    }
+
     private void NotifySubtitleForScenario(int scenarioIndex)
     {
         switch (scenarioIndex)
@@ -360,14 +391,16 @@ public class SimulationOrchestratorManager : MonoBehaviour
         sessionScoreInitialized = true;
     }
 
-    private void FinalizeSessionScore()
+    private void FinalizeSessionScore(string completionStatus)
     {
         if (!sessionScoreInitialized || ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
         {
             return;
         }
 
-        ControlCenter.Instance.scoreManager.EndScene(LotoSimulationConstants.LotoSimScoreIndex);
+        ControlCenter.Instance.scoreManager.EndScene(
+            LotoSimulationConstants.LotoSimScoreIndex,
+            completionStatus);
         sessionScoreInitialized = false;
     }
 

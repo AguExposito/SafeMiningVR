@@ -23,5 +23,4 @@ public static class LotoSimulationConstants
     public const int XriTeleportInteractionLayerMask = unchecked((int)(1u << 31));
 
     public const float HazardHintTimeoutSeconds = 90f;
-    public const int HazardFalsePositiveFailThreshold = 3;
 }

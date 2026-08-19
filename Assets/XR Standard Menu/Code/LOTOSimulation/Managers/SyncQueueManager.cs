@@ -53,9 +53,45 @@ public class SyncQueueManager : MonoBehaviour
 
     public void EnqueueCompleteFromSceneScore(SceneScore sceneScore, float elapsedSeconds, DateTime startDate, DateTime endDate)
     {
-        SimulationResultPayload payload = BuildResultPayload(sceneScore, elapsedSeconds, endDate);
-        string sessionId = ResolveSessionId();
-        payload.sessionId = sessionId;
+        EnqueueCompleteFromSceneScore(sceneScore, elapsedSeconds, startDate, endDate, LotoSessionScore.CompletionCompleted);
+    }
+
+    public SimulationResultPayload EnqueueCompleteFromSceneScore(
+        SceneScore sceneScore,
+        float elapsedSeconds,
+        DateTime startDate,
+        DateTime endDate,
+        string completionStatus)
+    {
+        int falsePositiveCount = 0;
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
+        {
+            falsePositiveCount = ControlCenter.Instance.simulationSessionManager.GetFalsePositiveCount();
+        }
+
+        SimulationResultPayload payload = LotoSessionScore.Build(
+            sceneScore,
+            falsePositiveCount,
+            elapsedSeconds,
+            endDate,
+            completionStatus);
+        payload.sessionId = ResolveSessionId();
+        EnqueueComplete(payload);
+        return payload;
+    }
+
+    public void EnqueueComplete(SimulationResultPayload payload)
+    {
+        if (payload == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(payload.sessionId))
+        {
+            payload.sessionId = ResolveSessionId();
+        }
+
         PendingSyncEntry entry = new PendingSyncEntry
         {
             entryType = PendingSyncEntry.EntryTypeComplete,
@@ -66,6 +102,7 @@ public class SyncQueueManager : MonoBehaviour
         {
             ControlCenter.Instance.simulationSessionManager.CompleteCurrentSession(payload);
         }
+
         _ = TryFlushQueueAsync();
     }
 
@@ -156,7 +193,7 @@ public class SyncQueueManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SyncQueueManager] Load failed: {exception.Message}");
+            Debug.LogWarning($"[SyncQueueManager] Load failed: {exception.Message}");
         }
     }
 
@@ -173,7 +210,7 @@ public class SyncQueueManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SyncQueueManager] Save failed: {exception.Message}");
+            Debug.LogWarning($"[SyncQueueManager] Save failed: {exception.Message}");
         }
     }
 
@@ -215,47 +252,6 @@ public class SyncQueueManager : MonoBehaviour
     #endregion
 
     #region Payload Mapping
-
-    private static SimulationResultPayload BuildResultPayload(SceneScore sceneScore, float elapsedSeconds, DateTime endDate)
-    {
-        SimulationResultPayload payload = new SimulationResultPayload
-        {
-            durationSeconds = Mathf.Max(0, Mathf.RoundToInt(elapsedSeconds)),
-            finishedAtUtc = endDate.ToUniversalTime().ToString("o"),
-            completionStatus = "Completed"
-        };
-        if (sceneScore == null || sceneScore.objectives == null)
-        {
-            payload.objectives = Array.Empty<SimulationObjectiveResult>();
-            payload.scoreTotal = 0;
-            payload.approved = false;
-            return payload;
-        }
-        List<SimulationObjectiveResult> objectiveResults = new List<SimulationObjectiveResult>();
-        float weightedScore = 0f;
-        for (int i = 0; i < sceneScore.objectives.Count; i++)
-        {
-            ObjectiveScore objective = sceneScore.objectives[i];
-            if (objective == null)
-            {
-                continue;
-            }
-            int weight = LotoObjectiveIds.GetWeightPercent(objective.id);
-            float partial = objective.isAchivied ? weight : 0f;
-            weightedScore += partial;
-            objectiveResults.Add(new SimulationObjectiveResult
-            {
-                objectiveId = objective.id,
-                achieved = objective.isAchivied,
-                weightPercent = weight,
-                scorePartial = partial
-            });
-        }
-        payload.objectives = objectiveResults.ToArray();
-        payload.scoreTotal = Mathf.Clamp(Mathf.RoundToInt(weightedScore), 0, 100);
-        payload.approved = payload.scoreTotal >= LotoObjectiveIds.DefaultApprovalThresholdPercent;
-        return payload;
-    }
 
     private static string ResolveSessionId()
     {
