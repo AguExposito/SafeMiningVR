@@ -16,26 +16,34 @@ public class EppEquipmentManager : MonoBehaviour
         EppItemType.SafetyBoots
     };
 
+    [SerializeField] private LotoScenario1Controller scenarioController;
+    [SerializeField] private Transform helmetAnchor;
+    [SerializeField] private Transform glassesAnchor;
+    [SerializeField] private Transform vestAnchor;
+    [SerializeField] private Transform glovesAnchor;
+    [SerializeField] private Transform bootsAnchor;
+
     private readonly HashSet<EppItemType> equippedMandatory = new HashSet<EppItemType>();
     private readonly HashSet<int> rejectedDefectiveIds = new HashSet<int>();
     private readonly HashSet<int> pendingDefectiveIds = new HashSet<int>();
 
     private bool selectionObjectiveScored;
     private bool defectObjectiveScored;
-    private bool defectObjectiveFailed;
+    private bool attemptedDefectiveWear;
 
     public Transform rejectZoneAnchor;
 
-    public bool IsReadyToAdvance =>
-        equippedMandatory.Count >= MandatoryTypes.Length &&
-        pendingDefectiveIds.Count == 0 &&
-        defectObjectiveScored &&
-        !defectObjectiveFailed;
+    public bool IsReadyToAdvance => equippedMandatory.Count >= MandatoryTypes.Length;
 
     public int EquippedMandatoryCount => equippedMandatory.Count;
     public int MandatoryTotal => MandatoryTypes.Length;
 
     #region Public API
+
+    public void Configure(LotoScenario1Controller controller)
+    {
+        scenarioController = controller;
+    }
 
     public void Begin()
     {
@@ -44,9 +52,32 @@ public class EppEquipmentManager : MonoBehaviour
         pendingDefectiveIds.Clear();
         selectionObjectiveScored = false;
         defectObjectiveScored = false;
-        defectObjectiveFailed = false;
+        attemptedDefectiveWear = false;
+
+        ref_EppItem[] items = GetComponentsInChildren<ref_EppItem>(true);
+        for (int i = 0; i < items.Length; i++)
+        {
+            RegisterSpawnedItem(items[i]);
+        }
+
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s1_step_select");
+    }
+
+    public void BindBodyAnchors()
+    {
+        Transform cameraTransform = Camera.main != null ? Camera.main.transform : null;
+        if (cameraTransform == null)
+        {
+            return;
+        }
+
+        Transform origin = cameraTransform.root;
+        ReparentAnchor(helmetAnchor, cameraTransform, new Vector3(0f, 0.12f, 0.04f));
+        ReparentAnchor(glassesAnchor, cameraTransform, new Vector3(0f, 0f, 0.12f));
+        ReparentAnchor(vestAnchor, cameraTransform, new Vector3(0f, -0.38f, 0.16f));
+        ReparentAnchor(glovesAnchor, origin, new Vector3(-0.22f, 0.95f, 0.28f));
+        ReparentAnchor(bootsAnchor, origin, new Vector3(0.12f, 0.08f, 0.22f));
     }
 
     public void RegisterSpawnedItem(ref_EppItem item)
@@ -80,6 +111,7 @@ public class EppEquipmentManager : MonoBehaviour
 
         if (item.condition == EppItemCondition.Defective)
         {
+            attemptedDefectiveWear = true;
             EmitEvent("epp_equip_defect", false, item.itemType);
             NotifyOrchestratorSubtitle("loto_s1_reject_defective");
             ScoreDefectObjective(false);
@@ -101,7 +133,12 @@ public class EppEquipmentManager : MonoBehaviour
         if (equippedMandatory.Count >= MandatoryTypes.Length)
         {
             ScoreSelectionObjective();
-            NotifyOrchestratorSubtitle("loto_s1_step_reject");
+            if (!attemptedDefectiveWear)
+            {
+                ScoreDefectObjective(true);
+            }
+
+            NotifyOrchestratorSubtitle("loto_s1_step_ready");
         }
 
         return true;
@@ -125,7 +162,7 @@ public class EppEquipmentManager : MonoBehaviour
         item.SetRejected(true);
         EmitEvent("epp_reject_defect", true, item.itemType);
 
-        if (pendingDefectiveIds.Count == 0 && !defectObjectiveFailed)
+        if (pendingDefectiveIds.Count == 0 && !attemptedDefectiveWear)
         {
             ScoreDefectObjective(true);
             NotifyOrchestratorSubtitle("loto_s1_success_defect");
@@ -142,28 +179,33 @@ public class EppEquipmentManager : MonoBehaviour
     {
         if (!IsReadyToAdvance)
         {
-            NotifyOrchestratorSubtitle(equippedMandatory.Count < MandatoryTypes.Length
-                ? "loto_s1_step_select"
-                : "loto_s1_step_reject");
+            NotifyOrchestratorSubtitle("loto_s1_block_incomplete");
             return;
         }
 
-        LotoScenario1Controller scenario = FindFirstObjectByType<LotoScenario1Controller>();
-        if (scenario != null)
+        if (scenarioController != null)
         {
-            scenario.OnEquipmentCompleted();
+            scenarioController.OnEquipmentCompleted();
         }
     }
 
     public Transform GetAttachAnchor(EppItemType type)
     {
-        Transform anchorsRoot = transform.Find("AttachPoints");
-        if (anchorsRoot == null)
+        switch (type)
         {
-            return null;
+            case EppItemType.Helmet:
+                return helmetAnchor;
+            case EppItemType.SafetyGlasses:
+                return glassesAnchor;
+            case EppItemType.ReflectiveVest:
+                return vestAnchor;
+            case EppItemType.Gloves:
+                return glovesAnchor;
+            case EppItemType.SafetyBoots:
+                return bootsAnchor;
+            default:
+                return null;
         }
-
-        return anchorsRoot.Find(type.ToString());
     }
 
     #endregion
@@ -189,12 +231,7 @@ public class EppEquipmentManager : MonoBehaviour
             return;
         }
 
-        if (!achieved)
-        {
-            defectObjectiveFailed = true;
-        }
-
-        defectObjectiveScored = achieved;
+        defectObjectiveScored = true;
         SetObjective(LotoSimulationConstants.ObjectiveEppDefectIndex, achieved);
     }
 
@@ -315,6 +352,19 @@ public class EppEquipmentManager : MonoBehaviour
 
         string translated = ControlCenter.Instance.languageManager.GetText(key);
         return string.IsNullOrEmpty(translated) ? key : translated;
+    }
+
+    private static void ReparentAnchor(Transform anchor, Transform parent, Vector3 localPosition)
+    {
+        if (anchor == null || parent == null)
+        {
+            return;
+        }
+
+        anchor.SetParent(parent, false);
+        anchor.localPosition = localPosition;
+        anchor.localRotation = Quaternion.identity;
+        anchor.localScale = Vector3.one;
     }
 
     #endregion

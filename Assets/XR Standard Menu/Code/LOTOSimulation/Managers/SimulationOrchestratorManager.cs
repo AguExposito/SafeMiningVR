@@ -295,10 +295,18 @@ public class SimulationOrchestratorManager : MonoBehaviour
             return;
         }
 
-        if (ControlCenter.Instance != null && ControlCenter.Instance.loadManager != null)
+        bool canShowWaiter = ControlCenter.Instance != null &&
+            ControlCenter.Instance.loadManager != null &&
+            SBD_Prefab.Instance != null &&
+            SBD_Prefab.Instance.UI_Waiter_normal != null;
+
+        if (canShowWaiter)
         {
             await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(buildIndex);
+            return;
         }
+
+        SceneManager.LoadScene(buildIndex);
     }
 
     private void NotifySubtitleForScenario(int scenarioIndex)

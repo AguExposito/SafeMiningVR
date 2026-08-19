@@ -15,6 +15,13 @@ public enum EppItemCondition
     Defective
 }
 
+public enum EppSocketRole
+{
+    Body,
+    Locker,
+    Reject
+}
+
 public static class EppTypeRules
 {
     public static bool IsMandatory(EppItemType type)

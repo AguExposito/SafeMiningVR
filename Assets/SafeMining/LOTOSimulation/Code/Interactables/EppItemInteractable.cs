@@ -15,11 +15,6 @@ public class EppItemInteractable : MonoBehaviour
     private void Awake()
     {
         itemRef = GetComponent<ref_EppItem>();
-        if (equipmentManager == null)
-        {
-            equipmentManager = FindFirstObjectByType<EppEquipmentManager>();
-        }
-
         if (itemRef != null && itemRef.grabInteractable != null)
         {
             itemRef.grabInteractable.selectExited.AddListener(OnReleased);

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class ref_EppItem : MonoBehaviour
@@ -38,12 +37,10 @@ public class ref_EppItem : MonoBehaviour
             grabInteractable.enabled = !rejected;
         }
 
-        if (itemRenderer != null)
+        if (rejected)
         {
-            itemRenderer.material.color = new Color(0.35f, 0.35f, 0.35f, 0.6f);
+            gameObject.SetActive(false);
         }
-
-        gameObject.SetActive(!rejected);
     }
 
     #endregion
