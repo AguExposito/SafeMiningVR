@@ -108,13 +108,13 @@ MonoBehaviour:
   defaultTargetName: Main Camera
   followSpeed: 1
   rotationSpeed: 50
-  toleranceRadius: 1
-  fixedDistance: 0.35
+  toleranceRadius: 0.35
+  fixedDistance: 1.75
   invertLookDirection: 1
   cebo: {fileID: 0}
   defaultCeboName: cebo
   simpleFollowSpeed: 2
-  offset: {x: -0.5, y: 0, z: 2.15}
+  offset: {x: -0.35, y: -0.15, z: 1.75}
   showDebugInfo: 0
   showToleranceRadius: 0
 --- !u!114 &3003

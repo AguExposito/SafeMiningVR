@@ -7,14 +7,14 @@
 - **Target device:** Meta Quest 3S (Android ARM64)
 - **Render pipeline:** URP 17.3
 
-## Current state (Fase 5 complete — E2E + resumen RN01/RN02)
+## Current state (Fase 6 complete — QA Quest / Malo 1–2)
 
-- **Roadmap:** Fase 0–5 complete. Fase 5: local `IntentoCapacitacionCapacitado` across S1→S2→S3, in-sim summary (score 0–100, Aprobado/No aprobado at threshold **60**, five-objective RN01 breakdown), offline queue retained 24h, abandon records partial score. Quest QA is Fase 6; JWT/online is Fase 7.
+- **Roadmap:** Fase 0–6 complete. Fase 6: Malo 1 jolt polish, Malo 2 `hasGloves` breaker alert, HUD follow ~1.75 m, OpenXR Android (Vulkan + Single Pass Instanced), Dev APK `com.safeminingvr.sim`. Quest headset sideload/logcat was blocked (no device); see [qa-quest-fase6.md](qa-quest-fase6.md). JWT/online is Fase 7.
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
 - **Entry scene:** `StandardMainMenu.unity` (build index 0). LOTO carousel title uses loc `loto_simulation` («Bloqueo/Etiquetado de Energía»).
 - **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD 1/3 + locker EPP), `VR-LOTO-S2` (2, HUD 2/3 + inspection yard), `VR-LOTO-S3` (3, HUD 3/3 + LOTO station → session summary).
 - **Legacy hub:** `VR-LOTO-Placeholder.unity` remains on disk, **out of Build Settings**
-- **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster`, no CanvasScaler). Session summary panel is authored on the HUD prefab.
+- **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster`, follow ~1.75 m). Session summary panel is authored on the HUD prefab.
 - **Bootstrap:** `LotoScenarioSceneBootstrap` with serialized HUD refs; S1 serializes `LotoScenario1Controller`; S2 serializes `LotoScenario2Controller`; S3 serializes `LotoScenario3Controller`. `LotoHubBootstrap` stays on Placeholder only.
 - **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`. Rule: `Assets/.cursor/rules/safemining-mcp-console.mdc`
 

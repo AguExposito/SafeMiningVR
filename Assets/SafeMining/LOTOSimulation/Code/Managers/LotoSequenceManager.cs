@@ -105,11 +105,25 @@ public class LotoSequenceManager : MonoBehaviour
             return false;
         }
 
+        WarnMissingGlovesIfNeeded();
+
         currentStep = LotoSequenceStep.EnergyIsolated;
         SetLockSocketActive(true);
         EmitEvent("breaker_off", true);
         NotifyStep(LotoSequenceStep.EnergyIsolated, "loto_s3_step_lock");
         return true;
+    }
+
+    public bool HasSessionGloves()
+    {
+        if (ControlCenter.Instance == null ||
+            ControlCenter.Instance.simulationSessionManager == null ||
+            ControlCenter.Instance.simulationSessionManager.CurrentSession == null)
+        {
+            return true;
+        }
+
+        return ControlCenter.Instance.simulationSessionManager.CurrentSession.hasGloves;
     }
 
     public bool TryApplyLock(LotoLockType lockType, GameObject lockObject)
@@ -379,6 +393,17 @@ public class LotoSequenceManager : MonoBehaviour
     {
         EmitEvent(optionId, false);
         NotifyOrchestratorSubtitle(subtitleKey);
+    }
+
+    private void WarnMissingGlovesIfNeeded()
+    {
+        if (HasSessionGloves())
+        {
+            return;
+        }
+
+        EmitEvent("breaker_no_gloves", false);
+        NotifyOrchestratorSubtitle("loto_s3_alert_no_gloves");
     }
 
     #endregion

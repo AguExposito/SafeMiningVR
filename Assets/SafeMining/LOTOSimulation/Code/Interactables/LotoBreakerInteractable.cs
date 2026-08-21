@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -8,8 +9,11 @@ public class LotoBreakerInteractable : MonoBehaviour
     [SerializeField] private LotoSequenceManager sequenceManager;
     [SerializeField] private Color onColor = new Color(0.2f, 0.8f, 0.2f);
     [SerializeField] private Color offColor = new Color(0.8f, 0.2f, 0.2f);
+    [SerializeField] private Color alertFlashColor = new Color(1f, 0.55f, 0.1f);
+    [SerializeField] private float alertFlashSeconds = 0.45f;
 
     private ref_LotoBreaker breakerRef;
+    private Coroutine alertFlashRoutine;
 
     #region Lifecycle
 
@@ -29,6 +33,12 @@ public class LotoBreakerInteractable : MonoBehaviour
         if (breakerRef != null && breakerRef.interactable != null)
         {
             breakerRef.interactable.selectEntered.RemoveListener(OnSelected);
+        }
+
+        if (alertFlashRoutine != null)
+        {
+            StopCoroutine(alertFlashRoutine);
+            alertFlashRoutine = null;
         }
     }
 
@@ -56,6 +66,7 @@ public class LotoBreakerInteractable : MonoBehaviour
             return;
         }
 
+        bool missingGloves = !sequenceManager.HasSessionGloves();
         if (!sequenceManager.TryToggleBreakerOff())
         {
             return;
@@ -63,6 +74,37 @@ public class LotoBreakerInteractable : MonoBehaviour
 
         breakerRef.isOff = true;
         ApplyVisual();
+        if (missingGloves)
+        {
+            PlayAlertFlash();
+        }
+    }
+
+    private void PlayAlertFlash()
+    {
+        if (breakerRef == null || breakerRef.breakerRenderer == null)
+        {
+            return;
+        }
+
+        if (alertFlashRoutine != null)
+        {
+            StopCoroutine(alertFlashRoutine);
+        }
+
+        alertFlashRoutine = StartCoroutine(AlertFlashRoutine());
+    }
+
+    private IEnumerator AlertFlashRoutine()
+    {
+        if (breakerRef.breakerRenderer != null)
+        {
+            breakerRef.breakerRenderer.material.color = alertFlashColor;
+        }
+
+        yield return new WaitForSeconds(alertFlashSeconds);
+        ApplyVisual();
+        alertFlashRoutine = null;
     }
 
     private void ApplyVisual()

@@ -94,6 +94,7 @@
 	<string name="loto_s3_reject_wrong_tag">Use the DANGER DO NOT OPERATE tag.</string>
 	<string name="loto_s3_reject_order">Complete the LOTO steps in order before continuing.</string>
 	<string name="loto_s3_alert_incomplete">Incomplete LOTO. It is not safe to energize the equipment.</string>
+	<string name="loto_s3_alert_no_gloves">No protective gloves. Electrocution risk when isolating energy.</string>
 	<string name="loto_s3_success_zero_energy">Zero energy verification successful.</string>
 	<string name="loto_s3_summary_title">LOTO session summary</string>
 	<string name="loto_s3_summary_body">Objectives achieved: {0}/{1}. Result: {2}.</string>

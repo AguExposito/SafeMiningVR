@@ -91,6 +91,7 @@
 	<string name="loto_s3_reject_wrong_tag">Use la etiqueta PELIGRO NO OPERAR.</string>
 	<string name="loto_s3_reject_order">Complete los pasos LOTO en orden antes de continuar.</string>
 	<string name="loto_s3_alert_incomplete">LOTO incompleto. No es seguro energizar el equipo.</string>
+	<string name="loto_s3_alert_no_gloves">Sin guantes de protección. Riesgo de electrocución al aislar energía.</string>
 	<string name="loto_s3_success_zero_energy">Verificación de energía cero exitosa.</string>
 	<string name="loto_s3_summary_title">Resumen de sesión LOTO</string>
 	<string name="loto_s3_summary_body">Objetivos logrados: {0}/{1}. Resultado: {2}.</string>

@@ -4,6 +4,8 @@ public class BeltAnimator : MonoBehaviour
 {
     [SerializeField] private Transform beltVisual;
     [SerializeField] private float scrollSpeed = 0.35f;
+    [SerializeField] private float failedStartDurationSeconds = 1.75f;
+    [SerializeField] private float failedStartScrollMultiplier = 3f;
 
     private bool isRunning = true;
     private float failedStartTimer;
@@ -19,7 +21,7 @@ public class BeltAnimator : MonoBehaviour
     public void PlayFailedStartAttempt()
     {
         isRunning = true;
-        failedStartTimer = 1.25f;
+        failedStartTimer = failedStartDurationSeconds;
     }
 
     #endregion
@@ -36,7 +38,12 @@ public class BeltAnimator : MonoBehaviour
         if (failedStartTimer > 0f)
         {
             failedStartTimer -= Time.deltaTime;
-            beltVisual.localPosition += Vector3.right * (scrollSpeed * 2f * Time.deltaTime);
+            beltVisual.localPosition += Vector3.right * (scrollSpeed * failedStartScrollMultiplier * Time.deltaTime);
+            if (beltVisual.localPosition.x > 1f)
+            {
+                beltVisual.localPosition = new Vector3(-1f, beltVisual.localPosition.y, beltVisual.localPosition.z);
+            }
+
             if (failedStartTimer <= 0f)
             {
                 isRunning = false;
