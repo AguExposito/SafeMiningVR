@@ -28,6 +28,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
     {
         ResolveFollowTarget();
         ConfigurePanelFollowers();
+        EnsurePcPlaytestDriver();
 
         if (ControlCenter.Instance == null)
         {
@@ -98,6 +99,14 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
             {
                 followers[i].SetTarget(panelFollowTarget);
             }
+        }
+    }
+
+    private void EnsurePcPlaytestDriver()
+    {
+        if (GetComponent<LotoPcPlaytestDriver>() == null)
+        {
+            gameObject.AddComponent<LotoPcPlaytestDriver>();
         }
     }
 

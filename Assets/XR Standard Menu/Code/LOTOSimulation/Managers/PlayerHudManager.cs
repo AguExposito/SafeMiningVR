@@ -177,15 +177,21 @@ public class PlayerHudManager : MonoBehaviour
             playerHud.rootPanel.SetActive(showHud);
         }
 
+        bool showExitConfirm = state == LotoSimulationState.ExitConfirm;
+        bool showSessionSummary = state == LotoSimulationState.SessionSummary;
+        bool showActiveChrome = state == LotoSimulationState.Active;
+
         if (playerHud != null && playerHud.exitConfirmPanel != null)
         {
-            playerHud.exitConfirmPanel.SetActive(state == LotoSimulationState.ExitConfirm);
+            playerHud.exitConfirmPanel.SetActive(showExitConfirm);
         }
 
         if (playerHud != null && playerHud.sessionSummaryPanel != null)
         {
-            playerHud.sessionSummaryPanel.SetActive(state == LotoSimulationState.SessionSummary);
+            playerHud.sessionSummaryPanel.SetActive(showSessionSummary);
         }
+
+        SetActiveChromeVisible(showActiveChrome);
 
         if (state == LotoSimulationState.Briefing)
         {
@@ -207,6 +213,53 @@ public class PlayerHudManager : MonoBehaviour
         if (state == LotoSimulationState.SessionSummary)
         {
             RefreshSessionSummary();
+        }
+    }
+
+    private void SetActiveChromeVisible(bool visible)
+    {
+        if (playerHud == null)
+        {
+            return;
+        }
+
+        if (playerHud.activeObjectiveTitle != null)
+        {
+            playerHud.activeObjectiveTitle.gameObject.SetActive(visible);
+        }
+
+        if (playerHud.objectivesContainer != null)
+        {
+            playerHud.objectivesContainer.gameObject.SetActive(visible);
+        }
+
+        if (playerHud.timerText != null)
+        {
+            playerHud.timerText.gameObject.SetActive(visible);
+        }
+
+        if (playerHud.timerFill != null)
+        {
+            playerHud.timerFill.gameObject.SetActive(visible);
+        }
+
+        if (playerHud.scenarioIndicatorText != null)
+        {
+            playerHud.scenarioIndicatorText.gameObject.SetActive(visible);
+        }
+
+        if (playerHud.subtitleText != null)
+        {
+            playerHud.subtitleText.gameObject.SetActive(visible);
+        }
+
+        if (playerHud.menuButtonRoot != null)
+        {
+            playerHud.menuButtonRoot.SetActive(visible);
+        }
+        else if (playerHud.menuButton != null)
+        {
+            playerHud.menuButton.gameObject.SetActive(visible);
         }
     }
 

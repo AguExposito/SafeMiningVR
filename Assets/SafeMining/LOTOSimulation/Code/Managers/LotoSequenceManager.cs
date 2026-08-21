@@ -230,6 +230,7 @@ public class LotoSequenceManager : MonoBehaviour
         NotifyOrchestratorSubtitle("loto_s3_success_zero_energy");
         OnStepChanged?.Invoke(currentStep);
         OnSequenceCompleted?.Invoke(true);
+        RefreshOutlineHints(LotoSequenceStep.ZeroEnergyVerified);
     }
 
     #endregion
@@ -414,6 +415,89 @@ public class LotoSequenceManager : MonoBehaviour
     {
         OnStepChanged?.Invoke(step);
         NotifyOrchestratorSubtitle(subtitleKey);
+        RefreshOutlineHints(step);
+    }
+
+    private void RefreshOutlineHints(LotoSequenceStep step)
+    {
+        LotoOutlineHint hint = GetComponent<LotoOutlineHint>();
+        if (hint == null)
+        {
+            hint = gameObject.AddComponent<LotoOutlineHint>();
+        }
+
+        System.Collections.Generic.List<GameObject> targets = new System.Collections.Generic.List<GameObject>(8);
+        switch (step)
+        {
+            case LotoSequenceStep.BeltRunning:
+                CollectControlButtons(targets, false);
+                break;
+            case LotoSequenceStep.BeltStopped:
+                CollectBreakers(targets);
+                break;
+            case LotoSequenceStep.EnergyIsolated:
+                CollectLocks(targets, LotoLockType.Personal);
+                break;
+            case LotoSequenceStep.LockApplied:
+                CollectTags(targets, LotoTagType.DangerDoNotOperate);
+                break;
+            case LotoSequenceStep.TagApplied:
+                CollectControlButtons(targets, true);
+                break;
+            default:
+                hint.Clear();
+                return;
+        }
+
+        hint.Show(targets);
+    }
+
+    private void CollectControlButtons(System.Collections.Generic.List<GameObject> targets, bool startButtons)
+    {
+        ref_LotoControlButton[] buttons = GetComponentsInChildren<ref_LotoControlButton>(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i] != null && buttons[i].isStartButton == startButtons)
+            {
+                targets.Add(buttons[i].gameObject);
+            }
+        }
+    }
+
+    private void CollectBreakers(System.Collections.Generic.List<GameObject> targets)
+    {
+        ref_LotoBreaker[] breakers = GetComponentsInChildren<ref_LotoBreaker>(true);
+        for (int i = 0; i < breakers.Length; i++)
+        {
+            if (breakers[i] != null)
+            {
+                targets.Add(breakers[i].gameObject);
+            }
+        }
+    }
+
+    private void CollectLocks(System.Collections.Generic.List<GameObject> targets, LotoLockType lockType)
+    {
+        ref_LotoLock[] locks = GetComponentsInChildren<ref_LotoLock>(true);
+        for (int i = 0; i < locks.Length; i++)
+        {
+            if (locks[i] != null && locks[i].lockType == lockType)
+            {
+                targets.Add(locks[i].gameObject);
+            }
+        }
+    }
+
+    private void CollectTags(System.Collections.Generic.List<GameObject> targets, LotoTagType tagType)
+    {
+        ref_LotoTag[] tags = GetComponentsInChildren<ref_LotoTag>(true);
+        for (int i = 0; i < tags.Length; i++)
+        {
+            if (tags[i] != null && tags[i].tagType == tagType)
+            {
+                targets.Add(tags[i].gameObject);
+            }
+        }
     }
 
     private void NotifyOrchestratorSubtitle(string key)

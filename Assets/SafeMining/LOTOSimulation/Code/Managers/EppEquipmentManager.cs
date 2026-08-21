@@ -62,6 +62,7 @@ public class EppEquipmentManager : MonoBehaviour
 
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s1_step_select");
+        RefreshOutlineHints();
     }
 
     public void BindBodyAnchors()
@@ -172,6 +173,7 @@ public class EppEquipmentManager : MonoBehaviour
             }
         }
 
+        RefreshOutlineHints();
         return true;
     }
 
@@ -331,6 +333,49 @@ public class EppEquipmentManager : MonoBehaviour
     private void NotifyProgress()
     {
         OnProgressChanged?.Invoke(equippedMandatory.Count, MandatoryTypes.Length);
+        RefreshOutlineHints();
+    }
+
+    private void RefreshOutlineHints()
+    {
+        LotoOutlineHint hint = GetComponent<LotoOutlineHint>();
+        if (hint == null)
+        {
+            hint = gameObject.AddComponent<LotoOutlineHint>();
+        }
+
+        if (IsReadyToAdvance)
+        {
+            LotoS1ContinueInteractable continueDoor = GetComponentInChildren<LotoS1ContinueInteractable>(true);
+            if (continueDoor != null)
+            {
+                hint.Show(continueDoor.gameObject);
+                return;
+            }
+
+            hint.Clear();
+            return;
+        }
+
+        System.Collections.Generic.List<GameObject> targets = new System.Collections.Generic.List<GameObject>(8);
+        ref_EppItem[] items = GetComponentsInChildren<ref_EppItem>(true);
+        for (int i = 0; i < items.Length; i++)
+        {
+            ref_EppItem item = items[i];
+            if (item == null || item.IsLocked)
+            {
+                continue;
+            }
+
+            if (item.condition == EppItemCondition.Good &&
+                EppTypeRules.IsMandatory(item.itemType) &&
+                !equippedMandatory.Contains(item.itemType))
+            {
+                targets.Add(item.gameObject);
+            }
+        }
+
+        hint.Show(targets);
     }
 
     private void NotifyOrchestratorSubtitle(string key)

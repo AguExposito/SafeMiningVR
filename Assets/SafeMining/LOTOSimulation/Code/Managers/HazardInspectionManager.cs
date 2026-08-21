@@ -60,6 +60,7 @@ public class HazardInspectionManager : MonoBehaviour
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s2_intro");
         hintCoroutine = StartCoroutine(HintTimeoutRoutine());
+        RefreshOutlineHints();
     }
 
     public void RegisterSpawnedSpot(ref_HazardSpot spot)
@@ -243,6 +244,40 @@ public class HazardInspectionManager : MonoBehaviour
     private void NotifyProgress()
     {
         OnProgressChanged?.Invoke(reportedHazards.Count, RequiredHazards.Length);
+        RefreshOutlineHints();
+    }
+
+    private void RefreshOutlineHints()
+    {
+        LotoOutlineHint hint = GetComponent<LotoOutlineHint>();
+        if (hint == null)
+        {
+            hint = gameObject.AddComponent<LotoOutlineHint>();
+        }
+
+        if (IsReadyToAdvance)
+        {
+            LotoS2ContinueInteractable continueDoor = GetComponentInChildren<LotoS2ContinueInteractable>(true);
+            if (continueDoor != null)
+            {
+                hint.Show(continueDoor.gameObject);
+                return;
+            }
+
+            hint.Clear();
+            return;
+        }
+
+        System.Collections.Generic.List<GameObject> targets = new System.Collections.Generic.List<GameObject>(4);
+        for (int i = 0; i < pendingRealSpots.Count; i++)
+        {
+            if (pendingRealSpots[i] != null && !pendingRealSpots[i].IsReported)
+            {
+                targets.Add(pendingRealSpots[i].gameObject);
+            }
+        }
+
+        hint.Show(targets);
     }
 
     private static string GetReportSubtitleKey(HazardType type)
