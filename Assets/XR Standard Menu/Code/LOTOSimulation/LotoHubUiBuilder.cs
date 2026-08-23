@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit.UI;
 using XRStandardMenu;
 
 public static class LotoHubUiBuilder
@@ -58,7 +59,7 @@ public static class LotoHubUiBuilder
 
     private static GameObject CreateWorldCanvasRoot(string name, Vector3 localPosition, Transform followTarget, bool active)
     {
-        GameObject root = new GameObject(name, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        GameObject root = new GameObject(name, typeof(RectTransform), typeof(Canvas), typeof(GraphicRaycaster), typeof(TrackedDeviceGraphicRaycaster));
         root.layer = LayerMask.NameToLayer("UI");
         root.SetActive(active);
 
@@ -69,9 +70,9 @@ public static class LotoHubUiBuilder
 
         Canvas canvas = root.GetComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
-
-        CanvasScaler scaler = root.GetComponent<CanvasScaler>();
-        scaler.dynamicPixelsPerUnit = 10f;
+        canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 |
+                                          AdditionalCanvasShaderChannels.Normal |
+                                          AdditionalCanvasShaderChannels.Tangent;
 
         if (followTarget != null)
         {
@@ -105,6 +106,7 @@ public static class LotoHubUiBuilder
         rect.offsetMin = offsetMin;
         rect.offsetMax = offsetMax;
         panel.GetComponent<Image>().color = new Color(0.102f, 0.212f, 0.365f, 0.95f);
+        panel.GetComponent<Image>().raycastTarget = false;
         return panel;
     }
 
@@ -130,6 +132,7 @@ public static class LotoHubUiBuilder
         text.fontSize = fontSize;
         text.color = Color.white;
         text.alignment = TextAlignmentOptions.MidlineLeft;
+        text.raycastTarget = false;
         return text;
     }
 
@@ -146,6 +149,7 @@ public static class LotoHubUiBuilder
         image.type = Image.Type.Filled;
         image.fillMethod = Image.FillMethod.Horizontal;
         image.color = new Color(0.133f, 0.773f, 0.369f, 1f);
+        image.raycastTarget = false;
         return image;
     }
 

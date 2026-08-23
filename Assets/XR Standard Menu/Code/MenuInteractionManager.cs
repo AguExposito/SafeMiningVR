@@ -21,6 +21,13 @@ public class MenuInteractionManager : MonoBehaviour
         ref_logout = ComponentFinder.FindComponentInScene<ref_Logout>();
         controlCenter = ComponentFinder.FindComponentInScene<ControlCenter>();
         Initialize();
+        LotoInputModalityVisuals.OnHandsModeChanged += SyncControlsHelpToModality;
+        SyncControlsHelpToModality(LotoInputModalityVisuals.IsHandsMode);
+    }
+
+    private void OnDestroy()
+    {
+        LotoInputModalityVisuals.OnHandsModeChanged -= SyncControlsHelpToModality;
     }
     void Initialize()
     {
@@ -43,6 +50,7 @@ public class MenuInteractionManager : MonoBehaviour
         {
             ref_controls.gameObject.SetActive(true);
             ref_mainMenu.gameObject.SetActive(false);
+            SyncControlsHelpToModality(LotoInputModalityVisuals.IsHandsMode);
         });
         ref_mainMenu.go_btn_exit.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -135,5 +143,23 @@ public class MenuInteractionManager : MonoBehaviour
         }
         string pinValue = string.IsNullOrEmpty(userData.userPin) ? "-" : userData.userPin;
         ref_logout.text_userdata.text = $"{fullName} / PIN {pinValue}";
+    }
+
+    private void SyncControlsHelpToModality(bool handsMode)
+    {
+        if (ref_controls == null)
+        {
+            return;
+        }
+
+        if (ref_controls.go_panel_contentHands != null)
+        {
+            ref_controls.go_panel_contentHands.SetActive(handsMode);
+        }
+
+        if (ref_controls.go_panel_contentVR != null)
+        {
+            ref_controls.go_panel_contentVR.SetActive(!handsMode);
+        }
     }
 }

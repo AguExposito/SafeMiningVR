@@ -4408,7 +4408,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6553694105641296276
 Transform:
   m_ObjectHideFlags: 0
@@ -6923,6 +6923,7 @@ GameObject:
   - component: {fileID: 3639897786663306106}
   - component: {fileID: 4098003600152749398}
   - component: {fileID: 4995449084335909498}
+  - component: {fileID: 8800111222334455670}
   - component: {fileID: 7331742721928664605}
   - component: {fileID: 6026899772773912285}
   m_Layer: 2
@@ -7050,6 +7051,24 @@ MonoBehaviour:
   m_MotionControllerModeEnded:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8800111222334455670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2782560199055662006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7c4e2b1d8f4a6e9c3b5d7f0a1e2c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoInputModalityVisuals
+  modalityManager: {fileID: 4995449084335909498}
+  leftHand: {fileID: 3139180109014309239}
+  rightHand: {fileID: 3974037204550759568}
+  leftController: {fileID: 7588895976978649828}
+  rightController: {fileID: 1713627106571810728}
+  handsReturnDelay: 0.6
 --- !u!114 &7331742721928664605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18230,7 +18249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4534453522673560594
 Transform:
   m_ObjectHideFlags: 0

@@ -7,15 +7,15 @@
 - **Target device:** Meta Quest 3S (Android ARM64)
 - **Render pipeline:** URP 17.3
 
-## Current state (visual polish + PC playtest post Fase 6)
+## Current state (hands-default input + VR/PC UI)
 
-- **Roadmap:** Fases 0–6 complete. Visual polish: URP Lit mats S1/S3, HUD non-overlap + TMP channels, underground Mixed lighting, QuickOutline→URP + pedagogical `LotoOutlineHint`, XR Interaction Simulator + `LotoPcPlaytestDriver`. JWT/online remains Fase 7.
+- **Roadmap:** Fases 0–6 + visual polish. Input: hand tracking default on `PlayerMR`, auto visual switch to Touch when grabbed (`LotoInputModalityVisuals`). JWT/online remains Fase 7.
 - **Docs:** [loto-simulation-handbook.md](loto-simulation-handbook.md), [loto-asset-list.md](loto-asset-list.md).
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
-- **Entry scene:** `StandardMainMenu.unity` (build index 0). LOTO carousel title uses loc `loto_simulation` («Bloqueo/Etiquetado de Energía»).
+- **Entry scene:** `StandardMainMenu.unity` (build index 0). World-space menu is XR-clickable; **mouse enabled** in Play Mode.
 - **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD 1/3 + locker EPP), `VR-LOTO-S2` (2, HUD 2/3 + inspection yard), `VR-LOTO-S3` (3, HUD 3/3 + LOTO station → session summary).
 - **Legacy hub:** `VR-LOTO-Placeholder.unity` remains on disk, **out of Build Settings**
-- **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster`, follow ~1.75 m). Session summary / exit confirm are mutually exclusive; active objective chrome hides while those panels show.
+- **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster` + `GraphicRaycaster`, follow ~1.75 m). Raycasts only on buttons. Session summary / exit confirm mutually exclusive.
 - **Bootstrap:** `LotoScenarioSceneBootstrap` with serialized HUD refs + runtime PC cheats driver. `LotoHubBootstrap` stays on Placeholder only.
 - **PC playtest:** XRI Interaction Simulator auto-instantiate (Editor); Inspector bools / ContextMenus on `LotoPcPlaytestDriver`.
 - **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`. Rule: `Assets/.cursor/rules/safemining-mcp-console.mdc`

@@ -32,14 +32,19 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 - S2: unreported real hazards → continue door when ready (no decoys).
 - S3: STOP → breaker → personal lock → danger tag → START.
 
+## Input (hands vs controllers)
+
+- Default: **hand tracking** on `PlayerMR` (`Left/Right Hand` on, controllers off).
+- `XRInputModalityManager` + [`LotoInputModalityVisuals`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoInputModalityVisuals.cs): picking up Touch shows controller meshes and hides hands; releasing (~0.6 s hysteresis) returns to hands.
+- Menu Controls help panels follow the live modality; Hands/Joysticks buttons still preview help art.
+- OpenXR **Hand Interaction Profile** is enabled on Android and Standalone.
+
 ## PC playtest (no headset)
 
-1. Enter Play on S1–S3 with Game view focused.
-2. **XR Interaction Simulator** auto-instantiates in Editor (`XRDeviceSimulatorSettings`: Automatically Instantiate = true, prefab = XRI 3.3.1 sample).
-3. Mouse UI works on briefing/HUD (`XRUIInputModule`).
-4. Select the bootstrap object → `LotoPcPlaytestDriver`: toggle Inspector bools (one-shot) or Context Menu **LOTO/PC/**… to dismiss briefing, equip 5/5, reject defect, continue S1/S2, report hazards, run LOTO happy path, force no gloves / incomplete START, confirm exit / summary.
-
-Simulator keys depend on the XRI sample overlay; prefer Inspector cheats for scenario progression.
+1. Play **StandardMainMenu** or S1–S3 with Game view focused. Mouse UI is enabled on the menu and LOTO EventSystems.
+2. **XR Interaction Simulator** auto-instantiates in Editor (treat as joysticks). Hands remain default until simulator/controller input arrives.
+3. HUD/briefing use `TrackedDeviceGraphicRaycaster` + `GraphicRaycaster`; only buttons block rays.
+4. Select bootstrap → `LotoPcPlaytestDriver` Inspector bools / Context Menu **LOTO/PC/**… for scenario cheats (S1–S3 only).
 
 ## Where to maintain
 
@@ -48,6 +53,7 @@ Simulator keys depend on the XRI sample overlay; prefer Inspector cheats for sce
 | Scenario rules / scoring | Managers under `Code/Managers/` |
 | Prefab layout / art | `Prefabs/`, `Art/Materials/` |
 | Loc strings | Language assets used by `LanguageManager` (`loto_*` keys) |
+| Input modality | `PlayerMR` + `LotoInputModalityVisuals` |
 | HUD layers | `PlayerHudManager.ApplyState` (summary vs exit confirm mutually exclusive; active chrome hidden on overlays) |
 | Underground lights | Menu **SafeMining/LOTO/Configure Underground Lighting S1-S3** or `LotoUndergroundLightingTool` |
 | Sync payload | `SyncQueueManager` + `PendingSyncEntry` |
