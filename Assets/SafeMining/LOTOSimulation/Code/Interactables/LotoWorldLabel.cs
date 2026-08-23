@@ -6,11 +6,31 @@ public class LotoWorldLabel : MonoBehaviour
     [SerializeField] private TMP_Text label;
     [SerializeField] private string locKey;
 
+    private Camera cachedCamera;
+
     #region Lifecycle
 
     private void OnEnable()
     {
         Refresh();
+    }
+
+    private void LateUpdate()
+    {
+        Camera cam = ResolveCamera();
+        if (cam == null)
+        {
+            return;
+        }
+
+        Vector3 toCamera = transform.position - cam.transform.position;
+        toCamera.y = 0f;
+        if (toCamera.sqrMagnitude < 0.0001f)
+        {
+            return;
+        }
+
+        transform.rotation = Quaternion.LookRotation(toCamera.normalized, Vector3.up);
     }
 
     #endregion
@@ -42,4 +62,15 @@ public class LotoWorldLabel : MonoBehaviour
     }
 
     #endregion
+
+    private Camera ResolveCamera()
+    {
+        if (cachedCamera != null)
+        {
+            return cachedCamera;
+        }
+
+        cachedCamera = Camera.main;
+        return cachedCamera;
+    }
 }

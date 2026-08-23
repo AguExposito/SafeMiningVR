@@ -58,5 +58,18 @@ public class LotoS1ContinueInteractable : MonoBehaviour
         equipmentManager.TryContinue();
     }
 
+    private void Update()
+    {
+        Renderer doorRenderer = GetComponent<Renderer>();
+        if (doorRenderer == null || equipmentManager == null)
+        {
+            return;
+        }
+
+        Color ready = new Color(0.133f, 0.773f, 0.369f, 1f);
+        Color blocked = new Color(0.45f, 0.47f, 0.5f, 1f);
+        doorRenderer.material.color = equipmentManager.IsReadyToAdvance ? ready : blocked;
+    }
+
     #endregion
 }

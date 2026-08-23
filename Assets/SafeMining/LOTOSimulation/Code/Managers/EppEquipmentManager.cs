@@ -115,6 +115,7 @@ public class EppEquipmentManager : MonoBehaviour
             attemptedDefectiveWear = true;
             EmitEvent("epp_equip_defect", false, item.itemType);
             NotifyOrchestratorSubtitle("loto_s1_reject_defective");
+            LotoTrainingFeedback.PlayFail();
             ScoreDefectObjective(false);
             return false;
         }
@@ -142,13 +143,21 @@ public class EppEquipmentManager : MonoBehaviour
             NotifyOrchestratorSubtitle("loto_s1_step_ready");
         }
 
+        LotoTrainingFeedback.PlaySuccess();
         return true;
     }
 
     public bool TryReject(ref_EppItem item)
     {
-        if (item == null || item.condition != EppItemCondition.Defective)
+        if (item == null)
         {
+            return false;
+        }
+
+        if (item.condition != EppItemCondition.Defective)
+        {
+            NotifyOrchestratorSubtitle("loto_s1_block_incomplete");
+            LotoTrainingFeedback.PlayFail();
             return false;
         }
 
@@ -174,6 +183,7 @@ public class EppEquipmentManager : MonoBehaviour
         }
 
         RefreshOutlineHints();
+        LotoTrainingFeedback.PlaySuccess();
         return true;
     }
 
@@ -182,6 +192,7 @@ public class EppEquipmentManager : MonoBehaviour
         if (!IsReadyToAdvance)
         {
             NotifyOrchestratorSubtitle("loto_s1_block_incomplete");
+            LotoTrainingFeedback.PlayFail();
             return;
         }
 

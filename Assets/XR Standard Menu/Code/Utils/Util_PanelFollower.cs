@@ -40,6 +40,7 @@ namespace XRStandardMenu
         private bool isFollowing = false;
         private float currentDistance;
         private Vector3 initialPosition; // Posición inicial del canvas
+        private Camera cachedCamera;
         
         private void Start()
         {
@@ -53,16 +54,25 @@ namespace XRStandardMenu
             // Si no hay target asignado, buscar el target por defecto
             if (target == null)
             {
-                GameObject defaultTarget = GameObject.Find(defaultTargetName);
-                if (defaultTarget != null)
+                if (cachedCamera == null)
                 {
-                    target = defaultTarget.transform;
-                    if (showDebugInfo)
-                    {
-                        Debug.Log($"PanelFollower: Target encontrado automáticamente - {defaultTargetName}");
-                    }
+                    cachedCamera = Camera.main;
+                }
+
+                if (cachedCamera != null)
+                {
+                    target = cachedCamera.transform;
                 }
                 else
+                {
+                    GameObject defaultTarget = GameObject.Find(defaultTargetName);
+                    if (defaultTarget != null)
+                    {
+                        target = defaultTarget.transform;
+                    }
+                }
+
+                if (target == null)
                 {
                     Debug.LogWarning($"PanelFollower: No se encontró el target '{defaultTargetName}'. El panel no seguirá a ningún objeto.");
                     return;

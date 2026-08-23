@@ -36,6 +36,7 @@ public class LotoOutlineHint : MonoBehaviour
             outline.OutlineWidth = outlineWidth;
             outline.enabled = true;
             activeOutlines.Add(outline);
+            return;
         }
     }
 
@@ -55,6 +56,7 @@ public class LotoOutlineHint : MonoBehaviour
             }
 
             ShowAppend(targets[i]);
+            return;
         }
     }
 

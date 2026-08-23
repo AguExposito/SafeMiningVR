@@ -218,6 +218,7 @@ public class LotoSequenceManager : MonoBehaviour
             }
 
             NotifyOrchestratorSubtitle("loto_s3_alert_incomplete");
+            LotoTrainingFeedback.PlayFail();
             ScoreZeroEnergyObjective(false);
             return;
         }
@@ -228,6 +229,7 @@ public class LotoSequenceManager : MonoBehaviour
         EmitEvent("zero_energy_verified", true);
         OnHintSubtitle?.Invoke(Translate("loto_s3_success_zero_energy"));
         NotifyOrchestratorSubtitle("loto_s3_success_zero_energy");
+        LotoTrainingFeedback.PlaySuccess();
         OnStepChanged?.Invoke(currentStep);
         OnSequenceCompleted?.Invoke(true);
         RefreshOutlineHints(LotoSequenceStep.ZeroEnergyVerified);
@@ -394,6 +396,7 @@ public class LotoSequenceManager : MonoBehaviour
     {
         EmitEvent(optionId, false);
         NotifyOrchestratorSubtitle(subtitleKey);
+        LotoTrainingFeedback.PlayFail();
     }
 
     private void WarnMissingGlovesIfNeeded()
@@ -405,6 +408,7 @@ public class LotoSequenceManager : MonoBehaviour
 
         EmitEvent("breaker_no_gloves", false);
         NotifyOrchestratorSubtitle("loto_s3_alert_no_gloves");
+        LotoTrainingFeedback.PlayFail();
     }
 
     #endregion
@@ -416,6 +420,7 @@ public class LotoSequenceManager : MonoBehaviour
         OnStepChanged?.Invoke(step);
         NotifyOrchestratorSubtitle(subtitleKey);
         RefreshOutlineHints(step);
+        LotoTrainingFeedback.PlaySuccess();
     }
 
     private void RefreshOutlineHints(LotoSequenceStep step)

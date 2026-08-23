@@ -4,6 +4,8 @@ public class LotoPcPlaytestDriver : MonoBehaviour
 {
     [Header("PC Playtest")]
     [SerializeField] private bool enablePcCheats = true;
+    [Tooltip("F1 briefing, F2 5/5 PPE, F3 continue S1, F4 reject defect, F5 4 hazards, F6 continue S2, F7 LOTO path")]
+    [SerializeField] private bool enableHotkeys = true;
 
     [Header("Triggers (toggle in Play Mode)")]
     [SerializeField] private bool dismissBriefing;
@@ -78,6 +80,44 @@ public class LotoPcPlaytestDriver : MonoBehaviour
         if (Consume(ref completeSummary))
         {
             CompleteSummary();
+        }
+
+        if (enableHotkeys)
+        {
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                DismissBriefing();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                EquipMandatoryFive();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                ContinueS1();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                RejectOneDefect();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                ReportFourHazards();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F6))
+            {
+                ContinueS2();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F7))
+            {
+                RunLotoHappyPath();
+            }
         }
     }
 

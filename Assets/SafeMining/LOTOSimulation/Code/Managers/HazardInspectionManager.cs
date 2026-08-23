@@ -94,6 +94,7 @@ public class HazardInspectionManager : MonoBehaviour
 
             EmitEvent("hazard_false_positive", false, spot.hazardType);
             NotifyOrchestratorSubtitle("loto_s2_false_positive");
+            LotoTrainingFeedback.PlayFail();
             return false;
         }
 
@@ -108,6 +109,7 @@ public class HazardInspectionManager : MonoBehaviour
         EmitEvent("hazard_report", true, spot.hazardType);
         NotifyProgress();
         NotifyOrchestratorSubtitle(GetReportSubtitleKey(spot.hazardType));
+        LotoTrainingFeedback.PlaySuccess();
 
         if (reportedHazards.Count >= RequiredHazards.Length)
         {
@@ -125,6 +127,7 @@ public class HazardInspectionManager : MonoBehaviour
         if (!IsReadyToAdvance)
         {
             NotifyOrchestratorSubtitle("loto_s2_progress_hint");
+            LotoTrainingFeedback.PlayFail();
             return;
         }
 

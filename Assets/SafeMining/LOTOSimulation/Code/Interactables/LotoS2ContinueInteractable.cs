@@ -53,5 +53,18 @@ public class LotoS2ContinueInteractable : MonoBehaviour
         inspectionManager.TryContinue();
     }
 
+    private void Update()
+    {
+        Renderer doorRenderer = GetComponent<Renderer>();
+        if (doorRenderer == null || inspectionManager == null)
+        {
+            return;
+        }
+
+        Color ready = new Color(0.133f, 0.773f, 0.369f, 1f);
+        Color blocked = new Color(0.45f, 0.47f, 0.5f, 1f);
+        doorRenderer.material.color = inspectionManager.IsReadyToAdvance ? ready : blocked;
+    }
+
     #endregion
 }

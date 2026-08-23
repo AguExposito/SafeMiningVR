@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 using XRStandardMenu;
 
 public class LotoScenarioSceneBootstrap : MonoBehaviour
@@ -29,6 +30,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         ResolveFollowTarget();
         ConfigurePanelFollowers();
         EnsurePcPlaytestDriver();
+        BindTeleportationAreas();
 
         if (ControlCenter.Instance == null)
         {
@@ -107,6 +109,24 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         if (GetComponent<LotoPcPlaytestDriver>() == null)
         {
             gameObject.AddComponent<LotoPcPlaytestDriver>();
+        }
+    }
+
+    private void BindTeleportationAreas()
+    {
+        TeleportationProvider provider = Object.FindFirstObjectByType<TeleportationProvider>();
+        if (provider == null)
+        {
+            return;
+        }
+
+        TeleportationArea[] areas = Object.FindObjectsByType<TeleportationArea>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        for (int i = 0; i < areas.Length; i++)
+        {
+            if (areas[i] != null)
+            {
+                areas[i].teleportationProvider = provider;
+            }
         }
     }
 

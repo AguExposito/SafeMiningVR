@@ -17,6 +17,7 @@ public class PlayerHudManager : MonoBehaviour
     private SimulationOrchestratorManager orchestrator;
     private readonly List<ref_LotoObjectiveRow> objectiveRows = new List<ref_LotoObjectiveRow>();
     private float nextTimerRefreshTime;
+    private float subtitleHideTime;
 
     #region Initialization
 
@@ -51,6 +52,13 @@ public class PlayerHudManager : MonoBehaviour
         if (orchestrator == null || playerHud == null)
         {
             return;
+        }
+
+        if (playerHud.subtitleText != null && subtitleHideTime > 0f && Time.unscaledTime >= subtitleHideTime)
+        {
+            playerHud.subtitleText.text = string.Empty;
+            playerHud.subtitleText.color = Color.white;
+            subtitleHideTime = 0f;
         }
 
         if (Time.unscaledTime < nextTimerRefreshTime)
@@ -152,10 +160,21 @@ public class PlayerHudManager : MonoBehaviour
 
     private void HandleSubtitleChanged(string subtitle)
     {
-        if (playerHud != null && playerHud.subtitleText != null)
+        if (playerHud == null || playerHud.subtitleText == null)
         {
-            playerHud.subtitleText.text = subtitle;
+            return;
         }
+
+        playerHud.subtitleText.text = subtitle;
+        bool isError = !string.IsNullOrEmpty(subtitle) &&
+                       (subtitle.IndexOf("reject", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        subtitle.IndexOf("block", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        subtitle.IndexOf("alert", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        subtitle.IndexOf("false", StringComparison.OrdinalIgnoreCase) >= 0);
+        playerHud.subtitleText.color = isError
+            ? new Color(1f, 0.72f, 0.45f, 1f)
+            : Color.white;
+        subtitleHideTime = Time.unscaledTime + 3f;
     }
 
     #endregion
@@ -240,7 +259,7 @@ public class PlayerHudManager : MonoBehaviour
 
         if (playerHud.timerFill != null)
         {
-            playerHud.timerFill.gameObject.SetActive(visible);
+            playerHud.timerFill.gameObject.SetActive(false);
         }
 
         if (playerHud.scenarioIndicatorText != null)
@@ -260,6 +279,21 @@ public class PlayerHudManager : MonoBehaviour
         else if (playerHud.menuButton != null)
         {
             playerHud.menuButton.gameObject.SetActive(visible);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (playerHud == null || playerHud.subtitleText == null)
+        {
+            return;
+        }
+
+        if (subtitleHideTime > 0f && Time.unscaledTime >= subtitleHideTime)
+        {
+            playerHud.subtitleText.text = string.Empty;
+            playerHud.subtitleText.color = Color.white;
+            subtitleHideTime = 0f;
         }
     }
 
@@ -481,7 +515,29 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         row.statusIcon.sprite = achieved ? GetAchievedSprite() : GetPendingSprite();
-        row.statusIcon.color = achieved ? new Color(0.133f, 0.773f, 0.369f, 1f) : Color.white;
+        row.statusIcon.color = achieved ? new Color(0.133f, 0.773f, 0.369f, 1f) : new Color(0.75f, 0.78f, 0.82f, 1f);
+        row.gameObject.SetActive(IsObjectiveVisibleForCurrentScenario(objectiveIndex));
+    }
+
+    private bool IsObjectiveVisibleForCurrentScenario(int objectiveIndex)
+    {
+        if (orchestrator == null)
+        {
+            return true;
+        }
+
+        int scenario = orchestrator.CurrentScenarioIndex;
+        if (scenario == LotoSimulationConstants.ScenarioEpp)
+        {
+            return objectiveIndex <= 1;
+        }
+
+        if (scenario == LotoSimulationConstants.ScenarioInspection)
+        {
+            return objectiveIndex == 2;
+        }
+
+        return objectiveIndex >= 3;
     }
 
     #endregion
@@ -606,7 +662,7 @@ public class PlayerHudManager : MonoBehaviour
 
         if (playerHud.timerFill != null)
         {
-            playerHud.timerFill.fillAmount = Mathf.Clamp01(elapsed / 1800f);
+            playerHud.timerFill.gameObject.SetActive(false);
         }
     }
 
@@ -676,7 +732,7 @@ public class PlayerHudManager : MonoBehaviour
 
         if (SBD_Images.Instance != null)
         {
-            return SBD_Images.Instance.UI_objective_failed;
+            return SBD_Images.Instance.UI_objective_achivied;
         }
 
         return null;
