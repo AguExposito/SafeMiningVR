@@ -26,6 +26,7 @@ public static class LotoS1LockerPrefabBuilder
 
     public static GameObject Build()
     {
+        LotoVisualPrefabLibrary.EnsureLibrary();
         Shader lit = Shader.Find("Universal Render Pipeline/Lit");
         if (lit == null)
         {
@@ -161,12 +162,37 @@ public static class LotoS1LockerPrefabBuilder
 
     private static GameObject CreateCube(string name, Transform parent, Vector3 scale, Color color, Shader lit)
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.name = name;
-        cube.transform.SetParent(parent, false);
-        cube.transform.localScale = scale;
-        ApplyColor(cube, color, lit);
-        return cube;
+        return LotoVisualPrefabLibrary.Instantiate(ResolvePlaceholderPath(name), parent, name, Vector3.zero, scale);
+    }
+
+    private static string ResolvePlaceholderPath(string name)
+    {
+        if (name.StartsWith("Shelf"))
+        {
+            return LotoVisualPrefabLibrary.Shelf;
+        }
+
+        if (name.Contains("Cabinet"))
+        {
+            return LotoVisualPrefabLibrary.CabinetPanel;
+        }
+
+        if (name.Contains("Floor"))
+        {
+            return LotoVisualPrefabLibrary.FloorPlate;
+        }
+
+        if (name.Contains("Reject") || name.Contains("Bin"))
+        {
+            return LotoVisualPrefabLibrary.RejectBin;
+        }
+
+        if (name.Contains("Door") || name.Contains("Exit"))
+        {
+            return LotoVisualPrefabLibrary.ExitDoor;
+        }
+
+        return LotoVisualPrefabLibrary.Cube;
     }
 
     private static void CreateShelf(Transform parent, string name, Vector3 localPos, Shader lit)
@@ -229,43 +255,20 @@ public static class LotoS1LockerPrefabBuilder
     private static void CreateEppItem(Transform parent, SlotSpec spec, EppItemCondition condition, EppEquipmentManager manager, Shader lit)
     {
         string name = "EPP_" + spec.Type + (condition == EppItemCondition.Defective ? "_Defect" : "_Good");
-        GameObject item = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        item.name = name;
-        item.transform.SetParent(parent, false);
-        item.transform.localPosition = spec.Position + new Vector3(0f, 0.08f, -0.08f);
-        item.transform.localScale = spec.Scale;
-        ApplyColor(item, spec.Color, lit);
+        GameObject item = LotoVisualPrefabLibrary.InstantiateUnit(
+            LotoVisualPrefabLibrary.EppPath(spec.Type, condition),
+            parent,
+            name,
+            spec.Position + new Vector3(0f, 0.08f, -0.08f));
 
-        if (spec.Type == EppItemType.SafetyGlasses)
+        EppItemInteractable logic = item.GetComponent<EppItemInteractable>();
+        if (logic != null)
         {
-            GameObject lens = CreateCube("Lens", item.transform, new Vector3(0.9f, 0.55f, 0.2f), Lens, lit);
-            lens.transform.localPosition = new Vector3(0f, 0f, 0.4f);
-            UnityEngine.Object.DestroyImmediate(lens.GetComponent<Collider>());
+            logic.Configure(manager);
         }
 
-        if (condition == EppItemCondition.Defective)
-        {
-            AddDefectCue(item.transform, spec.Type, lit);
-        }
-
-        Rigidbody body = item.AddComponent<Rigidbody>();
-        body.useGravity = true;
-        body.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-        XRGrabInteractable grab = item.AddComponent<XRGrabInteractable>();
-        grab.interactionLayers = new InteractionLayerMask { value = -1 };
-        grab.movementType = XRBaseInteractable.MovementType.Kinematic;
-        grab.throwOnDetach = false;
-
-        ref_EppItem itemRef = item.AddComponent<ref_EppItem>();
-        itemRef.itemType = spec.Type;
-        itemRef.condition = condition;
-        itemRef.itemRenderer = item.GetComponent<Renderer>();
-        itemRef.grabInteractable = grab;
-
-        EppItemInteractable logic = item.AddComponent<EppItemInteractable>();
-        logic.Configure(manager);
-        if (condition == EppItemCondition.Defective)
+        ref_EppItem itemRef = item.GetComponent<ref_EppItem>();
+        if (condition == EppItemCondition.Defective && itemRef != null)
         {
             manager.RegisterSpawnedItem(itemRef);
         }

@@ -25,6 +25,7 @@ public static class LotoS2InspectionYardPrefabBuilder
 
     public static GameObject Build()
     {
+        LotoVisualPrefabLibrary.EnsureLibrary();
         Shader lit = Shader.Find("Universal Render Pipeline/Lit");
         if (lit == null)
         {
@@ -110,15 +111,13 @@ public static class LotoS2InspectionYardPrefabBuilder
     {
         Transform belt = FindDeep(conveyorRoot, "BeltVisual");
         Transform parent = belt != null ? belt.parent : conveyorRoot;
-        GameObject roller = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        roller.name = "AnomalousRoller";
-        roller.transform.SetParent(parent, false);
-        roller.transform.localPosition = belt != null
-            ? belt.localPosition + new Vector3(0.55f, -0.12f, 0.28f)
-            : new Vector3(0.55f, 0.35f, 0.3f);
+        GameObject roller = LotoVisualPrefabLibrary.Instantiate(
+            LotoVisualPrefabLibrary.Roller,
+            parent,
+            "AnomalousRoller",
+            belt != null ? belt.localPosition + new Vector3(0.55f, -0.12f, 0.28f) : new Vector3(0.55f, 0.35f, 0.3f),
+            new Vector3(0.18f, 0.22f, 0.18f));
         roller.transform.localRotation = Quaternion.Euler(0f, 0f, 18f);
-        roller.transform.localScale = new Vector3(0.18f, 0.22f, 0.18f);
-        ApplyColor(roller, Roller, lit);
     }
 
     private static void CreateSpill(Transform parent, HazardInspectionManager manager, Shader lit)
@@ -265,24 +264,74 @@ public static class LotoS2InspectionYardPrefabBuilder
 
     private static GameObject CreateCone(string name, Transform parent, Vector3 localPos, Shader lit)
     {
-        GameObject cone = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        cone.name = name;
-        cone.transform.SetParent(parent, false);
-        cone.transform.localPosition = localPos;
-        cone.transform.localScale = new Vector3(0.18f, 0.16f, 0.18f);
-        ApplyColor(cone, Cone, lit);
-        UnityEngine.Object.DestroyImmediate(cone.GetComponent<Collider>());
+        GameObject cone = LotoVisualPrefabLibrary.Instantiate(
+            LotoVisualPrefabLibrary.Cone,
+            parent,
+            name,
+            localPos,
+            new Vector3(0.18f, 0.16f, 0.18f));
+        Collider collider = cone.GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
         return cone;
     }
 
     private static GameObject CreateCube(string name, Transform parent, Vector3 scale, Color color, Shader lit)
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.name = name;
-        cube.transform.SetParent(parent, false);
-        cube.transform.localScale = scale;
-        ApplyColor(cube, color, lit);
-        return cube;
+        return LotoVisualPrefabLibrary.Instantiate(ResolvePlaceholderPath(name), parent, name, Vector3.zero, scale);
+    }
+
+    private static string ResolvePlaceholderPath(string name)
+    {
+        if (name.Contains("Floor") || name.Contains("Yard"))
+        {
+            return LotoVisualPrefabLibrary.YardFloor;
+        }
+
+        if (name.Contains("Cone"))
+        {
+            return LotoVisualPrefabLibrary.Cone;
+        }
+
+        if (name.Contains("Wrench") || name.Contains("Tool"))
+        {
+            return LotoVisualPrefabLibrary.Wrench;
+        }
+
+        if (name.Contains("Board") || name.Contains("Sign"))
+        {
+            return LotoVisualPrefabLibrary.FallenBoard;
+        }
+
+        if (name.Contains("Box") || name.Contains("Block"))
+        {
+            return LotoVisualPrefabLibrary.Crate;
+        }
+
+        if (name.Contains("Extinguish"))
+        {
+            return LotoVisualPrefabLibrary.Extinguisher;
+        }
+
+        if (name.Contains("Rack") || name.Contains("Shelf"))
+        {
+            return LotoVisualPrefabLibrary.Rack;
+        }
+
+        if (name.Contains("Door") || name.Contains("Exit"))
+        {
+            return LotoVisualPrefabLibrary.ExitDoor;
+        }
+
+        if (name.Contains("Spill") || name == "Visual")
+        {
+            return LotoVisualPrefabLibrary.Spill;
+        }
+
+        return LotoVisualPrefabLibrary.Cube;
     }
 
     private static void ApplyColor(GameObject target, Color color, Shader lit)
