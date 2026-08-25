@@ -43,24 +43,29 @@ public class LotoPanelDoorInteractable : MonoBehaviour
 
     #region Interaction
 
-    private void OnSelected(SelectEnterEventArgs args)
-    {
-        if (isOpen)
+        private void OnSelected(SelectEnterEventArgs args)
         {
-            return;
+            ActivateFromPc();
         }
 
-        isOpen = true;
-        if (doorPivot != null)
+        public void ActivateFromPc()
         {
-            doorPivot.localRotation = Quaternion.Euler(0f, openAngle, 0f);
-        }
+            if (isOpen)
+            {
+                return;
+            }
 
-        if (breakerInteractable != null)
-        {
-            breakerInteractable.SetInteractableEnabled(true);
+            isOpen = true;
+            if (doorPivot != null)
+            {
+                doorPivot.localRotation = Quaternion.Euler(0f, openAngle, 0f);
+            }
+
+            if (breakerInteractable != null)
+            {
+                breakerInteractable.SetInteractableEnabled(true);
+            }
         }
-    }
 
     #endregion
 }

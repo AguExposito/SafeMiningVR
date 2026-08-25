@@ -18,11 +18,11 @@ namespace XRStandardMenu
         [SerializeField] private string defaultTargetName = "Main Camera";
         
         [Header("Follow Settings")]
-        [SerializeField] private float followSpeed = 1f;
-        [SerializeField] private float rotationSpeed = 50f; // Velocidad de rotación separada
-        [SerializeField] private float toleranceRadius = 1f;
-        [SerializeField] private float fixedDistance = .35f; // Distancia fija en profundidad
-        [SerializeField] private bool invertLookDirection = true; // Invertir la dirección de mirada
+        [SerializeField] private float followSpeed = 8f;
+        [SerializeField] private float rotationSpeed = 12f;
+        [SerializeField] private float toleranceRadius = 0.08f;
+        [SerializeField] private float fixedDistance = 0.85f;
+        [SerializeField] private bool invertLookDirection = true;
         
         [Header("Simple Mode Settings")]
         [SerializeField] private Transform cebo; // Objeto que seguirá en modo simple
@@ -30,7 +30,7 @@ namespace XRStandardMenu
         [SerializeField] private float simpleFollowSpeed = 2f; // Velocidad de seguimiento en modo simple
         
         [Header("Offset Settings")]
-        [SerializeField] private Vector3 offset = new Vector3(-.5f,0,2.15f);
+        [SerializeField] private Vector3 offset = new Vector3(-0.22f, -0.12f, 0.85f);
         
         [Header("Debug")]
         [SerializeField] private bool showDebugInfo = false;
@@ -119,16 +119,8 @@ namespace XRStandardMenu
             }
             else
             {
-                // Modo Advanced: lógica original
                 UpdateTargetPosition();
-                CheckIfShouldFollow();
-                
-                if (isFollowing)
-                {
-                    FollowTarget();
-                }
-                
-                // Siempre mirar hacia el target
+                FollowTarget();
                 LookAtTarget();
             }
             
@@ -140,61 +132,25 @@ namespace XRStandardMenu
         
         private void UpdateTargetPosition()
         {
-            // Calcular la posición del target con offset
-            targetPosition = target.position + target.TransformDirection(offset);
+            Vector3 localOffset = offset;
+            if (localOffset.z < 0.4f)
+            {
+                localOffset.z = fixedDistance;
+            }
+
+            targetPosition = target.TransformPoint(localOffset);
         }
         
         private void CheckIfShouldFollow()
         {
-            // Calcular la posición deseada manteniendo la distancia fija en Z
-            Vector3 currentPos = transform.position;
-            Vector3 directionToTarget = (targetPosition - currentPos).normalized;
-            Vector3 targetAtFixedDistance = targetPosition - (directionToTarget * fixedDistance);
-            
-            // Calcular distancia solo en los ejes X e Y (sin profundidad)
-            Vector2 currentPos2D = new Vector2(currentPos.x, currentPos.y);
-            Vector2 targetPos2D = new Vector2(targetAtFixedDistance.x, targetAtFixedDistance.y);
-            
-            currentDistance = Vector2.Distance(currentPos2D, targetPos2D);
-            
-            // Si está fuera del radio de tolerancia, comenzar a seguir
-            if (currentDistance > toleranceRadius)
-            {
-                if (!isFollowing)
-                {
-                    isFollowing = true;
-                    if (showDebugInfo)
-                    {
-                        Debug.Log($"PanelFollower: Comenzando a seguir - Distancia 2D: {currentDistance:F2}");
-                    }
-                }
-            }
-            // Si está dentro del radio de tolerancia, dejar de seguir
-            else if (isFollowing)
-            {
-                isFollowing = false;
-                if (showDebugInfo)
-                {
-                    Debug.Log($"PanelFollower: Dejando de seguir - Distancia 2D: {currentDistance:F2}");
-                }
-            }
+            currentDistance = Vector3.Distance(transform.position, targetPosition);
+            isFollowing = currentDistance > toleranceRadius;
         }
         
         private void FollowTarget()
         {
-            Vector3 currentPosition = transform.position;
-            Vector3 newPosition = currentPosition;
-            
-            // Calcular la posición deseada manteniendo la distancia fija en Z
-            Vector3 directionToTarget = (targetPosition - currentPosition).normalized;
-            Vector3 targetAtFixedDistance = targetPosition - (directionToTarget * fixedDistance);
-            
-            // Seguir solo en X e Y, mantener Z en la posición inicial
-            newPosition.x = Mathf.Lerp(currentPosition.x, targetAtFixedDistance.x, followSpeed * Time.deltaTime);
-            newPosition.y = Mathf.Lerp(currentPosition.y, targetAtFixedDistance.y, followSpeed * Time.deltaTime);
-            newPosition.z = initialPosition.z; // Mantener la profundidad inicial
-            
-            transform.position = newPosition;
+            float t = 1f - Mathf.Exp(-followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, t);
         }
         
         private void FollowCeboSimple()

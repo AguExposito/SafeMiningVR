@@ -37,21 +37,26 @@ public class LotoControlButtonInteractable : MonoBehaviour
         sequenceManager = manager;
     }
 
-    private void OnSelected(SelectEnterEventArgs args)
-    {
-        if (sequenceManager == null || buttonRef == null)
+        private void OnSelected(SelectEnterEventArgs args)
         {
-            return;
+            ActivateFromPc();
         }
 
-        if (buttonRef.isStartButton)
+        public void ActivateFromPc()
         {
-            sequenceManager.TryStartVerification();
-            return;
-        }
+            if (sequenceManager == null || buttonRef == null)
+            {
+                return;
+            }
 
-        sequenceManager.TryStopConveyor();
-    }
+            if (buttonRef.isStartButton)
+            {
+                sequenceManager.TryStartVerification();
+                return;
+            }
+
+            sequenceManager.TryStopConveyor();
+        }
 
     #endregion
 }

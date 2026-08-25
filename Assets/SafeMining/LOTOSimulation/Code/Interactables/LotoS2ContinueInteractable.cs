@@ -43,15 +43,20 @@ public class LotoS2ContinueInteractable : MonoBehaviour
 
     #region Interaction
 
-    private void OnSelected(SelectEnterEventArgs args)
-    {
-        if (inspectionManager == null)
+        private void OnSelected(SelectEnterEventArgs args)
         {
-            return;
+            ActivateFromPc();
         }
 
-        inspectionManager.TryContinue();
-    }
+        public void ActivateFromPc()
+        {
+            if (inspectionManager == null)
+            {
+                return;
+            }
+
+            inspectionManager.TryContinue();
+        }
 
     private void Update()
     {

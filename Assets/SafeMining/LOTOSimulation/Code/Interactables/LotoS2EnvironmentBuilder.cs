@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
 public class LotoS2EnvironmentBuilder : MonoBehaviour
 {
@@ -21,33 +22,35 @@ public class LotoS2EnvironmentBuilder : MonoBehaviour
 
         ClearChildren();
 
-        Transform areaRoot = CreateEmpty("InspectionArea", new Vector3(3f, 0f, -2f));
-        CreateCube("Floor", areaRoot, new Vector3(6f, 0.05f, 4f), FloorColor).transform.localPosition = Vector3.zero;
+        Transform areaRoot = CreateEmpty("InspectionArea", new Vector3(0f, 0f, -4.5f));
+        GameObject floor = CreateCube("Floor", areaRoot, new Vector3(7f, 0.05f, 5f), FloorColor);
+        floor.transform.localPosition = Vector3.zero;
+        ConfigureTeleportArea(floor);
 
-        Transform conveyorRoot = CreateEmpty("Conveyor", areaRoot.position + new Vector3(0f, 0.5f, 1f));
+        Transform conveyorRoot = CreateEmpty("StoppedConveyor", areaRoot.position + new Vector3(0f, 0.5f, 1.2f));
         conveyorRoot.SetParent(areaRoot, true);
         CreateCube("BeltVisual", conveyorRoot, new Vector3(3.5f, 0.15f, 0.8f), ConveyorColor).transform.localPosition = Vector3.zero;
 
-        CreateHazardSpot("Hazard_Spill", areaRoot.position + new Vector3(-1.5f, 0.08f, -0.8f),
+        CreateHazardSpot("Hazard_Spill", areaRoot.position + new Vector3(-1.8f, 0.08f, -1f),
             new Vector3(0.6f, 0.06f, 0.4f), HazardColor, HazardType.SpilledMaterial, HazardSpotKind.RealHazard, manager);
-        CreateHazardSpot("Hazard_Tools", areaRoot.position + new Vector3(1.2f, 0.12f, -0.3f),
+        CreateHazardSpot("Hazard_Tools", areaRoot.position + new Vector3(1.4f, 0.12f, -0.5f),
             new Vector3(0.35f, 0.12f, 0.25f), HazardColor, HazardType.AbandonedTools, HazardSpotKind.RealHazard, manager);
-        CreateHazardSpot("Hazard_Signage", areaRoot.position + new Vector3(-0.2f, 0.05f, 1.5f),
+        CreateHazardSpot("Hazard_Signage", areaRoot.position + new Vector3(-0.4f, 0.05f, 1.6f),
             new Vector3(0.5f, 0.08f, 0.3f), HazardColor, HazardType.FallenSignage, HazardSpotKind.RealHazard, manager);
-        CreateHazardSpot("Hazard_Extinguisher", areaRoot.position + new Vector3(2f, 0.35f, 0.8f),
+        CreateHazardSpot("Hazard_Extinguisher", areaRoot.position + new Vector3(2.2f, 0.35f, 0.9f),
             new Vector3(0.18f, 0.45f, 0.18f), HazardColor, HazardType.ObstructedExtinguisher, HazardSpotKind.RealHazard, manager);
 
-        CreateHazardSpot("Decoy_CleanFloor", areaRoot.position + new Vector3(-2f, 0.04f, 0.6f),
+        CreateHazardSpot("Decoy_CleanFloor", areaRoot.position + new Vector3(-2.2f, 0.04f, 0.5f),
             new Vector3(0.5f, 0.04f, 0.5f), DecoyColor, HazardType.DecoyCleanFloor, HazardSpotKind.Decoy, manager);
-        CreateHazardSpot("Decoy_StoredTools", areaRoot.position + new Vector3(0.8f, 0.5f, -1.2f),
+        CreateHazardSpot("Decoy_StoredTools", areaRoot.position + new Vector3(0.9f, 0.5f, -1.5f),
             new Vector3(0.4f, 0.35f, 0.25f), DecoyColor, HazardType.DecoyStoredTools, HazardSpotKind.Decoy, manager);
-        CreateHazardSpot("Decoy_VisibleSign", areaRoot.position + new Vector3(-1f, 1.2f, 1.3f),
+        CreateHazardSpot("Decoy_VisibleSign", areaRoot.position + new Vector3(-1.2f, 1.2f, 1.5f),
             new Vector3(0.6f, 0.4f, 0.06f), DecoyColor, HazardType.DecoyVisibleSign, HazardSpotKind.Decoy, manager);
 
         GameObject continueDoor = CreateCube("ContinueDoor", areaRoot, new Vector3(0.6f, 1.2f, 0.15f), ContinueColor);
-        continueDoor.transform.localPosition = new Vector3(0f, 0.6f, -1.85f);
+        continueDoor.transform.localPosition = new Vector3(0f, 0.6f, -2.3f);
         XRSimpleInteractable continueInteractable = continueDoor.AddComponent<XRSimpleInteractable>();
-        ConfigureInteractionLayers(continueInteractable);
+        ConfigureReportInteractionLayers(continueInteractable);
         LotoS2ContinueInteractable continueLogic = continueDoor.AddComponent<LotoS2ContinueInteractable>();
         continueLogic.Configure(manager);
     }
@@ -61,16 +64,18 @@ public class LotoS2EnvironmentBuilder : MonoBehaviour
     {
         GameObject spotObject = CreateCube(name, transform, scale, color);
         spotObject.transform.position = worldPos;
+        EnsureSolidCollider(spotObject);
 
         ref_HazardSpot spotRef = spotObject.AddComponent<ref_HazardSpot>();
         spotRef.hazardType = type;
         spotRef.spotKind = kind;
         spotRef.spotRenderer = spotObject.GetComponent<Renderer>();
         spotRef.interactable = spotObject.AddComponent<XRSimpleInteractable>();
-        ConfigureInteractionLayers(spotRef.interactable);
+        ConfigureReportInteractionLayers(spotRef.interactable);
 
         HazardReportInteractable logic = spotObject.AddComponent<HazardReportInteractable>();
         logic.Configure(manager);
+        spotRef.CacheOriginalColor();
 
         if (kind == HazardSpotKind.RealHazard)
         {
@@ -105,7 +110,35 @@ public class LotoS2EnvironmentBuilder : MonoBehaviour
         return cube;
     }
 
-    private static void ConfigureInteractionLayers(XRSimpleInteractable interactable)
+    private static void EnsureSolidCollider(GameObject target)
+    {
+        Collider collider = target.GetComponent<Collider>();
+        if (collider == null)
+        {
+            collider = target.AddComponent<BoxCollider>();
+        }
+
+        collider.isTrigger = false;
+        collider.enabled = true;
+    }
+
+    private static void ConfigureTeleportArea(GameObject floor)
+    {
+        EnsureSolidCollider(floor);
+        TeleportationArea teleportArea = floor.GetComponent<TeleportationArea>();
+        if (teleportArea == null)
+        {
+            teleportArea = floor.AddComponent<TeleportationArea>();
+        }
+
+        teleportArea.interactionLayers = new InteractionLayerMask
+        {
+            value = LotoSimulationConstants.XriTeleportInteractionLayerMask
+        };
+        teleportArea.matchOrientation = MatchOrientation.None;
+    }
+
+    private static void ConfigureReportInteractionLayers(XRSimpleInteractable interactable)
     {
         if (interactable == null)
         {

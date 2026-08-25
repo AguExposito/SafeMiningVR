@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -69,7 +68,6 @@ public static class LotoS2InspectionYardPrefabBuilder
         exitInteractable.interactionLayers = new InteractionLayerMask { value = -1 };
         LotoS2ContinueInteractable continueLogic = exitDoor.AddComponent<LotoS2ContinueInteractable>();
         continueLogic.Configure(manager);
-        CreateWorldLabel(exitDoor.transform, "Label", new Vector3(0f, 0.78f, -0.06f), "loto_s2_exit");
 
         GameObject prefab = PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
         UnityEngine.Object.DestroyImmediate(root);
@@ -157,7 +155,6 @@ public static class LotoS2InspectionYardPrefabBuilder
         board.transform.localPosition = new Vector3(0f, 0.4f, 0f);
         board.transform.localRotation = Quaternion.Euler(82f, 12f, 0f);
         UnityEngine.Object.DestroyImmediate(board.GetComponent<Collider>());
-        CreateWorldLabel(board.transform, "Label", new Vector3(0f, 0f, -0.6f), "loto_s2_report_signage");
         AssignRemediation(spot.GetComponent<ref_HazardSpot>(), null, null, board.transform, null, null);
     }
 
@@ -187,7 +184,6 @@ public static class LotoS2InspectionYardPrefabBuilder
     private static void CreateDecoyUprightSign(Transform parent, HazardInspectionManager manager, Shader lit)
     {
         GameObject spot = CreateSpotRoot("Decoy_VisibleSign", parent, new Vector3(-2.15f, 1.15f, 2.15f), new Vector3(0.55f, 0.4f, 0.06f), Safe, lit, HazardType.DecoyVisibleSign, HazardSpotKind.Decoy, manager);
-        CreateWorldLabel(spot.transform, "Label", new Vector3(0f, 0f, -0.7f), "loto_s2_false_positive");
     }
 
     private static GameObject CreateSpotRoot(
@@ -456,22 +452,6 @@ public static class LotoS2InspectionYardPrefabBuilder
             value = LotoSimulationConstants.XriTeleportInteractionLayerMask
         };
         teleportArea.matchOrientation = MatchOrientation.None;
-    }
-
-    private static void CreateWorldLabel(Transform parent, string name, Vector3 localPos, string locKey)
-    {
-        GameObject labelObject = new GameObject(name);
-        labelObject.transform.SetParent(parent, false);
-        labelObject.transform.localPosition = localPos;
-        labelObject.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-        TextMeshPro tmp = labelObject.AddComponent<TextMeshPro>();
-        tmp.text = locKey;
-        tmp.fontSize = 1.4f;
-        tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = Color.white;
-        tmp.rectTransform.sizeDelta = new Vector2(0.8f, 0.2f);
-        LotoWorldLabel worldLabel = labelObject.AddComponent<LotoWorldLabel>();
-        worldLabel.Configure(tmp, locKey);
     }
 
     private static Transform FindDeep(Transform parent, string name)

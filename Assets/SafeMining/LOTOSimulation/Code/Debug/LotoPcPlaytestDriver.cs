@@ -4,7 +4,7 @@ public class LotoPcPlaytestDriver : MonoBehaviour
 {
     [Header("PC Playtest")]
     [SerializeField] private bool enablePcCheats = true;
-    [Tooltip("F1 briefing, F2 5/5 PPE, F3 continue S1, F4 reject defect, F5 4 hazards, F6 continue S2, F7 LOTO path")]
+    [Tooltip("WASD mover, RMB mirar. Cheats Numpad: 1 briefing, 2 5/5 PPE, 3 continue S1, 4 reject, 5 hazards, 6 continue S2, 7 LOTO path")]
     [SerializeField] private bool enableHotkeys = true;
 
     [Header("Triggers (toggle in Play Mode)")]
@@ -84,37 +84,37 @@ public class LotoPcPlaytestDriver : MonoBehaviour
 
         if (enableHotkeys)
         {
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(KeyCode.Keypad1))
             {
                 DismissBriefing();
             }
 
-            if (Input.GetKeyDown(KeyCode.F2))
+            if (Input.GetKeyDown(KeyCode.Keypad2))
             {
                 EquipMandatoryFive();
             }
 
-            if (Input.GetKeyDown(KeyCode.F3))
+            if (Input.GetKeyDown(KeyCode.Keypad3))
             {
                 ContinueS1();
             }
 
-            if (Input.GetKeyDown(KeyCode.F4))
+            if (Input.GetKeyDown(KeyCode.Keypad4))
             {
                 RejectOneDefect();
             }
 
-            if (Input.GetKeyDown(KeyCode.F5))
+            if (Input.GetKeyDown(KeyCode.Keypad5))
             {
                 ReportFourHazards();
             }
 
-            if (Input.GetKeyDown(KeyCode.F6))
+            if (Input.GetKeyDown(KeyCode.Keypad6))
             {
                 ContinueS2();
             }
 
-            if (Input.GetKeyDown(KeyCode.F7))
+            if (Input.GetKeyDown(KeyCode.Keypad7))
             {
                 RunLotoHappyPath();
             }
@@ -306,7 +306,7 @@ public class LotoPcPlaytestDriver : MonoBehaviour
             return;
         }
 
-        manager.TryEquip(item, manager.GetAttachAnchor(type));
+        manager.TryEquip(item, null);
     }
 
     private static ref_EppItem FindItem(EppItemType type, EppItemCondition condition)

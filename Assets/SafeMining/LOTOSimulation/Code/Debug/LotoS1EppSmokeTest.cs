@@ -54,7 +54,7 @@ public class LotoS1EppSmokeTest : MonoBehaviour
             return;
         }
 
-        equipmentManager.TryEquip(item, equipmentManager.GetAttachAnchor(type));
+        equipmentManager.TryEquip(item, null);
     }
 
     private void TryEquipDefective(EppItemType type)
@@ -65,7 +65,7 @@ public class LotoS1EppSmokeTest : MonoBehaviour
             return;
         }
 
-        equipmentManager.TryEquip(item, equipmentManager.GetAttachAnchor(type));
+        equipmentManager.TryEquip(item, null);
     }
 
     private static ref_EppItem FindItem(EppItemType type, EppItemCondition condition)

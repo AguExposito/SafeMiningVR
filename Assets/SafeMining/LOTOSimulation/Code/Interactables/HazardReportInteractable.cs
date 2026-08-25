@@ -52,15 +52,20 @@ public class HazardReportInteractable : MonoBehaviour
 
     #region Interaction
 
-    private void OnSelected(SelectEnterEventArgs args)
-    {
-        if (inspectionManager == null || spotRef == null || spotRef.IsReported)
+        private void OnSelected(SelectEnterEventArgs args)
         {
-            return;
+            ActivateFromPc();
         }
 
-        inspectionManager.TryReport(spotRef);
-    }
+        public void ActivateFromPc()
+        {
+            if (inspectionManager == null || spotRef == null || spotRef.IsReported)
+            {
+                return;
+            }
+
+            inspectionManager.TryReport(spotRef);
+        }
 
     #endregion
 }

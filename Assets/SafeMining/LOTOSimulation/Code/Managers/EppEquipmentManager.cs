@@ -93,6 +93,7 @@ public class EppEquipmentManager : MonoBehaviour
 
     public bool TryEquip(ref_EppItem item, Transform attachAnchor)
     {
+        _ = attachAnchor;
         if (item == null)
         {
             return false;
@@ -120,17 +121,20 @@ public class EppEquipmentManager : MonoBehaviour
             return false;
         }
 
-        if (attachAnchor != null)
-        {
-            item.transform.SetPositionAndRotation(attachAnchor.position, attachAnchor.rotation);
-            item.transform.SetParent(attachAnchor, true);
-        }
-
         item.SetEquipped(true);
         equippedMandatory.Add(item.itemType);
         UpdateSessionEppFlags(item.itemType, true);
         EmitEvent("epp_equip_good", true, item.itemType);
+        Debug.Log($"[LOTO] Equipado: {GetDisplayName(item.itemType)} {equippedMandatory.Count}/{MandatoryTypes.Length}");
         NotifyProgress();
+
+        EppItemInteractable interactable = item.GetComponent<EppItemInteractable>();
+        if (interactable != null)
+        {
+            interactable.RaiseEquipped();
+        }
+
+        item.gameObject.SetActive(false);
 
         if (equippedMandatory.Count >= MandatoryTypes.Length)
         {
@@ -408,6 +412,29 @@ public class EppEquipmentManager : MonoBehaviour
 
         string translated = ControlCenter.Instance.languageManager.GetText(key);
         return string.IsNullOrEmpty(translated) ? key : translated;
+    }
+
+    public static string GetDisplayName(EppItemType type)
+    {
+        switch (type)
+        {
+            case EppItemType.Helmet:
+                return "Casco";
+            case EppItemType.SafetyGlasses:
+                return "Gafas";
+            case EppItemType.ReflectiveVest:
+                return "Chaleco";
+            case EppItemType.Gloves:
+                return "Guantes";
+            case EppItemType.SafetyBoots:
+                return "Botas";
+            case EppItemType.Respirator:
+                return "Respirador";
+            case EppItemType.HearingProtection:
+                return "Proteccion auditiva";
+            default:
+                return type.ToString();
+        }
     }
 
     private static void ReparentAnchor(Transform anchor, Transform parent, Vector3 localPosition)

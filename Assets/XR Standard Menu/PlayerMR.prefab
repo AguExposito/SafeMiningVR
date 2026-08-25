@@ -6926,6 +6926,8 @@ GameObject:
   - component: {fileID: 8800111222334455670}
   - component: {fileID: 7331742721928664605}
   - component: {fileID: 6026899772773912285}
+  - component: {fileID: 8123456789012345123}
+  - component: {fileID: 8123456789012345125}
   m_Layer: 2
   m_Name: PlayerMR
   m_TagString: Untagged
@@ -7114,6 +7116,35 @@ MonoBehaviour:
       m_Calls: []
   m_PlanePrefab: {fileID: 5982963534685165758, guid: b08aa487cadd25e48bd9a7c9c00d7680, type: 3}
   m_DetectionMode: 1
+--- !u!114 &8123456789012345123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2782560199055662006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7b975d8c686434499f58b19d19da0d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoPcLocomotion
+  moveSpeed: 3.5
+  lookSensitivity: 1.8
+  minPitch: -40
+  maxPitch: 55
+--- !u!114 &8123456789012345125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2782560199055662006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b3aad388295ae4c8725abab47cd28a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoPcClickInteractor
+  maxDistance: 3.5
 --- !u!1 &2793367679950906252
 GameObject:
   m_ObjectHideFlags: 0
@@ -17063,7 +17094,7 @@ LineRenderer:
   m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.02
+    widthMultiplier: 0.01
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -20583,7 +20614,7 @@ LineRenderer:
   m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.02
+    widthMultiplier: 0.01
     widthCurve:
       serializedVersion: 2
       m_Curve:

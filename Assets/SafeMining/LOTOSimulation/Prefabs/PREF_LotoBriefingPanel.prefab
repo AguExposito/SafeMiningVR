@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8800111222334455668}
   - component: {fileID: 3170839619419805339}
   - component: {fileID: 2003}
+  - component: {fileID: 2004}
   m_Layer: 5
   m_Name: PREF_LotoBriefingPanel
   m_TagString: Untagged
@@ -30,7 +31,7 @@ RectTransform:
   m_GameObject: {fileID: 2000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2}
-  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_LocalScale: {x: 0.0007, y: 0.0007, z: 0.0007}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8610411640737626110}
@@ -58,14 +59,14 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 500
   m_TargetDisplay: 0
 --- !u!114 &3573220169393377340
 MonoBehaviour:
@@ -118,15 +119,15 @@ MonoBehaviour:
   followMode: 0
   target: {fileID: 0}
   defaultTargetName: Main Camera
-  followSpeed: 1
-  rotationSpeed: 50
-  toleranceRadius: 0.35
-  fixedDistance: 1.75
+  followSpeed: 8
+  rotationSpeed: 12
+  toleranceRadius: 0.08
+  fixedDistance: 0.9
   invertLookDirection: 1
   cebo: {fileID: 0}
   defaultCeboName: cebo
   simpleFollowSpeed: 2
-  offset: {x: -0.35, y: -0.15, z: 1.75}
+  offset: {x: 0, y: -0.08, z: 0.9}
   showDebugInfo: 0
   showToleranceRadius: 0
 --- !u!114 &2003
@@ -145,6 +146,19 @@ MonoBehaviour:
   titleText: {fileID: 5803973122342218035}
   bodyText: {fileID: 4422717290641346273}
   beginButton: {fileID: 6650306061774357892}
+--- !u!114 &2004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f44c324281f1643806d293d8ee2db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoWorldUiOverlay
+  sortingOrder: 500
 --- !u!1 &564303335532092370
 GameObject:
   m_ObjectHideFlags: 0

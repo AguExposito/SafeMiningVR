@@ -176,7 +176,12 @@ public class LotoHubBootstrap : MonoBehaviour
             s3ZoneRoot = GameObject.Find("S3_ZoneRoot");
         }
 
-        scenario2Controller.Configure(s2ZoneRoot, s3ZoneRoot, inspectionManager, builder);
+        if (s1ZoneRoot == null)
+        {
+            s1ZoneRoot = GameObject.Find("S1_ZoneRoot");
+        }
+
+        scenario2Controller.Configure(s2ZoneRoot, s1ZoneRoot, s3ZoneRoot, inspectionManager, builder);
 #if UNITY_EDITOR
         if (s2ZoneRoot.GetComponent<LotoS2HazardSmokeTest>() == null)
         {

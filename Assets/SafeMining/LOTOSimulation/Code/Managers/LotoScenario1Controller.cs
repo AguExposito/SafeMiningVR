@@ -36,7 +36,6 @@ public class LotoScenario1Controller : MonoBehaviour
         }
 
         equipmentManager.Configure(this);
-        equipmentManager.BindBodyAnchors();
         equipmentManager.Begin();
     }
 

@@ -1,12 +1,14 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 [RequireComponent(typeof(ref_EppItem))]
 public class EppItemInteractable : MonoBehaviour
 {
     [SerializeField] private EppEquipmentManager equipmentManager;
-    [SerializeField] private float equipSnapDistance = 0.55f;
     [SerializeField] private float rejectSnapDistance = 0.6f;
+    [SerializeField] private UnityEvent onEquipped;
 
     private ref_EppItem itemRef;
 
@@ -17,6 +19,7 @@ public class EppItemInteractable : MonoBehaviour
         itemRef = GetComponent<ref_EppItem>();
         if (itemRef != null && itemRef.grabInteractable != null)
         {
+            itemRef.grabInteractable.selectEntered.AddListener(OnGrabbed);
             itemRef.grabInteractable.selectExited.AddListener(OnReleased);
         }
     }
@@ -25,6 +28,7 @@ public class EppItemInteractable : MonoBehaviour
     {
         if (itemRef != null && itemRef.grabInteractable != null)
         {
+            itemRef.grabInteractable.selectEntered.RemoveListener(OnGrabbed);
             itemRef.grabInteractable.selectExited.RemoveListener(OnReleased);
         }
     }
@@ -38,9 +42,34 @@ public class EppItemInteractable : MonoBehaviour
         equipmentManager = manager;
     }
 
+    public void RaiseEquipped()
+    {
+        onEquipped?.Invoke();
+    }
+
     #endregion
 
     #region Interaction
+
+    private void OnGrabbed(UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs args)
+    {
+        if (equipmentManager == null || itemRef == null || itemRef.IsLocked)
+        {
+            return;
+        }
+
+        if (args != null && args.interactorObject is XRSocketInteractor)
+        {
+            return;
+        }
+
+        if (itemRef.condition == EppItemCondition.Defective)
+        {
+            return;
+        }
+
+        equipmentManager.TryEquip(itemRef, null);
+    }
 
     private void OnReleased(UnityEngine.XR.Interaction.Toolkit.SelectExitEventArgs args)
     {
@@ -49,29 +78,7 @@ public class EppItemInteractable : MonoBehaviour
             return;
         }
 
-        if (TryRejectAtZone())
-        {
-            return;
-        }
-
-        TryEquipAtAnchor();
-    }
-
-    private void TryEquipAtAnchor()
-    {
-        Transform anchor = equipmentManager.GetAttachAnchor(itemRef.itemType);
-        if (anchor == null)
-        {
-            return;
-        }
-
-        float distance = Vector3.Distance(transform.position, anchor.position);
-        if (distance > equipSnapDistance)
-        {
-            return;
-        }
-
-        equipmentManager.TryEquip(itemRef, anchor);
+        TryRejectAtZone();
     }
 
     private bool TryRejectAtZone()

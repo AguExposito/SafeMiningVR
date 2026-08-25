@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -108,7 +107,6 @@ public static class LotoS1LockerPrefabBuilder
         EppTypedSocket rejectTyped = rejectBin.AddComponent<EppTypedSocket>();
         rejectTyped.Configure(manager, EppSocketRole.Reject, EppItemType.Helmet);
         manager.rejectZoneAnchor = rejectBin.transform;
-        CreateWorldLabel(rejectBin.transform, "Label", new Vector3(0f, 0.32f, -0.22f), "loto_epp_discard");
 
         GameObject exitDoor = CreateCube("ExitDoor", root.transform, new Vector3(0.7f, 1.35f, 0.08f), Orange, lit);
         exitDoor.transform.localPosition = new Vector3(-1.25f, 0.72f, 0.05f);
@@ -116,7 +114,6 @@ public static class LotoS1LockerPrefabBuilder
         exitInteractable.interactionLayers = new InteractionLayerMask { value = -1 };
         LotoS1ContinueInteractable continueLogic = exitDoor.AddComponent<LotoS1ContinueInteractable>();
         continueLogic.Configure(manager);
-        CreateWorldLabel(exitDoor.transform, "Label", new Vector3(0f, 0.78f, -0.06f), "loto_epp_exit");
 
         SerializedObject so = new SerializedObject(manager);
         so.FindProperty("helmetAnchor").objectReferenceValue = helmetAnchor;
@@ -222,7 +219,6 @@ public static class LotoS1LockerPrefabBuilder
         AddSocket(slot, 0.14f);
         EppTypedSocket typed = slot.AddComponent<EppTypedSocket>();
         typed.Configure(manager, EppSocketRole.Locker, spec.Type);
-        CreateWorldLabel(slot.transform, "Label", new Vector3(0f, 0.16f, -0.18f), spec.LocKey);
     }
 
     private static Transform CreateBodyAnchor(Transform parent, string name, EppEquipmentManager manager, EppItemType type)
@@ -314,20 +310,5 @@ public static class LotoS1LockerPrefabBuilder
         }
     }
 
-    private static void CreateWorldLabel(Transform parent, string name, Vector3 localPos, string locKey)
-    {
-        GameObject labelObject = new GameObject(name);
-        labelObject.transform.SetParent(parent, false);
-        labelObject.transform.localPosition = localPos;
-        labelObject.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-        TextMeshPro tmp = labelObject.AddComponent<TextMeshPro>();
-        tmp.text = locKey;
-        tmp.fontSize = 1.4f;
-        tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = Color.white;
-        tmp.rectTransform.sizeDelta = new Vector2(0.7f, 0.18f);
-        LotoWorldLabel worldLabel = labelObject.AddComponent<LotoWorldLabel>();
-        worldLabel.Configure(tmp, locKey);
-    }
 }
 #endif

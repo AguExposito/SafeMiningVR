@@ -88,7 +88,7 @@ public class EppTypedSocket : MonoBehaviour
 
         if (role == EppSocketRole.Body)
         {
-            bool equipped = equipmentManager.TryEquip(item, transform);
+            bool equipped = equipmentManager.TryEquip(item, null);
             if (!equipped)
             {
                 Eject(args.interactableObject);

@@ -59,26 +59,31 @@ public class LotoBreakerInteractable : MonoBehaviour
         }
     }
 
-    private void OnSelected(SelectEnterEventArgs args)
-    {
-        if (sequenceManager == null || breakerRef == null || breakerRef.isOff)
+        private void OnSelected(SelectEnterEventArgs args)
         {
-            return;
+            ActivateFromPc();
         }
 
-        bool missingGloves = !sequenceManager.HasSessionGloves();
-        if (!sequenceManager.TryToggleBreakerOff())
+        public void ActivateFromPc()
         {
-            return;
-        }
+            if (sequenceManager == null || breakerRef == null || breakerRef.isOff)
+            {
+                return;
+            }
 
-        breakerRef.isOff = true;
-        ApplyVisual();
-        if (missingGloves)
-        {
-            PlayAlertFlash();
+            bool missingGloves = !sequenceManager.HasSessionGloves();
+            if (!sequenceManager.TryToggleBreakerOff())
+            {
+                return;
+            }
+
+            breakerRef.isOff = true;
+            ApplyVisual();
+            if (missingGloves)
+            {
+                PlayAlertFlash();
+            }
         }
-    }
 
     private void PlayAlertFlash()
     {
