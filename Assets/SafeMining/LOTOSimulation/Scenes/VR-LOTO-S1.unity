@@ -93,8 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 8ce48b75dd7fd5747891d89ce881ab49, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 78151f5e58fb9f749bd5225f789faa27, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -219,6 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 77346126}
   - component: {fileID: 77346125}
+  - component: {fileID: 77346127}
   m_Layer: 0
   m_Name: LotoFillA
   m_TagString: Untagged
@@ -306,6 +307,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &77346127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77346124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &83152313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1749,7 +1779,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.92, b: 0.78, a: 1}
-  m_Intensity: 12
+  m_Intensity: 5
   m_Range: 7
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1905,7 +1935,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.92, b: 0.78, a: 1}
-  m_Intensity: 12
+  m_Intensity: 5
   m_Range: 7
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2196,6 +2226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1247816355}
   - component: {fileID: 1247816354}
+  - component: {fileID: 1247816356}
   m_Layer: 0
   m_Name: LotoFillB
   m_TagString: Untagged
@@ -2283,6 +2314,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247816356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247816353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &1284640698
 GameObject:
   m_ObjectHideFlags: 0
@@ -2417,7 +2477,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.92, b: 0.78, a: 1}
-  m_Intensity: 12
+  m_Intensity: 5
   m_Range: 7
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2794,6 +2854,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1628207649}
   - component: {fileID: 1628207648}
+  - component: {fileID: 1628207650}
   m_Layer: 0
   m_Name: LotoKeyIndustrial
   m_TagString: Untagged
@@ -2881,6 +2942,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1628207650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628207647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &1628599967
 GameObject:
   m_ObjectHideFlags: 0
@@ -4669,6 +4759,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7887640097651914944}
     m_Modifications:
+    - target: {fileID: 3424844605771092228, guid: 398e1a205d30b114ca64137826fc2054, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 46b92499f384f3e43bdccdd71c0561c8, type: 2}
     - target: {fileID: 5215933445146626439, guid: 398e1a205d30b114ca64137826fc2054, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.2
@@ -5706,6 +5800,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3008889772697107139, guid: 9188ba42cec748a4cb7634cb7ca9b562, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2beb1684ae91a994386385cc5f892b71, type: 2}
     - target: {fileID: 6461916709497902917, guid: 9188ba42cec748a4cb7634cb7ca9b562, type: 3}
       propertyPath: m_Name
       value: CabinetBack
@@ -5836,6 +5934,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3008889772697107139, guid: 9188ba42cec748a4cb7634cb7ca9b562, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2beb1684ae91a994386385cc5f892b71, type: 2}
     - target: {fileID: 6461916709497902917, guid: 9188ba42cec748a4cb7634cb7ca9b562, type: 3}
       propertyPath: m_Name
       value: CabinetLeft
@@ -7251,7 +7353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &3122110418962473606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8232,7 +8334,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &4371716821463857010
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9052,6 +9154,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7887640097651914944}
     m_Modifications:
+    - target: {fileID: 5504799759385727526, guid: 42b147f579c1613459001c11bd6941db, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 46b92499f384f3e43bdccdd71c0561c8, type: 2}
     - target: {fileID: 6531118301764891720, guid: 42b147f579c1613459001c11bd6941db, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.7
@@ -10037,6 +10143,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7887640097651914944}
     m_Modifications:
+    - target: {fileID: 5504799759385727526, guid: 42b147f579c1613459001c11bd6941db, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 46b92499f384f3e43bdccdd71c0561c8, type: 2}
     - target: {fileID: 6531118301764891720, guid: 42b147f579c1613459001c11bd6941db, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.7
@@ -10429,6 +10539,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3008889772697107139, guid: 9188ba42cec748a4cb7634cb7ca9b562, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2beb1684ae91a994386385cc5f892b71, type: 2}
     - target: {fileID: 6461916709497902917, guid: 9188ba42cec748a4cb7634cb7ca9b562, type: 3}
       propertyPath: m_Name
       value: CabinetRight
@@ -13333,6 +13447,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7887640097651914944}
     m_Modifications:
+    - target: {fileID: 5504799759385727526, guid: 42b147f579c1613459001c11bd6941db, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 46b92499f384f3e43bdccdd71c0561c8, type: 2}
     - target: {fileID: 6531118301764891720, guid: 42b147f579c1613459001c11bd6941db, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.7
