@@ -1,0 +1,79 @@
+---
+description: "Manager-based service architecture: ControlCenter singleton, Managers, SDBs, refs, utils"
+alwaysApply: true
+---
+
+# Unity Architecture
+
+## ControlCenter (CC)
+
+- Singleton: `ControlCenter.Instance`
+- `DontDestroyOnLoad`. Initializes SDBs BEFORE Managers.
+- Creates managers if absent, adds as component, calls `Initialize()`.
+- All inter-manager communication goes through CC.
+
+Access pattern:
+
+```csharp
+ControlCenter.Instance.GetManager<SomeManager>()
+```
+
+## Managers
+
+- **Location:** `Code/Managers/`
+- **Naming:** `[SystemName]Manager.cs`
+- Must expose `public void Initialize()` — no `Awake`/`Start` for init.
+- Modular and independent — never reference another manager directly.
+- Use event/subscription pattern for decoupled communication.
+
+## Core Managers (always present)
+
+| Manager | Responsibility |
+|---------|---------------|
+| `PersistantDataManager` | JSON persistence via `Application.persistentDataPath` |
+| `SoundManager` | Audio playback, volume by category |
+| `LanguageManager` | XML localization via `Resources.Load<TextAsset>()` |
+| `ScoreManager` | Objective tracking, scene scores, cloud report |
+
+## Simulated Databases (SDBs)
+
+- **Location:** `Code/SDBs/` — **Naming:** `SDB_[DataType].cs`
+- Singleton with merge logic for scene changes. Initialized by CC before managers.
+
+## Reference Scripts
+
+- **Location:** `Code/refs/` — **Naming:** `ref_[ObjectName].cs`
+- Public fields only — no logic. Accessed via `FindObjectOfType<>()`.
+
+## Utilities
+
+- **Location:** `Code/Utils/` — **Naming:** `Util_[Purpose].cs`
+- Static methods. No game-state dependencies.
+
+## SafeMining simulation code
+
+All LOTO gameplay code lives under `Assets/SafeMining/LOTOSimulation/`. Do not add simulation logic to `Assets/XR Standard Menu/` except minimal hooks in `ControlCenter` and `ScoreManager`.
+
+| Subfolder | Contents |
+|-----------|----------|
+| `Code/Managers/` | `EppEquipmentManager`, `HazardInspectionManager`, `LotoSequenceManager`, `SimulationSessionManager`, `SyncQueueManager`, `SimulationOrchestratorManager`, `PlayerHudManager`, scenario bootstraps/controllers |
+| `Code/Data/` | `LotoObjectiveIds`, `LotoSessionScore`, DTOs (`SimulationSessionContext`, `SimulationEventRecord`, `SimulationResultPayload`, `PendingSyncEntry`) |
+| `Code/Adapters/` | `ISimulationBackendAdapter`, `OfflineBackendAdapter`, `SafeMiningBackendAdapter` |
+| `Code/Interactables/` | `LotoInputModalityVisuals`, `LotoOutlineHint`, environment builders |
+| `Code/Debug/` | `LotoPcPlaytestDriver`, smoke tests |
+| `Prefabs/` | `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel`, `PREF_S1_Locker`, `PREF_S2_InspectionYard`, `PREF_S3_ConveyorStation` |
+| `Scenes/` | `VR-LOTO-S1` (build 1), `VR-LOTO-S2` (build 2), `VR-LOTO-S3` (build 3) |
+
+## ALWAYS
+
+1. Use `Initialize()` for Managers and SDBs.
+2. Access managers through `ControlCenter.Instance`.
+3. Subscribe events in `OnEnable`/`Start`; unsubscribe in `OnDisable`/`OnDestroy`.
+4. Use `Application.persistentDataPath` for runtime saves.
+
+## NEVER
+
+1. Direct references between managers.
+2. `Awake`/`Start` for manager/SDB initialization.
+3. Circular dependencies.
+4. Duplicate `ControlCenter` or `PersistantDataManager` logic.

@@ -1,0 +1,44 @@
+---
+description: "SafeMining VR project-root validation, Unity/Meta MCP gate, zero-error console policy"
+alwaysApply: true
+---
+
+# Project Gate
+
+## Project root
+
+`D:/Unity/Projects/SafeMiningVR`
+
+At the start of any Unity work call `Unity_ManageEditor` → `GetProjectRoot`. Abort if the root differs from the path above.
+
+## Documentation hierarchy
+
+1. **Primary truth:** `Doc_SMVR/SafeMining_VR_v1.1.md` (full spec: RN, RNF, HU-220/221/222/223, wireframes).
+2. **Operational docs:** `.agent-docs/` (living knowledge base — editable by agents).
+3. **Gameplay brief:** `Propuesta Simulacion LOTO.txt`.
+4. **Brand reference:** `Doc_SMVR/paleta de colores.jpg`, `Assets/Resources/BrandConfig.asset`.
+
+When a design or domain question arises, consult this hierarchy before assuming.
+
+## Unity MCP
+
+- Config: `.cursor/mcp.json` (project) and `~/.cursor/mcp.json` (user). Both must point to `%USERPROFILE%\.unity\relay\relay_win.exe` with `--mcp` and `--project-path D:\Unity\Projects\SafeMiningVR`.
+- Unity Editor must be open with this project and **Project Settings > AI > Unity MCP Server** bridge running before Cursor connects.
+- Author scenes and prefabs with `Unity_ManageScene` / `Unity_ManageGameObject`. Never hand-edit `.unity` or `.prefab` YAML.
+- After each block of work call `Unity_ReadConsole` (Errors). Require **0 entries**.
+- Validate scripts with Unity MCP tools, not a second Editor batch compile.
+
+## Meta VR MCP
+
+Before any change touching Quest, XRI, teleport, grab, world-space HUD, comfort, or Android build: call `meta_docs_search` (and `meta_docs_get_page` if needed). Keep XRI **3.3.1** unless Meta docs require a specific API change.
+
+## Console policy
+
+- `Debug.LogError` only for irrecoverable setup failures.
+- Pedagogical rejects and simulation feedback use localized subtitles — never `LogError`.
+- Fix warnings introduced by our changes; pre-existing warnings may be left.
+
+## Asset hygiene
+
+- SafeMining `.meta` GUIDs must be 32 hex characters.
+- Do not recreate a gameplay `asmdef` that cannot reference `ControlCenter`.

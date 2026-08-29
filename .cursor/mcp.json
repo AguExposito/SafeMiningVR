@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "unity-mcp": {
+      "command": "C:\\Users\\Usuario\\.unity\\relay\\relay_win.exe",
+      "args": [
+        "--mcp",
+        "--project-path",
+        "D:\\Unity\\Projects\\SafeMiningVR"
+      ],
+      "env": {
+        "UNITY_PROJECT_PATH": "D:\\Unity\\Projects\\SafeMiningVR"
+      }
+    }
+  }
+}

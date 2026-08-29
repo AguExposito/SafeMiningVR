@@ -1,0 +1,260 @@
+---
+description: "MCP tool orchestration: mandatory invocation protocols, domain bindings, cross-validation gates, and reporting for Unity and Meta VR MCP servers"
+alwaysApply: true
+---
+
+# MCP Bindings & Orchestration
+
+MCP tools are the **primary inspection and validation path**. Never guess scene state, component configuration, or SDK behavior — verify with MCP first, then code.
+
+## Available MCP servers
+
+| Server | Namespace | Status check | Purpose |
+|--------|-----------|-------------|---------|
+| Unity Editor | `user-unity-mcp` | `Unity_ManageEditor` → `GetProjectRoot` | Scene/GO inspection, script validation, console, profiler |
+| Meta VR | `plugin-meta-vr-metavr` | `meta_docs_search` (any query) | Quest SDK docs, device management, Perfetto tracing |
+
+## Mandatory invocation gates
+
+These MCP calls are **not optional** — they must execute at the indicated trigger points.
+
+### Gate 1: Session start
+
+At the beginning of any Unity-related work session:
+
+```
+Unity_ManageEditor → Action: "GetProjectRoot"
+```
+
+**Abort** if result differs from `D:/Unity/Projects/SafeMiningVR`.
+
+### Gate 2: Post-change console check
+
+After every block of code changes, component modifications, or scene edits:
+
+```
+Unity_ReadConsole → logTypes: "Error"
+```
+
+**Require 0 entries.** If errors are found, fix them before proceeding.
+
+### Gate 3: Pre-XR-change SDK verification
+
+Before any change touching Quest, XRI, hand tracking, controllers, teleport, grab, or world-space HUD:
+
+```
+meta_docs_search → query: "<specific API or feature being modified>"
+                 → scope: "unity"
+                 → mode: "verify"
+```
+
+Follow up with `meta_docs_get_page` if the search returns relevant doc paths for exact API signatures.
+
+### Gate 4: Script validation
+
+After creating or modifying any C# script:
+
+```
+Unity_ValidateScript → Action: "validate", name: "<script name>"
+```
+
+## Domain-specific MCP bindings
+
+### Scene hierarchy & GameObject inspection
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Get full scene hierarchy | `Unity_ManageScene` | `Action: "GetHierarchy"` |
+| Get active scene info | `Unity_ManageScene` | `Action: "GetActive"` |
+| Get build settings order | `Unity_ManageScene` | `Action: "GetBuildSettings"` |
+| Find a GameObject by name | `Unity_ManageGameObject` | `action: "find", search_term: "<name>", search_method: "by_name"` |
+| Find a GameObject by path | `Unity_ManageGameObject` | `action: "find", search_term: "<path>", search_method: "by_path"` |
+| Get all components on a GO | `Unity_ManageGameObject` | `action: "get_components", target: "<name>", search_method: "by_name"` |
+| Get specific component data | `Unity_ManageGameObject` | `action: "get_component", target: "<name>", component_name: "<type>"` |
+| Read serialized private fields | `Unity_ManageGameObject` | `action: "get_components", include_non_public_serialized: true` |
+
+**Use these BEFORE assuming** what components exist on a GameObject, what serialized references are assigned, or what layers/tags are set.
+
+### Component & property modification
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Add component to GO | `Unity_ManageGameObject` | `action: "add_component", target: "<name>", component_name: "<type>"` |
+| Remove component from GO | `Unity_ManageGameObject` | `action: "remove_component", target: "<name>", component_name: "<type>"` |
+| Set component property | `Unity_ManageGameObject` | `action: "set_component_property", target: "<name>", component_properties: { "<Component>": { "<property>": value } }` |
+| Create GameObject | `Unity_ManageGameObject` | `action: "create", name: "<name>", parent: "<parent>", position: [x,y,z]` |
+| Modify GO transform/parent | `Unity_ManageGameObject` | `action: "modify", target: "<name>", position/rotation/scale/parent` |
+
+**Never hand-edit `.unity` or `.prefab` YAML.** Always use these tools for scene authoring.
+
+### Script operations
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Read script content | `Unity_ReadResource` | `uri: "unity://path/Assets/..."` with `start_line`/`line_count` |
+| Search within a script | `Unity_FindInFile` | `Uri: "Assets/...", Pattern: "<regex>"` |
+| Get script SHA (for edits) | `Unity_GetSha` | `Uri: "Assets/..."` |
+| Validate script compilation | `Unity_ValidateScript` | (via `Unity_ManageScript` action `"validate"`) |
+| Create new script | `Unity_CreateScript` | `Path: "Assets/...", Contents: "<code>"` |
+| Apply text edits | `Unity_ApplyTextEdits` | `Uri, Edits: [{startLine,startCol,endLine,endCol,newText}], PreconditionSha256` |
+| Structured edits | `Unity_ScriptApplyEdits` | Anchor-based pattern replacements (safer for method/class operations) |
+
+### Asset discovery & management
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Search assets by name/type | `Unity_FindProjectAssets` | `query: "<description>"` |
+| Get asset info | `Unity_ManageAsset` | `Action: "GetInfo", Path: "Assets/..."` |
+| Search assets by pattern | `Unity_ManageAsset` | `Action: "Search", Path: "Assets/", SearchPattern: "*.prefab"` |
+| List scripts in folder | `Unity_ListResources` | `Pattern: "*.cs", Under: "Assets/SafeMining"` |
+| Search code with ripgrep | `Unity_Grep` | `args: "<pattern>", path: "Assets/SafeMining"` |
+
+### Console & diagnostics
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Read errors only | `Unity_ReadConsole` | (legacy alias) or `Unity_GetConsoleLogs` → `logTypes: "Error"` |
+| Read all logs | `Unity_GetConsoleLogs` | `logTypes: "Error,Warning,Log"` |
+| Read with stack traces | `Unity_GetConsoleLogs` | `includeStackTrace: true` |
+| Get editor state | `Unity_ManageEditor` | `Action: "GetState"` |
+| Play/stop in Editor | `Unity_ManageEditor` | `Action: "Play"` / `Action: "Stop"` |
+
+### Profiler (performance investigation)
+
+| Task | MCP tool |
+|------|----------|
+| Counter summary over frames | `Unity_Profiler_GetCounterSummary` |
+| Per-frame counter table | `Unity_Profiler_GetCounterTable` |
+| Top GC allocations in frame | `Unity_Profiler_GetFrameGcAllocati_a7eb5b61` |
+| GC allocations over range | `Unity_Profiler_GetFrameRangeGcAll_90f409da` |
+| Top time consumers in frame | `Unity_Profiler_GetFrameTopTimeSam_ccc85b2d` |
+| Sample time summary | `Unity_Profiler_GetSampleTimeSummary` |
+
+Use profiler tools during WF4 (Build & Performance Verification) workflow execution.
+
+### Editor menu execution
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| List available menu items | `Unity_ManageMenuItem` | `Action: "List", Search: "<filter>"` |
+| Execute menu command | `Unity_ManageMenuItem` | `Action: "Execute", MenuPath: "<path>"` |
+| Run lighting tool | `Unity_ManageMenuItem` | `Action: "Execute", MenuPath: "SafeMining/LOTO/Configure Underground Lighting S1-S3"` |
+
+## Meta VR MCP bindings
+
+### Documentation & SDK verification
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Verify SDK API/feature | `meta_docs_search` | `query: "<question>", scope: "unity", mode: "verify"` |
+| Search docs broadly | `meta_docs_search` | `query: "<question>", mode: "search", max_results: 10` |
+| Get full doc page | `meta_docs_get_page` | `url: "<doc_path from search results>"` |
+| Get API class details | `get_api_details` | `name: "<class>", engine: "unity"` |
+| Search API reference | `search_api_reference` | `query: "<method or class>", engine: "unity"` |
+
+### Device management
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| List connected devices | `metavr_device` | `action: "list"` |
+| Get device info | `metavr_device` | `action: "info", target: "<serial>"` |
+| Battery status | `metavr_device` | `action: "battery"` |
+| Controller info | `metavr_device` | `action: "controllers"` |
+| Wake device | `metavr_device` | `action: "wake"` |
+
+### App management
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Install APK | `metavr_app` | `action: "install", apk_path: "Builds/SafeMiningVR-Quest3S-Dev.apk", replace: true` |
+| Launch app | `metavr_app` | `action: "launch", package: "com.safeminingvr.sim"` |
+| Stop app | `metavr_app` | `action: "stop", package: "com.safeminingvr.sim"` |
+| List installed apps | `metavr_app` | `action: "list", app_type: "user"` |
+
+### Device debugging
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Get device logcat | `get_device_logcat` | `tag: "Unity", level: "E", lines: 500` |
+| Filtered logcat | `get_device_logcat` | `package: "com.safeminingvr.sim", level: "W"` |
+| Take screenshot | `take_screenshot` | (no required params) |
+| UI dump (accessibility tree) | `ui_dump` | (no required params) |
+
+### Performance tracing
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Capture Perfetto trace | `capture_perfetto_trace` | `app: "com.safeminingvr.sim", duration_ms: 5000, mode: "standard"` |
+| Analyze captured trace | `analyze_trace` | `focus: "overview"` (or `"gpu"`, `"cpu"`, `"frames"`) |
+| Compare before/after | `compare_traces` | `baseline_id: "<before>", comparison_id: "<after>"` |
+| List available traces | `get_traces` | `limit: 10` |
+
+### 3D asset search
+
+| Task | MCP tool | Parameters |
+|------|----------|------------|
+| Search Meta asset library | `meta_assets_search` | `prompt: "<description>", number_of_models: 3` |
+
+## Cross-validation protocol
+
+### Inspect before modifying
+
+Before modifying any serialized component in a scene or prefab:
+
+1. **Inspect** current state with `Unity_ManageGameObject` → `get_components`.
+2. **Verify** the component type and current property values.
+3. **Cross-reference** with documentation (rules or `.agent-docs/`) to confirm the intended change aligns with requirements.
+4. **Apply** the modification via `Unity_ManageGameObject` → `set_component_property` or `add_component`.
+5. **Validate** with `Unity_ReadConsole` (Errors) → 0 entries.
+
+### Verify SDK compatibility before coding
+
+Before writing code that uses XRI, Meta OpenXR, or XR Hands APIs:
+
+1. **Search** with `meta_docs_search` for the specific API being used.
+2. **Confirm** the API exists in current SDK version and is not deprecated.
+3. **Get details** with `get_api_details` or `meta_docs_get_page` if exact signatures are needed.
+4. **Code** the implementation.
+5. **Validate** with `Unity_ValidateScript`.
+
+### Performance audit protocol
+
+When investigating framerate issues:
+
+1. **Capture** with `capture_perfetto_trace` on device (5–10s during problematic scene).
+2. **Analyze** with `analyze_trace` → identify CPU/GPU bottlenecks.
+3. **Correlate** with Editor profiler data via `Unity_Profiler_*` tools.
+4. **Fix** identified bottlenecks.
+5. **Re-capture** and `compare_traces` to verify improvement.
+
+## MCP call reporting
+
+After executing MCP tool calls that inform a code decision, report the results concisely:
+
+```
+MCP verification:
+- Unity_ManageGameObject(get_components, "PlayerMR") → found XRInputModalityManager, LotoInputModalityVisuals, TeleportationProvider
+- meta_docs_search("XRGrabInteractable selectEntered") → confirmed API unchanged in XRI 3.3.1
+- Unity_ReadConsole(Errors) → 0 entries
+```
+
+This reporting:
+- Appears after MCP calls complete but before presenting code changes.
+- Lists tool name, key parameters, and result summary.
+- Is omitted when the MCP call is a routine gate (e.g., post-change console check) with no findings.
+
+## ALWAYS
+
+1. Call `Unity_ManageEditor` → `GetProjectRoot` at session start.
+2. Call `Unity_ReadConsole` (Errors) after every code or scene change.
+3. Call `meta_docs_search` before any XR/Quest SDK code change.
+4. Inspect components with MCP before modifying serialized scene data.
+5. Report significant MCP findings before presenting code.
+
+## NEVER
+
+1. Assume a component exists on a GameObject without inspecting.
+2. Hand-edit `.unity`, `.prefab`, or `.asset` YAML files.
+3. Write XR SDK code without verifying the API in Meta docs.
+4. Skip the post-change console error check.
+5. Use MCP asset generation tools without explicit user consent.

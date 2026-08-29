@@ -1,0 +1,90 @@
+---
+description: "Offline-first backend sync: DTOs, API contracts (Fase 7), adapter pattern, IBManager legacy"
+globs: "Assets/SafeMining/**/*.cs"
+alwaysApply: false
+---
+
+# Backend Sync & Networking
+
+## Offline-first principle
+
+MVP runs with `IBManager.ConnectionMode.Offline`. All session data persists locally **before** any HTTP attempt. Gameplay must **never** block on network availability.
+
+## Local persistence (Application.persistentDataPath)
+
+| File | Manager | Purpose |
+|------|---------|---------|
+| `ScorePersistantData.json` | `PersistantDataManager` / `ScoreManager` | Existing score history |
+| `PendingSyncQueue.json` | `SyncQueueManager` | Outbound sync queue |
+| `SimulationSessionContext.json` | `SimulationSessionManager` | Active/completed session context |
+
+## DTO → Enterprise Architect entity mapping
+
+| Unity DTO | EA Entity |
+|-----------|-----------|
+| `SimulationSessionContext` | `IntentoCapacitacionCapacitado` |
+| `SimulationEventRecord` | `EleccionOpcionCapacitacion` |
+| `SimulationObjectiveResult` | `OBJETIVOSCapacitacion` (partial) |
+| `SimulationResultPayload` | `resultadoIntentoCapacitacion` |
+
+## API contracts (Fase 7 — stub until backend ready)
+
+### POST /api/vr/sessions/start
+
+Request: `{ "token": "jwt-from-emp02", "capacitacionId": "string", "programId": "string" }`
+Response: `{ "intentoId": "string", "sessionId": "string", "expiresAt": "ISO-8601" }`
+
+### POST /api/vr/sessions/{id}/events
+
+Request: `SimulationEventRecord`
+Response: `{ "ok": true }`
+
+### POST /api/vr/sessions/{id}/complete
+
+Request: `SimulationResultPayload`
+Response: `{ "approved": true, "scoreTotal": 85 }`
+
+### POST /api/vr/sessions/sync
+
+Request: `{ "entries": [ PendingSyncEntry ] }`
+Response: `{ "synced": [], "failed": [] }`
+
+## Auth flow (Fase 7)
+
+1. Employee presses "Iniciar VR" on **EMP-02** web → JWT token issued (2 h expiry per RNF08).
+2. VR app login (**VR-APP-01**) validates token (username field, no password in visor).
+3. Session start registered **before** scene load (RN09, F4-RF07).
+
+## Adapter pattern
+
+| Class | Phase | Behavior |
+|-------|-------|----------|
+| `OfflineBackendAdapter` | Fase 5 (current) | Local persist only. `IsAvailable` = `false` — queue is not drained. |
+| `SafeMiningBackendAdapter` | Fase 7 | REST stub. Returns `false` until real endpoints exist. |
+
+New adapters implement `ISimulationBackendAdapter` with `StartSessionAsync`, `RecordEventAsync`, `CompleteSessionAsync`.
+
+## IBManager legacy
+
+- Keep `IBManager.SendScoreToCloud` and `/crearSimReporte` intact. New sync layer runs in **parallel** via `SyncQueueManager`.
+- Do not break offline menu flow or existing `ScoreManager` → `IBManager` pipeline.
+
+## Sync queue
+
+- Enqueue on `ScoreManager.EndScene` via `EnqueueCompleteFromSceneScore`.
+- Deferred sync window: **24 hours** (HU-220 CA8). Purge entries older than 24 h on flush.
+- Queue not flushed while `ISimulationBackendAdapter.IsAvailable` is `false`.
+
+## ALWAYS
+
+1. Use `JsonUtility` with wrapper classes for list serialization.
+2. Purge sync entries older than 24 hours on flush.
+3. Preserve `IBManager` legacy path — do not remove or refactor.
+4. Register session start before loading simulation scene (RN09).
+
+## NEVER
+
+1. Block gameplay when network unavailable.
+2. Delete local score history on sync failure.
+3. Send PII beyond `participantId` / `sessionId` defined in session context.
+4. Modify `IBManager` core flow without explicit approval.

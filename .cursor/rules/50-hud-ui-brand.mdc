@@ -1,0 +1,79 @@
+---
+description: "SafeMining VR branding, world-space HUD, UI patterns, localization, VR comfort"
+globs: "Assets/SafeMining/**/*.{cs,prefab,unity}"
+alwaysApply: false
+---
+
+# HUD, UI & Branding
+
+## Brand palette
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| Primary | `#1A365D` | HUD backgrounds, headers, data bars |
+| Secondary | `#F97316` | CTAs, active progress, outline hints, dwell reticle |
+| Tertiary | `#334155` | Borders, secondary text, subtle backgrounds |
+| Neutral | `#F9FAFB` | Text on dark panels |
+| Success | `#22C55E` | Objective achieved |
+| Error | `#EF4444` | Failures, safety alerts |
+| Destructive action | Dark red (trash icon) | Delete/reset buttons only |
+
+Runtime access: `Brand.PrimaryColor`, `Brand.SecondaryColor`, etc. via `BrandConfig` ScriptableObject at `Assets/Resources/BrandConfig.asset`.
+
+Typography: **Inter** family for web; in-VR use **TMP** with `LiberationSans SDF` (bundled) at equivalent sizing.
+
+## World-space canvas (Quest 3S)
+
+- Canvas render mode: **World Space**.
+- Transform scale: **~0.001** on the canvas.
+- Distance from player: **1.5–2 m** (HUD and briefing panels use `Util_PanelFollower` at ~1.75 m).
+- Minimum touch target: **48 × 48 px** equivalent.
+- Minimum body text: **~24 pt TMP** at default canvas scale.
+- Contrast ratio: **≥ 4.5:1** for text on panels (WCAG AA).
+- Avoid transparent overdraw — use opaque panels with alpha clip if needed.
+
+## HUD layout
+
+- **Top-left:** active objective + checklist (up to 5 objective rows via `PREF_LotoObjectiveRow`).
+- **Top-right:** session timer + scenario indicator (1/3, 2/3, 3/3).
+- **Bottom:** subtitles / briefing text (`TranslatableText`).
+- **Menu button:** opens exit-confirm dialog. Session summary and exit confirm are **mutually exclusive** — `PlayerHudManager.ApplyState` manages visibility.
+- Active chrome (objectives, timer) hides when session summary or exit confirm overlays are shown.
+
+## Raycasting
+
+- `TrackedDeviceGraphicRaycaster` for VR pointer input.
+- `GraphicRaycaster` for PC mouse fallback.
+- Raycast blocking: **only on buttons**, not on panel backgrounds. This lets the user look through the HUD at the world.
+
+## Comfort
+
+- Prefer **teleport** over smooth locomotion.
+- Panel follow via `Util_PanelFollower` — subtle billboarding, not every-frame if perf-critical.
+- Alerts: subtitle + breaker flash or audio only. **No camera shake.**
+- `TunnelingVignette` on locomotion providers (already enabled on `PlayerMR`).
+
+## Localization
+
+- All user-facing strings bound via `TranslatableText` + `translationID`.
+- Translation files: `Assets/Resources/es.xml`, `Assets/Resources/en.xml`.
+- LOTO keys use `loto_*` prefix (e.g. `loto_s1_intro`, `loto_s3_alert_incomplete`).
+- Spanish is default. English provided for reference/testing.
+
+## Shared UI sprites
+
+Reuse sprites from `Assets/SafeMining/Shared/UI/` (`BrandLogo.png`, `Timer_frame.png`, `Timer_filled.png`, `Score_misionStatus_frame.png`, `Score_misionStatus_filled.png`).
+
+## ALWAYS
+
+1. Bind text via `TranslatableText` + `translationID` — never hardcode Spanish strings in scripts.
+2. Use `Brand.*` accessors for runtime color application.
+3. Test HUD legibility at Quest resolution (~1832 × 1920 per eye).
+4. Reuse sprites from `Shared/UI/` before creating new ones.
+
+## NEVER
+
+1. Use Screen Space Overlay canvas for in-simulation HUD.
+2. Hardcode Spanish strings in simulation scripts.
+3. Use motion-heavy animations on persistent HUD elements.
+4. Add non-diegetic UI chrome that breaks VR immersion (health bars, minimap, etc.).

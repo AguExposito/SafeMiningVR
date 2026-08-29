@@ -1,0 +1,147 @@
+---
+description: >-
+  Security review protocol for SafeMining VR backend, auth, telemetry, and sync
+  pipeline. Apply on PRs and agent tasks touching Adapters, DTOs, SyncQueueManager,
+  SimulationSessionManager, IBManager, or score payloads. Triggers /review-security
+  and Bugbot security vectors.
+globs:
+  - "Assets/SafeMining/LOTOSimulation/Code/Adapters/**"
+  - "Assets/SafeMining/LOTOSimulation/Code/Data/**"
+  - "Assets/XR Standard Menu/Code/LOTOSimulation/Managers/SyncQueueManager.cs"
+  - "Assets/XR Standard Menu/Code/LOTOSimulation/Managers/SimulationSessionManager.cs"
+  - "Assets/XR Standard Menu/Code/Managers/IBManager.cs"
+  - "Assets/XR Standard Menu/Code/Managers/ScoreManager.cs"
+  - "Assets/XR Standard Menu/Code/Managers/PersistantDataManager.cs"
+alwaysApply: false
+---
+
+# Security Review Protocol — Backend, Auth & Telemetry
+
+Applies to offline-first sync, HTTP adapters (Fase 7), JWT auth, score payloads, and local persistence for the LOTO training simulation.
+
+**Trigger:** Any PR or agent task modifying paths in `globs` above → run `/review-security` before merge.
+
+**Automated gate:** `python tools/ci/validate_security_surface.py` in CI on matching path changes.
+
+---
+
+## Severity model
+
+| Level | Meaning | Merge policy |
+|-------|---------|--------------|
+| `[CRITICAL]` | Credential leak, score tampering vector, data loss, auth bypass | Block merge |
+| `[HIGH]` | Missing timeout, race condition with data corruption risk, PII exposure | Fix before merge |
+| `[MEDIUM]` | Weak logging hygiene, missing retry bounds, incomplete validation | Fix or documented accept |
+| `[INFO]` | Hardening suggestion, defense-in-depth | Optional |
+
+Report format per finding:
+
+```
+[SEVERITY] Title
+Location: path:line
+Vector: <category>
+Finding: <what is wrong>
+Mitigation: <specific fix>
+```
+
+---
+
+## Inspection vectors (mandatory)
+
+### V1 — Credentials & tokens
+
+- [ ] No JWT, API keys, passwords, or serial numbers in source, comments, or committed config
+- [ ] No `Debug.Log` / `Debug.LogWarning` printing tokens, headers, or full request bodies
+- [ ] Tokens not stored in `PlayerPrefs` without encryption and expiry handling
+- [ ] Auth headers set only in adapter layer — not duplicated across managers
+- [ ] VR login: username/token field only — no password entry in headset (RNF08, VR-APP-01)
+- [ ] JWT expiry respected (2h VR per RNF08) — reject expired tokens before session start
+
+### V2 — Score payload integrity
+
+- [ ] `SimulationResultPayload` built only via `LotoSessionScore.Build()` — no client-side score override after build
+- [ ] Objective weights read from `LotoObjectiveIds.GetWeightPercent` — not hardcoded in adapter
+- [ ] `scoreTotal` clamped 0–100; `approved` derived from threshold (60%), not set independently
+- [ ] `sessionId` on payload matches active `SimulationSessionContext` — no session swapping
+- [ ] Event records (`SimulationEventRecord`) append-only during session — no retroactive tampering
+- [ ] False-positive penalty applied in `LotoSessionScore.ComputePartial` — not skippable via adapter
+
+### V3 — Local persistence & PII
+
+- [ ] Files under `Application.persistentDataPath` only — no `StreamingAssets` writes for scores
+- [ ] No PII beyond `participantId` / `sessionId` in DTOs or JSON files
+- [ ] `ScorePersistantData.json` never deleted on sync failure
+- [ ] Queue file (`PendingSyncQueue.json`) writable only through `SyncQueueManager` — no parallel writers
+
+### V4 — Sync queue resilience
+
+- [ ] Queue NOT flushed when `ISimulationBackendAdapter.IsAvailable` is false
+- [ ] 24h purge (`SyncRetentionHours`) — stale entries removed, not retried indefinitely
+- [ ] `retryCount` increments on failure; `lastError` populated; no silent drop
+- [ ] Partial flush: synced entries removed, failed entries retained (WF3 F4)
+- [ ] No race: concurrent `TryFlushQueueAsync` calls do not corrupt `queueData` or double-send
+- [ ] `Enqueue` + `SaveQueue` atomic — file not left half-written on crash (best-effort verify)
+
+### V5 — Network & HTTP (Fase 7)
+
+- [ ] HTTPS only (`https://`) — no cleartext endpoints (RNF06 TLS 1.2+)
+- [ ] Request timeout configured (recommend ≤10s; gameplay never blocks on await)
+- [ ] Adapter returns `false` on timeout/4xx/5xx — entry stays in queue
+- [ ] No gameplay `await` on network — fire-and-forget or background Task
+- [ ] `IBManager.SendScoreToCloud` and `/crearSimReporte` unchanged unless explicitly approved
+
+### V6 — Serialization safety
+
+- [ ] `JsonUtility` wrapper classes for lists — no raw array serialization bugs
+- [ ] `payloadJson` in `PendingSyncEntry` round-trips without data loss
+- [ ] Deserialization failures handled — corrupt entry quarantined, not crash loop
+
+---
+
+## Review procedure
+
+1. Read `.agent-docs/integration-vr-backend.md` and `70-backend-sync.mdc`
+2. Diff only files matching `globs`
+3. Run `python tools/ci/validate_security_surface.py`
+4. Audit each vector V1–V6 with file:line evidence
+5. Output findings table sorted by severity
+6. If `[CRITICAL]` or `[HIGH]` > 0 → **DO NOT MERGE**
+
+---
+
+## Bugbot coordination
+
+When `/review-bugbot` runs on the same diff, Bugbot focuses on correctness/regressions; this rule adds security vectors V1–V6. Both reviews required for adapter/sync changes.
+
+Launch:
+
+```text
+/review-security
+Review branch changes per 80-security-review.mdc vectors V1–V6.
+
+/review-bugbot
+Review branch changes for logic bugs in sync queue and adapter error paths.
+```
+
+---
+
+## Key files
+
+| Path | Risk |
+|------|------|
+| `Assets/SafeMining/LOTOSimulation/Code/Adapters/` | HTTP, auth headers, timeouts |
+| `Assets/SafeMining/LOTOSimulation/Code/Data/LotoSessionScore.cs` | Score integrity |
+| `Assets/SafeMining/LOTOSimulation/Code/Data/SimulationResultPayload.cs` | Payload schema |
+| `Assets/XR Standard Menu/Code/LOTOSimulation/Managers/SyncQueueManager.cs` | Queue races, data loss |
+| `Assets/XR Standard Menu/Code/Managers/IBManager.cs` | Legacy endpoint — read-only |
+
+---
+
+## NEVER
+
+1. Log tokens, JWTs, or passwords
+2. Store credentials in PlayerPrefs without encryption
+3. Block gameplay on network failure
+4. Delete local scores on sync failure
+5. Send PII beyond session identifiers
+6. Modify IBManager legacy path without explicit approval

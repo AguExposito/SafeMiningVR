@@ -18,7 +18,7 @@
 - **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster` + `GraphicRaycaster`, follow ~1.75 m). Raycasts only on buttons. Session summary / exit confirm mutually exclusive.
 - **Bootstrap:** `LotoScenarioSceneBootstrap` with serialized HUD refs + runtime PC cheats driver. `LotoHubBootstrap` stays on Placeholder only.
 - **PC playtest:** XRI Interaction Simulator auto-instantiate (Editor); Inspector bools / ContextMenus on `LotoPcPlaytestDriver`.
-- **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`. Rule: `Assets/.cursor/rules/safemining-mcp-console.mdc`
+- **Verification:** Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`. Config: `.cursor/mcp.json`. Rules: `.cursor/rules/02-mcp-bindings.mdc`
 
 ## Architecture
 

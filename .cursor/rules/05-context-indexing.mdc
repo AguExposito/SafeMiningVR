@@ -1,0 +1,214 @@
+---
+description: "Context indexing strategy: source-of-truth hierarchy, @reference routing by task domain, @Codebase search directives, and transparency protocol"
+alwaysApply: true
+---
+
+# Context Indexing & Reference Routing
+
+## Source-of-truth hierarchy (strict priority)
+
+When a design, domain, or implementation question arises, resolve it using this cascade. Stop at the first level that answers the question.
+
+| Priority | Source | Path | Scope |
+|----------|--------|------|-------|
+| 1 | Formal specification | `Doc_SMVR/SafeMining_VR_v1.1.md` | RN, RNF, HU-220–223, wireframes, traceability matrix |
+| 2 | Gameplay brief | `Propuesta Simulacion LOTO.txt` | LOTO procedure steps, scenario descriptions |
+| 3 | Operational knowledge base | `.agent-docs/` | Living docs: handbooks, objectives, asset lists, integration notes, QA checklists, workflows |
+| 4 | Brand reference | `Doc_SMVR/paleta de colores.jpg` + `Assets/Resources/BrandConfig.asset` | Color palette, logo, visual identity |
+| 5 | Cursor rules | `.cursor/rules/*.mdc` | Coding directives, architectural patterns, performance budgets |
+| 6 | Cursor skills | `.cursor/skills/*/SKILL.md` | Executable procedures, subagent launch templates |
+| 7 | Existing codebase | `Assets/SafeMining/` + `Assets/XR Standard Menu/` | Implementation reference, patterns to follow |
+| 8 | Meta VR MCP | `meta_docs_search` / `meta_docs_get_page` | Quest SDK docs, XRI API reference |
+| 9 | Ask the user | — | Last resort when all sources are exhausted |
+
+Never assume or invent requirements. If the hierarchy is exhausted without an answer, ask the user explicitly.
+
+## Granular document consumption protocol
+
+`Doc_SMVR/SafeMining_VR_v1.1.md` is ~5800 lines. **Never load it fully.** Instead:
+
+1. Open `.agent-docs/INDEX.md` — the master lookup table.
+2. Find the requirement ID (RN-*, RNF-*, HU-*, module) in the index tables.
+3. Read **only** the line range indicated: `Read(path, offset=<start>, limit=<span>)`.
+4. Cite the ID and source file in your response before generating code or analysis.
+
+For `.agent-docs/` files (all <100 lines), full reads are acceptable.
+
+For `Propuesta Simulacion LOTO.txt` (100 lines), full reads are acceptable.
+
+## Reference routing by task domain
+
+### Interaction & XR tasks
+
+When working on interactables, hand tracking, controllers, dwell-time, outline hints, or teleport:
+
+**Read first:**
+- `.cursor/rules/40-vr-interaction.mdc`
+- `.cursor/skills/meta-xr-interaction/SKILL.md`
+
+**Key code files:**
+- `Assets/SafeMining/LOTOSimulation/Code/Interactables/` — all interactable scripts
+- `Assets/XR Standard Menu/Code/XRS_HandGrab.cs` — fist-based grab
+- `Assets/XR Standard Menu/Code/Utils/Util_HandGesture.cs` — hand tracking utilities
+- `Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoInputModalityVisuals.cs` — modality switch
+- `Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoOutlineHint.cs` — pedagogical hints
+
+**MCP before coding:** `meta_docs_search` for XRI / hand tracking API verification.
+
+### Backend, networking & sync tasks
+
+When working on adapters, DTOs, sync queue, scoring payloads, or auth:
+
+**Read first:**
+- `.cursor/rules/70-backend-sync.mdc`
+- `.cursor/skills/network-session-pipeline/SKILL.md`
+- `.agent-docs/integration-vr-backend.md`
+
+**Key code files:**
+- `Assets/SafeMining/LOTOSimulation/Code/Adapters/` — all 3 adapter files
+- `Assets/SafeMining/LOTOSimulation/Code/Data/` — all DTOs and scoring logic
+- `Assets/XR Standard Menu/Code/LOTOSimulation/Managers/SyncQueueManager.cs`
+- `Assets/XR Standard Menu/Code/LOTOSimulation/Managers/SimulationSessionManager.cs`
+- `Assets/XR Standard Menu/Code/Managers/ScoreManager.cs`
+- `Assets/XR Standard Menu/Code/Managers/IBManager.cs`
+
+### UI, HUD & branding tasks
+
+When working on HUD layout, briefing panels, world-space canvas, localization, or brand colors:
+
+**Read first:**
+- `.cursor/rules/50-hud-ui-brand.mdc`
+- `Doc_SMVR/paleta de colores.jpg`
+
+**Key code files:**
+- `Assets/XR Standard Menu/Code/LOTOSimulation/refs/ref_PlayerHUD.cs`
+- `Assets/XR Standard Menu/Code/LOTOSimulation/Managers/PlayerHudManager.cs`
+- `Assets/XR Standard Menu/Code/TranslatableText.cs`
+- `Assets/XR Standard Menu/Code/BrandApplicator.cs`
+- `Assets/XR Standard Menu/Code/Managers/BrandConfig.cs`
+- `Assets/XR Standard Menu/Code/Utils/Util_PanelFollower.cs`
+- `Assets/Resources/es.xml` / `Assets/Resources/en.xml`
+- `Assets/Resources/BrandConfig.asset`
+
+### LOTO domain & compliance tasks
+
+When working on scenario logic, gates, scoring weights, objective IDs, or procedure fidelity:
+
+**Read first:**
+- `.cursor/rules/30-loto-domain.mdc`
+- `.cursor/skills/safemining-compliance/SKILL.md`
+- `.agent-docs/loto-objectives.md`
+- `.agent-docs/loto-simulation-handbook.md`
+
+**Key code files:**
+- `Assets/SafeMining/LOTOSimulation/Code/Data/LotoObjectiveIds.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Data/LotoSessionScore.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Data/LotoSimulationConstants.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/EppEquipmentManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/HazardInspectionManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoSequenceManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario1Controller.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario2Controller.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario3Controller.cs`
+
+### Architecture & performance tasks
+
+When working on manager creation, ControlCenter integration, scene setup, lighting, or build optimization:
+
+**Read first:**
+- `.cursor/rules/10-unity-architecture.mdc`
+- `.cursor/rules/60-quest-performance.mdc`
+- `.cursor/rules/20-cross-platform.mdc`
+
+**Key code files:**
+- `Assets/XR Standard Menu/Code/ControlCenter.cs`
+- `Assets/XR Standard Menu/Code/Managers/PersistantDataManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenarioSceneBootstrap.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Debug/LotoUndergroundLightingTool.cs`
+- `Packages/manifest.json`
+
+### QA & validation tasks
+
+When running QA workflows or validation checklists:
+
+**Read first:**
+- `.agent-docs/workflows/README.md` (workflow index)
+- The specific workflow file for the domain being tested
+
+**Workflow files:**
+- `.agent-docs/workflows/wf-dual-mode-testing.md` — PC + Quest input/ergonomics
+- `.agent-docs/workflows/wf-loto-step-compliance.md` — LOTO procedure fidelity
+- `.agent-docs/workflows/wf-network-auth-telemetry.md` — offline-first sync pipeline
+- `.agent-docs/workflows/wf-build-performance.md` — build settings + 72 FPS target
+
+## @Codebase search directives
+
+When using codebase-wide search, follow these rules to avoid noise:
+
+### Effective search patterns
+
+| Intent | Search query | Target |
+|--------|-------------|--------|
+| Find an objective ID | `loto_obj_` | `Code/Data/LotoObjectiveIds.cs` |
+| Find scoring logic | `LotoSessionScore` or `ComputePartial` | `Code/Data/LotoSessionScore.cs` |
+| Find an interactable pattern | class name (e.g., `HazardReportInteractable`) | `Code/Interactables/` |
+| Find a manager | `Manager` + domain (e.g., `EppEquipmentManager`) | `Code/Managers/` |
+| Find localization keys | `loto_s1_` or `loto_s3_alert` | `Assets/Resources/es.xml` |
+| Find brand color usage | `Brand.PrimaryColor` or `Brand.SecondaryColor` | `Code/Managers/BrandConfig.cs` |
+| Find adapter methods | `StartSessionAsync` or `CompleteSessionAsync` | `Code/Adapters/` |
+| Find sync queue logic | `SyncQueueManager` or `PendingSyncEntry` | `SyncQueueManager.cs`, `PendingSyncEntry.cs` |
+| Find hand tracking | `XRS_HandGrab` or `Util_HandGesture` or `LotoInputModalityVisuals` | `XRS_HandGrab.cs`, `Util_HandGesture.cs` |
+
+### Exclusion rules
+
+Never search or read these paths — they are binary, auto-generated, or irrelevant to SafeMining development:
+
+- `Library/` — Unity cache (auto-generated, binary).
+- `Temp/` — Unity temporary files.
+- `Logs/` — Editor log files.
+- `Builds/` — APK output (binary).
+- `UserSettings/` — Per-user editor layout.
+- `*.meta` — Unity asset metadata (search only if debugging GUID conflicts).
+- `*.unity` / `*.prefab` — Serialized YAML; use Unity MCP to inspect, never read directly.
+- `*.asset` — ScriptableObject YAML; use Unity MCP or `Resources.Load` references.
+- `Packages/` — Package cache (read `manifest.json` only for version checks).
+- `Assets/XR/` — XR plugin settings (auto-generated, rarely hand-edited).
+
+### Scope narrowing
+
+- For LOTO simulation code: restrict to `Assets/SafeMining/LOTOSimulation/Code/`.
+- For framework code: restrict to `Assets/XR Standard Menu/Code/`.
+- For localization: restrict to `Assets/Resources/*.xml`.
+- For documentation: restrict to `Doc_SMVR/` or `.agent-docs/`.
+
+## Transparency protocol
+
+On complex tasks (multi-file changes, architectural decisions, requirement-sensitive work), the agent must declare which sources it consulted before proceeding to code generation:
+
+```
+Sources consulted:
+- [rule] 30-loto-domain.mdc — scoring weights and scenario gates
+- [doc] .agent-docs/loto-objectives.md — objective ID reference
+- [code] LotoObjectiveIds.cs — current weight implementation
+- [mcp] meta_docs_search("XRGrabInteractable hand tracking") — API compatibility
+```
+
+This declaration:
+- Appears at the start of the response, before any code or file edits.
+- Lists the specific files or MCP queries used, not generic descriptions.
+- Is omitted for trivial single-file edits where the source is obvious.
+- Enables the user to verify the agent's reasoning chain and catch missed sources.
+
+## ALWAYS
+
+1. Consult the source-of-truth hierarchy before assuming any requirement.
+2. Read the domain-specific rule and skill files before writing code in that domain.
+3. Use scoped search paths — never search the entire `Assets/` tree without filtering.
+4. Declare sources on complex tasks.
+
+## NEVER
+
+1. Read `.unity`, `.prefab`, or `.asset` files directly — use Unity MCP tools.
+2. Search `Library/`, `Temp/`, `Logs/`, or `Builds/` directories.
+3. Assume a requirement exists without finding it in documentation.
+4. Skip the transparency declaration on multi-file or requirement-sensitive changes.

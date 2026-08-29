@@ -1,0 +1,89 @@
+---
+description: "VR interaction: hand tracking, controller fallback, dwell-time reticles, outline hints, Meta XR SDK reuse, PC playtest"
+globs: "Assets/SafeMining/**/*.cs"
+alwaysApply: false
+---
+
+# VR Interaction & Input
+
+## Input modality — hands-first, controllers on demand
+
+- Default: **hand tracking** on `PlayerMR` (`Left/Right Hand` active, controller visuals off).
+- `XRInputModalityManager` + `LotoInputModalityVisuals` handle auto-switch:
+  - Picking up a Touch controller → show controller meshes, hide hands.
+  - Releasing controller (~0.6 s hysteresis) → return to hand tracking.
+- OpenXR **Hand Interaction Profile** enabled on Android and Standalone.
+- Menu help panels follow the live modality (hands vs joysticks art).
+
+When creating new interactables, ensure they work with both modalities. Test with hand tracking first, then verify controller poke/ray fallback.
+
+## Dwell-time reticles for trigger interactions
+
+For non-grab interactions (buttons, hazard reporting, panel switches), use a **radial progress reticle** driven by dwell time:
+
+- When the user's ray or hand pointer hovers over an interactable trigger, show a world-space radial fill (Secondary color `#F97316`).
+- Fill duration: **0.8–1.2 s** (configurable per interactable). On completion, fire the interaction event.
+- On hover exit before completion, reset the fill smoothly.
+- Visual: thin ring around the pointer hit point, not a full-screen overlay. Scale ~0.03 m at contact distance.
+- Prefer XRI's `XRInteractableAffordanceStateProvider` + `XRPokeInteractor` hover events to drive fill state.
+- Dwell confirmation prevents accidental activations — critical for safety training fidelity.
+- Do NOT use dwell for grab interactions (EPP items, locks, tags). Grabs remain direct XRI `XRGrabInteractable`.
+
+## Outline hints — pedagogical guidance
+
+`LotoOutlineHint` provides step-by-step visual cues:
+
+- Color: Secondary `#F97316`, width ~4.
+- One active hint set at a time; cleared when the step completes.
+- S1: pending mandatory EPP items → continue door when ready.
+- S2: unreported real hazards → continue door when all 4 reported (no decoy outlines).
+- S3: STOP → breaker → personal lock → danger tag → START.
+
+## XRI 3.3.1 — reuse, don't reinvent
+
+| Interaction | XRI component | Notes |
+|-------------|---------------|-------|
+| Grab EPP, locks, tags | `XRGrabInteractable` | Hand tracking + controller grip |
+| Socket for lock/tag placement | `XRSocketInteractor` | Snap with visual preview |
+| UI buttons (HUD, panels) | `TrackedDeviceGraphicRaycaster` | Plus `GraphicRaycaster` for PC mouse |
+| Poke / touch | `XRPokeInteractor` | Physical buttons, panel switches |
+| Teleport locomotion | `TeleportationArea` / `TeleportationAnchor` | Floor areas only |
+| Comfort vignette | `TunnelingVignette` | Attached to locomotion providers on `PlayerMR` |
+
+Before writing a custom interaction, check if XRI or Meta XR SDK already provides it.
+
+## Meta XR SDK integration
+
+- Use `PlayerMR` (OpenXR-based camera rig) — do not introduce `OVRCameraRig` unless Meta docs require it.
+- Reuse Meta hand tracking prefabs for mesh visualization.
+- Consult `meta_docs_search` when modifying anything Quest-specific.
+
+## Serious-game interaction principles
+
+- Debounce button presses (fixed timestep or cooldown).
+- Haptic pulses: 100–200 ms max, only on meaningful events (lock snap, alert).
+- No haptic spam on hover or continuous contact.
+- Error feedback = localized subtitle + short audio cue. No camera shake.
+
+## PC Playtest mode (no headset)
+
+1. Play `StandardMainMenu` or any S scene in Editor. Mouse UI works on menu and LOTO EventSystems.
+2. **XR Interaction Simulator** auto-instantiates in Editor (acts as joystick input). Hands remain default until simulator input arrives.
+3. `LotoPcPlaytestDriver` (auto-added by `LotoScenarioSceneBootstrap`):
+   - Inspector bools and Context Menu items under `LOTO/PC/…` for scenario cheats (S1–S3 only).
+   - Hotkeys: Numpad 1–7 for common shortcuts (briefing dismiss, equip 5, continue, etc.).
+4. HUD/briefing panels use both `TrackedDeviceGraphicRaycaster` and `GraphicRaycaster` — rays only on buttons, not panel background.
+
+## ALWAYS
+
+1. Test hand tracking first, controller second.
+2. Use dwell-time confirmation for trigger actions; direct grab for physical objects.
+3. Reuse XRI and Meta SDK components before writing custom interaction logic.
+4. Verify PC Playtest path after any input/interaction change.
+
+## NEVER
+
+1. Hardcode controller-only input (e.g. `OVRInput.Get` without hand tracking path).
+2. Use full-screen flashing or camera shake for error feedback.
+3. Create grab interactables that only work with one modality.
+4. Skip `LotoInputModalityVisuals` event when adding new hand/controller visuals.

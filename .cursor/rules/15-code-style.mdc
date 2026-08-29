@@ -1,0 +1,61 @@
+---
+description: "C# code style: no comments, region grouping, naming conventions, project glossary"
+alwaysApply: true
+---
+
+# Code Style
+
+## No-comments policy
+
+- NEVER generate comments (`//`, `/* */`, `///`, XML docs).
+- Code must be self-documenting through clear naming.
+- Only exception: `#region` names.
+
+## Region grouping
+
+- Group related members with `#region` / `#endregion`.
+- Region names use Title Case: `"Initialization"`, `"Event Handlers"`, `"Public API"`.
+
+## Naming conventions
+
+| Prefix | Meaning | Example |
+|--------|---------|---------|
+| `SDB_` | Simulated database | `SDB_Audio` |
+| `ref_` | Reference script (public fields, no logic) | `ref_PlayerHUD` |
+| `Util_` | Static utility | `Util_PanelFollower` |
+| `XRS_` | XR Supplement for XR-package systems | `XRS_HandGrab` |
+| `I_` or `I` | Interface | `ISimulationBackendAdapter` |
+| `PREF_` | Prefab asset name | `PREF_LotoPlayerHUD` |
+| `MAT_` | Material asset name | `MAT_S1_LockerMetal` |
+
+Manager classes: `[SystemName]Manager`. Controllers: `[Scenario]Controller`.
+
+## Project glossary
+
+| Term | Meaning |
+|------|---------|
+| `ControlCenter` | Singleton hub. Centralizes managers, persists across scenes. |
+| `SimulationOrchestratorManager` | Orchestrates S1→S2→S3 flow for the LOTO simulation. |
+| `SimulationSessionManager` | Creates and persists `SimulationSessionContext` on simulation start. |
+| `SyncQueueManager` | Offline JSON queue for backend sync (`PendingSyncQueue.json`). |
+| `ISimulationBackendAdapter` | Interface for `OfflineBackendAdapter` / `SafeMiningBackendAdapter`. |
+| `loto_simulation` | SimScore scene ID for the complete LOTO simulation. |
+| `loto_obj_*` | Objective ID constants defined in `LotoObjectiveIds`. |
+
+## Documentation files
+
+- `.agent-docs/` Markdown files are permitted and maintained as living knowledge.
+- Do NOT create README.md, CHANGELOG.md, or ad-hoc `.txt` docs outside `.agent-docs/`.
+- Code is the primary documentation; `.agent-docs/` is the secondary reference.
+
+## ALWAYS
+
+1. Use descriptive names for variables, methods, classes.
+2. Follow prefix conventions strictly for new files.
+3. Group functions with `#region`.
+
+## NEVER
+
+1. Generate comments of any kind.
+2. Use vague or abbreviated names.
+3. Leave code without proper region grouping.

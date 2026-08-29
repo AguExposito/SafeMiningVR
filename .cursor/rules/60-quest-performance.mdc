@@ -1,0 +1,73 @@
+---
+description: "Meta Quest 3S performance budget: 72 FPS target, URP rendering, lighting, script optimization"
+globs: "Assets/SafeMining/**/*"
+alwaysApply: false
+---
+
+# Quest 3S Performance Budget
+
+## Target
+
+- **72 FPS** sustained on Meta Quest 3S.
+- Frame time budget: **~13.9 ms** total (CPU + GPU).
+- Build verification: `Builds/SafeMiningVR-Quest3S-Dev.apk`.
+
+## Rendering (URP 17)
+
+- Baked lighting where possible; limit realtime lights to **1 key Mixed Spot** per scene + up to **2 Mixed Point fills**.
+- Soft shadows only on key light.
+- Directional sun disabled in simulation scenes; custom dark ambient for underground/industrial feel.
+- Enable **LOD** on imported meshes (conveyor, electrical panel, environment).
+- **Occlusion culling** for industrial scenes.
+- Avoid transparent overdraw on HUD — opaque panels with alpha clip.
+- **Single Pass Instanced** rendering (OpenXR).
+- Graphics API: **Vulkan**.
+
+## Scripts
+
+- No empty `Update()` loops — use events, coroutines, or XRI callbacks.
+- Object pool for frequently spawned feedback (cones, highlight rings, particles).
+- Cache `ControlCenter.Instance` references in `Start`, not per-frame.
+- No `FindObjectOfType` in `Update` — resolve references once during init.
+- Debounce button presses (fixed timestep or cooldown).
+
+## Asset pipeline
+
+- Decimate/LOD Sketchfab imports before use — never import high-poly raw.
+- Texture atlases for UI sprites where practical.
+- Batch static environment geometry (`Static Batching` flag).
+- Strip unused XRI/MR sample assets from player builds.
+
+## Build settings
+
+| Setting | Value |
+|---------|-------|
+| Scripting backend | IL2CPP |
+| Architectures | ARM64 |
+| Min / Target SDK | 32 / 34 |
+| Graphics API | Vulkan |
+| OpenXR render mode | Single Pass Instanced |
+| Multiview render regions | None |
+
+## VR comfort
+
+- Fixed timestep for physics interactions.
+- Haptic pulses: 100–200 ms max.
+- No camera shake on safety alerts — use audio + UI.
+
+## Lighting tool
+
+Editor menu: **SafeMining → LOTO → Configure Underground Lighting S1-S3** (or `LotoUndergroundLightingTool`) sets per-scene key + fill configuration.
+
+## ALWAYS
+
+1. Profile with **Meta XR Tools** / OVR Metrics before marking a slice complete.
+2. Batch static environment geometry.
+3. Test on device early each slice — Editor XR Simulator is not sufficient for perf sign-off.
+
+## NEVER
+
+1. Import high-poly Sketchfab assets without decimation/LOD.
+2. Use `FindObjectOfType` in `Update`.
+3. Enable full-scene realtime GI in simulation scenes.
+4. Add realtime lights beyond the per-scene budget (1 key + 2 fill).

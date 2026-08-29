@@ -1,0 +1,53 @@
+---
+description: "Cross-platform development for PC Editor and Android/Quest deployment"
+alwaysApply: true
+---
+
+# Cross-Platform (PC & Android)
+
+All code must work identically on PC (Editor Play Mode) and Android (Meta Quest 3S APK).
+
+## Platform-agnostic principles
+
+1. Use Unity's cross-platform APIs by default.
+2. Only use preprocessor directives when truly platform-specific.
+3. Mental check on every change: "Will this work on both platforms?"
+
+## File access
+
+| Use case | API | Notes |
+|----------|-----|-------|
+| Load assets at runtime | `Resources.Load<T>()` | Works on PC & Android |
+| Save/load user data | `Application.persistentDataPath` | Unity resolves per platform |
+| Serialization | `JsonUtility` (or `Newtonsoft.Json` where `JsonUtility` falls short) | No `File.ReadAllText` on `StreamingAssets` (breaks Android APK) |
+| PlayerPrefs | `PlayerPrefs` | Identical on both |
+
+## Preprocessor directives
+
+Use ONLY for genuinely platform-exclusive features:
+
+```csharp
+#if UNITY_ANDROID && !UNITY_EDITOR
+    // Quest-only: e.g. OVR performance API
+#endif
+```
+
+## Input considerations
+
+- VR: hand tracking + Touch controllers via XR Interaction Toolkit.
+- PC Editor: mouse/keyboard via `GraphicRaycaster` and XR Interaction Simulator.
+- Minimum touch/poke target: **48 × 48 px** equivalent.
+
+## AVOID
+
+- `System.IO.File` for reading bundled assets.
+- `Application.streamingAssetsPath` with `File.ReadAllText`.
+- Hardcoded file paths with backslashes.
+- Platform-specific APIs without `#if` guards.
+
+## ALWAYS
+
+1. `Resources.Load<T>()` for runtime asset loading.
+2. `Application.persistentDataPath` for save files.
+3. Platform-agnostic code by default.
+4. Test: Editor Play Mode before device builds.

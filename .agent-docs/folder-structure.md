@@ -59,6 +59,8 @@ Assets/SafeMining/
 ```
 Assets/XR Standard Menu/     — Menu shell, ControlCenter, ScoreManager
 Assets/Resources/            — es.xml, en.xml, SimScore.asset, BrandConfig
-Assets/.cursor/rules/        — Cursor rules including safemining-*
+.cursor/rules/               — Cursor rules (project gate, MCP, LOTO domain, XR, UI, perf, backend)
+.cursor/skills/              — Cursor skills (procedures + subagent launch templates)
+.cursor/mcp.json             — Unity MCP relay config (project-scoped)
 .agent-docs/                 — This knowledge base
 ```
