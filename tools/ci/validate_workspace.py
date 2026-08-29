@@ -13,6 +13,7 @@ FORBIDDEN_UNDER_ASSETS_STRICT = (
 FORBIDDEN_UNDER_ASSETS_CRITICAL = (
     "Assets/.cursor/hooks.json",
     "Assets/.cursor/agents/",
+    "Assets/XR Standard Menu/Code/NJ/rules.mdc",
 )
 
 FORBIDDEN_EXTENSIONS_WARN = (

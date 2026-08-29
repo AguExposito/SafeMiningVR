@@ -1,16 +1,22 @@
 {
   "version": 1,
   "hooks": {
+    "workspaceOpen": [
+      {
+        "command": "python .cursor/hooks/session_start.py",
+        "timeout": 20
+      }
+    ],
     "sessionStart": [
       {
         "command": "python .cursor/hooks/session_start.py",
         "timeout": 20
       }
     ],
-    "afterFileEdit": [
+    "postToolUse": [
       {
         "command": "python .cursor/hooks/after_safemining_edit.py",
-        "matcher": "Write|Edit|ApplyPatch|StrReplace",
+        "matcher": "Write",
         "timeout": 15
       }
     ],

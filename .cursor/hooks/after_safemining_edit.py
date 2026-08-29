@@ -27,6 +27,12 @@ def extract_paths(payload):
         value = payload.get(key)
         if isinstance(value, str) and value.strip():
             paths.append(value.replace("\\", "/"))
+    tool_input = payload.get("tool_input")
+    if isinstance(tool_input, dict):
+        for key in ("path", "file_path", "filePath", "target_file"):
+            value = tool_input.get(key)
+            if isinstance(value, str) and value.strip():
+                paths.append(value.replace("\\", "/"))
     files = payload.get("files")
     if isinstance(files, list):
         for item in files:
