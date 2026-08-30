@@ -49,14 +49,19 @@ Assets/SafeMining/
 │       │   └── *Interactable.cs (trigger + grab)
 │       ├── Debug/
 │       │   ├── LotoPcPlaytestDriver.cs
-│       │   ├── LotoFase4MenuFlowRunner.cs
-│       │   └── LotoS*SmokeTest.cs
+│       │   ├── LotoFase4MenuFlowRunner.cs   (#if UNITY_EDITOR)
+│       │   ├── LotoVisualPrefabLibrary.cs   (interactables only; no PREF_PH_)
+│       │   ├── LotoUndergroundLightingTool.cs (ConfigureScene API; no public duplicate menu)
+│       │   ├── LotoS*SmokeTest.cs
+│       │   └── *PrefabBuilder.cs (deprecated — dialog only)
 │       ├── Editor/
 │       │   ├── LotoFase2PrefabSetupTool.cs
 │       │   ├── LotoFase3PrefabSetupTool.cs
 │       │   ├── LotoFase4MenuFlowTestTool.cs
 │       │   ├── LotoFase5LightingCleanupTool.cs
-│       │   └── LotoFase6QuestBuildTool.cs
+│       │   ├── LotoFase6QuestBuildTool.cs
+│       │   ├── LotoFullSetupTool.cs
+│       │   └── LotoMenuBrandSetupTool.cs
 └── Shared/
     └── UI/
         ├── BrandLogo.png
@@ -105,6 +110,8 @@ Assets/Resources/            — es.xml, en.xml, SimScore.asset, BrandConfig
 
 **Fase 4 (2026-08):** WF1-FLOW validated menu→S3→menu; `LotoFase4MenuFlowRunner`; `ControlCenter` GO rename in menu scene.
 
-**Fase 5 (2026-08):** Lighting budget 3 lights/scene via `LotoFase5LightingCleanupTool`; retired `PREF_PH_*` placeholders and Scenery2 duplicates.
+**Fase 5 (2026-08):** Lighting budget 3 lights/scene via `LotoFase5LightingCleanupTool`; retired `PREF_PH_*` placeholders.
 
-**Fase 6 (2026-08):** Quest 3S device install/launch via metavr; `LotoFase6QuestBuildTool`; WF1-B/WF4-E PARTIAL pending in-headset + fresh APK + Perfetto adb.
+**Audit-fix (2026-08-30):** Removed `Models/Scenery2/`; unified lighting menus; `LotoFullSetupTool` + `LotoMenuBrandSetupTool`; deprecated scenario rebuild builders; CI `validate_loto_editor_hygiene.py` (no `PREF_PH_` in `.cs`).
+
+**Fase 6 (2026-08):** Quest 3S device install/launch via metavr; `LotoFase6QuestBuildTool` + pre-build validation; WF1-B/WF4-E PARTIAL pending in-headset + fresh APK + Perfetto adb.

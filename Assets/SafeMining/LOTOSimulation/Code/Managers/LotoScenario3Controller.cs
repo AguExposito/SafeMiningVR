@@ -53,12 +53,12 @@ public class LotoScenario3Controller : MonoBehaviour
 
     public void OnSequenceCompleted(bool success)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.simulationOrchestratorManager == null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.GetManager<SimulationOrchestratorManager>() == null)
         {
             return;
         }
 
-        ControlCenter.Instance.simulationOrchestratorManager.ShowSessionSummary();
+        ControlCenter.Instance.GetManager<SimulationOrchestratorManager>().ShowSessionSummary();
     }
 
     #endregion

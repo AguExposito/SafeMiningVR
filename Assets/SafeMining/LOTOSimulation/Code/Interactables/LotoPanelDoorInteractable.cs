@@ -82,6 +82,7 @@ public class LotoPanelDoorInteractable : MonoBehaviour
             dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
         }
 
+        dwellReticle.ConfigureDwellSeconds(LotoSimulationConstants.DwellSecondsLoto);
         dwellReticle.Bind(interactable, ActivateFromPc);
     }
 

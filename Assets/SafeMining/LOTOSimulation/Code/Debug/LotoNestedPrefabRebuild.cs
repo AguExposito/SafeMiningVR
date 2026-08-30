@@ -5,14 +5,22 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public static class LotoNestedPrefabRebuild
 {
-    [MenuItem("SafeMining/LOTO/Rebuild Nested Scenario Prefabs")]
+    private const string DeprecatedMessage =
+        "Scenario prefab rebuild from placeholders is retired.\n\n" +
+        "Edit PREF_S1_Locker, PREF_S2_InspectionYard, and PREF_S3_ConveyorStation directly.\n\n" +
+        "This menu now only re-nests S3 interactable prefabs (locks, tags, buttons, breaker).";
+
+    [MenuItem("SafeMining/LOTO/Rebuild Nested Scenario Prefabs", false, 2000)]
     public static void RebuildAll()
     {
+        if (!EditorUtility.DisplayDialog("Deprecated rebuild", DeprecatedMessage, "Continue S3 interactables only", "Cancel"))
+        {
+            return;
+        }
+
         LotoVisualPrefabLibrary.EnsureLibrary();
-        LotoS1LockerPrefabBuilder.Build();
-        LotoS2InspectionYardPrefabBuilder.Build();
         NestS3ConveyorStation();
-        Debug.Log("[LOTO] Nested scenario prefabs rebuilt.");
+        Debug.Log("[LOTO] S3 interactable nest complete. S1/S2 scenario rebuild skipped (use final prefabs).");
     }
 
     public static void NestS3ConveyorStation()
@@ -30,10 +38,6 @@ public static class LotoNestedPrefabRebuild
         ReplaceNamed(root, "StopButton", LotoVisualPrefabLibrary.ButtonStop);
         ReplaceNamed(root, "StartButton", LotoVisualPrefabLibrary.ButtonStart);
         ReplaceNamed(root, "Breaker", LotoVisualPrefabLibrary.Breaker);
-        ReplaceNamed(root, "BeltVisual", LotoVisualPrefabLibrary.BeltVisual);
-        ReplaceNamed(root, "PanelBody", LotoVisualPrefabLibrary.PanelBody);
-        ReplaceNamed(root, "HaspBody", LotoVisualPrefabLibrary.Hasp);
-        ReplaceNamed(root, "Hasp", LotoVisualPrefabLibrary.Hasp);
 
         LotoSequenceManager sequenceManager = root.GetComponent<LotoSequenceManager>();
         if (sequenceManager != null)

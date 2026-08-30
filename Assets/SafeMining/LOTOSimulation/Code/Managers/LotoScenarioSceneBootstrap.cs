@@ -38,7 +38,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
             return;
         }
 
-        SimulationOrchestratorManager orchestrator = ControlCenter.Instance.simulationOrchestratorManager;
+        SimulationOrchestratorManager orchestrator = ControlCenter.Instance.GetManager<SimulationOrchestratorManager>();
         if (orchestrator == null)
         {
             Debug.LogWarning("[LOTO] simulationOrchestratorManager is null.");

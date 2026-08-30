@@ -15,18 +15,6 @@ public static class LotoUndergroundLightingTool
         "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S3.unity"
     };
 
-    [MenuItem("SafeMining/LOTO/Configure Underground Lighting S1-S3")]
-    public static void ConfigureAll()
-    {
-        for (int i = 0; i < ScenePaths.Length; i++)
-        {
-            ConfigureScene(ScenePaths[i], i, DefaultKeyPosition(i), DefaultFillAPosition(i), DefaultFillBPosition(i));
-        }
-
-        AssetDatabase.SaveAssets();
-        Debug.Log("[LOTO] Underground lighting configured for S1-S3.");
-    }
-
     public static void ConfigureScene(string scenePath)
     {
         int sceneIndex = 0;

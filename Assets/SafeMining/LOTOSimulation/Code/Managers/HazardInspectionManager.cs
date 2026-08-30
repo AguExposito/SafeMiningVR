@@ -87,9 +87,9 @@ public class HazardInspectionManager : MonoBehaviour
         {
             falsePositiveCount++;
             spot.SetReported(true);
-            if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
+            if (ControlCenter.Instance != null && ControlCenter.Instance.GetManager<SimulationSessionManager>() != null)
             {
-                ControlCenter.Instance.simulationSessionManager.RecordHazardFalsePositive();
+                ControlCenter.Instance.GetManager<SimulationSessionManager>().RecordHazardFalsePositive();
             }
 
             EmitEvent("hazard_false_positive", false, spot.hazardType);

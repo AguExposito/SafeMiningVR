@@ -263,12 +263,12 @@ public class EppEquipmentManager : MonoBehaviour
 
     private static void UpdateSessionEppFlags(EppItemType type, bool equipped)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.simulationSessionManager == null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.GetManager<SimulationSessionManager>() == null)
         {
             return;
         }
 
-        SimulationSessionContext session = ControlCenter.Instance.simulationSessionManager.CurrentSession;
+        SimulationSessionContext session = ControlCenter.Instance.GetManager<SimulationSessionManager>().CurrentSession;
         if (session == null)
         {
             return;

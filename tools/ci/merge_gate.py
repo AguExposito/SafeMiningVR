@@ -99,6 +99,53 @@ def print_human_block(title, items):
         safe = item.replace("\u2192", "->")
         print(f"- {safe}")
 
+MENU_BRAND_SCENE = "Assets/XR Standard Menu/Level/Scenes/StandardMainMenu.unity"
+MENU_BRAND_TOOL = "Assets/SafeMining/LOTOSimulation/Code/Editor/LotoMenuBrandSetupTool.cs"
+
+def is_loto_editor_generated_yaml(yaml_files, all_files):
+    if not yaml_files:
+        return False
+    for path in yaml_files:
+        if not path.startswith("Assets/SafeMining/LOTOSimulation/"):
+            return False
+        if not ("/Prefabs/" in path or "/Scenes/" in path):
+            return False
+    return any(
+        f.endswith(".cs") and "Assets/SafeMining/LOTOSimulation/Code/Editor/LotoFase" in f
+        for f in all_files
+    )
+
+def is_menu_brand_generated_yaml(yaml_files, all_files):
+    if not yaml_files:
+        return False
+    if MENU_BRAND_TOOL not in all_files:
+        return False
+    return all(path == MENU_BRAND_SCENE for path in yaml_files)
+
+def classify_yaml_hand_edits(yaml_files, all_files):
+    loto_yaml = [f for f in yaml_files if f.startswith("Assets/SafeMining/LOTOSimulation/")]
+    other_yaml = [f for f in yaml_files if f not in loto_yaml]
+    menu_yaml = [f for f in other_yaml if f == MENU_BRAND_SCENE]
+    remaining_yaml = [f for f in other_yaml if f != MENU_BRAND_SCENE]
+
+    warn_yaml = []
+    fail_yaml = []
+
+    if loto_yaml:
+        if is_loto_editor_generated_yaml(loto_yaml, all_files):
+            warn_yaml.extend(loto_yaml)
+        else:
+            fail_yaml.extend(loto_yaml)
+
+    if menu_yaml:
+        if is_menu_brand_generated_yaml(menu_yaml, all_files):
+            warn_yaml.extend(menu_yaml)
+        else:
+            fail_yaml.extend(menu_yaml)
+
+    fail_yaml.extend(remaining_yaml)
+    return warn_yaml, fail_yaml
+
 def main():
     files = changed_files()
     removed = deleted_files()
@@ -114,6 +161,8 @@ def main():
     auto_fail = []
     human = []
 
+    auto_warn = []
+
     ci_ok, ci_log = run_ci(security_needed)
     if ci_ok:
         auto_pass.append("CI validators (tools/ci/run_all.py" + (" --security" if security_needed else "") + ")")
@@ -123,10 +172,18 @@ def main():
             auto_fail.append(f"CI output: {ci_log[:500]}")
 
     if yaml_hand_edits:
-        auto_fail.append(
-            "Possible hand-edited Unity YAML: " + ", ".join(yaml_hand_edits[:5])
-            + (" ..." if len(yaml_hand_edits) > 5 else "")
-        )
+        warn_yaml, fail_yaml = classify_yaml_hand_edits(yaml_hand_edits, files)
+        if warn_yaml:
+            auto_warn.append(
+                "Unity YAML likely Editor-tool generated: "
+                + ", ".join(warn_yaml[:5])
+                + (" ..." if len(warn_yaml) > 5 else "")
+            )
+        if fail_yaml:
+            auto_fail.append(
+                "Possible hand-edited Unity YAML: " + ", ".join(fail_yaml[:5])
+                + (" ..." if len(fail_yaml) > 5 else "")
+            )
 
     if security_needed:
         auto_pass.append("Security surface paths touched — --security scan included")
@@ -154,6 +211,11 @@ def main():
         print("\n## AUTO - FAIL")
         for item in auto_fail:
             print(f"[FAIL] {item}")
+
+    if auto_warn:
+        print("\n## AUTO - WARN")
+        for item in auto_warn:
+            print(f"[WARN] {item}")
 
     print("\n## SUGGESTED PR TITLE")
     print(f"[{domain}] <short description>")

@@ -67,6 +67,7 @@ public class LotoControlButtonInteractable : MonoBehaviour
             dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
         }
 
+        dwellReticle.ConfigureDwellSeconds(LotoSimulationConstants.DwellSecondsLoto);
         dwellReticle.Bind(buttonRef.interactable, ActivateFromPc);
     }
 

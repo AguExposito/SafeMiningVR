@@ -1118,7 +1118,7 @@ public class IBManager : MonoBehaviour
     private void LoadLocalSimulationScene()
     {
         SetCurrentCarouselNotInstalledVisible(false);
-        LoadSimulationSceneByBuildIndex(LotoSimulationConstants.LotoHubBuildIndex);
+        LoadSimulationSceneByBuildIndex(LotoSimulationConstants.DefaultLotoEntryBuildIndex);
     }
 
     private void LoadSimulationSceneByBuildIndex(int buildIndex)

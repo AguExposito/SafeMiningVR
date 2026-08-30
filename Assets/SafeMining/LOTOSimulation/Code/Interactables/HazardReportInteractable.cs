@@ -78,6 +78,7 @@ public class HazardReportInteractable : MonoBehaviour
             dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
         }
 
+        dwellReticle.ConfigureDwellSeconds(LotoSimulationConstants.DwellSecondsHazard);
         dwellReticle.Bind(interactable, ActivateFromPc);
         RefreshDwellState();
     }

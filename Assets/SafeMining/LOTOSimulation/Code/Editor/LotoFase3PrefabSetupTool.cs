@@ -54,15 +54,35 @@ public static class LotoFase3PrefabSetupTool
                 continue;
             }
 
-            if (targetObject.GetComponent<LotoDwellReticle>() != null)
+            LotoDwellReticle dwell = targetObject.GetComponent<LotoDwellReticle>();
+            if (dwell == null)
+            {
+                dwell = targetObject.AddComponent<LotoDwellReticle>();
+                addedCount++;
+            }
+            else
             {
                 skippedCount++;
-                continue;
             }
 
-            targetObject.AddComponent<LotoDwellReticle>();
-            addedCount++;
+            dwell.ConfigureDwellSeconds(ResolveDwellSeconds(targetObject));
         }
+    }
+
+    private static float ResolveDwellSeconds(GameObject targetObject)
+    {
+        if (targetObject.GetComponent<HazardReportInteractable>() != null)
+        {
+            return LotoSimulationConstants.DwellSecondsHazard;
+        }
+
+        if (targetObject.GetComponent<LotoS1ContinueInteractable>() != null
+            || targetObject.GetComponent<LotoS2ContinueInteractable>() != null)
+        {
+            return LotoSimulationConstants.DwellSecondsDefault;
+        }
+
+        return LotoSimulationConstants.DwellSecondsLoto;
     }
 
     private static bool IsDwellTriggerTarget(GameObject targetObject)

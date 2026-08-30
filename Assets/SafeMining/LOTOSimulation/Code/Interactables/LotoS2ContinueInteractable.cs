@@ -97,6 +97,7 @@ public class LotoS2ContinueInteractable : MonoBehaviour
             dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
         }
 
+        dwellReticle.ConfigureDwellSeconds(LotoSimulationConstants.DwellSecondsDefault);
         dwellReticle.Bind(interactable, ActivateFromPc);
     }
 

@@ -30,3 +30,9 @@
 | Perf | LODs, atlases, static batching, baked lightmaps after layout freeze |
 
 Keep green≠good / red≠bad as the only cue — prefer wear marks, labels, and silhouette.
+
+## Editor tooling notes (audit-fix)
+
+- **Placeholders retired:** Do not use `PREF_PH_*` or **Rebuild Visual Prefab Library** for scenario geometry. Source of truth: `PREF_S1_Locker`, `PREF_S2_InspectionYard`, `PREF_S3_ConveyorStation`.
+- **Interactable library:** Menu **Rebuild Interactable Prefab Library** regenerates locks, tags, and control prefabs under `Prefabs/Interactables/` only.
+- **Scenery2:** Legacy folder removed; no LOTO runtime references.

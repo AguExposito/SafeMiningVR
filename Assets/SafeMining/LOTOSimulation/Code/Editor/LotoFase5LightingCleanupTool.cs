@@ -44,8 +44,20 @@ public static class LotoFase5LightingCleanupTool
 
     #region Public API
 
-    [MenuItem("SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S3")]
+    [MenuItem("SafeMining/LOTO/Apply Canonical Lighting S1-S3")]
     public static void ApplyFase5Cleanup()
+    {
+        ApplyCanonicalLighting();
+    }
+
+    [MenuItem("SafeMining/LOTO/Configure Underground Lighting S1-S3 (Legacy)")]
+    public static void ApplyLegacyLightingMenu()
+    {
+        Debug.LogWarning("[LOTO] Legacy lighting menu delegates to Apply Canonical Lighting S1-S3.");
+        ApplyCanonicalLighting();
+    }
+
+    public static void ApplyCanonicalLighting()
     {
         int prefabRemoved = 0;
         for (int i = 0; i < PrefabPaths.Length; i++)

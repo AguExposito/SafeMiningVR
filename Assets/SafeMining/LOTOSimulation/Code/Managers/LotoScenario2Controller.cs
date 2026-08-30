@@ -56,12 +56,12 @@ public class LotoScenario2Controller : MonoBehaviour
 
     public void OnInspectionCompleted()
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.simulationOrchestratorManager == null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.GetManager<SimulationOrchestratorManager>() == null)
         {
             return;
         }
 
-        ControlCenter.Instance.simulationOrchestratorManager.OnScenario2Completed();
+        ControlCenter.Instance.GetManager<SimulationOrchestratorManager>().OnScenario2Completed();
     }
 
     #endregion

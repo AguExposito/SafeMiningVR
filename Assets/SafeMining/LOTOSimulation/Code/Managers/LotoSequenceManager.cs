@@ -117,13 +117,13 @@ public class LotoSequenceManager : MonoBehaviour
     public bool HasSessionGloves()
     {
         if (ControlCenter.Instance == null ||
-            ControlCenter.Instance.simulationSessionManager == null ||
-            ControlCenter.Instance.simulationSessionManager.CurrentSession == null)
+            ControlCenter.Instance.GetManager<SimulationSessionManager>() == null ||
+            ControlCenter.Instance.GetManager<SimulationSessionManager>().CurrentSession == null)
         {
             return true;
         }
 
-        return ControlCenter.Instance.simulationSessionManager.CurrentSession.hasGloves;
+        return ControlCenter.Instance.GetManager<SimulationSessionManager>().CurrentSession.hasGloves;
     }
 
     public bool TryApplyLock(LotoLockType lockType, GameObject lockObject)

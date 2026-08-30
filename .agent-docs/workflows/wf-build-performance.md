@@ -257,3 +257,11 @@ For imported meshes (Sketchfab, FBX) in SafeMining folders:
 | F — Console hygiene | | | |
 
 **Workflow complete when all phases show PASS. Phase E marked BLOCKED if no Quest 3S available — document and schedule device test.**
+
+---
+
+## CI / merge gate — Editor-generated YAML
+
+When a PR changes `.unity` / `.prefab` YAML under `Assets/SafeMining/LOTOSimulation/` **and** includes at least one `Code/Editor/LotoFase*.cs` change, `merge_gate.py` emits **WARN** (not FAIL) for those YAML files. Rationale: Fase 2–5 Editor tools intentionally rewrite prefabs/scenes; human review still applies, but the gate does not block READY.
+
+Run locally: `python tools/ci/merge_gate.py` and `python tools/ci/run_all.py` (includes `validate_loto_editor_hygiene.py` — fails if `PREF_PH_` appears in SafeMining `.cs`).

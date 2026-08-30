@@ -170,6 +170,31 @@ public class SyncQueueManager : MonoBehaviour
         SaveQueue();
     }
 
+    public bool HasCompleteEntryWithStatus(string completionStatus)
+    {
+        if (queueData == null || queueData.entries == null || string.IsNullOrEmpty(completionStatus))
+        {
+            return false;
+        }
+
+        for (int i = 0; i < queueData.entries.Count; i++)
+        {
+            PendingSyncEntry entry = queueData.entries[i];
+            if (entry == null || entry.entryType != PendingSyncEntry.EntryTypeComplete)
+            {
+                continue;
+            }
+
+            SimulationResultPayload payload = JsonUtility.FromJson<SimulationResultPayload>(entry.payloadJson);
+            if (payload != null && payload.completionStatus == completionStatus)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     #endregion
 
     #region Queue Persistence

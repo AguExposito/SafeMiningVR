@@ -47,7 +47,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 ## Dwell-time triggers (non-grab)
 
-- Triggers (hazard report, STOP/START, breaker, panel door, continue doors) use [`LotoDwellReticle`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoDwellReticle.cs): hover ray → radial fill ~1 s (Secondary `#F97316`) → action.
+- Triggers (hazard report, STOP/START, breaker, panel door, continue doors) use [`LotoDwellReticle`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoDwellReticle.cs): hover ray → radial fill (~1 s default, 1.1 s LOTO controls via `LotoSimulationConstants`) → action.
 - Moving ray away resets fill. Instant select is blocked until dwell completes.
 - Grabs (EPP, locks, tags) remain direct — no dwell reticle.
 - PC cheats call `ActivateFromPc()` on each trigger script, bypassing dwell.
@@ -69,16 +69,19 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | Loc strings | Language assets used by `LanguageManager` (`loto_*` keys) |
 | Input modality | `PlayerMR` + `LotoInputModalityVisuals` |
 | HUD layers | `PlayerHudManager.ApplyState` (summary vs exit confirm mutually exclusive; active chrome hidden on overlays) |
-| Underground lights | Menu **SafeMining/LOTO/Configure Underground Lighting S1-S3** or `LotoUndergroundLightingTool` |
+| Underground lights | Menu **SafeMining/LOTO/Apply Canonical Lighting S1-S3** (canonical); legacy **Configure Underground Lighting S1-S3 (Legacy)** delegates to same |
+| Full Editor setup | **SafeMining/LOTO/Apply Full LOTO Setup (Fases 2-5)** — brand/loc → dwell → lighting |
+| Menu brand | **SafeMining/LOTO/Apply Menu Brand Setup** on `StandardMainMenu` (separate from HUD prefab brand) |
 | Sync payload | `SyncQueueManager` + `PendingSyncEntry` |
 | CC ↔ simulation bridge | `Util_LotoSimulationBridge` (objectives, events, subtitles) |
 | HUD brand colors | `BrandApplicator` on HUD/briefing/objective row prefabs |
 | S2/S3 world labels | `LotoWorldLabel` + `loto_s2_label_*` / `loto_lock_*` / `loto_tag_*` |
 | Prefab brand/loc batch | Menu **SafeMining/LOTO/Apply Fase 2 Brand and Loc Prefab Setup** |
 | Prefab dwell batch | Menu **SafeMining/LOTO/Apply Fase 3 Dwell Reticle Setup** |
-| Menu flow QA | **SafeMining/LOTO/Run Fase 4 Menu Flow Test** (Play Mode from StandardMainMenu) |
-| Lighting cleanup | **SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S3** |
-| Quest dev APK | **SafeMining/LOTO/Build Quest 3S Dev APK** → `Builds/SafeMiningVR-Quest3S-Dev.apk` |
+| Menu flow QA | **SafeMining/LOTO/Run Fase 4 Menu Flow Test** — carousel path via `IBManager.HandleSceneViewerSelect`; optional Malo 1/2 routines |
+| Lighting cleanup | **SafeMining/LOTO/Apply Canonical Lighting S1-S3** |
+| Quest dev APK | **SafeMining/LOTO/Build Quest 3S Dev APK** (pre-build validation) → `Builds/SafeMiningVR-Quest3S-Dev.apk` |
+| Deprecated rebuild | **Rebuild S1 Locker / S2 Yard** menus show deprecation dialog — use `PREF_S1/S2/S3` as source of truth; **Rebuild Interactable Prefab Library** for locks/tags only |
 | Device QA | See [qa-quest-fase6.md](../.agent-docs/qa-quest-fase6.md); deploy via `metavr_app install` |
 | Trigger dwell | `LotoDwellReticle` on `XRSimpleInteractable` triggers only |
 

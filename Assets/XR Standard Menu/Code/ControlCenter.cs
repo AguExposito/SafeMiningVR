@@ -153,6 +153,61 @@ public class ControlCenter : MonoBehaviour
     }
     #endregion
 
+    public T GetManager<T>() where T : Component
+    {
+        if (typeof(T) == typeof(PersistantDataManager))
+        {
+            return persistantDataManager as T;
+        }
+
+        if (typeof(T) == typeof(LoadManager))
+        {
+            return loadManager as T;
+        }
+
+        if (typeof(T) == typeof(LanguageManager))
+        {
+            return languageManager as T;
+        }
+
+        if (typeof(T) == typeof(SoundManager))
+        {
+            return soundManager as T;
+        }
+
+        if (typeof(T) == typeof(ScoreManager))
+        {
+            return scoreManager as T;
+        }
+
+        if (typeof(T) == typeof(IBManager))
+        {
+            return ibManager as T;
+        }
+
+        if (typeof(T) == typeof(SyncQueueManager))
+        {
+            return syncQueueManager as T;
+        }
+
+        if (typeof(T) == typeof(SimulationSessionManager))
+        {
+            return simulationSessionManager as T;
+        }
+
+        if (typeof(T) == typeof(SimulationOrchestratorManager))
+        {
+            return simulationOrchestratorManager as T;
+        }
+
+        if (typeof(T) == typeof(PlayerHudManager))
+        {
+            return FindFirstObjectByType<PlayerHudManager>() as T;
+        }
+
+        return GetComponent<T>();
+    }
+
     [Header("Branding")]
     [Tooltip("Optional override. If empty, loads Resources/BrandConfig.")]
     [SerializeField] private BrandConfig brandConfig;

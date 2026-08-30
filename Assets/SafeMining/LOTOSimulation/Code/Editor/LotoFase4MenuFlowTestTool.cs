@@ -35,6 +35,30 @@ public static class LotoFase4MenuFlowTestTool
         runner.RunNegativeGateChecks();
     }
 
+    [MenuItem("SafeMining/LOTO/Run Fase 4 Malo 1 Test")]
+    public static void RunMalo1Test()
+    {
+        if (!Application.isPlaying)
+        {
+            EditorUtility.DisplayDialog("LOTO Fase 4", "Enter Play Mode on S3 first.", "OK");
+            return;
+        }
+
+        EnsureRunner().RunMalo1IncompleteStart();
+    }
+
+    [MenuItem("SafeMining/LOTO/Run Fase 4 Malo 2 Test")]
+    public static void RunMalo2Test()
+    {
+        if (!Application.isPlaying)
+        {
+            EditorUtility.DisplayDialog("LOTO Fase 4", "Enter Play Mode on S3 first.", "OK");
+            return;
+        }
+
+        EnsureRunner().RunMalo2NoGloves();
+    }
+
     [MenuItem("SafeMining/LOTO/Prepare Fase 4 Menu Flow Test")]
     public static void PrepareMenuFlowTest()
     {

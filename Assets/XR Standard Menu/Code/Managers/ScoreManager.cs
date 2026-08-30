@@ -73,7 +73,7 @@ public class ScoreManager : MonoBehaviour
         {
             uIContentCarousel = ComponentFinder.FindComponentInScene<UIContentCarousel>();
         }
-        int targetBuildIndex = LotoSimulationConstants.LotoHubBuildIndex;
+        int targetBuildIndex = LotoSimulationConstants.DefaultLotoEntryBuildIndex;
         if (uIContentCarousel != null)
         {
             int requestedIndex = uIContentCarousel.currentIndex + 1;
@@ -89,7 +89,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (!IsBuildIndexLoadable(buildIndex))
         {
-            buildIndex = LotoSimulationConstants.LotoHubBuildIndex;
+            buildIndex = LotoSimulationConstants.DefaultLotoEntryBuildIndex;
         }
         if (!IsBuildIndexLoadable(buildIndex) || ControlCenter.Instance == null || ControlCenter.Instance.loadManager == null)
         {
@@ -125,16 +125,23 @@ public class ScoreManager : MonoBehaviour
         lastInitializedSceneIndex = index;
     }
 
-    public void AchiveObjective(int index, bool value)
+    public void AchieveObjective(int index, bool value)
     {
         if (lastInitializedSceneIndex < 0)
         {
             return;
         }
-        AchiveObjective(lastInitializedSceneIndex, index, value);
+
+        AchieveObjective(lastInitializedSceneIndex, index, value);
     }
 
-    public void AchiveObjective(int sceneIndex, int objectiveIndex, bool value)
+    [System.Obsolete("Use AchieveObjective")]
+    public void AchiveObjective(int index, bool value)
+    {
+        AchieveObjective(index, value);
+    }
+
+    public void AchieveObjective(int sceneIndex, int objectiveIndex, bool value)
     {
         if (!activeSceneScores.TryGetValue(sceneIndex, out ActiveSceneScoreState state))
         {
@@ -146,6 +153,12 @@ public class ScoreManager : MonoBehaviour
         }
         state.sceneScore.objectives[objectiveIndex].isAchivied = value;
         activeSceneScores[sceneIndex] = state;
+    }
+
+    [System.Obsolete("Use AchieveObjective")]
+    public void AchiveObjective(int sceneIndex, int objectiveIndex, bool value)
+    {
+        AchieveObjective(sceneIndex, objectiveIndex, value);
     }
 
     public void EndScene(int index)

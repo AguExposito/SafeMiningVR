@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -23,6 +24,7 @@ public class LotoDwellReticle : MonoBehaviour
     private Transform reticleRoot;
     private Image fillImage;
     private Image ringImage;
+    private Coroutine dwellRoutine;
 
     #region Lifecycle
 
@@ -31,27 +33,6 @@ public class LotoDwellReticle : MonoBehaviour
         if (cooldownRemaining > 0f)
         {
             cooldownRemaining -= Time.deltaTime;
-        }
-
-        if (!isHovering || !dwellEnabled || boundInteractable == null)
-        {
-            return;
-        }
-
-        UpdateReticleFacing();
-        UpdateReticleAnchor();
-
-        if (cooldownRemaining > 0f)
-        {
-            return;
-        }
-
-        hoverFill += Time.deltaTime / Mathf.Max(dwellSeconds, 0.01f);
-        ApplyFillAmount(hoverFill);
-
-        if (hoverFill >= 1f)
-        {
-            CompleteDwell();
         }
     }
 
@@ -63,6 +44,11 @@ public class LotoDwellReticle : MonoBehaviour
     #endregion
 
     #region Public API
+
+    public void ConfigureDwellSeconds(float seconds)
+    {
+        dwellSeconds = Mathf.Max(seconds, 0.01f);
+    }
 
     public void Bind(XRSimpleInteractable target, Action completeAction)
     {
@@ -93,6 +79,8 @@ public class LotoDwellReticle : MonoBehaviour
 
     public void Unbind()
     {
+        StopDwellRoutine();
+
         if (boundInteractable != null)
         {
             boundInteractable.hoverEntered.RemoveListener(OnHoverEntered);
@@ -301,6 +289,7 @@ public class LotoDwellReticle : MonoBehaviour
         UpdateReticleAnchor();
         UpdateReticleFacing();
         SetReticleVisible(true);
+        StartDwellRoutine();
     }
 
     private void OnHoverExited(HoverExitEventArgs args)
@@ -319,8 +308,47 @@ public class LotoDwellReticle : MonoBehaviour
         }
     }
 
+    private void StartDwellRoutine()
+    {
+        StopDwellRoutine();
+        dwellRoutine = StartCoroutine(DwellFillRoutine());
+    }
+
+    private void StopDwellRoutine()
+    {
+        if (dwellRoutine != null)
+        {
+            StopCoroutine(dwellRoutine);
+            dwellRoutine = null;
+        }
+    }
+
+    private IEnumerator DwellFillRoutine()
+    {
+        while (isHovering && dwellEnabled && boundInteractable != null)
+        {
+            UpdateReticleFacing();
+            UpdateReticleAnchor();
+
+            if (cooldownRemaining <= 0f)
+            {
+                hoverFill += Time.deltaTime / Mathf.Max(dwellSeconds, 0.01f);
+                ApplyFillAmount(hoverFill);
+
+                if (hoverFill >= 1f)
+                {
+                    CompleteDwell();
+                    yield break;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
     private void CompleteDwell()
     {
+        StopDwellRoutine();
         hoverFill = 1f;
         ApplyFillAmount(1f);
         cooldownRemaining = cooldownSeconds;
@@ -334,6 +362,7 @@ public class LotoDwellReticle : MonoBehaviour
 
     private void ResetDwell()
     {
+        StopDwellRoutine();
         isHovering = false;
         activeHoverInteractor = null;
         hoverFill = 0f;

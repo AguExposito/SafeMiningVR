@@ -96,6 +96,7 @@ public class LotoBreakerInteractable : MonoBehaviour
             dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
         }
 
+        dwellReticle.ConfigureDwellSeconds(LotoSimulationConstants.DwellSecondsLoto);
         dwellReticle.Bind(breakerRef.interactable, ActivateFromPc);
     }
 

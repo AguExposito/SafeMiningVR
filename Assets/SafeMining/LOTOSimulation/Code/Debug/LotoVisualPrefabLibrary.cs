@@ -8,28 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public static class LotoVisualPrefabLibrary
 {
     public const string InteractablesFolder = "Assets/SafeMining/LOTOSimulation/Prefabs/Interactables";
-    public const string PlaceholdersFolder = "Assets/SafeMining/LOTOSimulation/Prefabs/Placeholders";
     public const string MaterialsFolder = "Assets/SafeMining/LOTOSimulation/Art/Materials";
-
-    public const string FloorPlate = PlaceholdersFolder + "/PREF_PH_FloorPlate.prefab";
-    public const string CabinetPanel = PlaceholdersFolder + "/PREF_PH_CabinetPanel.prefab";
-    public const string Shelf = PlaceholdersFolder + "/PREF_PH_Shelf.prefab";
-    public const string RejectBin = PlaceholdersFolder + "/PREF_PH_RejectBin.prefab";
-    public const string ExitDoor = PlaceholdersFolder + "/PREF_PH_ExitDoor.prefab";
-    public const string YardFloor = PlaceholdersFolder + "/PREF_PH_YardFloor.prefab";
-    public const string Spill = PlaceholdersFolder + "/PREF_PH_Spill.prefab";
-    public const string Wrench = PlaceholdersFolder + "/PREF_PH_Wrench.prefab";
-    public const string FallenBoard = PlaceholdersFolder + "/PREF_PH_FallenBoard.prefab";
-    public const string Crate = PlaceholdersFolder + "/PREF_PH_Crate.prefab";
-    public const string Extinguisher = PlaceholdersFolder + "/PREF_PH_Extinguisher.prefab";
-    public const string Cone = PlaceholdersFolder + "/PREF_PH_Cone.prefab";
-    public const string Rack = PlaceholdersFolder + "/PREF_PH_Rack.prefab";
-    public const string BeltVisual = PlaceholdersFolder + "/PREF_PH_BeltVisual.prefab";
-    public const string PanelBody = PlaceholdersFolder + "/PREF_PH_PanelBody.prefab";
-    public const string Hasp = PlaceholdersFolder + "/PREF_PH_Hasp.prefab";
-    public const string Roller = PlaceholdersFolder + "/PREF_PH_Roller.prefab";
-    public const string Pedestal = PlaceholdersFolder + "/PREF_PH_Pedestal.prefab";
-    public const string Cube = PlaceholdersFolder + "/PREF_PH_Cube.prefab";
 
     public const string HelmetGood = InteractablesFolder + "/PREF_EPP_Helmet_Good.prefab";
     public const string HelmetDefect = InteractablesFolder + "/PREF_EPP_Helmet_Defect.prefab";
@@ -54,11 +33,13 @@ public static class LotoVisualPrefabLibrary
     public const string ButtonStart = InteractablesFolder + "/PREF_Button_Start.prefab";
     public const string Breaker = InteractablesFolder + "/PREF_Breaker.prefab";
 
-    [MenuItem("SafeMining/LOTO/Rebuild Visual Prefab Library")]
+    #region Public API
+
+    [MenuItem("SafeMining/LOTO/Rebuild Interactable Prefab Library")]
     public static void RebuildLibraryMenu()
     {
         EnsureLibrary();
-        Debug.Log("[LOTO] Visual prefab library rebuilt.");
+        Debug.Log("[LOTO] Interactable prefab library rebuilt (EPP, locks, tags, buttons, breaker). Scenario prefabs PREF_S1/S2/S3 are edited directly.");
     }
 
     public static void EnsureLibrary()
@@ -102,9 +83,13 @@ public static class LotoVisualPrefabLibrary
             prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         }
 
-        GameObject instance = prefab != null
-            ? (GameObject)PrefabUtility.InstantiatePrefab(prefab)
-            : CreateVisualRoot(name, PrimitiveType.Cube, Color.magenta, FindLit());
+        if (prefab == null)
+        {
+            Debug.LogError("[LOTO] Missing interactable prefab at " + prefabPath);
+            return null;
+        }
+
+        GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
         instance.name = name;
         instance.transform.SetParent(parent, false);
         instance.transform.localPosition = localPosition;
@@ -165,12 +150,9 @@ public static class LotoVisualPrefabLibrary
         return root.GetComponentInChildren<Renderer>(true);
     }
 
-    private static void SavePlaceholder(string path, string name, PrimitiveType primitive, Color color, Shader lit)
-    {
-        GameObject root = CreateVisualRoot(name, primitive, color, lit);
-        PrefabUtility.SaveAsPrefabAsset(root, path);
-        Object.DestroyImmediate(root);
-    }
+    #endregion
+
+    #region Prefab Generation
 
     private static GameObject CreateVisualRoot(string name, PrimitiveType primitive, Color color, Shader lit)
     {
@@ -393,5 +375,7 @@ public static class LotoVisualPrefabLibrary
             AssetDatabase.CreateFolder(parent, child);
         }
     }
+
+    #endregion
 }
 #endif

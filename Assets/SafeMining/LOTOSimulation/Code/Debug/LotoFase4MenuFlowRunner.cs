@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using System.Collections;
+using NJ.Finder;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +8,7 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
 {
     [SerializeField] private float sceneLoadTimeoutSeconds = 20f;
     [SerializeField] private float stateWaitTimeoutSeconds = 10f;
+    [SerializeField] private float subtitleWaitSeconds = 2f;
 
     private LotoPcPlaytestDriver playtestDriver;
 
@@ -32,6 +35,18 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         StartCoroutine(NegativeGateRoutine());
     }
 
+    public void RunMalo1IncompleteStart()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Malo1Routine());
+    }
+
+    public void RunMalo2NoGloves()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Malo2Routine());
+    }
+
     #endregion
 
     #region Flow Routines
@@ -42,15 +57,42 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
 
         if (ControlCenter.Instance == null)
         {
-            LogStep("A2 CC present", false, "ControlCenter.Instance is null");
+            LogStep("A1 CC present", false, "ControlCenter.Instance is null");
             yield break;
         }
 
-        LogStep("A2 CC present", true, string.Empty);
+        LogStep("A1 CC present", true, string.Empty);
 
-        ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario1BuildIndex);
+        bool onMenu = SceneManager.GetActiveScene().buildIndex == LotoSimulationConstants.MainMenuBuildIndex;
+        LogStep("A1 menu scene", onMenu, onMenu ? string.Empty : "expected build 0");
+
+        if (!onMenu)
+        {
+            yield break;
+        }
+
+        UIContentCarousel carousel = ResolveCarousel();
+        if (carousel == null)
+        {
+            LogStep("A2 carousel", false, "UIContentCarousel not found");
+            yield break;
+        }
+
+        int lotoIndex = ResolveLotoCarouselIndex(carousel);
+        carousel.currentIndex = lotoIndex;
+        LogStep("A2 carousel LOTO index", true, lotoIndex.ToString());
+
+        if (ControlCenter.Instance.ibManager != null)
+        {
+            ControlCenter.Instance.ibManager.HandleSceneViewerSelect(carousel);
+        }
+        else
+        {
+            ControlCenter.Instance.scoreManager.LoadSceneByCarouselIndex();
+        }
+
         yield return WaitForScene(LotoSimulationConstants.Scenario1BuildIndex);
-        if (!AssertScene(LotoSimulationConstants.Scenario1BuildIndex, "A2 load S1"))
+        if (!AssertScene(LotoSimulationConstants.Scenario1BuildIndex, "A2 carousel→S1"))
         {
             yield break;
         }
@@ -94,6 +136,9 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         yield return WaitForOrchestratorState(LotoSimulationState.SessionSummary);
         LogStep("A3.6 LOTO happy path summary", OrchestratorStateIs(LotoSimulationState.SessionSummary), string.Empty);
 
+        bool syncQueued = HasCompletedSyncEntry();
+        LogStep("A3.6b sync queue Completed", syncQueued, string.Empty);
+
         playtestDriver.CompleteSummary();
         yield return WaitForScene(LotoSimulationConstants.MainMenuBuildIndex);
         LogStep("A3.7 return to menu", SceneManager.GetActiveScene().buildIndex == LotoSimulationConstants.MainMenuBuildIndex, string.Empty);
@@ -111,8 +156,7 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
             yield break;
         }
 
-        ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario1BuildIndex);
-        yield return WaitForScene(LotoSimulationConstants.Scenario1BuildIndex);
+        yield return LaunchS1FromMenu();
 
         playtestDriver = ResolvePlaytestDriver();
         if (playtestDriver == null)
@@ -143,9 +187,130 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         Debug.Log("[LOTO Fase4] Negative gate test finished.");
     }
 
+    private IEnumerator Malo1Routine()
+    {
+        yield return LaunchS3FromMenu();
+        playtestDriver = ResolvePlaytestDriver();
+        if (playtestDriver == null)
+        {
+            yield break;
+        }
+
+        playtestDriver.DismissBriefingIfPresent();
+        playtestDriver.ForceIncompleteStart();
+        yield return new WaitForSeconds(subtitleWaitSeconds);
+        LogStep("Malo1 loto_s3_alert_incomplete", SubtitleMatchesLocKey("loto_s3_alert_incomplete"), string.Empty);
+    }
+
+    private IEnumerator Malo2Routine()
+    {
+        yield return LaunchS3FromMenu();
+        playtestDriver = ResolvePlaytestDriver();
+        if (playtestDriver == null)
+        {
+            yield break;
+        }
+
+        playtestDriver.DismissBriefingIfPresent();
+        playtestDriver.ForceNoGloves();
+        yield return new WaitForSeconds(subtitleWaitSeconds);
+        LogStep("Malo2 loto_s3_alert_no_gloves", SubtitleMatchesLocKey("loto_s3_alert_no_gloves"), string.Empty);
+    }
+
     #endregion
 
     #region Helpers
+
+    private IEnumerator LaunchS1FromMenu()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != LotoSimulationConstants.MainMenuBuildIndex)
+        {
+            ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario1BuildIndex);
+            yield return WaitForScene(LotoSimulationConstants.Scenario1BuildIndex);
+            yield break;
+        }
+
+        UIContentCarousel carousel = ResolveCarousel();
+        if (carousel != null && ControlCenter.Instance.ibManager != null)
+        {
+            carousel.currentIndex = ResolveLotoCarouselIndex(carousel);
+            ControlCenter.Instance.ibManager.HandleSceneViewerSelect(carousel);
+        }
+        else
+        {
+            ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario1BuildIndex);
+        }
+
+        yield return WaitForScene(LotoSimulationConstants.Scenario1BuildIndex);
+    }
+
+    private IEnumerator LaunchS3FromMenu()
+    {
+        if (ControlCenter.Instance == null)
+        {
+            yield break;
+        }
+
+        ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario3BuildIndex);
+        yield return WaitForScene(LotoSimulationConstants.Scenario3BuildIndex);
+    }
+
+    private static UIContentCarousel ResolveCarousel()
+    {
+        ref_SceneViewer sceneViewer = ComponentFinder.FindComponentInScene<ref_SceneViewer>();
+        if (sceneViewer != null && sceneViewer.uIContentCarousel != null)
+        {
+            return sceneViewer.uIContentCarousel;
+        }
+
+        return FindFirstObjectByType<UIContentCarousel>();
+    }
+
+    private static int ResolveLotoCarouselIndex(UIContentCarousel carousel)
+    {
+        if (carousel == null || carousel.gridLayoutGroup == null)
+        {
+            return 0;
+        }
+
+        Transform root = carousel.gridLayoutGroup.transform;
+        for (int i = 0; i < root.childCount; i++)
+        {
+            TranslatableText[] texts = root.GetChild(i).GetComponentsInChildren<TranslatableText>(true);
+            for (int t = 0; t < texts.Length; t++)
+            {
+                if (texts[t] != null && texts[t].translationID == LotoObjectiveIds.SimulationSceneId)
+                {
+                    return i;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    private static bool HasCompletedSyncEntry()
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null)
+        {
+            return false;
+        }
+
+        return ControlCenter.Instance.syncQueueManager.HasCompleteEntryWithStatus(LotoSessionScore.CompletionCompleted);
+    }
+
+    private static bool SubtitleMatchesLocKey(string locKey)
+    {
+        ref_PlayerHUD hud = FindFirstObjectByType<ref_PlayerHUD>();
+        if (hud == null || hud.subtitleText == null)
+        {
+            return false;
+        }
+
+        string expected = Util_LotoSimulationBridge.Translate(locKey);
+        string actual = hud.subtitleText.text ?? string.Empty;
+        return actual.Contains(expected) || actual.Contains(locKey);
+    }
 
     private LotoPcPlaytestDriver ResolvePlaytestDriver()
     {
@@ -195,9 +360,13 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
 
     private static SimulationOrchestratorManager GetOrchestrator()
     {
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
+        if (ControlCenter.Instance != null)
         {
-            return ControlCenter.Instance.simulationOrchestratorManager;
+            SimulationOrchestratorManager orchestrator = ControlCenter.Instance.GetManager<SimulationOrchestratorManager>();
+            if (orchestrator != null)
+            {
+                return orchestrator;
+            }
         }
 
         return FindFirstObjectByType<SimulationOrchestratorManager>();
@@ -207,7 +376,7 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
     {
         if (pass)
         {
-            Debug.Log("[LOTO Fase4][PASS] " + stepId);
+            Debug.Log("[LOTO Fase4][PASS] " + stepId + (string.IsNullOrEmpty(detail) ? string.Empty : " (" + detail + ")"));
             return;
         }
 
@@ -222,3 +391,4 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
 
     #endregion
 }
+#endif

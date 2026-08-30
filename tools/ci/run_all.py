@@ -10,6 +10,7 @@ def main():
         "tools/ci/validate_workspace.py",
         "tools/ci/validate_loto_objectives.py",
         "tools/ci/validate_csharp_sanity.py",
+        "tools/ci/validate_loto_editor_hygiene.py",
     ]
     if "--security" in sys.argv:
         scripts.append("tools/ci/validate_security_surface.py")

@@ -1,4 +1,5 @@
 using System;
+using XRStandardMenu;
 
 public static class Util_LotoSimulationBridge
 {
@@ -6,19 +7,25 @@ public static class Util_LotoSimulationBridge
 
     public static void SetObjective(int objectiveIndex, bool achieved)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.GetManager<ScoreManager>() == null)
         {
             return;
         }
 
-        ControlCenter.Instance.scoreManager.AchiveObjective(
+        ScoreManager scoreManager = ControlCenter.Instance.GetManager<ScoreManager>();
+        if (scoreManager == null)
+        {
+            return;
+        }
+
+        scoreManager.AchieveObjective(
             LotoSimulationConstants.LotoSimScoreIndex,
             objectiveIndex,
             achieved);
 
-        if (ControlCenter.Instance.simulationOrchestratorManager != null)
+        if (ControlCenter.Instance.GetManager<SimulationOrchestratorManager>() != null)
         {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifyObjectiveVisualUpdate(objectiveIndex, achieved);
+            ControlCenter.Instance.GetManager<SimulationOrchestratorManager>().NotifyObjectiveVisualUpdate(objectiveIndex, achieved);
         }
     }
 
@@ -28,7 +35,7 @@ public static class Util_LotoSimulationBridge
 
     public static void EnqueueEvent(SimulationEventRecord record)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null || record == null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.GetManager<SyncQueueManager>() == null || record == null)
         {
             return;
         }
@@ -43,19 +50,19 @@ public static class Util_LotoSimulationBridge
             entryType = PendingSyncEntry.EntryTypeEvent,
             payloadJson = UnityEngine.JsonUtility.ToJson(record)
         };
-        ControlCenter.Instance.syncQueueManager.Enqueue(entry);
+        ControlCenter.Instance.GetManager<SyncQueueManager>().Enqueue(entry);
     }
 
     public static string GetSessionId()
     {
         if (ControlCenter.Instance == null ||
-            ControlCenter.Instance.simulationSessionManager == null ||
-            ControlCenter.Instance.simulationSessionManager.CurrentSession == null)
+            ControlCenter.Instance.GetManager<SimulationSessionManager>() == null ||
+            ControlCenter.Instance.GetManager<SimulationSessionManager>().CurrentSession == null)
         {
             return string.Empty;
         }
 
-        return ControlCenter.Instance.simulationSessionManager.CurrentSession.sessionId;
+        return ControlCenter.Instance.GetManager<SimulationSessionManager>().CurrentSession.sessionId;
     }
 
     #endregion
@@ -64,12 +71,12 @@ public static class Util_LotoSimulationBridge
 
     public static string Translate(string key)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.GetManager<LanguageManager>() == null)
         {
             return key;
         }
 
-        string translated = ControlCenter.Instance.languageManager.GetText(key);
+        string translated = ControlCenter.Instance.GetManager<LanguageManager>().GetText(key);
         return string.IsNullOrEmpty(translated) ? key : translated;
     }
 
@@ -77,9 +84,9 @@ public static class Util_LotoSimulationBridge
     {
         string translated = Translate(locKey);
         localHint?.Invoke(translated);
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
+        if (ControlCenter.Instance != null && ControlCenter.Instance.GetManager<SimulationOrchestratorManager>() != null)
         {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated);
+            ControlCenter.Instance.GetManager<SimulationOrchestratorManager>().NotifySubtitle(translated);
         }
     }
 

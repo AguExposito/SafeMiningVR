@@ -1,5 +1,7 @@
 # Audit Alignment Baseline — Fase 0
 
+> **Archived snapshot (Fase 0):** Sections through "Fase 6 applied" below are the historical audit from 2026-08-29. For current OPEN/CLOSED status after audit-fix work, see **Estado actual (post-audit-fix)** at the end of this file.
+
 ## Metadata
 
 | Field | Value |
@@ -497,3 +499,42 @@ Remaining P0: none (lighting closed Fase 5).
 | `capture_perfetto_trace` | BLOCKED — adb executable not in PATH/HZDB |
 
 Remaining manual: in-headset happy path, WF1-B B3–B10, FPS ≥72 after fresh APK + adb for Perfetto.
+
+---
+
+## Estado actual (post-audit-fix)
+
+| Field | Value |
+|-------|-------|
+| Date | 2026-08-30 |
+| Commit | `9d2ae16` (audit-fix branch; uncommitted deltas may follow) |
+| Scope | P1–P3 audit corrections (plan `loto_audit_fixes`) |
+
+### Matriz única OPEN / CLOSED
+
+| ID | Item | Status |
+|----|------|--------|
+| EDITOR-HYGIENE | `LotoVisualPrefabLibrary` — no `PREF_PH_*`; deprecated S1/S2/Nested rebuild menus | CLOSED |
+| ARCH-08 | `LotoHubBuildIndex` → `DefaultLotoEntryBuildIndex` + `[Obsolete]` alias | CLOSED |
+| WF1-FLOW | `LotoFase4MenuFlowRunner` carousel via `IBManager.HandleSceneViewerSelect`; Malo 1/2; sync spot-check | CLOSED (Editor automation) |
+| LIGHT-MENU | Canonical **Apply Canonical Lighting S1-S3**; legacy menu delegates in Editor | CLOSED |
+| BRAND-MENU | `LotoMenuBrandSetupTool` + `BrandApplicator` on `StandardMainMenu` (HUD vs menu separate scopes) | CLOSED |
+| GET-MANAGER | `ControlCenter.GetManager<T>()`; SafeMining call sites migrated | CLOSED |
+| FULL-SETUP | `LotoFullSetupTool` (Fases 2→3→5) | CLOSED |
+| QUEST-VALIDATE | `LotoFase6QuestBuildTool.ValidateQuestBuildSettings()` pre-build | CLOSED |
+| MERGE-GATE-YAML | Editor-generated LOTOSimulation prefab/scene YAML → WARN not FAIL when `LotoFase*` Editor `.cs` in diff | CLOSED |
+| ASSET-SCENERY2 | `Assets/SafeMining/Models/Scenery2/` removed (0 LOTO refs) | CLOSED |
+| TMP-FALLBACK | `LiberationSans SDF - Fallback.asset` restored from `origin/main` | CLOSED |
+| P3-POLISH | `AchieveObjective` alias; `LotoDwellReticle` coroutine; FlowRunner `#if UNITY_EDITOR`; dwell constants; CI `PREF_PH_` grep | CLOSED |
+| OPENXR | Single Pass Instanced; multiview regions off | PASS |
+| F6-APK | Quest APK install/launch | PARTIAL (rebuild + in-headset manual) |
+| WF1-B | B3–B10 in-headset | PARTIAL |
+| WF4-E | Perfetto (adb PATH) | PARTIAL |
+| JWT-F7 | Online backend / JWT | OPEN (Fase 7) |
+
+### Correcciones documentales vs snapshot Fase 0
+
+- **ARCH-08:** Hub removed; entry build index is `DefaultLotoEntryBuildIndex` (= S1), not a separate hub scene.
+- **OpenXR:** Fase 6 PASS — render mode Single Pass Instanced.
+- **BRAND:** HUD/briefing use `BrandApplicator`; main menu has separate `LotoMenuBrandSetupTool` scope (not the same prefabs).
+- **WF1-FLOW:** Was BLOCKED in Fase 0; now automated via Fase 4 runner with real carousel path.

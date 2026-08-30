@@ -9,7 +9,7 @@
 
 ## Current state (hands-default input + VR/PC UI)
 
-- **Roadmap:** Fases 0–6 + visual polish. Input: hand tracking default on `PlayerMR`, auto visual switch to Touch when grabbed (`LotoInputModalityVisuals`). JWT/online remains Fase 7.
+- **Roadmap:** Fases 0–5 complete; **Fase 6 PARTIAL** (Quest build tool + device install OK; in-headset WF1-B and fresh APK/Perfetto pending). See [qa-quest-fase6.md](qa-quest-fase6.md). JWT/online remains Fase 7.
 - **Docs:** [loto-simulation-handbook.md](loto-simulation-handbook.md), [loto-asset-list.md](loto-asset-list.md).
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
 - **Entry scene:** `StandardMainMenu.unity` (build index 0). World-space menu is XR-clickable; **mouse enabled** in Play Mode.

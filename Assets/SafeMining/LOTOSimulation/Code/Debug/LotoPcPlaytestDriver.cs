@@ -142,6 +142,15 @@ public class LotoPcPlaytestDriver : MonoBehaviour
         }
     }
 
+    public void DismissBriefingIfPresent()
+    {
+        SimulationOrchestratorManager orchestrator = GetOrchestrator();
+        if (orchestrator != null && orchestrator.CurrentState == LotoSimulationState.Briefing)
+        {
+            orchestrator.DismissBriefing();
+        }
+    }
+
     [ContextMenu("LOTO/PC/Equip 5/5")]
     public void EquipMandatoryFive()
     {
