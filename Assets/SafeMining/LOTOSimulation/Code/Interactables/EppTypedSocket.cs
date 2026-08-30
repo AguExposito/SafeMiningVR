@@ -41,11 +41,24 @@ public class EppTypedSocket : MonoBehaviour
 
     #region Configuration
 
+    public EppSocketRole Role => role;
+
+    public EppItemType ExpectedType => expectedType;
+
     public void Configure(EppEquipmentManager manager, EppSocketRole socketRole, EppItemType type)
     {
         equipmentManager = manager;
         role = socketRole;
         expectedType = type;
+        if (socket == null)
+        {
+            socket = GetComponent<XRSocketInteractor>();
+        }
+    }
+
+    public void BindManager(EppEquipmentManager manager)
+    {
+        equipmentManager = manager;
         if (socket == null)
         {
             socket = GetComponent<XRSocketInteractor>();
@@ -88,7 +101,7 @@ public class EppTypedSocket : MonoBehaviour
 
         if (role == EppSocketRole.Body)
         {
-            bool equipped = equipmentManager.TryEquip(item, null);
+            bool equipped = equipmentManager.TryEquip(item, transform);
             if (!equipped)
             {
                 Eject(args.interactableObject);

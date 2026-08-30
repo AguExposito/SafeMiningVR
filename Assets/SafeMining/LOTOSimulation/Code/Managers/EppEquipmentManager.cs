@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class EppEquipmentManager : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class EppEquipmentManager : MonoBehaviour
 
     public int EquippedMandatoryCount => equippedMandatory.Count;
     public int MandatoryTotal => MandatoryTypes.Length;
+    public bool IsDefectObjectiveScored => defectObjectiveScored;
+    public bool IsSelectionObjectiveScored => selectionObjectiveScored;
 
     #region Public API
 
@@ -61,6 +64,8 @@ public class EppEquipmentManager : MonoBehaviour
         }
 
         WireChildInteractables();
+        ActivateLogicRoots();
+        BindBodyAnchors();
 
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s1_step_select");
@@ -95,7 +100,6 @@ public class EppEquipmentManager : MonoBehaviour
 
     public bool TryEquip(ref_EppItem item, Transform attachAnchor)
     {
-        _ = attachAnchor;
         if (item == null)
         {
             return false;
@@ -136,16 +140,12 @@ public class EppEquipmentManager : MonoBehaviour
             interactable.RaiseEquipped();
         }
 
-        item.gameObject.SetActive(false);
+        Transform attach = attachAnchor != null ? attachAnchor : GetAttachAnchor(item.itemType);
+        AttachEquippedItem(item, attach);
 
         if (equippedMandatory.Count >= MandatoryTypes.Length)
         {
             ScoreSelectionObjective();
-            if (!attemptedDefectiveWear)
-            {
-                ScoreDefectObjective(true);
-            }
-
             NotifyOrchestratorSubtitle("loto_s1_step_ready");
         }
 
@@ -394,6 +394,84 @@ public class EppEquipmentManager : MonoBehaviour
             if (rejectSocket != null)
             {
                 rejectSocket.Configure(this, EppSocketRole.Reject, EppItemType.Helmet);
+            }
+        }
+    }
+
+    private void ActivateLogicRoots()
+    {
+        ActivateLogicRoot("BodyAnchors", true);
+        ActivateLogicRoot("LockerSlots", false);
+    }
+
+    private void ActivateLogicRoot(string rootName, bool disableSocketActive)
+    {
+        Transform root = transform.Find(rootName);
+        if (root == null)
+        {
+            return;
+        }
+
+        root.gameObject.SetActive(true);
+        DisableRenderersRecursive(root);
+
+        EppTypedSocket[] sockets = root.GetComponentsInChildren<EppTypedSocket>(true);
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            EppTypedSocket typed = sockets[i];
+            if (typed == null)
+            {
+                continue;
+            }
+
+            typed.BindManager(this);
+
+            if (!disableSocketActive)
+            {
+                continue;
+            }
+
+            XRSocketInteractor xrSocket = typed.GetComponent<XRSocketInteractor>();
+            if (xrSocket != null)
+            {
+                xrSocket.socketActive = false;
+            }
+        }
+    }
+
+    private static void AttachEquippedItem(ref_EppItem item, Transform attach)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (attach == null)
+        {
+            item.gameObject.SetActive(false);
+            return;
+        }
+
+        item.transform.SetParent(attach, false);
+        item.transform.localPosition = Vector3.zero;
+        item.transform.localRotation = Quaternion.identity;
+        item.transform.localScale = Vector3.one;
+        item.gameObject.SetActive(true);
+    }
+
+    private static void DisableRenderersRecursive(Transform root)
+    {
+        if (root == null)
+        {
+            return;
+        }
+
+        Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null)
+            {
+                renderers[i].enabled = false;
             }
         }
     }
