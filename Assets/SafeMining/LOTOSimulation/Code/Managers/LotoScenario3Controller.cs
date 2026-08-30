@@ -21,7 +21,7 @@ public class LotoScenario3Controller : MonoBehaviour
 
     #region Public API
 
-    public void Configure(GameObject zoneRoot, LotoSequenceManager manager, LotoS3EnvironmentBuilder builder)
+    public void Configure(GameObject zoneRoot, LotoSequenceManager manager)
     {
         s3ZoneRoot = zoneRoot;
         sequenceManager = manager;

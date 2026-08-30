@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4740835067244236636}
   - component: {fileID: 7112761088493459658}
   - component: {fileID: 8368014686964854002}
+  - component: {fileID: 3173495734494572173}
   m_Layer: 0
   m_Name: Hazard_Spill
   m_TagString: Untagged
@@ -171,6 +172,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &3173495734494572173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648725899007588739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &1845195399591313289
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +202,7 @@ GameObject:
   - component: {fileID: 1604048496618092463}
   - component: {fileID: 4844605574449008831}
   - component: {fileID: 2802641910978901572}
+  - component: {fileID: 37167469758630716}
   m_Layer: 0
   m_Name: Hazard_Extinguisher
   m_TagString: Untagged
@@ -207,6 +226,7 @@ Transform:
   - {fileID: 124645461762148659}
   - {fileID: 8754725724183883501}
   - {fileID: 510680815281930281}
+  - {fileID: 6981242859956652370}
   m_Father: {fileID: 866445478654780572}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3482132939715136385
@@ -341,6 +361,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &37167469758630716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845195399591313289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &2127359928365795196
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6995247768789751817
 RectTransform:
   m_ObjectHideFlags: 0
@@ -536,7 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LotoWorldLabel
   label: {fileID: 3774132998503195042}
-  locKey: loto_s2_report_signage
+  locKey: loto_s2_label_signage
 --- !u!1 &4094926350240275920
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,6 +587,7 @@ GameObject:
   - component: {fileID: 2769089396939646014}
   - component: {fileID: 3048844965914653092}
   - component: {fileID: 1761012236944804584}
+  - component: {fileID: 3974214049493169572}
   m_Layer: 0
   m_Name: Hazard_Tools
   m_TagString: Untagged
@@ -705,6 +743,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &3974214049493169572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4094926350240275920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &4605819020479914919
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &825344755481004783
 RectTransform:
   m_ObjectHideFlags: 0
@@ -914,6 +969,7 @@ GameObject:
   - component: {fileID: 3336800258407312740}
   - component: {fileID: 9186468474320705674}
   - component: {fileID: 1383049432686902446}
+  - component: {fileID: 8075633405414937982}
   m_Layer: 0
   m_Name: Decoy_VisibleSign
   m_TagString: Untagged
@@ -1068,6 +1124,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &8075633405414937982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4727739732856463505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &4785487434654557219
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,6 +1154,7 @@ GameObject:
   - component: {fileID: 2837417138003457577}
   - component: {fileID: 8566988262304753919}
   - component: {fileID: 7665311563137103706}
+  - component: {fileID: 5888144193743294223}
   m_Layer: 0
   m_Name: Hazard_Signage
   m_TagString: Untagged
@@ -1235,6 +1309,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &5888144193743294223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4785487434654557219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &4996968730717643885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,7 +1521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LotoWorldLabel
   label: {fileID: 2420249312748126660}
-  locKey: loto_s2_false_positive
+  locKey: loto_s2_label_signage
 --- !u!1 &5340181306669053388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,6 +1566,7 @@ GameObject:
   - component: {fileID: 8484437923481757873}
   - component: {fileID: 1521504327605705697}
   - component: {fileID: 7543447625271293473}
+  - component: {fileID: 1073559548951874332}
   m_Layer: 0
   m_Name: Decoy_CleanFloor
   m_TagString: Untagged
@@ -1628,6 +1720,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &1073559548951874332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5508232283661113657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &7267607088554276424
 GameObject:
   m_ObjectHideFlags: 0
@@ -1697,6 +1806,7 @@ GameObject:
   - component: {fileID: 1143794582638449056}
   - component: {fileID: 2949324599088434246}
   - component: {fileID: 5532935846186648766}
+  - component: {fileID: 7564192990951849850}
   m_Layer: 0
   m_Name: Decoy_StoredTools
   m_TagString: Untagged
@@ -1851,6 +1961,219 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HazardReportInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &7564192990951849850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8561744152388212559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
+--- !u!1 &9154434964152769957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6981242859956652370}
+  - component: {fileID: 3561984819173594415}
+  - component: {fileID: 5829438533158185058}
+  - component: {fileID: 1461075091021902791}
+  m_Layer: 0
+  m_Name: Label
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6981242859956652370
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9154434964152769957}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8046725725376604340}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.9}
+  m_SizeDelta: {x: 0.9, y: 0.2}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!23 &3561984819173594415
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9154434964152769957}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5829438533158185058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9154434964152769957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: loto_s2_label_extinguisher
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 1.4
+  m_fontSizeBase: 1.4
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 0
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 3561984819173594415}
+  m_maskType: 0
+--- !u!114 &1461075091021902791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9154434964152769957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9591f9dc7e8f64479af32b064ed8de6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoWorldLabel
+  label: {fileID: 5829438533158185058}
+  locKey: loto_s2_label_extinguisher
 --- !u!1001 &230862344293701617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1979,9 +2302,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 762605649694802207, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3838333826260309392, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6248676436264846268, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400531475940482590, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6609160342500124123, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
       propertyPath: m_Name
       value: PREF_S3_ConveyorStation
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358465218521155144, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276817482164875836, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753277127962518762, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1993,12 +2344,68 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6609160342500124123, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2379549243017898430}
+    - targetCorrespondingSourceObject: {fileID: 6714249409795974206, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3259224838642670085}
+    - targetCorrespondingSourceObject: {fileID: 7804302149803816066, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7490463055006233286}
+    - targetCorrespondingSourceObject: {fileID: 831920427933886436, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2965101607383835168}
+    - targetCorrespondingSourceObject: {fileID: 618141574977820844, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4882268681930097795}
   m_SourcePrefab: {fileID: 100100000, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
 --- !u!4 &115970540102936531 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 147460896690949256, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
   m_PrefabInstance: {fileID: 258922275283708763}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &584468807793986751 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 831920427933886436, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 258922275283708763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2965101607383835168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584468807793986751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
+--- !u!1 &793746295076205559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 618141574977820844, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 258922275283708763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4882268681930097795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793746295076205559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!4 &3975495089723249021 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3799960326137133606, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
@@ -2022,6 +2429,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LotoConveyorInspectionMode
   beltAnimator: {fileID: 7236743541429443839}
+--- !u!1 &6825818985015758693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6714249409795974206, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 258922275283708763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3259224838642670085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6825818985015758693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!114 &7236743541429443839 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7492287292342122404, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
@@ -2033,6 +2462,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1858e6ff72fd43399281bb6fb3fc4023, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeltAnimator
+--- !u!1 &8059634656974675929 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7804302149803816066, guid: 040f109ab02c682449ce18f1fb3b0657, type: 3}
+  m_PrefabInstance: {fileID: 258922275283708763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7490463055006233286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8059634656974675929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1001 &1507289990891925521
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2586,6 +3037,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3134592293993833623, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1433584833022949541}
+    - targetCorrespondingSourceObject: {fileID: 3134592293993833623, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1231814438810251522}
   m_SourcePrefab: {fileID: 100100000, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
 --- !u!1 &532990548294075598 stripped
 GameObject:
@@ -2680,6 +3134,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LotoS2ContinueInteractable
   inspectionManager: {fileID: 5027630909093790826}
   interactable: {fileID: 0}
+--- !u!114 &1231814438810251522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532990548294075598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!4 &8553232697633276960 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6509655101566116985, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}

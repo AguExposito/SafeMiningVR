@@ -31,7 +31,7 @@ RectTransform:
   m_GameObject: {fileID: 2000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2}
-  m_LocalScale: {x: 0.0007, y: 0.0007, z: 0.0007}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8610411640737626110}
@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 8610411640737626110}
   - component: {fileID: 5877115003787370205}
   - component: {fileID: 3258574718908069935}
+  - component: {fileID: 302445601246873036}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -217,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.102, g: 0.212, b: 0.365, a: 0.92}
+  m_Color: {r: 0.10196079, g: 0.21176472, b: 0.3647059, a: 0.92}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -234,6 +235,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &302445601246873036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564303335532092370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d4e8b1a6c734f2e8a5b0d9c3f7e21a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BrandApplicator
+  graphicRole: 0
+  colorRole: 1
+  textRole: 0
+  applyColorToGraphic: 1
 --- !u!1 &758682993133579880
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +263,7 @@ GameObject:
   - component: {fileID: 5989714769516573180}
   - component: {fileID: 5792617766201931982}
   - component: {fileID: 6650306061774357892}
+  - component: {fileID: 4350851907234945696}
   m_Layer: 5
   m_Name: BeginButton
   m_TagString: Untagged
@@ -294,7 +312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  m_Color: {r: 0.97647065, g: 0.44705886, b: 0.08627451, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -355,6 +373,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4350851907234945696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758682993133579880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d4e8b1a6c734f2e8a5b0d9c3f7e21a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BrandApplicator
+  graphicRole: 0
+  colorRole: 2
+  textRole: 0
+  applyColorToGraphic: 1
 --- !u!1 &1695243571047579261
 GameObject:
   m_ObjectHideFlags: 0

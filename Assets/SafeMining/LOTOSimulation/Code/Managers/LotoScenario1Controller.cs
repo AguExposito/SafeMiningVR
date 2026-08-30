@@ -9,7 +9,7 @@ public class LotoScenario1Controller : MonoBehaviour
 
     #region Public API
 
-    public void Configure(GameObject zoneRoot, GameObject lotoZoneRoot, EppEquipmentManager manager, LotoS1EnvironmentBuilder builder)
+    public void Configure(GameObject zoneRoot, GameObject lotoZoneRoot, EppEquipmentManager manager)
     {
         s1ZoneRoot = zoneRoot;
         equipmentManager = manager;

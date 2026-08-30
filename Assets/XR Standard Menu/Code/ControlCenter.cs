@@ -21,7 +21,7 @@ public class ControlCenter : MonoBehaviour
         }
         set
         {
-            persistantDataManager = value;
+            _persistantDataManager = value;
         }
     }
     private protected LoadManager _loadManager;

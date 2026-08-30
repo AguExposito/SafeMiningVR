@@ -254,20 +254,7 @@ public class EppEquipmentManager : MonoBehaviour
 
     private static void SetObjective(int objectiveIndex, bool achieved)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
-        {
-            return;
-        }
-
-        ControlCenter.Instance.scoreManager.AchiveObjective(
-            LotoSimulationConstants.LotoSimScoreIndex,
-            objectiveIndex,
-            achieved);
-
-        if (ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifyObjectiveVisualUpdate(objectiveIndex, achieved);
-        }
+        Util_LotoSimulationBridge.SetObjective(objectiveIndex, achieved);
     }
 
     #endregion
@@ -313,21 +300,9 @@ public class EppEquipmentManager : MonoBehaviour
 
     private void EmitEvent(string optionId, bool success, EppItemType type)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null)
-        {
-            return;
-        }
-
-        string sessionId = string.Empty;
-        if (ControlCenter.Instance.simulationSessionManager != null &&
-            ControlCenter.Instance.simulationSessionManager.CurrentSession != null)
-        {
-            sessionId = ControlCenter.Instance.simulationSessionManager.CurrentSession.sessionId;
-        }
-
         SimulationEventRecord record = new SimulationEventRecord
         {
-            sessionId = sessionId,
+            sessionId = Util_LotoSimulationBridge.GetSessionId(),
             eventType = "epp_step",
             objectiveId = success && optionId.Contains("reject")
                 ? LotoObjectiveIds.EppDefect
@@ -337,12 +312,7 @@ public class EppEquipmentManager : MonoBehaviour
             success = success
         };
 
-        PendingSyncEntry entry = new PendingSyncEntry
-        {
-            entryType = PendingSyncEntry.EntryTypeEvent,
-            payloadJson = JsonUtility.ToJson(record)
-        };
-        ControlCenter.Instance.syncQueueManager.Enqueue(entry);
+        Util_LotoSimulationBridge.EnqueueEvent(record);
     }
 
     private void NotifyProgress()
@@ -395,23 +365,7 @@ public class EppEquipmentManager : MonoBehaviour
 
     private void NotifyOrchestratorSubtitle(string key)
     {
-        string translated = Translate(key);
-        OnHintSubtitle?.Invoke(translated);
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated);
-        }
-    }
-
-    private static string Translate(string key)
-    {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null)
-        {
-            return key;
-        }
-
-        string translated = ControlCenter.Instance.languageManager.GetText(key);
-        return string.IsNullOrEmpty(translated) ? key : translated;
+        Util_LotoSimulationBridge.NotifySubtitle(key, OnHintSubtitle);
     }
 
     public static string GetDisplayName(EppItemType type)

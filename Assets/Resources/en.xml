@@ -65,9 +65,6 @@
 	<string name="continue">CONTINUE</string>
 	<!-- Custom scenes (for scores) -->
 	<string name="loto_simulation">Lockout/Tagout</string>
-	<string name="loto_simulation_summary">LOTO training: PPE, hazard inspection, and energy lockout on a conveyor belt.</string>
-	<string name="loto_placeholder_title">LOTO Simulation — Under construction</string>
-	<string name="loto_placeholder_return">Return to menu</string>
 	<string name="loto_obj_epp_selection">Correct PPE selection</string>
 	<string name="loto_obj_epp_defect">Defective PPE identification</string>
 	<string name="loto_obj_hazard_report">Unsafe condition reporting</string>
@@ -97,7 +94,6 @@
 	<string name="loto_s3_alert_no_gloves">No protective gloves. Electrocution risk when isolating energy.</string>
 	<string name="loto_s3_success_zero_energy">Zero energy verification successful.</string>
 	<string name="loto_s3_summary_title">LOTO session summary</string>
-	<string name="loto_s3_summary_body">Objectives achieved: {0}/{1}. Result: {2}.</string>
 	<string name="loto_summary_score">Score: {0}/100</string>
 	<string name="loto_summary_approved">Approved</string>
 	<string name="loto_summary_not_approved">Not approved</string>
@@ -111,7 +107,6 @@
 	<string name="loto_tag_maintenance">MAINTENANCE COMPLETE</string>
 	<string name="loto_s1_intro">Welcome to the locker room. Select and wear mandatory PPE before entering the plant.</string>
 	<string name="loto_s1_step_select">Select the 5 mandatory PPE items and place them on your body.</string>
-	<string name="loto_s1_step_reject">This PPE is in poor condition. Do not use it. Return it or place it in the discard bin.</string>
 	<string name="loto_s1_step_ready">PPE complete. Continue to the hazard inspection area.</string>
 	<string name="loto_s1_reject_defective">This PPE is in poor condition. Do not use it. Select a unit in good condition.</string>
 	<string name="loto_s1_success_equipped">Mandatory PPE complete (5/5).</string>
@@ -134,6 +129,8 @@
 	<string name="loto_s2_timeout_hint">Unsafe conditions remain unreported. Look more closely around the area.</string>
 	<string name="loto_s2_roller_anomaly">An anomaly was detected on a conveyor roller. Prepare the equipment for a safe intervention.</string>
 	<string name="loto_s2_exit">Continue to LOTO</string>
+	<string name="loto_s2_label_extinguisher">Obstructed extinguisher</string>
+	<string name="loto_s2_label_signage">Damaged signage</string>
 	<string name="loto_s2_report_spill">Spilled material in transit zone reported.</string>
 	<string name="loto_s2_report_tools">Abandoned tools reported.</string>
 	<string name="loto_s2_report_signage">Fallen or damaged signage reported.</string>

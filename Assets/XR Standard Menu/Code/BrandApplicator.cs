@@ -55,12 +55,14 @@ public class BrandApplicator : MonoBehaviour
             Graphic graphic = GetComponent<Graphic>();
             if (graphic != null)
             {
+                color.a = graphic.color.a;
                 graphic.color = color;
             }
 
             TMP_Text tmp = GetComponent<TMP_Text>();
             if (tmp != null)
             {
+                color.a = tmp.color.a;
                 tmp.color = color;
             }
         }

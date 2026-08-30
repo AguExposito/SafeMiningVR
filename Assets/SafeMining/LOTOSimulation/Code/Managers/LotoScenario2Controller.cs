@@ -14,8 +14,7 @@ public class LotoScenario2Controller : MonoBehaviour
         GameObject zoneRoot,
         GameObject eppZoneRoot,
         GameObject lotoZoneRoot,
-        HazardInspectionManager manager,
-        LotoS2EnvironmentBuilder builder)
+        HazardInspectionManager manager)
     {
         s2ZoneRoot = zoneRoot;
         inspectionManager = manager;

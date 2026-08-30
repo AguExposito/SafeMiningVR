@@ -69,32 +69,11 @@ public class LotoS3InteractableSmokeTest : MonoBehaviour
     {
         if (sequenceManager != null)
         {
-            EnsureEnvironment(sequenceManager);
             return sequenceManager;
         }
 
         sequenceManager = FindFirstObjectByType<LotoSequenceManager>();
-        EnsureEnvironment(sequenceManager);
         return sequenceManager;
-    }
-
-    private static void EnsureEnvironment(LotoSequenceManager manager)
-    {
-        if (manager == null)
-        {
-            return;
-        }
-
-        LotoS3EnvironmentBuilder builder = manager.GetComponent<LotoS3EnvironmentBuilder>();
-        if (builder == null)
-        {
-            builder = manager.GetComponentInParent<LotoS3EnvironmentBuilder>();
-        }
-
-        if (builder != null)
-        {
-            builder.Build(manager);
-        }
     }
 }
 #endif

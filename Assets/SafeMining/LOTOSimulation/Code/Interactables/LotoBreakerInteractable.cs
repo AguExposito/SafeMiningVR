@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(ref_LotoBreaker))]
@@ -13,6 +12,7 @@ public class LotoBreakerInteractable : MonoBehaviour
     [SerializeField] private float alertFlashSeconds = 0.45f;
 
     private ref_LotoBreaker breakerRef;
+    private LotoDwellReticle dwellReticle;
     private Coroutine alertFlashRoutine;
 
     #region Lifecycle
@@ -20,19 +20,15 @@ public class LotoBreakerInteractable : MonoBehaviour
     private void Awake()
     {
         breakerRef = GetComponent<ref_LotoBreaker>();
-        if (breakerRef != null && breakerRef.interactable != null)
-        {
-            breakerRef.interactable.selectEntered.AddListener(OnSelected);
-        }
-
+        BindDwellReticle();
         ApplyVisual();
     }
 
     private void OnDestroy()
     {
-        if (breakerRef != null && breakerRef.interactable != null)
+        if (dwellReticle != null)
         {
-            breakerRef.interactable.selectEntered.RemoveListener(OnSelected);
+            dwellReticle.Unbind();
         }
 
         if (alertFlashRoutine != null)
@@ -57,33 +53,51 @@ public class LotoBreakerInteractable : MonoBehaviour
         {
             breakerRef.interactable.enabled = enabled;
         }
+
+        if (dwellReticle != null)
+        {
+            dwellReticle.SetDwellEnabled(enabled);
+        }
     }
 
-        private void OnSelected(SelectEnterEventArgs args)
+    public void ActivateFromPc()
+    {
+        if (sequenceManager == null || breakerRef == null || breakerRef.isOff)
         {
-            ActivateFromPc();
+            return;
         }
 
-        public void ActivateFromPc()
+        bool missingGloves = !sequenceManager.HasSessionGloves();
+        if (!sequenceManager.TryToggleBreakerOff())
         {
-            if (sequenceManager == null || breakerRef == null || breakerRef.isOff)
-            {
-                return;
-            }
-
-            bool missingGloves = !sequenceManager.HasSessionGloves();
-            if (!sequenceManager.TryToggleBreakerOff())
-            {
-                return;
-            }
-
-            breakerRef.isOff = true;
-            ApplyVisual();
-            if (missingGloves)
-            {
-                PlayAlertFlash();
-            }
+            return;
         }
+
+        breakerRef.isOff = true;
+        ApplyVisual();
+        if (missingGloves)
+        {
+            PlayAlertFlash();
+        }
+
+        SetInteractableEnabled(false);
+    }
+
+    private void BindDwellReticle()
+    {
+        if (breakerRef == null || breakerRef.interactable == null)
+        {
+            return;
+        }
+
+        dwellReticle = GetComponent<LotoDwellReticle>();
+        if (dwellReticle == null)
+        {
+            dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
+        }
+
+        dwellReticle.Bind(breakerRef.interactable, ActivateFromPc);
+    }
 
     private void PlayAlertFlash()
     {

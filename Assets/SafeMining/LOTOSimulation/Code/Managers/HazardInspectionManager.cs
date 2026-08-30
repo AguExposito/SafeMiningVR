@@ -161,22 +161,7 @@ public class HazardInspectionManager : MonoBehaviour
 
     private static void SetObjective(bool achieved)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
-        {
-            return;
-        }
-
-        ControlCenter.Instance.scoreManager.AchiveObjective(
-            LotoSimulationConstants.LotoSimScoreIndex,
-            LotoSimulationConstants.ObjectiveHazardReportIndex,
-            achieved);
-
-        if (ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifyObjectiveVisualUpdate(
-                LotoSimulationConstants.ObjectiveHazardReportIndex,
-                achieved);
-        }
+        Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveHazardReportIndex, achieved);
     }
 
     #endregion
@@ -214,21 +199,9 @@ public class HazardInspectionManager : MonoBehaviour
 
     private void EmitEvent(string optionId, bool success, HazardType type)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null)
-        {
-            return;
-        }
-
-        string sessionId = string.Empty;
-        if (ControlCenter.Instance.simulationSessionManager != null &&
-            ControlCenter.Instance.simulationSessionManager.CurrentSession != null)
-        {
-            sessionId = ControlCenter.Instance.simulationSessionManager.CurrentSession.sessionId;
-        }
-
         SimulationEventRecord record = new SimulationEventRecord
         {
-            sessionId = sessionId,
+            sessionId = Util_LotoSimulationBridge.GetSessionId(),
             eventType = "hazard_inspection",
             objectiveId = LotoObjectiveIds.HazardReport,
             optionId = $"{optionId}_{type}",
@@ -236,12 +209,7 @@ public class HazardInspectionManager : MonoBehaviour
             success = success
         };
 
-        PendingSyncEntry entry = new PendingSyncEntry
-        {
-            entryType = PendingSyncEntry.EntryTypeEvent,
-            payloadJson = JsonUtility.ToJson(record)
-        };
-        ControlCenter.Instance.syncQueueManager.Enqueue(entry);
+        Util_LotoSimulationBridge.EnqueueEvent(record);
     }
 
     private void NotifyProgress()
@@ -302,23 +270,7 @@ public class HazardInspectionManager : MonoBehaviour
 
     private void NotifyOrchestratorSubtitle(string key)
     {
-        string translated = Translate(key);
-        OnHintSubtitle?.Invoke(translated);
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated);
-        }
-    }
-
-    private static string Translate(string key)
-    {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null)
-        {
-            return key;
-        }
-
-        string translated = ControlCenter.Instance.languageManager.GetText(key);
-        return string.IsNullOrEmpty(translated) ? key : translated;
+        Util_LotoSimulationBridge.NotifySubtitle(key, OnHintSubtitle);
     }
 
     #endregion

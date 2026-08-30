@@ -85,19 +85,28 @@ def ahead_of_origin():
     except ValueError:
         return None
 
+def deleted_files():
+    files = set()
+    files.update(git_output("diff", "--name-only", "--diff-filter=D", "HEAD"))
+    files.update(git_output("diff", "--name-only", "--diff-filter=D", "--cached"))
+    return {f.replace("\\", "/") for f in files}
+
 def print_human_block(title, items):
     if not items:
         return
-    print(f"\n## HUMAN ACTION REQUIRED — {title}")
+    print(f"\n## HUMAN ACTION REQUIRED - {title}")
     for item in items:
-        print(f"- {item}")
+        safe = item.replace("\u2192", "->")
+        print(f"- {safe}")
 
 def main():
     files = changed_files()
+    removed = deleted_files()
     security_needed = any(matches_security_surface(f) for f in files)
     yaml_hand_edits = [
         f for f in files
-        if any(f.endswith(ext) for ext in UNITY_YAML_MARKERS)
+        if f not in removed
+        and any(f.endswith(ext) for ext in UNITY_YAML_MARKERS)
         and "Assets/" in f
     ]
 
@@ -129,7 +138,7 @@ def main():
     commits_ahead = ahead_of_origin()
 
     print("=" * 60)
-    print("MERGE GATE REPORT — Phase E/F automation")
+    print("MERGE GATE REPORT - Phase E/F automation")
     print("=" * 60)
     print(f"Branch: {branch}")
     print(f"Domain (inferred): {domain}")
@@ -137,12 +146,12 @@ def main():
     if commits_ahead is not None:
         print(f"Commits ahead of origin/main: {commits_ahead}")
 
-    print("\n## AUTO — PASS")
+    print("\n## AUTO - PASS")
     for item in auto_pass:
         print(f"[PASS] {item}")
 
     if auto_fail:
-        print("\n## AUTO — FAIL")
+        print("\n## AUTO - FAIL")
         for item in auto_fail:
             print(f"[FAIL] {item}")
 
