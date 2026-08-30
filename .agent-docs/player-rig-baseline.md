@@ -122,3 +122,9 @@ Scoring, scenario gates S1–S3, LOTO procedure fidelity, backend sync, JWT / Fa
 - Sandbox: `Testing.unity` has `PREF_LotoPlayerVR` instance; legacy `PlayerMR` disabled in that scene only.
 - `XROrigin.RequestedTrackingOriginMode` = **Floor** (standing / room-scale).
 - ACC-VR-01…04 / ACC-COM-01 prefab checks: PASS (Editor MCP). Build scenes 0–3 unchanged.
+
+## Hotfix (2026-08-30 playtest)
+
+- Added `UniversalAdditionalCameraData` (`allowXRRendering`) on VR Main Camera — missing URP XR data can break stereo and feel like the world is glued to the head.
+- Floor tracking: `Camera Offset` Y and `CameraYOffset` set to **0** (was 1.36 stacked with Floor → height/origin fight).
+- Controllers no longer forced inactive in prefab hierarchy; `LotoInputModalityVisuals` syncs from `XRInputModalityManager.currentInputMode` on enable (fixes missed MotionController event → invisible hands/controllers).

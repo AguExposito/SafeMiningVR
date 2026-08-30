@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.XR.CoreUtils.Bindings;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
@@ -16,8 +17,11 @@ public class LotoInputModalityVisuals : MonoBehaviour
 
     private Coroutine pendingHandsReturn;
     private bool handsMode = true;
+    private IEventBinding inputModeBinding;
 
     public static bool IsHandsMode { get; private set; } = true;
+
+    #region Unity Messages
 
     private void Awake()
     {
@@ -25,8 +29,6 @@ public class LotoInputModalityVisuals : MonoBehaviour
         {
             modalityManager = GetComponent<XRInputModalityManager>();
         }
-
-        ApplyHands(true);
     }
 
     private void OnEnable()
@@ -38,6 +40,7 @@ public class LotoInputModalityVisuals : MonoBehaviour
 
         modalityManager.trackedHandModeStarted.AddListener(OnHandModeStarted);
         modalityManager.motionControllerModeStarted.AddListener(OnControllerModeStarted);
+        inputModeBinding = XRInputModalityManager.currentInputMode.SubscribeAndUpdate(OnInputModeChanged);
     }
 
     private void OnDisable()
@@ -48,8 +51,14 @@ public class LotoInputModalityVisuals : MonoBehaviour
             modalityManager.motionControllerModeStarted.RemoveListener(OnControllerModeStarted);
         }
 
+        inputModeBinding?.Unbind();
+        inputModeBinding = null;
         CancelPendingHands();
     }
+
+    #endregion
+
+    #region Event Handlers
 
     private void OnControllerModeStarted()
     {
@@ -63,11 +72,45 @@ public class LotoInputModalityVisuals : MonoBehaviour
         pendingHandsReturn = StartCoroutine(ReturnToHandsAfterDelay());
     }
 
+    private void OnInputModeChanged(XRInputModalityManager.InputMode mode)
+    {
+        switch (mode)
+        {
+            case XRInputModalityManager.InputMode.MotionController:
+                CancelPendingHands();
+                ApplyHands(false);
+                break;
+            case XRInputModalityManager.InputMode.TrackedHand:
+                if (!handsMode)
+                {
+                    OnHandModeStarted();
+                }
+                else
+                {
+                    CancelPendingHands();
+                    ApplyHands(true);
+                }
+
+                break;
+            default:
+                CancelPendingHands();
+                ApplyNone();
+                break;
+        }
+    }
+
+    #endregion
+
+    #region Modality Sync
+
     private IEnumerator ReturnToHandsAfterDelay()
     {
         yield return new WaitForSeconds(handsReturnDelay);
         pendingHandsReturn = null;
-        ApplyHands(true);
+        if (XRInputModalityManager.currentInputMode.Value != XRInputModalityManager.InputMode.MotionController)
+        {
+            ApplyHands(true);
+        }
     }
 
     private void ApplyHands(bool useHands)
@@ -81,6 +124,17 @@ public class LotoInputModalityVisuals : MonoBehaviour
         SetActive(rightController, !useHands);
 
         OnHandsModeChanged?.Invoke(useHands);
+    }
+
+    private void ApplyNone()
+    {
+        handsMode = true;
+        IsHandsMode = true;
+        SetActive(leftHand, false);
+        SetActive(rightHand, false);
+        SetActive(leftController, false);
+        SetActive(rightController, false);
+        OnHandsModeChanged?.Invoke(true);
     }
 
     private void CancelPendingHands()
@@ -99,4 +153,6 @@ public class LotoInputModalityVisuals : MonoBehaviour
             target.SetActive(active);
         }
     }
+
+    #endregion
 }
