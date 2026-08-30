@@ -75,7 +75,7 @@ public class EppItemInteractable : MonoBehaviour
 
         if (itemRef.condition == EppItemCondition.Defective)
         {
-            equipmentManager.TryEquip(itemRef, null);
+            equipmentManager.NotifyDefectiveInspected(itemRef);
             return;
         }
 
@@ -91,7 +91,15 @@ public class EppItemInteractable : MonoBehaviour
 
         onReleased?.Invoke();
 
-        TryRejectAtZone();
+        if (TryRejectAtZone())
+        {
+            return;
+        }
+
+        if (itemRef.condition == EppItemCondition.Defective)
+        {
+            equipmentManager.TryWearDefectiveNearBody(itemRef);
+        }
     }
 
     private bool TryRejectAtZone()

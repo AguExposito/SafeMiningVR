@@ -98,6 +98,40 @@ public class EppEquipmentManager : MonoBehaviour
         pendingDefectiveIds.Add(item.GetInstanceID());
     }
 
+    public void NotifyDefectiveInspected(ref_EppItem item)
+    {
+        if (item == null || item.condition != EppItemCondition.Defective)
+        {
+            return;
+        }
+
+        EmitEvent("epp_inspect_defect", true, item.itemType);
+        NotifyOrchestratorSubtitle("loto_s1_reject_defective");
+        LotoTrainingFeedback.PlayFail();
+    }
+
+    public bool TryWearDefectiveNearBody(ref_EppItem item)
+    {
+        if (item == null || item.condition != EppItemCondition.Defective || item.IsLocked)
+        {
+            return false;
+        }
+
+        Transform cameraTransform = Camera.main != null ? Camera.main.transform : null;
+        if (cameraTransform == null)
+        {
+            return false;
+        }
+
+        float distance = Vector3.Distance(item.transform.position, cameraTransform.position);
+        if (distance > 0.55f)
+        {
+            return false;
+        }
+
+        return TryEquip(item, null);
+    }
+
     public bool TryEquip(ref_EppItem item, Transform attachAnchor)
     {
         if (item == null)

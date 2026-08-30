@@ -58,7 +58,7 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 2. Continue: dwell via `XRSimpleInteractable` + `LotoDwellReticle` (not grab); `onContinue` on success.
 3. Gate to S2: 5/5 mandatory **good** only (defect objective does **not** gate).
 4. Good grab → `onGrabbed` → `TryEquip` → parent to body anchor → `onEquipped`.
-5. Defect grab → `onGrabbed` → `TryEquip` fail (subtitle) + remain holdable; release near reject / Reject socket → `TryReject` → `onRejected`.
+5. Defect grab → `onGrabbed` → inspect feedback (no score); release near reject → `TryReject`; release near body/camera → wear-fail score; Body/`TryEquip` defective still scores fail.
 6. Defect score **true** only after rejecting all pending defects without wear attempt; **false** on wear attempt; never auto-true at 5/5.
 7. LockerSlots: return non-equipped items (CA8 partial); Body anchors = attach points only.
 
