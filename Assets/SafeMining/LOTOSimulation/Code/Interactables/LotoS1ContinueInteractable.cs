@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class LotoS1ContinueInteractable : MonoBehaviour
 {
     [SerializeField] private EppEquipmentManager equipmentManager;
     [SerializeField] private XRSimpleInteractable interactable;
+    [SerializeField] private UnityEvent onContinue;
 
     private LotoDwellReticle dwellReticle;
 
@@ -60,6 +62,7 @@ public class LotoS1ContinueInteractable : MonoBehaviour
         }
 
         equipmentManager.TryContinue();
+        onContinue?.Invoke();
         ConsumeContinueInteraction();
     }
 

@@ -8,7 +8,10 @@ public class EppItemInteractable : MonoBehaviour
 {
     [SerializeField] private EppEquipmentManager equipmentManager;
     [SerializeField] private float rejectSnapDistance = 0.6f;
+    [SerializeField] private UnityEvent onGrabbed;
+    [SerializeField] private UnityEvent onReleased;
     [SerializeField] private UnityEvent onEquipped;
+    [SerializeField] private UnityEvent onRejected;
 
     private ref_EppItem itemRef;
 
@@ -47,6 +50,11 @@ public class EppItemInteractable : MonoBehaviour
         onEquipped?.Invoke();
     }
 
+    public void RaiseRejected()
+    {
+        onRejected?.Invoke();
+    }
+
     #endregion
 
     #region Interaction
@@ -63,8 +71,11 @@ public class EppItemInteractable : MonoBehaviour
             return;
         }
 
+        onGrabbed?.Invoke();
+
         if (itemRef.condition == EppItemCondition.Defective)
         {
+            equipmentManager.TryEquip(itemRef, null);
             return;
         }
 
@@ -77,6 +88,8 @@ public class EppItemInteractable : MonoBehaviour
         {
             return;
         }
+
+        onReleased?.Invoke();
 
         TryRejectAtZone();
     }

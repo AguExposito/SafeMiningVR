@@ -1771,6 +1771,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LotoS1ContinueInteractable
   equipmentManager: {fileID: 5070293354240461946}
   interactable: {fileID: 0}
+  onContinue:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1249790989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2444,7 +2447,6 @@ Transform:
   m_Children:
   - {fileID: 889087095}
   - {fileID: 1239693564}
-  - {fileID: 401732025445891163}
   - {fileID: 7887640097651914944}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7779,7 +7781,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1724800904}
+    m_TransformParent: {fileID: 6002930440345501252}
     m_Modifications:
     - target: {fileID: 632934761758571370, guid: dc923f328ed205d46acb0525d379c414, type: 3}
       propertyPath: equipmentManager
@@ -7815,7 +7817,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4679826807758242687, guid: dc923f328ed205d46acb0525d379c414, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 2.868
       objectReference: {fileID: 0}
     - target: {fileID: 4679826807758242687, guid: dc923f328ed205d46acb0525d379c414, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7823,7 +7825,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4679826807758242687, guid: dc923f328ed205d46acb0525d379c414, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.72700006
+      value: -0.7879999
       objectReference: {fileID: 0}
     - target: {fileID: 4679826807758242687, guid: dc923f328ed205d46acb0525d379c414, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8711,6 +8713,7 @@ Transform:
   - {fileID: 8373179350984248447}
   - {fileID: 497007023612337727}
   - {fileID: 6734903673560453065}
+  - {fileID: 401732025445891163}
   m_Father: {fileID: 7887640097651914944}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6050959634848812078

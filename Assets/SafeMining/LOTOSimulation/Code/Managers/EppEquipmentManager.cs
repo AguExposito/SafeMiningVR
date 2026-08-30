@@ -60,6 +60,8 @@ public class EppEquipmentManager : MonoBehaviour
             RegisterSpawnedItem(items[i]);
         }
 
+        WireChildInteractables();
+
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s1_step_select");
         RefreshOutlineHints();
@@ -175,6 +177,12 @@ public class EppEquipmentManager : MonoBehaviour
         pendingDefectiveIds.Remove(itemId);
         item.SetRejected(true);
         EmitEvent("epp_reject_defect", true, item.itemType);
+
+        EppItemInteractable interactable = item.GetComponent<EppItemInteractable>();
+        if (interactable != null)
+        {
+            interactable.RaiseRejected();
+        }
 
         if (pendingDefectiveIds.Count == 0 && !attemptedDefectiveWear)
         {
@@ -361,6 +369,33 @@ public class EppEquipmentManager : MonoBehaviour
         }
 
         hint.Show(targets);
+    }
+
+    private void WireChildInteractables()
+    {
+        EppItemInteractable[] itemInteractables = GetComponentsInChildren<EppItemInteractable>(true);
+        for (int i = 0; i < itemInteractables.Length; i++)
+        {
+            if (itemInteractables[i] != null)
+            {
+                itemInteractables[i].Configure(this);
+            }
+        }
+
+        LotoS1ContinueInteractable continueInteractable = GetComponentInChildren<LotoS1ContinueInteractable>(true);
+        if (continueInteractable != null)
+        {
+            continueInteractable.Configure(this);
+        }
+
+        if (rejectZoneAnchor != null)
+        {
+            EppTypedSocket rejectSocket = rejectZoneAnchor.GetComponent<EppTypedSocket>();
+            if (rejectSocket != null)
+            {
+                rejectSocket.Configure(this, EppSocketRole.Reject, EppItemType.Helmet);
+            }
+        }
     }
 
     private void NotifyOrchestratorSubtitle(string key)

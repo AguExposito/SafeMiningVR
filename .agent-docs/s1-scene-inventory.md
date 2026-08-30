@@ -6,12 +6,12 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-08-30 (Fase 1 applied) |
+| Date | 2026-08-30 (Fase 2 applied) |
 | Scene | `Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S1.unity` |
 | Build index | 1 |
-| Prior inventory commit | `1c2764e` |
+| Prior inventory commit | `e3e1b77` (Fase 1) |
 | Unity | 6000.3.10f1 |
-| MCP | Wiring PASS; PlayMode smoke menu→S1→S2 (build index 2) PASS |
+| MCP | Vest under Items; API smoke defect wear-fail + reject + equip PASS |
 
 ## B. Root map
 
@@ -31,16 +31,16 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 | GO | Components (MCP) | Notes |
 |----|------------------|-------|
 | `LOTO_S1Root` | `PlayerHudManager`, `LotoScenarioSceneBootstrap`, `LotoScenario1Controller` | Wired |
-| `PREF_S1_Locker` | `EppEquipmentManager` (`rejectZoneAnchor` → `S1_RejectZone`) | Fase 1 closed reject blocker |
+| `PREF_S1_Locker` | `EppEquipmentManager` (`rejectZoneAnchor` → `S1_RejectZone`) | Begin wires child interactables |
 | `S1_RejectZone` | BoxCollider, `XRSocketInteractor`, `EppTypedSocket` (Reject); MeshRenderer off | Placeholder under locker |
-| `S1_ContinueTrigger` | BoxCollider, `XRSimpleInteractable`, `LotoDwellReticle`, `LotoS1ContinueInteractable`; MeshRenderer off | At Cabin door bounds |
-| `Items` | Active; 10 EPP children | Vest still outside (Fase 2) |
+| `S1_ContinueTrigger` | BoxCollider, `XRSimpleInteractable`, `LotoDwellReticle`, `LotoS1ContinueInteractable` + `onContinue`; MeshRenderer off | At Cabin door bounds |
+| `Items` | Active; **11** EPP children (vest included) | Fase 2 reparent done |
 | `LockerSlots` / `BodyAnchors` | `activeSelf=false` | Fase 3 |
-| `EPP_ReflectiveVest_Good` | Under `LOTO_S1Root` | Fase 2 reparent |
+| `EPP_ReflectiveVest_Good` | Under `PREF_S1_Locker/Items` | INT-03 closed |
 
 ## C. EPP catalog (11)
 
-Unchanged from Fase 0 — 5 good mandatory + 4 defect + 2 optional. Vest good still under `LOTO_S1Root`. No vest defect.
+5 good mandatory + 4 defect + 2 optional. Vest good under `Items`. No vest defect (optional deferred).
 
 ## D. Action matrix
 
@@ -48,16 +48,17 @@ Unchanged from Fase 0 — 5 good mandatory + 4 defect + 2 optional. Vest good st
 |--------|-------|
 | **NO DELETE** | All `Cabin/*`; graphic meshes/props; lights; `PlayerMR`; `TeleportFloor`; existing EPP meshes |
 | **KEEP** | Bootstrap/HUD/briefing; Fase 1 placeholders |
-| **MODIFY (Fases 2–3)** | UnityEvents; defect grab; scoring defect; body bind; reparent vest; socket logic |
+| **MODIFY (Fase 3)** | Scoring defect; body bind; socket activation |
 | **CREATE done (Fase 1)** | `S1_RejectZone`, `S1_ContinueTrigger` |
-| **CREATE optional (Fase 2+)** | `EPP_ReflectiveVest_Defect` placeholder |
+| **CREATE optional (later)** | `EPP_ReflectiveVest_Defect` placeholder |
 
 ## E. Interaction contract (frozen)
 
 1. EPP: grab / pinch via `XRGrabInteractable`.
-2. Continue: dwell via `XRSimpleInteractable` + `LotoDwellReticle` (not grab).
+2. Continue: dwell via `XRSimpleInteractable` + `LotoDwellReticle` (not grab); `onContinue` on success.
 3. Gate to S2: 5/5 mandatory **good** only.
-4. Reject: release near `S1_RejectZone` / Reject socket → `TryReject`.
+4. Good grab → `onGrabbed` → `TryEquip` → `onEquipped`.
+5. Defect grab → `onGrabbed` → `TryEquip` fail (subtitle) + remain holdable; release near reject / Reject socket → `TryReject` → `onRejected`.
 
 ## F. Gaps → phase
 
@@ -66,20 +67,21 @@ Unchanged from Fase 0 — 5 good mandatory + 4 defect + 2 optional. Vest good st
 | S1-FLOW-01 | No `LotoS1ContinueInteractable` | 1 | **CLOSED** — `S1_ContinueTrigger` |
 | S1-FLOW-02 | No RejectZone / `rejectZoneAnchor` null | 1 | **CLOSED** — `S1_RejectZone` wired |
 | S1-FLOW-03 | No outline continue target | 1 / 4 | **CLOSED (target)** — manager finds continue child; pedagogy polish → Fase 4 |
-| S1-INT-01 | `onEquipped` empty; missing UnityEvents | 2 | open |
-| S1-INT-02 | Defect grab no-op semantics | 2 | open |
-| S1-INT-03 | Vest outside `Items` | 2 | open |
+| S1-INT-01 | `onEquipped` empty; missing UnityEvents | 2 | **CLOSED** — `onGrabbed` / `onReleased` / `onEquipped` / `onRejected` |
+| S1-INT-02 | Defect grab no-op semantics | 2 | **CLOSED** — wear-fail + reject path |
+| S1-INT-03 | Vest outside `Items` | 2 | **CLOSED** — under `Items` |
 | S1-RULE-01 | Defect score auto at 5/5 | 3 | open |
 | S1-RULE-02 | Body anchors inactive / equip hide-only | 3 | open |
 | S1-RULE-03 | `LockerSlots` / `BodyAnchors` inactive | 3 | open |
 | S1-PED-01 | Outline one-at-a-time + subtitle E2E | 4 | open |
 
-## G. Fase 1 exit
+## G. Fase 2 exit
 
-- [x] Placeholders under `PREF_S1_Locker`
-- [x] `rejectZoneAnchor` assigned
-- [x] Incomplete continue blocked; 5/5 + continue → S2 with ControlCenter
-- [x] Cabin art intact (door meshes unchanged; trigger invisible)
-- [x] Reject smoke `TryReject` PASS in Play Mode
+- [x] UnityEvents on `EppItemInteractable` + `onContinue` on continue
+- [x] Defect grab wear-fail + reject; item stays holdable until rejected
+- [x] Vest reparented under `Items` (11 children)
+- [x] `Begin` wires interactables / continue / reject socket
+- [x] API smoke: vest_under_items, defect_wear_fail, reject_ok, equip_good PASS
+- [x] Cabin art intact
 
-**Ready for Plan Fase 2:** UnityEvents + defect grab + vest reparent.
+**Ready for Plan Fase 3:** scoring defect + body/sockets.
