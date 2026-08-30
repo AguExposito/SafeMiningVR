@@ -234,7 +234,7 @@ PARTIAL (2026-08-29) — Quest 3S `340YC20G8W04C3` via metavr; APK install+launc
 | `LOTO_S1Root` | Bootstrap, S1Controller, PlayerHudManager, LotoPcPlaytestDriver | PASS |
 | `PREF_S1_Locker` | EppEquipmentManager, 12 children | PASS |
 | `PREF_LotoPlayerHUD` / Briefing | World space, Util_PanelFollower | PASS |
-| `PlayerMR` | LotoInputModalityVisuals, XRInputModalityManager, teleport, PC drivers | PASS |
+| `PlayerMR` | LotoInputModalityVisuals, XRInputModalityManager, teleport, PC drivers | PASS (modality); comfort vignette GAP — [player-rig-baseline.md](player-rig-baseline.md) |
 | `TeleportFloor` | Present in hierarchy | PASS |
 
 ### VR-LOTO-S2
@@ -401,7 +401,7 @@ Remaining P0 from baseline: none (Fase 5 closed lighting).
 | VR-01 | `LotoDwellReticle` on trigger interactables (dwell 1s, Secondary fill, select guard) | CLOSED |
 | VR-01 | Wired S1 continue, S2 hazards+continue, S3 panel/breaker/buttons | CLOSED |
 | VR-01 | `LotoFase3PrefabSetupTool` — 16 reticle components across 3 scenario prefabs | CLOSED |
-| VR-03 | `LotoInputModalityVisuals` on `PlayerMR` (MCP verify) | PASS (unchanged) |
+| VR-03 | `LotoInputModalityVisuals` on `PlayerMR` (MCP verify) | PASS (modality); TunnelingVignette provider refs null → GAP, see [player-rig-baseline.md](player-rig-baseline.md) |
 
 ### WF1 post-Fase 3
 

@@ -40,7 +40,8 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 ## Input (hands vs controllers)
 
-- Default: **hand tracking** on `PlayerMR` (`Left/Right Hand` on, controllers off).
+- **Today:** default **hand tracking** on `PlayerMR` (`Left/Right Hand` on, controllers off).
+- **Target (dual rig):** `PREF_LotoPlayerPC` + `PREF_LotoPlayerVR` + `LotoPlayerRigSelector` (`Auto` / `ForcePc` / `ForceVr`). Contract: [player-rig-baseline.md](player-rig-baseline.md).
 - `XRInputModalityManager` + [`LotoInputModalityVisuals`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoInputModalityVisuals.cs): picking up Touch shows controller meshes and hides hands; releasing (~0.6 s hysteresis) returns to hands.
 - Menu Controls help panels follow the live modality; Hands/Joysticks buttons still preview help art.
 - OpenXR **Hand Interaction Profile** is enabled on Android and Standalone.
@@ -67,7 +68,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | Scenario rules / scoring | Managers under `Code/Managers/` |
 | Prefab layout / art | `Prefabs/`, `Art/Materials/` |
 | Loc strings | Language assets used by `LanguageManager` (`loto_*` keys) |
-| Input modality | `PlayerMR` + `LotoInputModalityVisuals` |
+| Input modality | Today: `PlayerMR` + `LotoInputModalityVisuals`. Target: dual prefabs — [player-rig-baseline.md](player-rig-baseline.md) |
 | HUD layers | `PlayerHudManager.ApplyState` (summary vs exit confirm mutually exclusive; active chrome hidden on overlays) |
 | Underground lights | Menu **SafeMining/LOTO/Configure Underground Lighting S1-S3** or `LotoUndergroundLightingTool` |
 | Sync payload | `SyncQueueManager` + `PendingSyncEntry` |

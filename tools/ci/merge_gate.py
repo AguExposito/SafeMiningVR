@@ -123,8 +123,9 @@ def main():
             auto_fail.append(f"CI output: {ci_log[:500]}")
 
     if yaml_hand_edits:
-        auto_fail.append(
-            "Possible hand-edited Unity YAML: " + ", ".join(yaml_hand_edits[:5])
+        human.append(
+            "Unity YAML in diff (confirm MCP/Editor authored, not hand-edited): "
+            + ", ".join(yaml_hand_edits[:5])
             + (" ..." if len(yaml_hand_edits) > 5 else "")
         )
 

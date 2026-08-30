@@ -56,7 +56,7 @@ Target: Meta Quest 3S, package `com.safeminingvr.sim`, interactive apps ≥ **72
 ## Comfort
 
 - HUD / briefing `Util_PanelFollower` distance ~**1.75 m** (`PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel`).
-- PlayerMR `TunnelingVignette` locomotion providers already enabled (XRI comfort).
+- PlayerMR `TunnelingVignetteController` is present but all `locomotionProvider` refs are **null** (GAP — comfort vignette does not fire). Fix in player dual-rig Fase 1; see [player-rig-baseline.md](player-rig-baseline.md).
 - Alerts use subtitle + breaker flash only — no camera shake.
 
 ## Fail paths (HU-223)

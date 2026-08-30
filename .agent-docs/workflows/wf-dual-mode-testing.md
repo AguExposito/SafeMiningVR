@@ -178,3 +178,27 @@ For each grabbable (EPP items in S1, locks/tags in S3):
 | B — Quest 3S Device | | | |
 
 **Workflow complete when both phases show PASS.**
+
+---
+
+## Player rig acceptance (post dual migration)
+
+Sign-off for player dual-rig Fases 1–5 only. Does not require full S1–S3 happy path. Source: [player-rig-baseline.md](../player-rig-baseline.md).
+
+| ID | Mode | Check |
+|----|------|-------|
+| ACC-PC-01 | Editor ForcePc / Auto Editor | [ ] WASD + look; click interactables; `LotoPcPlaytestDriver` cheats work |
+| ACC-PC-02 | Editor | [ ] Single active XR Origin; HUD follow `Camera.main` |
+| ACC-VR-01 | Quest / ForceVr | [ ] Quest hand visuals default; controllers via modality |
+| ACC-VR-02 | Quest | [ ] No artificial gravity (origin does not fall) |
+| ACC-VR-03 | Quest | [ ] SnapTurn on; ContinuousTurn off; vignette providers assigned |
+| ACC-VR-04 | Quest standing | [ ] Floor / room-scale; physical play area |
+| ACC-SEL-01 | Both | [ ] Auto → PC in Editor, VR on Android |
+| ACC-SEL-02 | Editor | [ ] `ForcePc` / `ForceVr` switch rig without project reload |
+| ACC-COM-01 | Both | [ ] Zero rig setup `LogError`; no `OVRCameraRig` |
+
+| Field | Value |
+|-------|-------|
+| Tester | |
+| Date | |
+| Result | |

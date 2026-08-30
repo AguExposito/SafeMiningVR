@@ -129,6 +129,7 @@ All files are small enough to load entirely when needed.
 | `integration-vr-backend.md` | ~82 | API contracts, DTOs, auth flow |
 | `folder-structure.md` | ~65 | Canonical folder layout |
 | `qa-quest-fase6.md` | ~45 | Build settings, comfort, fail paths, device checklist |
+| `player-rig-baseline.md` | ~110 | Player PC/VR dual-rig audit freeze, ACC criteria, C/M/D matrix |
 | `cloud-agent-playbook.md` | ~120 | Cloud/background agent branch protocol, merge gates |
 | `templates/cloud-agent-briefs.md` | ~200 | Copy-paste `/in-cloud` brief templates (WF2, S3, perf, Fase 7) |
 

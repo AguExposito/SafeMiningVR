@@ -9,8 +9,8 @@
 
 ## Current state (hands-default input + VR/PC UI)
 
-- **Roadmap:** Fases 0–6 + visual polish. Input: hand tracking default on `PlayerMR`, auto visual switch to Touch when grabbed (`LotoInputModalityVisuals`). JWT/online remains Fase 7.
-- **Docs:** [loto-simulation-handbook.md](loto-simulation-handbook.md), [loto-asset-list.md](loto-asset-list.md).
+- **Roadmap:** Fases 0–6 + visual polish. Input today: hand tracking default on `PlayerMR`, auto visual switch to Touch (`LotoInputModalityVisuals`). Target: dual PC/VR prefabs + selector — [player-rig-baseline.md](player-rig-baseline.md). JWT/online remains Fase 7.
+- **Docs:** [loto-simulation-handbook.md](loto-simulation-handbook.md), [loto-asset-list.md](loto-asset-list.md), [player-rig-baseline.md](player-rig-baseline.md).
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
 - **Entry scene:** `StandardMainMenu.unity` (build index 0). World-space menu is XR-clickable; **mouse enabled** in Play Mode.
 - **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD 1/3 + locker EPP), `VR-LOTO-S2` (2, HUD 2/3 + inspection yard), `VR-LOTO-S3` (3, HUD 3/3 + LOTO station → session summary).
