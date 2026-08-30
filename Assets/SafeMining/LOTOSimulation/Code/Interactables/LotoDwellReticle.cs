@@ -172,13 +172,6 @@ public class LotoDwellReticle : MonoBehaviour
             return cachedUiSprite;
         }
 
-        Sprite sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
-        if (sprite != null)
-        {
-            cachedUiSprite = sprite;
-            return cachedUiSprite;
-        }
-
         Texture2D texture = Texture2D.whiteTexture;
         cachedUiSprite = Sprite.Create(
             texture,

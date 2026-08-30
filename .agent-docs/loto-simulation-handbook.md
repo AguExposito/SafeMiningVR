@@ -24,7 +24,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 **Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` persists via DontDestroyOnLoad. Direct launch of S1–S3 is for visual inspection only (CC null warning expected).
 
 1. Main menu carousel → LOTO simulation.
-2. **S1 Briefing** → Begin → equip 5 mandatory EPP (reject defective via reject zone) → continue door → S2.
+2. **S1 Briefing** → Begin → equip 5 mandatory EPP (reject defective via reject zone) → continue door → S2. **PC happy path validated (Fase 5)** via **SafeMining/LOTO/Run Fase 5 S1 E2E Test**.
 3. **S2** report 4 real hazards (decoys penalize) → continue → S3.
 4. **S3** STOP → breaker OFF → personal lock → danger tag → START verify zero energy → session summary.
 5. Abandon (menu/exit confirm) yields partial score + summary path.
@@ -78,6 +78,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | Prefab brand/loc batch | Menu **SafeMining/LOTO/Apply Fase 2 Brand and Loc Prefab Setup** |
 | Prefab dwell batch | Menu **SafeMining/LOTO/Apply Fase 3 Dwell Reticle Setup** |
 | Menu flow QA | **SafeMining/LOTO/Run Fase 4 Menu Flow Test** (Play Mode from StandardMainMenu) |
+| S1 E2E QA | **SafeMining/LOTO/Run Fase 5 S1 E2E Test** (briefing→5/5→reject→S2); see [s1-scene-inventory.md](s1-scene-inventory.md) §H |
 | Lighting cleanup | **SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S3** |
 | Quest dev APK | **SafeMining/LOTO/Build Quest 3S Dev APK** → `Builds/SafeMiningVR-Quest3S-Dev.apk` |
 | Device QA | See [qa-quest-fase6.md](../.agent-docs/qa-quest-fase6.md); deploy via `metavr_app install` |

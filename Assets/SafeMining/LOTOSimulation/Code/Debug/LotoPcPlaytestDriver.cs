@@ -171,10 +171,33 @@ public class LotoPcPlaytestDriver : MonoBehaviour
         ref_EppItem[] items = FindObjectsByType<ref_EppItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i] != null && items[i].condition == EppItemCondition.Defective)
+            if (items[i] != null
+                && items[i].condition == EppItemCondition.Defective
+                && !items[i].IsLocked)
             {
                 manager.TryReject(items[i]);
                 return;
+            }
+        }
+    }
+
+    [ContextMenu("LOTO/PC/Reject All Defects")]
+    public void RejectAllDefects()
+    {
+        EppEquipmentManager manager = FindFirstObjectByType<EppEquipmentManager>();
+        if (manager == null)
+        {
+            return;
+        }
+
+        ref_EppItem[] items = FindObjectsByType<ref_EppItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i] != null
+                && items[i].condition == EppItemCondition.Defective
+                && !items[i].IsLocked)
+            {
+                manager.TryReject(items[i]);
             }
         }
     }

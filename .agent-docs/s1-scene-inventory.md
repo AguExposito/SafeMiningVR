@@ -6,12 +6,12 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 
 | Field | Value |
 |-------|-------|
-| Date | 2026-08-30 (Fase 4 applied) |
+| Date | 2026-08-30 (Fase 5 post-align) |
 | Scene | `Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S1.unity` |
 | Build index | 1 |
-| Prior inventory commit | `5c55405` (Fase 3 fix) |
+| Prior inventory commit | `1f8393e` (Fase 4) |
 | Unity | 6000.3.10f1 |
-| MCP | Outline MandatoryTypes order PASS; subtitle isError pipeline; Brand Secondary outlines |
+| MCP | PC E2E S1→S2 PASS; Quest launch smoke PASS; console 0 Errors |
 
 ## B. Root map
 
@@ -46,7 +46,7 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 | Action | Items |
 |--------|-------|
 | **NO DELETE** | All `Cabin/*`; graphic meshes/props; lights; `PlayerMR`; `TeleportFloor`; existing EPP meshes |
-| **KEEP** | Bootstrap/HUD/briefing; Fases 1–4 logic |
+| **KEEP** | Bootstrap/HUD/briefing; Fases 1–5 logic + E2E runners |
 | **CREATE done (Fase 1)** | `S1_RejectZone`, `S1_ContinueTrigger` |
 | **CREATE optional (later)** | `EPP_ReflectiveVest_Defect` placeholder |
 
@@ -72,14 +72,36 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 | S1-INT-01/02/03 | UnityEvents / defect / vest | 2 | **CLOSED** |
 | S1-RULE-01/02/03 | Scoring / body / sockets | 3 | **CLOSED** |
 | S1-PED-01 | Outline one-at-a-time + subtitle E2E | 4 | **CLOSED** |
+| S1-E2E-01 | PC menu→S1→S2 + negative gate | 5 | **CLOSED** |
+| S1-E2E-02 | Quest launch smoke | 5 | **CLOSED** |
 
-## G. Fase 4 exit
+## G. Fases 0–4 exit (summary)
 
-- [x] Outline ordered by MandatoryTypes; continue at 5/5
-- [x] `LotoOutlineHint` Brand Secondary
-- [x] Subtitle `isError` pipeline (bridge → orchestrator → HUD)
-- [x] Fail keys S1 wired; S3 alerts / S2 false-positive also flagged
-- [x] Smoke: Helmet → Glasses → Continue; DismissBriefing present
-- [x] Cabin art intact
+All FLOW / INT / RULE / PED gaps CLOSED. Cabin art intact.
 
-**Ready for Plan Fase 5:** full PC/Quest flow validation + merge gate.
+## H. Fase 5 E2E results (post-align)
+
+| Step | Mode | Result |
+|------|------|--------|
+| Build order 0–3 | Editor | PASS |
+| F5.1 dismiss briefing → Active | PC Play | PASS |
+| F5.2 equip 5/5 | PC Play (Numpad/cheat) | PASS |
+| F5.3 reject all defects → defect scored | PC Play | PASS |
+| F5.4 continue S1→S2 | PC Play | PASS |
+| Gate S1 block without 5/5 | PC Play | PASS |
+| Gate S2 block without 4/4 | PC Play | PASS |
+| Console Errors after dwell sprite fix | PC Play | PASS (0) |
+| Quest `340YC20G8W04C3` launch `com.safeminingvr.sim` | Device | PASS (no Unity:E) |
+
+Menu: **SafeMining/LOTO/Run Fase 5 S1 E2E Test** (Play from StandardMainMenu).
+
+### Residuals (non-blocking)
+
+| Residual | Notes |
+|----------|-------|
+| Quest in-headset hands/controllers happy path | Manual WF1 Phase B; APK may need rebuild post-Fase 5 for latest C# |
+| JWT / backend online | Fase 7 |
+| Optional `EPP_ReflectiveVest_Defect` | Art placeholder only |
+| Cabin art polish | Out of S1 align scope |
+
+**Roadmap S1 Fases 0–5: CLOSED (post-align).**

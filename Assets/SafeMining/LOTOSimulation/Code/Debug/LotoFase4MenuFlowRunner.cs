@@ -32,9 +32,63 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         StartCoroutine(NegativeGateRoutine());
     }
 
+    public void RunS1E2eFlow()
+    {
+        StopAllCoroutines();
+        StartCoroutine(S1E2eRoutine());
+    }
+
     #endregion
 
     #region Flow Routines
+
+    private IEnumerator S1E2eRoutine()
+    {
+        yield return null;
+
+        if (ControlCenter.Instance == null)
+        {
+            LogStep("F5 CC present", false, "ControlCenter.Instance is null");
+            yield break;
+        }
+
+        LogStep("F5 CC present", true, string.Empty);
+
+        ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario1BuildIndex);
+        yield return WaitForScene(LotoSimulationConstants.Scenario1BuildIndex);
+        if (!AssertScene(LotoSimulationConstants.Scenario1BuildIndex, "F5 load S1"))
+        {
+            yield break;
+        }
+
+        playtestDriver = ResolvePlaytestDriver();
+        if (playtestDriver == null)
+        {
+            LogStep("F5 playtest driver", false, "LotoPcPlaytestDriver missing on S1");
+            yield break;
+        }
+
+        playtestDriver.DismissBriefing();
+        yield return WaitForOrchestratorState(LotoSimulationState.Active);
+        LogStep("F5.1 dismiss briefing", OrchestratorStateIs(LotoSimulationState.Active), string.Empty);
+
+        playtestDriver.EquipMandatoryFive();
+        EppEquipmentManager eppManager = FindFirstObjectByType<EppEquipmentManager>();
+        LogStep("F5.2 equip 5/5", eppManager != null && eppManager.IsReadyToAdvance, string.Empty);
+
+        playtestDriver.RejectAllDefects();
+        eppManager = FindFirstObjectByType<EppEquipmentManager>();
+        LogStep("F5.3 reject defect", eppManager != null && eppManager.IsDefectObjectiveScored, string.Empty);
+
+        playtestDriver.ContinueS1();
+        yield return WaitForScene(LotoSimulationConstants.Scenario2BuildIndex);
+        if (!AssertScene(LotoSimulationConstants.Scenario2BuildIndex, "F5.4 continue S1→S2"))
+        {
+            yield break;
+        }
+
+        Debug.Log("[LOTO Fase5] S1 E2E happy path finished.");
+    }
 
     private IEnumerator FullMenuFlowRoutine()
     {
@@ -69,6 +123,10 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         playtestDriver.EquipMandatoryFive();
         EppEquipmentManager eppManager = FindFirstObjectByType<EppEquipmentManager>();
         LogStep("A3.2 equip 5/5", eppManager != null && eppManager.IsReadyToAdvance, string.Empty);
+
+        playtestDriver.RejectAllDefects();
+        eppManager = FindFirstObjectByType<EppEquipmentManager>();
+        LogStep("A3.2b reject defect", eppManager != null && eppManager.IsDefectObjectiveScored, string.Empty);
 
         playtestDriver.ContinueS1();
         yield return WaitForScene(LotoSimulationConstants.Scenario2BuildIndex);

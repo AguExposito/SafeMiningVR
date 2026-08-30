@@ -35,6 +35,22 @@ public static class LotoFase4MenuFlowTestTool
         runner.RunNegativeGateChecks();
     }
 
+    [MenuItem("SafeMining/LOTO/Run Fase 5 S1 E2E Test")]
+    public static void RunFase5S1E2eTest()
+    {
+        if (!Application.isPlaying)
+        {
+            EditorUtility.DisplayDialog(
+                "LOTO Fase 5",
+                "Enter Play Mode on StandardMainMenu first, then run this command again.",
+                "OK");
+            return;
+        }
+
+        LotoFase4MenuFlowRunner runner = EnsureRunner();
+        runner.RunS1E2eFlow();
+    }
+
     [MenuItem("SafeMining/LOTO/Prepare Fase 4 Menu Flow Test")]
     public static void PrepareMenuFlowTest()
     {
