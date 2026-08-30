@@ -211,13 +211,12 @@ public class LotoSequenceManager : MonoBehaviour
         if (currentStep != LotoSequenceStep.TagApplied)
         {
             EmitEvent("start_incomplete", false);
-            OnHintSubtitle?.Invoke(Translate("loto_s3_alert_incomplete"));
+            Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_incomplete", OnHintSubtitle);
             if (beltAnimator != null)
             {
                 beltAnimator.PlayFailedStartAttempt();
             }
 
-            NotifyOrchestratorSubtitle("loto_s3_alert_incomplete");
             LotoTrainingFeedback.PlayFail();
             ScoreZeroEnergyObjective(false);
             return;
@@ -227,8 +226,7 @@ public class LotoSequenceManager : MonoBehaviour
         currentStep = LotoSequenceStep.ZeroEnergyVerified;
         ScoreZeroEnergyObjective(true);
         EmitEvent("zero_energy_verified", true);
-        OnHintSubtitle?.Invoke(Translate("loto_s3_success_zero_energy"));
-        NotifyOrchestratorSubtitle("loto_s3_success_zero_energy");
+        Util_LotoSimulationBridge.NotifySubtitle("loto_s3_success_zero_energy", OnHintSubtitle);
         LotoTrainingFeedback.PlaySuccess();
         OnStepChanged?.Invoke(currentStep);
         OnSequenceCompleted?.Invoke(true);
@@ -340,20 +338,7 @@ public class LotoSequenceManager : MonoBehaviour
 
     private static void SetObjective(int objectiveIndex, bool achieved)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.scoreManager == null)
-        {
-            return;
-        }
-
-        ControlCenter.Instance.scoreManager.AchiveObjective(
-            LotoSimulationConstants.LotoSimScoreIndex,
-            objectiveIndex,
-            achieved);
-
-        if (ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifyObjectiveVisualUpdate(objectiveIndex, achieved);
-        }
+        Util_LotoSimulationBridge.SetObjective(objectiveIndex, achieved);
     }
 
     #endregion
@@ -362,21 +347,9 @@ public class LotoSequenceManager : MonoBehaviour
 
     private void EmitEvent(string optionId, bool success)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null)
-        {
-            return;
-        }
-
-        string sessionId = string.Empty;
-        if (ControlCenter.Instance.simulationSessionManager != null &&
-            ControlCenter.Instance.simulationSessionManager.CurrentSession != null)
-        {
-            sessionId = ControlCenter.Instance.simulationSessionManager.CurrentSession.sessionId;
-        }
-
         SimulationEventRecord record = new SimulationEventRecord
         {
-            sessionId = sessionId,
+            sessionId = Util_LotoSimulationBridge.GetSessionId(),
             eventType = "loto_step",
             objectiveId = LotoObjectiveIds.LotoSequence,
             optionId = optionId,
@@ -384,18 +357,13 @@ public class LotoSequenceManager : MonoBehaviour
             success = success
         };
 
-        PendingSyncEntry entry = new PendingSyncEntry
-        {
-            entryType = PendingSyncEntry.EntryTypeEvent,
-            payloadJson = JsonUtility.ToJson(record)
-        };
-        ControlCenter.Instance.syncQueueManager.Enqueue(entry);
+        Util_LotoSimulationBridge.EnqueueEvent(record);
     }
 
     private void Reject(string subtitleKey, string optionId)
     {
         EmitEvent(optionId, false);
-        NotifyOrchestratorSubtitle(subtitleKey);
+        Util_LotoSimulationBridge.NotifySubtitle(subtitleKey, OnHintSubtitle);
         LotoTrainingFeedback.PlayFail();
     }
 
@@ -407,7 +375,7 @@ public class LotoSequenceManager : MonoBehaviour
         }
 
         EmitEvent("breaker_no_gloves", false);
-        NotifyOrchestratorSubtitle("loto_s3_alert_no_gloves");
+        Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_no_gloves", OnHintSubtitle);
         LotoTrainingFeedback.PlayFail();
     }
 
@@ -418,7 +386,7 @@ public class LotoSequenceManager : MonoBehaviour
     private void NotifyStep(LotoSequenceStep step, string subtitleKey)
     {
         OnStepChanged?.Invoke(step);
-        NotifyOrchestratorSubtitle(subtitleKey);
+        Util_LotoSimulationBridge.NotifySubtitle(subtitleKey, OnHintSubtitle);
         RefreshOutlineHints(step);
         LotoTrainingFeedback.PlaySuccess();
     }
@@ -503,27 +471,6 @@ public class LotoSequenceManager : MonoBehaviour
                 targets.Add(tags[i].gameObject);
             }
         }
-    }
-
-    private void NotifyOrchestratorSubtitle(string key)
-    {
-        string translated = Translate(key);
-        OnHintSubtitle?.Invoke(translated);
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated);
-        }
-    }
-
-    private static string Translate(string key)
-    {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null)
-        {
-            return key;
-        }
-
-        string translated = ControlCenter.Instance.languageManager.GetText(key);
-        return string.IsNullOrEmpty(translated) ? key : translated;
     }
 
     private void SetBeltRunning(bool running)

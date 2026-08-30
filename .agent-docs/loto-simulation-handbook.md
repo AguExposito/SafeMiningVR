@@ -15,14 +15,20 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | Scoring | RN01/RN02 via `ScoreManager` + session context; pass threshold 60 |
 | Sync | Offline queue 24h via `SyncQueueManager` (Fase 7 JWT later) |
 | Malo | Malo 1 incomplete START jolt; Malo 2 breaker without gloves alert |
+| Branding | `BrandApplicator` on `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel`, `PREF_LotoObjectiveRow`; colors via `BrandConfig` at runtime |
+| World labels | S2 static keys `loto_s2_label_*`; S3 lock/tag keys `loto_lock_*` / `loto_tag_*` on interactable prefabs |
+| Dwell reticle | `LotoDwellReticle` on trigger interactables (hazards, buttons, breaker, continue doors); ~1 s radial fill Secondary; grabs direct |
 
 ## Player flow
+
+**Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` persists via DontDestroyOnLoad. Direct launch of S1–S3 is for visual inspection only (CC null warning expected).
 
 1. Main menu carousel → LOTO simulation.
 2. **S1 Briefing** → Begin → equip 5 mandatory EPP (reject defective via reject zone) → continue door → S2.
 3. **S2** report 4 real hazards (decoys penalize) → continue → S3.
 4. **S3** STOP → breaker OFF → personal lock → danger tag → START verify zero energy → session summary.
 5. Abandon (menu/exit confirm) yields partial score + summary path.
+6. Session summary **Continue** → `CompleteSimulation()` → returns to main menu with score persisted offline.
 
 ## Outline hints
 
@@ -38,6 +44,14 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 - `XRInputModalityManager` + [`LotoInputModalityVisuals`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoInputModalityVisuals.cs): picking up Touch shows controller meshes and hides hands; releasing (~0.6 s hysteresis) returns to hands.
 - Menu Controls help panels follow the live modality; Hands/Joysticks buttons still preview help art.
 - OpenXR **Hand Interaction Profile** is enabled on Android and Standalone.
+
+## Dwell-time triggers (non-grab)
+
+- Triggers (hazard report, STOP/START, breaker, panel door, continue doors) use [`LotoDwellReticle`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoDwellReticle.cs): hover ray → radial fill ~1 s (Secondary `#F97316`) → action.
+- Moving ray away resets fill. Instant select is blocked until dwell completes.
+- Grabs (EPP, locks, tags) remain direct — no dwell reticle.
+- PC cheats call `ActivateFromPc()` on each trigger script, bypassing dwell.
+- Prefab batch: menu **SafeMining/LOTO/Apply Fase 3 Dwell Reticle Setup**.
 
 ## PC playtest (no headset)
 
@@ -57,7 +71,16 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | HUD layers | `PlayerHudManager.ApplyState` (summary vs exit confirm mutually exclusive; active chrome hidden on overlays) |
 | Underground lights | Menu **SafeMining/LOTO/Configure Underground Lighting S1-S3** or `LotoUndergroundLightingTool` |
 | Sync payload | `SyncQueueManager` + `PendingSyncEntry` |
-| EnvironmentBuilders | Editor/debug only — authored prefabs are source of truth |
+| CC ↔ simulation bridge | `Util_LotoSimulationBridge` (objectives, events, subtitles) |
+| HUD brand colors | `BrandApplicator` on HUD/briefing/objective row prefabs |
+| S2/S3 world labels | `LotoWorldLabel` + `loto_s2_label_*` / `loto_lock_*` / `loto_tag_*` |
+| Prefab brand/loc batch | Menu **SafeMining/LOTO/Apply Fase 2 Brand and Loc Prefab Setup** |
+| Prefab dwell batch | Menu **SafeMining/LOTO/Apply Fase 3 Dwell Reticle Setup** |
+| Menu flow QA | **SafeMining/LOTO/Run Fase 4 Menu Flow Test** (Play Mode from StandardMainMenu) |
+| Lighting cleanup | **SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S3** |
+| Quest dev APK | **SafeMining/LOTO/Build Quest 3S Dev APK** → `Builds/SafeMiningVR-Quest3S-Dev.apk` |
+| Device QA | See [qa-quest-fase6.md](../.agent-docs/qa-quest-fase6.md); deploy via `metavr_app install` |
+| Trigger dwell | `LotoDwellReticle` on `XRSimpleInteractable` triggers only |
 
 ## Lighting (Quest budget)
 

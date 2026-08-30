@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7957823619240303053}
   - component: {fileID: 6718918904877603134}
   - component: {fileID: 1653780042606243081}
+  - component: {fileID: 7189448548499502565}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -146,6 +147,23 @@ MonoBehaviour:
   doorPivot: {fileID: 1219012778448914930}
   breakerInteractable: {fileID: 0}
   openAngle: 110
+--- !u!114 &7189448548499502565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831920427933886436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1 &1182837259775060508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,13 +1350,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5710295919359627439, guid: 537c036897df66f4690f78da907f5d5c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8838783841239358365}
   m_SourcePrefab: {fileID: 100100000, guid: 537c036897df66f4690f78da907f5d5c, type: 3}
 --- !u!4 &6577313023051753177 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8662172292246684404, guid: 537c036897df66f4690f78da907f5d5c, type: 3}
   m_PrefabInstance: {fileID: 2553955051837367341}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7804302149803816066 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5710295919359627439, guid: 537c036897df66f4690f78da907f5d5c, type: 3}
+  m_PrefabInstance: {fileID: 2553955051837367341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8838783841239358365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804302149803816066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!1001 &2673951328223583346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1406,8 +1449,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8662118438299285580, guid: 43dc50ce4366e5b40839c10fad8b3b49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5336430819574500115}
   m_SourcePrefab: {fileID: 100100000, guid: 43dc50ce4366e5b40839c10fad8b3b49, type: 3}
+--- !u!1 &6714249409795974206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8662118438299285580, guid: 43dc50ce4366e5b40839c10fad8b3b49, type: 3}
+  m_PrefabInstance: {fileID: 2673951328223583346}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5336430819574500115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6714249409795974206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!4 &8351630645850808267 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6268231411229475769, guid: 43dc50ce4366e5b40839c10fad8b3b49, type: 3}
@@ -1935,8 +2003,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7359695881627492785, guid: c50c88638c0956447bcfe45ecb949915, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2847539148364521114}
   m_SourcePrefab: {fileID: 100100000, guid: c50c88638c0956447bcfe45ecb949915, type: 3}
+--- !u!1 &618141574977820844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7359695881627492785, guid: c50c88638c0956447bcfe45ecb949915, type: 3}
+  m_PrefabInstance: {fileID: 7977827766982408477}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2847539148364521114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618141574977820844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!4 &6672620168086953881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3616136124458985092, guid: c50c88638c0956447bcfe45ecb949915, type: 3}

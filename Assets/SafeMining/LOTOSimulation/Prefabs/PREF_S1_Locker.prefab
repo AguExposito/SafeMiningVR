@@ -4723,6 +4723,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3134592293993833623, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 13583907571816762}
+    - targetCorrespondingSourceObject: {fileID: 3134592293993833623, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4214508355798554024}
   m_SourcePrefab: {fileID: 100100000, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
 --- !u!1 &3250280965476786207 stripped
 GameObject:
@@ -4817,6 +4820,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LotoS1ContinueInteractable
   equipmentManager: {fileID: 5070293354156446702}
   interactable: {fileID: 0}
+--- !u!114 &4214508355798554024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3250280965476786207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559d1642bb5ba6c489d9b2bd3bee7438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoDwellReticle
+  dwellSeconds: 1
+  reticleDiameterMeters: 0.03
+  cooldownSeconds: 0.3
+  fallbackFillColor: {r: 0.976, g: 0.451, b: 0.086, a: 1}
+  ringBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 0.55}
 --- !u!4 &6687263354482893041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6509655101566116985, guid: 13ad7ddc46a7f534fa2b89eb34a35e24, type: 3}
@@ -5166,8 +5186,10 @@ PrefabInstance:
       propertyPath: equipmentManager
       value: 
       objectReference: {fileID: 5070293354156446702}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 5686276594976222710, guid: 250e7b059620548498d682994b9b374a, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 7357558246669501486, guid: 250e7b059620548498d682994b9b374a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 250e7b059620548498d682994b9b374a, type: 3}

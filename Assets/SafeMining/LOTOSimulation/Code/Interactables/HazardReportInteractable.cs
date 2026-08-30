@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(ref_HazardSpot))]
@@ -9,6 +8,7 @@ public class HazardReportInteractable : MonoBehaviour
     [SerializeField] private XRSimpleInteractable interactable;
 
     private ref_HazardSpot spotRef;
+    private LotoDwellReticle dwellReticle;
 
     #region Lifecycle
 
@@ -25,17 +25,14 @@ public class HazardReportInteractable : MonoBehaviour
             spotRef.CacheOriginalColor();
         }
 
-        if (interactable != null)
-        {
-            interactable.selectEntered.AddListener(OnSelected);
-        }
+        BindDwellReticle();
     }
 
     private void OnDestroy()
     {
-        if (interactable != null)
+        if (dwellReticle != null)
         {
-            interactable.selectEntered.RemoveListener(OnSelected);
+            dwellReticle.Unbind();
         }
     }
 
@@ -52,20 +49,49 @@ public class HazardReportInteractable : MonoBehaviour
 
     #region Interaction
 
-        private void OnSelected(SelectEnterEventArgs args)
+    public void ActivateFromPc()
+    {
+        if (inspectionManager == null || spotRef == null || spotRef.IsReported)
         {
-            ActivateFromPc();
+            return;
         }
 
-        public void ActivateFromPc()
-        {
-            if (inspectionManager == null || spotRef == null || spotRef.IsReported)
-            {
-                return;
-            }
+        inspectionManager.TryReport(spotRef);
+        RefreshDwellState();
+    }
 
-            inspectionManager.TryReport(spotRef);
+    private void Update()
+    {
+        RefreshDwellState();
+    }
+
+    private void BindDwellReticle()
+    {
+        if (interactable == null)
+        {
+            return;
         }
+
+        dwellReticle = GetComponent<LotoDwellReticle>();
+        if (dwellReticle == null)
+        {
+            dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
+        }
+
+        dwellReticle.Bind(interactable, ActivateFromPc);
+        RefreshDwellState();
+    }
+
+    private void RefreshDwellState()
+    {
+        if (dwellReticle == null)
+        {
+            return;
+        }
+
+        bool canDwell = spotRef != null && !spotRef.IsReported;
+        dwellReticle.SetDwellEnabled(canDwell);
+    }
 
     #endregion
 }

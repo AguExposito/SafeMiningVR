@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class LotoPanelDoorInteractable : MonoBehaviour
@@ -10,6 +9,7 @@ public class LotoPanelDoorInteractable : MonoBehaviour
     [SerializeField] private float openAngle = 110f;
 
     private bool isOpen;
+    private LotoDwellReticle dwellReticle;
 
     #region Lifecycle
 
@@ -20,10 +20,7 @@ public class LotoPanelDoorInteractable : MonoBehaviour
             interactable = GetComponent<XRSimpleInteractable>();
         }
 
-        if (interactable != null)
-        {
-            interactable.selectEntered.AddListener(OnSelected);
-        }
+        BindDwellReticle();
 
         if (breakerInteractable != null)
         {
@@ -33,9 +30,9 @@ public class LotoPanelDoorInteractable : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (interactable != null)
+        if (dwellReticle != null)
         {
-            interactable.selectEntered.RemoveListener(OnSelected);
+            dwellReticle.Unbind();
         }
     }
 
@@ -43,29 +40,50 @@ public class LotoPanelDoorInteractable : MonoBehaviour
 
     #region Interaction
 
-        private void OnSelected(SelectEnterEventArgs args)
+    public void ActivateFromPc()
+    {
+        if (isOpen)
         {
-            ActivateFromPc();
+            return;
         }
 
-        public void ActivateFromPc()
+        isOpen = true;
+        if (doorPivot != null)
         {
-            if (isOpen)
-            {
-                return;
-            }
-
-            isOpen = true;
-            if (doorPivot != null)
-            {
-                doorPivot.localRotation = Quaternion.Euler(0f, openAngle, 0f);
-            }
-
-            if (breakerInteractable != null)
-            {
-                breakerInteractable.SetInteractableEnabled(true);
-            }
+            doorPivot.localRotation = Quaternion.Euler(0f, openAngle, 0f);
         }
+
+        if (breakerInteractable != null)
+        {
+            breakerInteractable.SetInteractableEnabled(true);
+        }
+
+        if (dwellReticle != null)
+        {
+            dwellReticle.SetDwellEnabled(false);
+        }
+
+        if (interactable != null)
+        {
+            interactable.enabled = false;
+        }
+    }
+
+    private void BindDwellReticle()
+    {
+        if (interactable == null)
+        {
+            return;
+        }
+
+        dwellReticle = GetComponent<LotoDwellReticle>();
+        if (dwellReticle == null)
+        {
+            dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
+        }
+
+        dwellReticle.Bind(interactable, ActivateFromPc);
+    }
 
     #endregion
 }

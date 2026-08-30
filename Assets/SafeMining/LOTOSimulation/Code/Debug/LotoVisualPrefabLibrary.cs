@@ -64,31 +64,10 @@ public static class LotoVisualPrefabLibrary
     public static void EnsureLibrary()
     {
         EnsureFolder("Assets/SafeMining/LOTOSimulation/Prefabs", "Interactables");
-        EnsureFolder("Assets/SafeMining/LOTOSimulation/Prefabs", "Placeholders");
         EnsureFolder("Assets/SafeMining/LOTOSimulation", "Art");
         EnsureFolder("Assets/SafeMining/LOTOSimulation/Art", "Materials");
 
         Shader lit = FindLit();
-        SavePlaceholder(FloorPlate, "PREF_PH_FloorPlate", PrimitiveType.Cube, new Color(0.28f, 0.30f, 0.33f), lit);
-        SavePlaceholder(CabinetPanel, "PREF_PH_CabinetPanel", PrimitiveType.Cube, new Color(0.42f, 0.45f, 0.48f), lit);
-        SavePlaceholder(Shelf, "PREF_PH_Shelf", PrimitiveType.Cube, new Color(0.52f, 0.54f, 0.56f), lit);
-        SavePlaceholder(RejectBin, "PREF_PH_RejectBin", PrimitiveType.Cube, new Color(0.22f, 0.24f, 0.28f), lit);
-        SavePlaceholder(ExitDoor, "PREF_PH_ExitDoor", PrimitiveType.Cube, new Color(0.976f, 0.451f, 0.086f), lit);
-        SavePlaceholder(YardFloor, "PREF_PH_YardFloor", PrimitiveType.Cube, new Color(0.30f, 0.31f, 0.33f), lit);
-        SavePlaceholder(Spill, "PREF_PH_Spill", PrimitiveType.Cube, new Color(0.18f, 0.16f, 0.12f), lit);
-        SavePlaceholder(Wrench, "PREF_PH_Wrench", PrimitiveType.Cube, new Color(0.45f, 0.42f, 0.38f), lit);
-        SavePlaceholder(FallenBoard, "PREF_PH_FallenBoard", PrimitiveType.Cube, new Color(0.82f, 0.68f, 0.18f), lit);
-        SavePlaceholder(Crate, "PREF_PH_Crate", PrimitiveType.Cube, new Color(0.48f, 0.36f, 0.22f), lit);
-        SavePlaceholder(Extinguisher, "PREF_PH_Extinguisher", PrimitiveType.Cylinder, new Color(0.72f, 0.18f, 0.16f), lit);
-        SavePlaceholder(Cone, "PREF_PH_Cone", PrimitiveType.Cylinder, new Color(0.90f, 0.45f, 0.10f), lit);
-        SavePlaceholder(Rack, "PREF_PH_Rack", PrimitiveType.Cube, new Color(0.38f, 0.39f, 0.41f), lit);
-        SavePlaceholder(BeltVisual, "PREF_PH_BeltVisual", PrimitiveType.Cube, new Color(0.16f, 0.16f, 0.18f), lit);
-        SavePlaceholder(PanelBody, "PREF_PH_PanelBody", PrimitiveType.Cube, new Color(0.22f, 0.24f, 0.28f), lit);
-        SavePlaceholder(Hasp, "PREF_PH_Hasp", PrimitiveType.Cube, new Color(0.45f, 0.45f, 0.48f), lit);
-        SavePlaceholder(Roller, "PREF_PH_Roller", PrimitiveType.Cylinder, new Color(0.12f, 0.12f, 0.14f), lit);
-        SavePlaceholder(Pedestal, "PREF_PH_Pedestal", PrimitiveType.Cube, new Color(0.32f, 0.33f, 0.36f), lit);
-        SavePlaceholder(Cube, "PREF_PH_Cube", PrimitiveType.Cube, new Color(0.55f, 0.55f, 0.58f), lit);
-
         SaveEpp(HelmetGood, EppItemType.Helmet, EppItemCondition.Good, new Vector3(0.28f, 0.22f, 0.28f), new Color(0.90f, 0.72f, 0.12f), lit, false);
         SaveEpp(HelmetDefect, EppItemType.Helmet, EppItemCondition.Defective, new Vector3(0.28f, 0.22f, 0.28f), new Color(0.90f, 0.72f, 0.12f), lit, true);
         SaveEpp(GlassesGood, EppItemType.SafetyGlasses, EppItemCondition.Good, new Vector3(0.22f, 0.08f, 0.12f), new Color(0.12f, 0.16f, 0.22f), lit, false);

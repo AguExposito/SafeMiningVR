@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(ref_LotoControlButton))]
@@ -8,55 +7,68 @@ public class LotoControlButtonInteractable : MonoBehaviour
     [SerializeField] private LotoSequenceManager sequenceManager;
 
     private ref_LotoControlButton buttonRef;
+    private LotoDwellReticle dwellReticle;
 
     #region Lifecycle
 
     private void Awake()
     {
         buttonRef = GetComponent<ref_LotoControlButton>();
-        if (buttonRef != null && buttonRef.interactable != null)
-        {
-            buttonRef.interactable.selectEntered.AddListener(OnSelected);
-        }
+        BindDwellReticle();
     }
 
     private void OnDestroy()
     {
-        if (buttonRef != null && buttonRef.interactable != null)
+        if (dwellReticle != null)
         {
-            buttonRef.interactable.selectEntered.RemoveListener(OnSelected);
+            dwellReticle.Unbind();
         }
     }
 
     #endregion
 
-    #region Interaction
+    #region Configuration
 
     public void Configure(LotoSequenceManager manager)
     {
         sequenceManager = manager;
     }
 
-        private void OnSelected(SelectEnterEventArgs args)
+    #endregion
+
+    #region Interaction
+
+    public void ActivateFromPc()
+    {
+        if (sequenceManager == null || buttonRef == null)
         {
-            ActivateFromPc();
+            return;
         }
 
-        public void ActivateFromPc()
+        if (buttonRef.isStartButton)
         {
-            if (sequenceManager == null || buttonRef == null)
-            {
-                return;
-            }
-
-            if (buttonRef.isStartButton)
-            {
-                sequenceManager.TryStartVerification();
-                return;
-            }
-
-            sequenceManager.TryStopConveyor();
+            sequenceManager.TryStartVerification();
+            return;
         }
+
+        sequenceManager.TryStopConveyor();
+    }
+
+    private void BindDwellReticle()
+    {
+        if (buttonRef == null || buttonRef.interactable == null)
+        {
+            return;
+        }
+
+        dwellReticle = GetComponent<LotoDwellReticle>();
+        if (dwellReticle == null)
+        {
+            dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
+        }
+
+        dwellReticle.Bind(buttonRef.interactable, ActivateFromPc);
+    }
 
     #endregion
 }

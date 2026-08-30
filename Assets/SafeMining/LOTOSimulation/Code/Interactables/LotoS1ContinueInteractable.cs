@@ -1,11 +1,12 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class LotoS1ContinueInteractable : MonoBehaviour
 {
     [SerializeField] private EppEquipmentManager equipmentManager;
     [SerializeField] private XRSimpleInteractable interactable;
+
+    private LotoDwellReticle dwellReticle;
 
     #region Lifecycle
 
@@ -21,17 +22,14 @@ public class LotoS1ContinueInteractable : MonoBehaviour
             equipmentManager = FindFirstObjectByType<EppEquipmentManager>();
         }
 
-        if (interactable != null)
-        {
-            interactable.selectEntered.AddListener(OnSelected);
-        }
+        BindDwellReticle();
     }
 
     private void OnDestroy()
     {
-        if (interactable != null)
+        if (dwellReticle != null)
         {
-            interactable.selectEntered.RemoveListener(OnSelected);
+            dwellReticle.Unbind();
         }
     }
 
@@ -48,20 +46,35 @@ public class LotoS1ContinueInteractable : MonoBehaviour
 
     #region Interaction
 
-        private void OnSelected(SelectEnterEventArgs args)
+    public void ActivateFromPc()
+    {
+        if (equipmentManager == null)
         {
-            ActivateFromPc();
+            return;
         }
 
-        public void ActivateFromPc()
+        if (!equipmentManager.IsReadyToAdvance)
         {
-            if (equipmentManager == null)
-            {
-                return;
-            }
-
             equipmentManager.TryContinue();
+            return;
         }
+
+        equipmentManager.TryContinue();
+        ConsumeContinueInteraction();
+    }
+
+    private void ConsumeContinueInteraction()
+    {
+        if (dwellReticle != null)
+        {
+            dwellReticle.SetDwellEnabled(false);
+        }
+
+        if (interactable != null)
+        {
+            interactable.enabled = false;
+        }
+    }
 
     private void Update()
     {
@@ -74,6 +87,22 @@ public class LotoS1ContinueInteractable : MonoBehaviour
         Color ready = new Color(0.133f, 0.773f, 0.369f, 1f);
         Color blocked = new Color(0.45f, 0.47f, 0.5f, 1f);
         doorRenderer.material.color = equipmentManager.IsReadyToAdvance ? ready : blocked;
+    }
+
+    private void BindDwellReticle()
+    {
+        if (interactable == null)
+        {
+            return;
+        }
+
+        dwellReticle = GetComponent<LotoDwellReticle>();
+        if (dwellReticle == null)
+        {
+            dwellReticle = gameObject.AddComponent<LotoDwellReticle>();
+        }
+
+        dwellReticle.Bind(interactable, ActivateFromPc);
     }
 
     #endregion

@@ -62,9 +62,6 @@
 	<string name="continue">CONTINUAR</string>
 	<!-- Custom scenes (for scores) -->
 	<string name="loto_simulation">Bloqueo/Etiquetado de Energía</string>
-	<string name="loto_simulation_summary">Capacitación LOTO: EPP, inspección de riesgos y bloqueo de energía en correa transportadora.</string>
-	<string name="loto_placeholder_title">Simulación LOTO — En construcción</string>
-	<string name="loto_placeholder_return">Volver al menú</string>
 	<string name="loto_obj_epp_selection">Selección correcta de EPP</string>
 	<string name="loto_obj_epp_defect">Identificación de EPP defectuoso</string>
 	<string name="loto_obj_hazard_report">Reporte de condiciones inseguras</string>
@@ -94,7 +91,6 @@
 	<string name="loto_s3_alert_no_gloves">Sin guantes de protección. Riesgo de electrocución al aislar energía.</string>
 	<string name="loto_s3_success_zero_energy">Verificación de energía cero exitosa.</string>
 	<string name="loto_s3_summary_title">Resumen de sesión LOTO</string>
-	<string name="loto_s3_summary_body">Objetivos logrados: {0}/{1}. Resultado: {2}.</string>
 	<string name="loto_summary_score">Puntaje: {0}/100</string>
 	<string name="loto_summary_approved">Aprobado</string>
 	<string name="loto_summary_not_approved">No aprobado</string>
@@ -108,7 +104,6 @@
 	<string name="loto_tag_maintenance">MANTENIMIENTO TERMINADO</string>
 	<string name="loto_s1_intro">Bienvenido al vestuario. Seleccione y colóquese el EPP obligatorio antes de ingresar a planta.</string>
 	<string name="loto_s1_step_select">Seleccione los 5 elementos de EPP obligatorios y colóquelos en su cuerpo.</string>
-	<string name="loto_s1_step_reject">Este EPP está en mal estado. No debe utilizarse. Devuélvalo o deposítelo en el contenedor de descarte.</string>
 	<string name="loto_s1_step_ready">EPP completo. Continúe hacia la inspección de riesgos.</string>
 	<string name="loto_s1_reject_defective">Este EPP está en mal estado. No debe utilizarse. Seleccione una unidad en buen estado.</string>
 	<string name="loto_s1_success_equipped">EPP obligatorio completo (5/5).</string>
@@ -131,6 +126,8 @@
 	<string name="loto_s2_timeout_hint">Aún hay condiciones inseguras sin reportar. Observe el área con más detalle.</string>
 	<string name="loto_s2_roller_anomaly">Se detectó una anomalía en un rodillo de la correa. Prepare el equipo para una intervención segura.</string>
 	<string name="loto_s2_exit">Continuar a LOTO</string>
+	<string name="loto_s2_label_extinguisher">Extintor obstruido</string>
+	<string name="loto_s2_label_signage">Señalización deteriorada</string>
 	<string name="loto_s2_report_spill">Material derramado en zona de tránsito reportado.</string>
 	<string name="loto_s2_report_tools">Herramientas abandonadas reportadas.</string>
 	<string name="loto_s2_report_signage">Señalización caída o deteriorada reportada.</string>

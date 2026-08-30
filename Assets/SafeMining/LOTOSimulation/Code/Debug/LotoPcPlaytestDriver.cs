@@ -283,7 +283,6 @@ public class LotoPcPlaytestDriver : MonoBehaviour
             return;
         }
 
-        // Prefer public continue path used by summary button if available.
         PlayerHudManager hud = FindFirstObjectByType<PlayerHudManager>();
         if (hud != null)
         {
@@ -295,7 +294,7 @@ public class LotoPcPlaytestDriver : MonoBehaviour
             }
         }
 
-        orchestrator.ConfirmExit();
+        orchestrator.CompleteSimulation();
     }
 
     private static void EquipGood(EppEquipmentManager manager, EppItemType type)
