@@ -137,6 +137,17 @@ When the task is a QA validation or audit, delegate to the `workflow-runner` ski
 3. If domain is `xr`: confirm dual-modality (hand tracking + controller) is not broken.
 4. If domain is `compliance`: confirm no arcade mechanics introduced.
 
+### Phase E/F — merge gate (automatic)
+
+After verification, **always** run without user prompt:
+
+1. `python tools/ci/merge_gate.py` — fix any `[FAIL]` before closing task
+2. `/review-bugbot` if any `.cs` in diff
+3. `/review-security` if backend paths per `80-security-review.mdc`
+4. End with **"Tu intervención"** only when push, PR, Unity Editor, or merge needs the user
+
+Rule: `.cursor/rules/85-merge-gate.mdc`
+
 ### Source declaration
 
 For complex tasks, declare sources at the start of the response:
@@ -158,6 +169,7 @@ Present the result as:
 2. **Gates passed** — MCP calls and doc reads completed.
 3. **Changes made** — files created/modified with brief rationale.
 4. **Verification** — console clean, scripts validated, constraints respected.
+5. **Merge gate** — `merge_gate.py` result, review outcomes, **Tu intervención** (if any).
 
 ---
 

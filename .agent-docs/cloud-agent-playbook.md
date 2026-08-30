@@ -147,6 +147,23 @@ A cloud/background job is **complete** only when the PR or final summary include
 
 ---
 
+## Phases E & F — automatic (default)
+
+The **agent** runs E/F after every substantive task without user prompt. Rule: `.cursor/rules/85-merge-gate.mdc`.
+
+| Step | Who | Command / action |
+|------|-----|------------------|
+| E1 CI + PR draft | Agent auto | `python tools/ci/merge_gate.py` |
+| E2 Unity gates | Agent auto | `Unity_ReadConsole`, `Unity_ValidateScript` |
+| E3 Push / PR | User **only if** branch unpushed | `git push` + GitHub PR |
+| F1 Bugbot | Agent auto | `/review-bugbot` when `.cs` changed |
+| F2 Security | Agent auto | `/review-security` when backend paths changed |
+| F3 Merge | User **only if** reviews pass | Approve PR on GitHub |
+
+Agent ends with **"Tu intervención"** section only when steps require the user, with exact commands.
+
+---
+
 ## Anti-patterns
 
 - Running cloud agent on `main` without a feature branch

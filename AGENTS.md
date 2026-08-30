@@ -77,4 +77,15 @@ See `.agent-docs/workflows/README.md` for the full index. Execute in order: **WF
 
 - **Cursor Hooks:** `.cursor/hooks.json` reinforces MCP gates (`sessionStart`, `afterFileEdit`, `beforeMCPExecution`).
 - **Local CI:** `python tools/ci/run_all.py` — workspace hygiene, LOTO matrix, C# sanity.
+- **Merge gate (E/F):** `python tools/ci/merge_gate.py` — agent runs automatically at end of substantive tasks; see `.cursor/rules/85-merge-gate.mdc`.
 - **GitHub Actions:** `.github/workflows/safemining-ci.yml` — runs on PR/push; enable Unity batchmode compile with repo variable `CI_UNITY_ENABLED=true` plus `UNITY_LICENSE` (and activation secrets).
+
+## End-of-task protocol (Phases E & F)
+
+The agent **always** runs merge gate + reviews after substantive work without being asked.
+
+1. `python tools/ci/merge_gate.py`
+2. MCP console/script validation if C# changed
+3. `/review-bugbot` if C# changed
+4. `/review-security` if backend paths changed
+5. Chat section **"Tu intervención"** only when push, PR, Unity Editor, or merge needs the user

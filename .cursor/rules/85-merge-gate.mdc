@@ -1,0 +1,59 @@
+---
+description: >-
+  Mandatory end-of-task merge gate (Phases E/F). Agent runs automatically after
+  any substantive code/doc/tooling change. Escalates to user only when human
+  action is required, with explicit instructions.
+alwaysApply: true
+---
+
+# Merge Gate — Phases E & F (automatic)
+
+After **every substantive task** (code, scenes via MCP, CI, rules, hooks), the agent runs Phases E/F **without asking permission** unless blocked.
+
+## Phase E — PR package (automated)
+
+Run in order:
+
+1. `python tools/ci/merge_gate.py` — parse report; fix any `[FAIL]` before continuing
+2. `Unity_ReadConsole` (Errors) → 0 if Unity/C# changed
+3. `Unity_ValidateScript` on each new/modified `.cs` if applicable
+4. If branch has unpushed commits → inform user only if push fails or user must approve PR creation
+
+Agent drafts PR title `[domain] description` and body from merge_gate output.
+
+## Phase F — Reviews (automated)
+
+| Condition | Agent action |
+|-----------|----------------|
+| Any `.cs` change in diff | Launch `/bugbot` on `branch changes` (foreground) |
+| Backend paths per `80-security-review.mdc` | Launch `/review-security` on `branch changes` |
+| CRITICAL or HIGH findings | **STOP** — report table + fix plan; do not claim task complete |
+| Zero CRITICAL/HIGH | Report "reviews clear" in deliverable |
+
+Do not skip reviews because the user did not ask — they are part of task completion.
+
+## User intervention required — report format
+
+When automation cannot complete, end the response with:
+
+```
+## ⚠️ Tu intervención
+1. <qué hacer> — <cómo, comando o clic exacto>
+2. ...
+```
+
+Examples:
+- **Push/PR:** `git push -u origin <branch>` luego crear PR en GitHub
+- **Unity Editor cerrado:** abrir Unity 6000.3.10f1 con SafeMiningVR para MCP gates
+- **CI_UNITY_ENABLED:** configurar secret en GitHub si compile job requerido
+- **Merge:** aprobar PR en GitHub tras reviews verdes
+
+If nothing blocks: omit the section or state "Sin intervención requerida."
+
+## Task complete definition
+
+A task is **not complete** until:
+- merge_gate.py → READY (exit 0)
+- Unity console 0 errors (if applicable)
+- Bugbot clear (if C# touched)
+- Security review clear (if backend touched)
