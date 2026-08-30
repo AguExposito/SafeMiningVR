@@ -1,5 +1,7 @@
 # Audit Alignment Baseline — Fase 0
 
+> **S1 scene wiring (post-Cabin art):** Prefer [`s1-scene-inventory.md`](s1-scene-inventory.md) (2026-08-30). It supersedes S1-03 / S1-04 and related VR-LOTO-S1 PASS rows below that reflected prefab/code — live MCP shows Continue / Reject / Outline absent and `rejectZoneAnchor` null.
+
 ## Metadata
 
 | Field | Value |
