@@ -32,9 +32,9 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 ## Outline hints
 
-- Color Secondary `#F97316`, width ~4.
+- Color Secondary `#F97316` via `Brand.GetColor(Secondary)` when BrandConfig is loaded (fallback hardcoded), width ~4.
 - One hint set at a time; cleared when the step completes.
-- S1: pending good mandatory EPP → continue door when ready.
+- S1: next pending good mandatory EPP in **MandatoryTypes order** (Helmet → Glasses → Vest → Gloves → Boots) → continue door when ready.
 - S2: unreported real hazards → continue door when ready (no decoys).
 - S3: STOP → breaker → personal lock → danger tag → START.
 

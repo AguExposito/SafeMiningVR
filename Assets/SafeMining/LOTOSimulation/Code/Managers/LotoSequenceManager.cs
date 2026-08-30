@@ -211,7 +211,7 @@ public class LotoSequenceManager : MonoBehaviour
         if (currentStep != LotoSequenceStep.TagApplied)
         {
             EmitEvent("start_incomplete", false);
-            Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_incomplete", OnHintSubtitle);
+            Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_incomplete", OnHintSubtitle, true);
             if (beltAnimator != null)
             {
                 beltAnimator.PlayFailedStartAttempt();
@@ -363,7 +363,7 @@ public class LotoSequenceManager : MonoBehaviour
     private void Reject(string subtitleKey, string optionId)
     {
         EmitEvent(optionId, false);
-        Util_LotoSimulationBridge.NotifySubtitle(subtitleKey, OnHintSubtitle);
+        Util_LotoSimulationBridge.NotifySubtitle(subtitleKey, OnHintSubtitle, true);
         LotoTrainingFeedback.PlayFail();
     }
 
@@ -375,7 +375,7 @@ public class LotoSequenceManager : MonoBehaviour
         }
 
         EmitEvent("breaker_no_gloves", false);
-        Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_no_gloves", OnHintSubtitle);
+        Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_no_gloves", OnHintSubtitle, true);
         LotoTrainingFeedback.PlayFail();
     }
 

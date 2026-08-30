@@ -9,6 +9,8 @@ public class LotoOutlineHint : MonoBehaviour
 
     private readonly List<Outline> activeOutlines = new List<Outline>();
 
+    #region Public API
+
     public void Show(params GameObject[] targets)
     {
         Clear();
@@ -25,17 +27,7 @@ public class LotoOutlineHint : MonoBehaviour
                 continue;
             }
 
-            Outline outline = target.GetComponent<Outline>();
-            if (outline == null)
-            {
-                outline = target.AddComponent<Outline>();
-            }
-
-            outline.OutlineMode = outlineMode;
-            outline.OutlineColor = outlineColor;
-            outline.OutlineWidth = outlineWidth;
-            outline.enabled = true;
-            activeOutlines.Add(outline);
+            ApplyOutline(target);
             return;
         }
     }
@@ -55,7 +47,7 @@ public class LotoOutlineHint : MonoBehaviour
                 continue;
             }
 
-            ShowAppend(targets[i]);
+            ApplyOutline(targets[i]);
             return;
         }
     }
@@ -73,7 +65,20 @@ public class LotoOutlineHint : MonoBehaviour
         activeOutlines.Clear();
     }
 
-    private void ShowAppend(GameObject target)
+    #endregion
+
+    #region Lifecycle
+
+    private void OnDisable()
+    {
+        Clear();
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private void ApplyOutline(GameObject target)
     {
         Outline outline = target.GetComponent<Outline>();
         if (outline == null)
@@ -82,14 +87,21 @@ public class LotoOutlineHint : MonoBehaviour
         }
 
         outline.OutlineMode = outlineMode;
-        outline.OutlineColor = outlineColor;
+        outline.OutlineColor = ResolveOutlineColor();
         outline.OutlineWidth = outlineWidth;
         outline.enabled = true;
         activeOutlines.Add(outline);
     }
 
-    private void OnDisable()
+    private Color ResolveOutlineColor()
     {
-        Clear();
+        if (Brand.HasConfig)
+        {
+            return Brand.GetColor(BrandColorRole.Secondary);
+        }
+
+        return outlineColor;
     }
+
+    #endregion
 }

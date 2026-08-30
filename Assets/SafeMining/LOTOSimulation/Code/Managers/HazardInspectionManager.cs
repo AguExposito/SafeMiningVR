@@ -270,7 +270,8 @@ public class HazardInspectionManager : MonoBehaviour
 
     private void NotifyOrchestratorSubtitle(string key)
     {
-        Util_LotoSimulationBridge.NotifySubtitle(key, OnHintSubtitle);
+        bool isError = key == "loto_s2_false_positive";
+        Util_LotoSimulationBridge.NotifySubtitle(key, OnHintSubtitle, isError);
     }
 
     #endregion

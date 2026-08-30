@@ -158,7 +158,7 @@ public class PlayerHudManager : MonoBehaviour
         RefreshObjectiveRow(objectiveIndex, achieved);
     }
 
-    private void HandleSubtitleChanged(string subtitle)
+    private void HandleSubtitleChanged(string subtitle, bool isError)
     {
         if (playerHud == null || playerHud.subtitleText == null)
         {
@@ -166,11 +166,6 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         playerHud.subtitleText.text = subtitle;
-        bool isError = !string.IsNullOrEmpty(subtitle) &&
-                       (subtitle.IndexOf("reject", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        subtitle.IndexOf("block", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        subtitle.IndexOf("alert", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        subtitle.IndexOf("false", StringComparison.OrdinalIgnoreCase) >= 0);
         playerHud.subtitleText.color = isError
             ? new Color(1f, 0.72f, 0.45f, 1f)
             : Color.white;

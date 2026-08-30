@@ -16,7 +16,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
 {
     public event Action<int, int> OnScenarioChanged;
     public event Action<int, bool> OnObjectiveVisualUpdate;
-    public event Action<string> OnSubtitleChanged;
+    public event Action<string, bool> OnSubtitleChanged;
     public event Action<LotoSimulationState> OnStateChanged;
 
     public event Action<bool> OnSessionSummaryRequested;
@@ -194,14 +194,14 @@ public class SimulationOrchestratorManager : MonoBehaviour
         return false;
     }
 
-    public void NotifySubtitle(string subtitle)
+    public void NotifySubtitle(string subtitle, bool isError = false)
     {
         if (string.IsNullOrEmpty(subtitle))
         {
             return;
         }
 
-        OnSubtitleChanged?.Invoke(subtitle);
+        OnSubtitleChanged?.Invoke(subtitle, isError);
     }
 
     public void ShowSessionSummary()
@@ -226,7 +226,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
             DateTime.UtcNow,
             LotoSessionScore.CompletionCompleted);
         OnSessionSummaryRequested?.Invoke(payload.approved);
-        OnSubtitleChanged?.Invoke(GetTranslation("loto_s3_summary_title"));
+        OnSubtitleChanged?.Invoke(GetTranslation("loto_s3_summary_title"), false);
     }
 
     public async void CompleteSimulation()
@@ -345,16 +345,16 @@ public class SimulationOrchestratorManager : MonoBehaviour
         switch (scenarioIndex)
         {
             case LotoSimulationConstants.ScenarioEpp:
-                OnSubtitleChanged?.Invoke(GetTranslation("loto_s1_intro"));
+                OnSubtitleChanged?.Invoke(GetTranslation("loto_s1_intro"), false);
                 break;
             case LotoSimulationConstants.ScenarioInspection:
-                OnSubtitleChanged?.Invoke(GetTranslation("loto_s2_intro"));
+                OnSubtitleChanged?.Invoke(GetTranslation("loto_s2_intro"), false);
                 break;
             case LotoSimulationConstants.ScenarioLoto:
-                OnSubtitleChanged?.Invoke(GetTranslation("loto_s3_intro"));
+                OnSubtitleChanged?.Invoke(GetTranslation("loto_s3_intro"), false);
                 break;
             default:
-                OnSubtitleChanged?.Invoke(GetTranslation("loto_subtitle_welcome"));
+                OnSubtitleChanged?.Invoke(GetTranslation("loto_subtitle_welcome"), false);
                 break;
         }
     }
@@ -367,7 +367,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
     {
         SetState(LotoSimulationState.Briefing);
         OnScenarioChanged?.Invoke(currentScenarioIndex, LotoSimulationConstants.TotalScenarios);
-        OnSubtitleChanged?.Invoke(GetTranslation("loto_briefing_body"));
+        OnSubtitleChanged?.Invoke(GetTranslation("loto_briefing_body"), false);
     }
 
     private void SetState(LotoSimulationState newState)

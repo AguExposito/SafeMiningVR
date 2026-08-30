@@ -106,7 +106,7 @@ public class EppEquipmentManager : MonoBehaviour
         }
 
         EmitEvent("epp_inspect_defect", true, item.itemType);
-        NotifyOrchestratorSubtitle("loto_s1_reject_defective");
+        NotifyOrchestratorSubtitle("loto_s1_reject_defective", true);
         LotoTrainingFeedback.PlayFail();
     }
 
@@ -155,7 +155,7 @@ public class EppEquipmentManager : MonoBehaviour
         {
             attemptedDefectiveWear = true;
             EmitEvent("epp_equip_defect", false, item.itemType);
-            NotifyOrchestratorSubtitle("loto_s1_reject_defective");
+            NotifyOrchestratorSubtitle("loto_s1_reject_defective", true);
             LotoTrainingFeedback.PlayFail();
             ScoreDefectObjective(false);
             return false;
@@ -196,7 +196,7 @@ public class EppEquipmentManager : MonoBehaviour
 
         if (item.condition != EppItemCondition.Defective)
         {
-            NotifyOrchestratorSubtitle("loto_s1_block_incomplete");
+            NotifyOrchestratorSubtitle("loto_s1_block_incomplete", true);
             LotoTrainingFeedback.PlayFail();
             return false;
         }
@@ -237,7 +237,7 @@ public class EppEquipmentManager : MonoBehaviour
     {
         if (!IsReadyToAdvance)
         {
-            NotifyOrchestratorSubtitle("loto_s1_block_incomplete");
+            NotifyOrchestratorSubtitle("loto_s1_block_incomplete", true);
             LotoTrainingFeedback.PlayFail();
             return;
         }
@@ -384,25 +384,32 @@ public class EppEquipmentManager : MonoBehaviour
             return;
         }
 
-        System.Collections.Generic.List<GameObject> targets = new System.Collections.Generic.List<GameObject>(8);
         ref_EppItem[] items = GetComponentsInChildren<ref_EppItem>(true);
-        for (int i = 0; i < items.Length; i++)
+        for (int typeIndex = 0; typeIndex < MandatoryTypes.Length; typeIndex++)
         {
-            ref_EppItem item = items[i];
-            if (item == null || item.IsLocked)
+            EppItemType requiredType = MandatoryTypes[typeIndex];
+            if (equippedMandatory.Contains(requiredType))
             {
                 continue;
             }
 
-            if (item.condition == EppItemCondition.Good &&
-                EppTypeRules.IsMandatory(item.itemType) &&
-                !equippedMandatory.Contains(item.itemType))
+            for (int i = 0; i < items.Length; i++)
             {
-                targets.Add(item.gameObject);
+                ref_EppItem item = items[i];
+                if (item == null || item.IsLocked)
+                {
+                    continue;
+                }
+
+                if (item.condition == EppItemCondition.Good && item.itemType == requiredType)
+                {
+                    hint.Show(item.gameObject);
+                    return;
+                }
             }
         }
 
-        hint.Show(targets);
+        hint.Clear();
     }
 
     private void WireChildInteractables()
@@ -510,9 +517,9 @@ public class EppEquipmentManager : MonoBehaviour
         }
     }
 
-    private void NotifyOrchestratorSubtitle(string key)
+    private void NotifyOrchestratorSubtitle(string key, bool isError = false)
     {
-        Util_LotoSimulationBridge.NotifySubtitle(key, OnHintSubtitle);
+        Util_LotoSimulationBridge.NotifySubtitle(key, OnHintSubtitle, isError);
     }
 
     public static string GetDisplayName(EppItemType type)

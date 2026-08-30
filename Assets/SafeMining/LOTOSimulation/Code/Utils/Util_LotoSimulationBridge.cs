@@ -73,13 +73,13 @@ public static class Util_LotoSimulationBridge
         return string.IsNullOrEmpty(translated) ? key : translated;
     }
 
-    public static void NotifySubtitle(string locKey, Action<string> localHint = null)
+    public static void NotifySubtitle(string locKey, Action<string> localHint = null, bool isError = false)
     {
         string translated = Translate(locKey);
         localHint?.Invoke(translated);
         if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
         {
-            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated);
+            ControlCenter.Instance.simulationOrchestratorManager.NotifySubtitle(translated, isError);
         }
     }
 
