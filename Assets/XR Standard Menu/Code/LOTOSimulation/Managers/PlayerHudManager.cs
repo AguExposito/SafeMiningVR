@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XRStandardMenu;
 
 public class PlayerHudManager : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class PlayerHudManager : MonoBehaviour
     private readonly List<ref_LotoObjectiveRow> objectiveRows = new List<ref_LotoObjectiveRow>();
     private float nextTimerRefreshTime;
     private float subtitleHideTime;
+    private bool hudChromeVisible = true;
+    private Button hudReopenButton;
+    private Button hudExitShortcutButton;
 
     #region Initialization
 
@@ -73,7 +77,7 @@ public class PlayerHudManager : MonoBehaviour
     private void RefreshButtonLabels()
     {
         EnsureButtonLabel(briefingPanel?.beginButton, "loto_briefing_begin");
-        EnsureButtonLabel(playerHud?.menuButton, "loto_hud_menu");
+        EnsureButtonLabel(playerHud?.menuButton, "loto_hud_hide_panel");
         EnsureButtonLabel(playerHud?.exitConfirmYes, "loto_exit_confirm_yes");
         EnsureButtonLabel(playerHud?.exitConfirmNo, "loto_exit_confirm_no");
     }
@@ -193,7 +197,7 @@ public class PlayerHudManager : MonoBehaviour
 
         bool showExitConfirm = state == LotoSimulationState.ExitConfirm;
         bool showSessionSummary = state == LotoSimulationState.SessionSummary;
-        bool showActiveChrome = state == LotoSimulationState.Active;
+        bool showActiveChrome = hudChromeVisible && state == LotoSimulationState.Active;
 
         if (playerHud != null && playerHud.exitConfirmPanel != null)
         {
@@ -206,6 +210,16 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         SetActiveChromeVisible(showActiveChrome);
+        if (hudReopenButton != null)
+        {
+            hudReopenButton.gameObject.SetActive(!hudChromeVisible && state == LotoSimulationState.Active);
+        }
+
+        EnsureExitShortcutButton();
+        if (hudExitShortcutButton != null)
+        {
+            hudExitShortcutButton.gameObject.SetActive(state == LotoSimulationState.Active);
+        }
 
         if (state == LotoSimulationState.Briefing)
         {
@@ -422,10 +436,12 @@ public class PlayerHudManager : MonoBehaviour
             briefingPanel.beginButton.onClick.AddListener(() => orchestrator?.DismissBriefing());
         }
 
+        EnsureHudPanelController();
+
         if (playerHud != null && playerHud.menuButton != null)
         {
             playerHud.menuButton.onClick.RemoveAllListeners();
-            playerHud.menuButton.onClick.AddListener(() => orchestrator?.RequestExitToMenu());
+            playerHud.menuButton.onClick.AddListener(OnMenuButtonPressed);
         }
 
         if (playerHud != null && playerHud.exitConfirmYes != null)
@@ -445,6 +461,162 @@ public class PlayerHudManager : MonoBehaviour
             playerHud.sessionSummaryContinueButton.onClick.RemoveAllListeners();
             playerHud.sessionSummaryContinueButton.onClick.AddListener(() => orchestrator?.CompleteSimulation());
         }
+    }
+
+    private void OnMenuButtonPressed()
+    {
+        ToggleHudChrome();
+    }
+
+    public void ToggleHudChrome()
+    {
+        hudChromeVisible = !hudChromeVisible;
+        ApplyChromeVisibilityForCurrentState();
+    }
+
+    private void ApplyChromeVisibilityForCurrentState()
+    {
+        LotoSimulationState state = orchestrator != null ? orchestrator.CurrentState : LotoSimulationState.Initializing;
+        bool showActiveChrome = hudChromeVisible
+            && state != LotoSimulationState.Briefing
+            && state != LotoSimulationState.ExitConfirm
+            && state != LotoSimulationState.SessionSummary;
+        SetActiveChromeVisible(showActiveChrome);
+        if (hudReopenButton != null)
+        {
+            hudReopenButton.gameObject.SetActive(!hudChromeVisible && state == LotoSimulationState.Active);
+        }
+    }
+
+    private void EnsureHudPanelController()
+    {
+        if (playerHud == null)
+        {
+            return;
+        }
+
+        LotoHudPanelController controller = playerHud.GetComponent<LotoHudPanelController>();
+        if (controller == null)
+        {
+            controller = playerHud.gameObject.AddComponent<LotoHudPanelController>();
+        }
+
+        Util_PanelFollower follower = playerHud.GetComponent<Util_PanelFollower>();
+        controller.Configure(follower);
+        hudReopenButton = EnsureReopenButton(playerHud.transform);
+        EnsureExitShortcutButton();
+
+        if (briefingPanel != null)
+        {
+            Util_PanelFollower briefingFollower = briefingPanel.GetComponent<Util_PanelFollower>();
+            if (briefingFollower != null)
+            {
+                briefingFollower.SetOffset(new Vector3(0f, -0.05f, 0.78f));
+                briefingFollower.SetFixedDistance(0.78f);
+            }
+
+            RectTransform briefingRect = briefingPanel.GetComponent<RectTransform>();
+            if (briefingRect != null)
+            {
+                briefingRect.sizeDelta = new Vector2(820f, 520f);
+                briefingPanel.transform.localScale = Vector3.one * 0.00075f;
+            }
+        }
+    }
+
+    private Button EnsureReopenButton(Transform hudRoot)
+    {
+        if (hudRoot == null)
+        {
+            return null;
+        }
+
+        Transform existing = hudRoot.Find("HudReopenButton");
+        GameObject buttonObject;
+        if (existing != null)
+        {
+            buttonObject = existing.gameObject;
+        }
+        else
+        {
+            buttonObject = new GameObject("HudReopenButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            buttonObject.transform.SetParent(hudRoot, false);
+            RectTransform rect = buttonObject.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0.5f, 0f);
+            rect.anchorMax = new Vector2(0.5f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            rect.anchoredPosition = new Vector2(0f, 24f);
+            rect.sizeDelta = new Vector2(220f, 64f);
+            Image image = buttonObject.GetComponent<Image>();
+            image.color = secondaryAccentColor;
+            GameObject labelObject = new GameObject("Label", typeof(RectTransform));
+            labelObject.transform.SetParent(buttonObject.transform, false);
+            RectTransform labelRect = labelObject.GetComponent<RectTransform>();
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = Vector2.zero;
+            labelRect.offsetMax = Vector2.zero;
+            TextMeshProUGUI label = labelObject.AddComponent<TextMeshProUGUI>();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 28;
+            label.color = Color.white;
+            label.text = GetTranslation("loto_hud_show_panel");
+        }
+
+        Button button = buttonObject.GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() =>
+        {
+            hudChromeVisible = true;
+            ApplyChromeVisibilityForCurrentState();
+        });
+        buttonObject.SetActive(false);
+        return button;
+    }
+
+    private void EnsureExitShortcutButton()
+    {
+        if (playerHud == null || hudExitShortcutButton != null)
+        {
+            return;
+        }
+
+        Transform hudRoot = playerHud.transform;
+        Transform existing = hudRoot.Find("HudExitShortcutButton");
+        GameObject buttonObject;
+        if (existing != null)
+        {
+            buttonObject = existing.gameObject;
+        }
+        else
+        {
+            buttonObject = new GameObject("HudExitShortcutButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            buttonObject.transform.SetParent(hudRoot, false);
+            RectTransform rect = buttonObject.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(1f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(1f, 1f);
+            rect.anchoredPosition = new Vector2(-24f, -24f);
+            rect.sizeDelta = new Vector2(160f, 56f);
+            Image image = buttonObject.GetComponent<Image>();
+            image.color = primaryPanelColor;
+            GameObject labelObject = new GameObject("Label", typeof(RectTransform));
+            labelObject.transform.SetParent(buttonObject.transform, false);
+            RectTransform labelRect = labelObject.GetComponent<RectTransform>();
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = Vector2.zero;
+            labelRect.offsetMax = Vector2.zero;
+            TextMeshProUGUI label = labelObject.AddComponent<TextMeshProUGUI>();
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 24;
+            label.color = Color.white;
+            label.text = GetTranslation("loto_hud_menu");
+        }
+
+        hudExitShortcutButton = buttonObject.GetComponent<Button>();
+        hudExitShortcutButton.onClick.RemoveAllListeners();
+        hudExitShortcutButton.onClick.AddListener(() => orchestrator?.RequestExitToMenu());
     }
 
     #endregion

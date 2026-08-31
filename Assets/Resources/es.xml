@@ -73,6 +73,8 @@
 	<string name="loto_hud_active_objective">Objetivo activo</string>
 	<string name="loto_hud_scenario_label">Escenario {0}/{1}</string>
 	<string name="loto_hud_menu">Menú</string>
+	<string name="loto_hud_hide_panel">Ocultar panel</string>
+	<string name="loto_hud_show_panel">Mostrar panel</string>
 	<string name="loto_exit_confirm_title">¿Salir de la simulación?</string>
 	<string name="loto_exit_confirm_body">La sesión quedará incompleta. Se guardará el avance parcial y podrás revisarlo en el lobby.</string>
 	<string name="loto_exit_confirm_yes">Salir</string>
@@ -109,6 +111,7 @@
 	<string name="loto_s1_success_equipped">EPP obligatorio completo (5/5).</string>
 	<string name="loto_s1_success_defect">EPP defectuoso identificado correctamente.</string>
 	<string name="loto_s1_optional_item">Este EPP no es obligatorio para esta tarea.</string>
+	<string name="loto_s1_optional_equipped">EPP opcional equipado</string>
 	<string name="loto_s1_block_incomplete">Debe completar el equipamiento de EPP obligatorio antes de continuar</string>
 	<string name="loto_epp_helmet">Casco</string>
 	<string name="loto_epp_glasses">Lentes</string>

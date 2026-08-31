@@ -17,5 +17,7 @@ public class SimulationSessionContext
     public bool hasReflectiveVest;
     public bool hasGloves;
     public bool hasSafetyBoots;
+    public bool hasRespirator;
+    public bool hasHearingProtection;
     public int falsePositiveCount;
 }

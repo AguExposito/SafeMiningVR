@@ -76,6 +76,8 @@
 	<string name="loto_hud_active_objective">Active objective</string>
 	<string name="loto_hud_scenario_label">Scenario {0}/{1}</string>
 	<string name="loto_hud_menu">Menu</string>
+	<string name="loto_hud_hide_panel">Hide panel</string>
+	<string name="loto_hud_show_panel">Show panel</string>
 	<string name="loto_exit_confirm_title">Leave simulation?</string>
 	<string name="loto_exit_confirm_body">The session will remain incomplete. Partial progress will be saved and available in the lobby.</string>
 	<string name="loto_exit_confirm_yes">Leave</string>
@@ -112,6 +114,7 @@
 	<string name="loto_s1_success_equipped">Mandatory PPE complete (5/5).</string>
 	<string name="loto_s1_success_defect">Defective PPE identified correctly.</string>
 	<string name="loto_s1_optional_item">This PPE item is not required for this task.</string>
+	<string name="loto_s1_optional_equipped">Optional PPE equipped</string>
 	<string name="loto_s1_block_incomplete">You must complete mandatory PPE equipment before continuing</string>
 	<string name="loto_epp_helmet">Helmet</string>
 	<string name="loto_epp_glasses">Glasses</string>

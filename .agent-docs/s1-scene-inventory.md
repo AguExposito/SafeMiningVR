@@ -105,3 +105,16 @@ Menu: **SafeMining/LOTO/Run Fase 5 S1 E2E Test** (Play from StandardMainMenu).
 | Cabin art polish | Out of S1 align scope |
 
 **Roadmap S1 Fases 0–5: CLOSED (post-align).**
+
+## I. UX pass (post Fase 5) — 2026-08-31
+
+| Feature | Behavior |
+|---------|----------|
+| HUD/Briefing size | Comfort scale (~0.00072) + centered follow offset |
+| Hide/Show HUD | Menu = Ocultar panel; HudReopenButton = Mostrar; Salir shortcut top-right |
+| Helmet | Body attach (unchanged) |
+| Glasses / Vest / Gloves / Boots | Disappear on grab (no body mesh); glasses tint filter; gloves hand materials |
+| Glasses grab | Larger collider + EnsureGrabInteractable |
+| Hover outline | Cyan/brand Outline on all EPP when hand/controller hovers |
+| Optional Respirator / Hearing | Equipable (consume visual); not required for gate |
+| `S1_TeleportToNextArea` | Cyan emissive pad; activates at 5/5; teleport triggers continue → S2 |

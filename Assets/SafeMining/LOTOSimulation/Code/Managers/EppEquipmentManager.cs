@@ -25,12 +25,14 @@ public class EppEquipmentManager : MonoBehaviour
     [SerializeField] private Transform bootsAnchor;
 
     private readonly HashSet<EppItemType> equippedMandatory = new HashSet<EppItemType>();
+    private readonly HashSet<EppItemType> equippedOptional = new HashSet<EppItemType>();
     private readonly HashSet<int> rejectedDefectiveIds = new HashSet<int>();
     private readonly HashSet<int> pendingDefectiveIds = new HashSet<int>();
 
     private bool selectionObjectiveScored;
     private bool defectObjectiveScored;
     private bool attemptedDefectiveWear;
+    private LotoS1TeleportToNextArea teleportToNextArea;
 
     public Transform rejectZoneAnchor;
 
@@ -51,6 +53,7 @@ public class EppEquipmentManager : MonoBehaviour
     public void Begin()
     {
         equippedMandatory.Clear();
+        equippedOptional.Clear();
         rejectedDefectiveIds.Clear();
         pendingDefectiveIds.Clear();
         selectionObjectiveScored = false;
@@ -66,10 +69,14 @@ public class EppEquipmentManager : MonoBehaviour
         WireChildInteractables();
         ActivateLogicRoots();
         BindBodyAnchors();
+        ResolveTeleportPad();
+        LotoSafetyGlassesVisionFilter.SetGlassesEquipped(false);
+        LotoGloveHandVisuals.SetGlovesEquipped(false);
 
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s1_step_select");
         RefreshOutlineHints();
+        RefreshTeleportPad();
     }
 
     public void BindBodyAnchors()
@@ -139,18 +146,6 @@ public class EppEquipmentManager : MonoBehaviour
             return false;
         }
 
-        if (!EppTypeRules.IsMandatory(item.itemType))
-        {
-            EmitEvent("epp_optional_grab", true, item.itemType);
-            NotifyOrchestratorSubtitle("loto_s1_optional_item");
-            return false;
-        }
-
-        if (equippedMandatory.Contains(item.itemType))
-        {
-            return false;
-        }
-
         if (item.condition == EppItemCondition.Defective)
         {
             attemptedDefectiveWear = true;
@@ -161,12 +156,41 @@ public class EppEquipmentManager : MonoBehaviour
             return false;
         }
 
+        bool isMandatory = EppTypeRules.IsMandatory(item.itemType);
+        if (isMandatory)
+        {
+            if (equippedMandatory.Contains(item.itemType))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (equippedOptional.Contains(item.itemType))
+            {
+                return false;
+            }
+        }
+
         item.SetEquipped(true);
-        equippedMandatory.Add(item.itemType);
+        if (isMandatory)
+        {
+            equippedMandatory.Add(item.itemType);
+        }
+        else
+        {
+            equippedOptional.Add(item.itemType);
+            EmitEvent("epp_optional_equip", true, item.itemType);
+            NotifyOrchestratorSubtitle("loto_s1_optional_equipped");
+        }
+
         UpdateSessionEppFlags(item.itemType, true);
-        EmitEvent("epp_equip_good", true, item.itemType);
-        Debug.Log($"[LOTO] Equipado: {GetDisplayName(item.itemType)} {equippedMandatory.Count}/{MandatoryTypes.Length}");
-        NotifyProgress();
+        if (isMandatory)
+        {
+            EmitEvent("epp_equip_good", true, item.itemType);
+            Debug.Log($"[LOTO] Equipado: {GetDisplayName(item.itemType)} {equippedMandatory.Count}/{MandatoryTypes.Length}");
+            NotifyProgress();
+        }
 
         EppItemInteractable interactable = item.GetComponent<EppItemInteractable>();
         if (interactable != null)
@@ -174,13 +198,13 @@ public class EppEquipmentManager : MonoBehaviour
             interactable.RaiseEquipped();
         }
 
-        Transform attach = attachAnchor != null ? attachAnchor : GetAttachAnchor(item.itemType);
-        AttachEquippedItem(item, attach);
+        ApplyEquipPresentation(item, attachAnchor);
 
-        if (equippedMandatory.Count >= MandatoryTypes.Length)
+        if (isMandatory && equippedMandatory.Count >= MandatoryTypes.Length)
         {
             ScoreSelectionObjective();
             NotifyOrchestratorSubtitle("loto_s1_step_ready");
+            RefreshTeleportPad();
         }
 
         LotoTrainingFeedback.PlaySuccess();
@@ -333,6 +357,12 @@ public class EppEquipmentManager : MonoBehaviour
             case EppItemType.SafetyBoots:
                 session.hasSafetyBoots = equipped;
                 break;
+            case EppItemType.Respirator:
+                session.hasRespirator = equipped;
+                break;
+            case EppItemType.HearingProtection:
+                session.hasHearingProtection = equipped;
+                break;
         }
     }
 
@@ -361,6 +391,7 @@ public class EppEquipmentManager : MonoBehaviour
     {
         OnProgressChanged?.Invoke(equippedMandatory.Count, MandatoryTypes.Length);
         RefreshOutlineHints();
+        RefreshTeleportPad();
     }
 
     private void RefreshOutlineHints()
@@ -373,6 +404,12 @@ public class EppEquipmentManager : MonoBehaviour
 
         if (IsReadyToAdvance)
         {
+            if (teleportToNextArea != null)
+            {
+                hint.Show(teleportToNextArea.gameObject);
+                return;
+            }
+
             LotoS1ContinueInteractable continueDoor = GetComponentInChildren<LotoS1ContinueInteractable>(true);
             if (continueDoor != null)
             {
@@ -429,6 +466,12 @@ public class EppEquipmentManager : MonoBehaviour
             continueInteractable.Configure(this);
         }
 
+        ResolveTeleportPad();
+        if (teleportToNextArea != null)
+        {
+            teleportToNextArea.Configure(this);
+        }
+
         if (rejectZoneAnchor != null)
         {
             EppTypedSocket rejectSocket = rejectZoneAnchor.GetComponent<EppTypedSocket>();
@@ -436,6 +479,50 @@ public class EppEquipmentManager : MonoBehaviour
             {
                 rejectSocket.Configure(this, EppSocketRole.Reject, EppItemType.Helmet);
             }
+        }
+    }
+
+    private void ResolveTeleportPad()
+    {
+        if (teleportToNextArea == null)
+        {
+            teleportToNextArea = FindFirstObjectByType<LotoS1TeleportToNextArea>();
+        }
+    }
+
+    private void RefreshTeleportPad()
+    {
+        ResolveTeleportPad();
+        if (teleportToNextArea != null)
+        {
+            teleportToNextArea.SetReady(IsReadyToAdvance);
+        }
+    }
+
+    private void ApplyEquipPresentation(ref_EppItem item, Transform attachAnchor)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (item.itemType == EppItemType.Helmet)
+        {
+            Transform attach = attachAnchor != null ? attachAnchor : GetAttachAnchor(EppItemType.Helmet);
+            AttachEquippedItem(item, attach);
+            return;
+        }
+
+        item.gameObject.SetActive(false);
+
+        switch (item.itemType)
+        {
+            case EppItemType.SafetyGlasses:
+                LotoSafetyGlassesVisionFilter.SetGlassesEquipped(true);
+                break;
+            case EppItemType.Gloves:
+                LotoGloveHandVisuals.SetGlovesEquipped(true);
+                break;
         }
     }
 

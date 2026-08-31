@@ -24,7 +24,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 **Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` persists via DontDestroyOnLoad. Direct launch of S1–S3 is for visual inspection only (CC null warning expected).
 
 1. Main menu carousel → LOTO simulation.
-2. **S1 Briefing** → Begin → equip 5 mandatory EPP (reject defective via reject zone) → continue door → S2. **PC happy path validated (Fase 5)** via **SafeMining/LOTO/Run Fase 5 S1 E2E Test**.
+2. **S1 Briefing** → Begin → equip 5 mandatory EPP (helmet on body; glasses/vest/gloves/boots consume + FX; optional respirator/hearing allowed) → cyan teleport pad / continue → S2. **PC happy path validated (Fase 5)** via **SafeMining/LOTO/Run Fase 5 S1 E2E Test**. HUD: Ocultar/Mostrar panel; Salir shortcut.
 3. **S2** report 4 real hazards (decoys penalize) → continue → S3.
 4. **S3** STOP → breaker OFF → personal lock → danger tag → START verify zero energy → session summary.
 5. Abandon (menu/exit confirm) yields partial score + summary path.
