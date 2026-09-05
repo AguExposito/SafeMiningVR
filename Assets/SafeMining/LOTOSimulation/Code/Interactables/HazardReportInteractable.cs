@@ -89,7 +89,8 @@ public class HazardReportInteractable : MonoBehaviour
             return;
         }
 
-        bool canDwell = spotRef != null && !spotRef.IsReported;
+        bool reportingOpen = inspectionManager == null || !inspectionManager.IsReportingLocked;
+        bool canDwell = spotRef != null && !spotRef.IsReported && reportingOpen;
         dwellReticle.SetDwellEnabled(canDwell);
     }
 

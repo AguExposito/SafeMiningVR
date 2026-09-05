@@ -56,6 +56,11 @@ public class LotoScenario2Controller : MonoBehaviour
 
     public void OnInspectionCompleted()
     {
+        if (inspectionManager != null)
+        {
+            inspectionManager.LockReporting();
+        }
+
         if (ControlCenter.Instance == null || ControlCenter.Instance.simulationOrchestratorManager == null)
         {
             return;

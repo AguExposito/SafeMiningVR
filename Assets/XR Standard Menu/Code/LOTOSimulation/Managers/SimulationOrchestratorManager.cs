@@ -175,6 +175,11 @@ public class SimulationOrchestratorManager : MonoBehaviour
             return;
         }
 
+        if (manager != null)
+        {
+            manager.LockReporting();
+        }
+
         scenario2Completed = true;
         EnterScenario3();
     }

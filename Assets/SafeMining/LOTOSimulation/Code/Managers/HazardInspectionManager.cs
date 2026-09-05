@@ -22,6 +22,7 @@ public class HazardInspectionManager : MonoBehaviour
     private readonly List<ref_HazardSpot> pendingRealSpots = new List<ref_HazardSpot>();
 
     private bool objectiveScored;
+    private bool reportingLocked;
     private int falsePositiveCount;
     private Coroutine hintCoroutine;
 
@@ -30,6 +31,7 @@ public class HazardInspectionManager : MonoBehaviour
     public int FalsePositiveCount => falsePositiveCount;
 
     public bool IsReadyToAdvance => reportedHazards.Count >= RequiredHazards.Length;
+    public bool IsReportingLocked => reportingLocked;
 
     #region Public API
 
@@ -43,6 +45,7 @@ public class HazardInspectionManager : MonoBehaviour
         reportedHazards.Clear();
         pendingRealSpots.Clear();
         objectiveScored = false;
+        reportingLocked = false;
         falsePositiveCount = 0;
 
         if (hintCoroutine != null)
@@ -55,12 +58,53 @@ public class HazardInspectionManager : MonoBehaviour
         for (int i = 0; i < spots.Length; i++)
         {
             RegisterSpawnedSpot(spots[i]);
+            if (spots[i] != null && spots[i].interactable != null && !spots[i].IsReported)
+            {
+                spots[i].interactable.enabled = true;
+            }
         }
 
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s2_intro");
         hintCoroutine = StartCoroutine(HintTimeoutRoutine());
         RefreshOutlineHints();
+    }
+
+    public void LockReporting()
+    {
+        if (reportingLocked)
+        {
+            return;
+        }
+
+        reportingLocked = true;
+
+        if (hintCoroutine != null)
+        {
+            StopCoroutine(hintCoroutine);
+            hintCoroutine = null;
+        }
+
+        LotoOutlineHint hint = GetComponent<LotoOutlineHint>();
+        if (hint != null)
+        {
+            hint.Clear();
+        }
+
+        ref_HazardSpot[] spots = GetComponentsInChildren<ref_HazardSpot>(true);
+        for (int i = 0; i < spots.Length; i++)
+        {
+            ref_HazardSpot spot = spots[i];
+            if (spot == null)
+            {
+                continue;
+            }
+
+            if (spot.interactable != null)
+            {
+                spot.interactable.enabled = false;
+            }
+        }
     }
 
     public void RegisterSpawnedSpot(ref_HazardSpot spot)
@@ -78,7 +122,7 @@ public class HazardInspectionManager : MonoBehaviour
 
     public bool TryReport(ref_HazardSpot spot)
     {
-        if (spot == null || spot.IsReported)
+        if (reportingLocked || spot == null || spot.IsReported)
         {
             return false;
         }
