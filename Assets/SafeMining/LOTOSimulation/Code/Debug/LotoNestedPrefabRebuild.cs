@@ -14,7 +14,7 @@ public static class LotoNestedPrefabRebuild
         LotoS1LockerPrefabBuilder.Build();
         NestS3ConveyorStation();
         LotoS2InspectionYardPrefabBuilder.Build();
-        LotoFase2PrefabSetupTool.EnsureS2YardWorldLabels();
+        LotoS2InspectionYardPrefabBuilder.EnsureS2YardWorldLabels();
         ApplyBuiltPrefabsToScenes();
         Debug.Log("[LOTO] Nested scenario prefabs rebuilt.");
     }

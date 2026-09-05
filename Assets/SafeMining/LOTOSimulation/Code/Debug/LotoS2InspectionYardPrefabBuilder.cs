@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -490,5 +491,156 @@ public static class LotoS2InspectionYardPrefabBuilder
 
         return null;
     }
+
+    #region World Labels
+
+    public static void EnsureS2YardWorldLabels()
+    {
+        GameObject root = PrefabUtility.LoadPrefabContents(PrefabPath);
+        LotoWorldLabel[] labels = root.GetComponentsInChildren<LotoWorldLabel>(true);
+        for (int i = 0; i < labels.Length; i++)
+        {
+            LotoWorldLabel worldLabel = labels[i];
+            SerializedObject serialized = new SerializedObject(worldLabel);
+            string currentKey = serialized.FindProperty("locKey").stringValue;
+            if (currentKey == "loto_s2_exit")
+            {
+                continue;
+            }
+
+            string hazardKey = ResolveS2StaticLabelKey(worldLabel.transform, root.transform);
+            if (string.IsNullOrEmpty(hazardKey))
+            {
+                worldLabel.gameObject.SetActive(false);
+                continue;
+            }
+
+            serialized.FindProperty("locKey").stringValue = hazardKey;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            worldLabel.gameObject.SetActive(true);
+        }
+
+        EnsureNamedWorldLabel(root, "Hazard_Spill", "loto_s2_label_spill", new Vector3(0f, 0.35f, 0f));
+        EnsureNamedWorldLabel(root, "Hazard_Tools", "loto_s2_label_tools", new Vector3(0f, 0.35f, 0f));
+        EnsureNamedWorldLabel(root, "Hazard_Signage", "loto_s2_label_signage", new Vector3(0f, 0.45f, 0f));
+        EnsureNamedWorldLabel(root, "Hazard_Extinguisher", "loto_s2_label_extinguisher", new Vector3(0f, 0.9f, 0f));
+        EnsureNamedWorldLabel(root, "ExitDoor", "loto_s2_exit", new Vector3(0f, 0.85f, 0f));
+
+        PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
+        PrefabUtility.UnloadPrefabContents(root);
+    }
+
+    private static void EnsureNamedWorldLabel(GameObject yardRoot, string objectName, string locKey, Vector3 localPosition)
+    {
+        Transform target = FindDeep(yardRoot.transform, objectName);
+        if (target == null)
+        {
+            return;
+        }
+
+        LotoWorldLabel existing = target.GetComponentInChildren<LotoWorldLabel>(true);
+        if (existing != null && existing.transform.IsChildOf(target))
+        {
+            SerializedObject serializedExisting = new SerializedObject(existing);
+            serializedExisting.FindProperty("locKey").stringValue = locKey;
+            serializedExisting.ApplyModifiedPropertiesWithoutUndo();
+            existing.gameObject.SetActive(true);
+            return;
+        }
+
+        EnsureWorldLabel(target, locKey, localPosition);
+    }
+
+    private static string ResolveS2StaticLabelKey(Transform labelTransform, Transform yardRoot)
+    {
+        Transform walk = labelTransform;
+        while (walk != null && walk != yardRoot)
+        {
+            if (walk.name == "Hazard_Spill")
+            {
+                return "loto_s2_label_spill";
+            }
+
+            if (walk.name == "Hazard_Tools")
+            {
+                return "loto_s2_label_tools";
+            }
+
+            if (walk.name == "Hazard_Extinguisher")
+            {
+                return "loto_s2_label_extinguisher";
+            }
+
+            if (walk.name == "Hazard_Signage")
+            {
+                return "loto_s2_label_signage";
+            }
+
+            if (walk.name == "ExitDoor")
+            {
+                return "loto_s2_exit";
+            }
+
+            walk = walk.parent;
+        }
+
+        return null;
+    }
+
+    private static void EnsureWorldLabel(Transform root, string locKey, Vector3 localPosition)
+    {
+        Transform labelTransform = root.Find("Label");
+        GameObject labelObject;
+        if (labelTransform == null)
+        {
+            labelObject = new GameObject("Label");
+            labelObject.transform.SetParent(root, false);
+            labelObject.transform.localPosition = localPosition;
+            labelObject.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            labelObject.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            labelObject = labelTransform.gameObject;
+        }
+
+        TextMeshPro textMesh = labelObject.GetComponent<TextMeshPro>();
+        if (textMesh == null)
+        {
+            textMesh = labelObject.AddComponent<TextMeshPro>();
+        }
+
+        if (labelObject.GetComponent<MeshRenderer>() == null)
+        {
+            labelObject.AddComponent<MeshRenderer>();
+        }
+
+        TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(
+            "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");
+        if (font != null)
+        {
+            textMesh.font = font;
+        }
+
+        textMesh.fontSize = 1.4f;
+        textMesh.alignment = TextAlignmentOptions.Center;
+        textMesh.rectTransform.sizeDelta = new Vector2(0.9f, 0.2f);
+        textMesh.enableWordWrapping = true;
+        textMesh.text = locKey;
+
+        LotoWorldLabel worldLabel = labelObject.GetComponent<LotoWorldLabel>();
+        if (worldLabel == null)
+        {
+            worldLabel = labelObject.AddComponent<LotoWorldLabel>();
+        }
+
+        SerializedObject serialized = new SerializedObject(worldLabel);
+        serialized.FindProperty("label").objectReferenceValue = textMesh;
+        serialized.FindProperty("locKey").stringValue = locKey;
+        serialized.ApplyModifiedPropertiesWithoutUndo();
+        labelObject.SetActive(true);
+    }
+
+    #endregion
 }
 #endif

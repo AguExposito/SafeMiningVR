@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public static class LotoFase2PrefabSetupTool
 {
-    private const string YardPrefabPath = "Assets/SafeMining/LOTOSimulation/Prefabs/PREF_S2_InspectionYard.prefab";
     private const string HudPrefabPath = "Assets/SafeMining/LOTOSimulation/Prefabs/PREF_LotoPlayerHUD.prefab";
     private const string BriefingPrefabPath = "Assets/SafeMining/LOTOSimulation/Prefabs/PREF_LotoBriefingPanel.prefab";
     private const string ObjectiveRowPrefabPath = "Assets/SafeMining/LOTOSimulation/Prefabs/PREF_LotoObjectiveRow.prefab";
@@ -26,129 +25,14 @@ public static class LotoFase2PrefabSetupTool
 
     public static void EnsureS2YardWorldLabels()
     {
-        FixS2YardLabels();
+        LotoS2InspectionYardPrefabBuilder.EnsureS2YardWorldLabels();
     }
 
     #region S2 Labels
 
     private static void FixS2YardLabels()
     {
-        GameObject root = PrefabUtility.LoadPrefabContents(YardPrefabPath);
-        LotoWorldLabel[] labels = root.GetComponentsInChildren<LotoWorldLabel>(true);
-        for (int i = 0; i < labels.Length; i++)
-        {
-            LotoWorldLabel worldLabel = labels[i];
-            SerializedObject serialized = new SerializedObject(worldLabel);
-            string currentKey = serialized.FindProperty("locKey").stringValue;
-            if (currentKey == "loto_s2_exit")
-            {
-                continue;
-            }
-
-            string hazardKey = ResolveS2StaticLabelKey(worldLabel.transform, root.transform);
-            if (string.IsNullOrEmpty(hazardKey))
-            {
-                worldLabel.gameObject.SetActive(false);
-                continue;
-            }
-
-            serialized.FindProperty("locKey").stringValue = hazardKey;
-            serialized.ApplyModifiedPropertiesWithoutUndo();
-            worldLabel.gameObject.SetActive(true);
-        }
-
-        EnsureS2HazardLabels(root);
-
-        PrefabUtility.SaveAsPrefabAsset(root, YardPrefabPath);
-        PrefabUtility.UnloadPrefabContents(root);
-    }
-
-    private static void EnsureS2HazardLabels(GameObject yardRoot)
-    {
-        EnsureNamedWorldLabel(yardRoot, "Hazard_Spill", "loto_s2_label_spill", new Vector3(0f, 0.35f, 0f));
-        EnsureNamedWorldLabel(yardRoot, "Hazard_Tools", "loto_s2_label_tools", new Vector3(0f, 0.35f, 0f));
-        EnsureNamedWorldLabel(yardRoot, "Hazard_Signage", "loto_s2_label_signage", new Vector3(0f, 0.45f, 0f));
-        EnsureNamedWorldLabel(yardRoot, "Hazard_Extinguisher", "loto_s2_label_extinguisher", new Vector3(0f, 0.9f, 0f));
-        EnsureNamedWorldLabel(yardRoot, "ExitDoor", "loto_s2_exit", new Vector3(0f, 0.85f, 0f));
-    }
-
-    private static void EnsureNamedWorldLabel(GameObject yardRoot, string objectName, string locKey, Vector3 localPosition)
-    {
-        Transform target = FindDeepChild(yardRoot.transform, objectName);
-        if (target == null)
-        {
-            return;
-        }
-
-        LotoWorldLabel existing = target.GetComponentInChildren<LotoWorldLabel>(true);
-        if (existing != null && existing.transform.IsChildOf(target))
-        {
-            SerializedObject serializedExisting = new SerializedObject(existing);
-            serializedExisting.FindProperty("locKey").stringValue = locKey;
-            serializedExisting.ApplyModifiedPropertiesWithoutUndo();
-            existing.gameObject.SetActive(true);
-            return;
-        }
-
-        EnsureWorldLabel(target, locKey, localPosition);
-    }
-
-    private static string ResolveS2StaticLabelKey(Transform labelTransform, Transform yardRoot)
-    {
-        Transform walk = labelTransform;
-        while (walk != null && walk != yardRoot)
-        {
-            if (walk.name == "Hazard_Spill")
-            {
-                return "loto_s2_label_spill";
-            }
-
-            if (walk.name == "Hazard_Tools")
-            {
-                return "loto_s2_label_tools";
-            }
-
-            if (walk.name == "Hazard_Extinguisher")
-            {
-                return "loto_s2_label_extinguisher";
-            }
-
-            if (walk.name == "Hazard_Signage")
-            {
-                return "loto_s2_label_signage";
-            }
-
-            if (walk.name == "ExitDoor")
-            {
-                return "loto_s2_exit";
-            }
-
-            walk = walk.parent;
-        }
-
-        return null;
-    }
-
-    private static void SetWorldLabelKey(GameObject root, string path, string locKey)
-    {
-        Transform target = root.transform.Find(path);
-        if (target == null)
-        {
-            Debug.LogWarning("[LOTO Fase2] Missing label path: " + path);
-            return;
-        }
-
-        LotoWorldLabel worldLabel = target.GetComponent<LotoWorldLabel>();
-        if (worldLabel == null)
-        {
-            Debug.LogWarning("[LOTO Fase2] Missing LotoWorldLabel on: " + path);
-            return;
-        }
-
-        SerializedObject serialized = new SerializedObject(worldLabel);
-        serialized.FindProperty("locKey").stringValue = locKey;
-        serialized.ApplyModifiedPropertiesWithoutUndo();
-        target.gameObject.SetActive(true);
+        LotoS2InspectionYardPrefabBuilder.EnsureS2YardWorldLabels();
     }
 
     #endregion
