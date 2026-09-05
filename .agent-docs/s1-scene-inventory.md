@@ -118,3 +118,36 @@ Menu: **SafeMining/LOTO/Run Fase 5 S1 E2E Test** (Play from StandardMainMenu).
 | Hover outline | Cyan/brand Outline on all EPP when hand/controller hovers |
 | Optional Respirator / Hearing | Equipable (consume visual); not required for gate |
 | `S1_TeleportToNextArea` | Cyan emissive pad; activates at 5/5; teleport triggers continue → S2 |
+
+## J. Lighting anti-flicker (2026-08-31)
+
+| Item | S1 state |
+|------|----------|
+| Ceiling spots | 3 retained (`LotoKeyIndustrial` + `(1)` + `(2)`) at user positions |
+| Shadow caster | **Only** canonical `LotoKeyIndustrial` (Hard shadows, intensity ≤4.2) |
+| Assist spots | `(1)` / `(2)` shadowless, intensity ≤3.4 |
+| Fills | `LotoFillA` + `LotoFillB`; duplicate `LotoFillA (1)` removed |
+| URP Quest | `Performance URP Config` shadow distance **8 m** (was 2.5 m) |
+| Lightmaps | Rebaked via **SafeMining/LOTO/Rebake S1 Lightmaps** |
+| Menu | **SafeMining/LOTO/Fix Duplicate Lights S1-S2** (preserves transforms) |
+
+## K. Post-process bloom (2026-08-31)
+
+| Item | Value |
+|------|-------|
+| Profile | `Assets/Resources/VOL_LotoUnderground.asset` |
+| Prefab | `PREF_LotoPostProcessVolume` (global Volume in S1–S3 roots) |
+| Bloom | threshold 0.95, intensity 0.2, scatter 0.55, maxIterations 3 |
+| HDR Quest | Enabled on `Performance URP Config` for emissive bloom |
+| Camera | `LotoPostProcessVolumeBootstrap` enables `renderPostProcessing` on Main Camera |
+| Quest renderer | `Android Preset` wired to URP `postProcessData` |
+| Menu | **SafeMining/LOTO/Apply Phase 3 Post Process Setup** |
+
+## L. Ambient dust (2026-08-31)
+
+| Item | Value |
+|------|-------|
+| Prefab | `PREF_LotoAmbientDust` parented under `LotoKeyIndustrial` |
+| Particles | 48 max, alpha ~0.16, slow drift + light noise, no collision/lights |
+| Controller | `LotoAmbientDustController` plays only in `Active` simulation state |
+| Menu | **SafeMining/LOTO/Apply Phase 4 Ambient Dust Setup** |

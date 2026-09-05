@@ -62,7 +62,7 @@ All LOTO gameplay code lives under `Assets/SafeMining/LOTOSimulation/`. Do not a
 | `Code/Interactables/` | `LotoInputModalityVisuals`, `LotoOutlineHint`, environment builders |
 | `Code/Debug/` | `LotoPcPlaytestDriver`, smoke tests |
 | `Prefabs/` | `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel`, `PREF_S1_Locker`, `PREF_S2_InspectionYard`, `PREF_S3_ConveyorStation` |
-| `Scenes/` | `VR-LOTO-S1` (build 1), `VR-LOTO-S2` (build 2), `VR-LOTO-S3` (build 3) |
+| `Scenes/` | `VR-LOTO-S1` (build 1), `VR-LOTO-S2` (build 2; S3 LOTO in-scene). `VR-LOTO-S3.unity` is not in Build Settings. |
 
 ## ALWAYS
 

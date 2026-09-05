@@ -18,11 +18,11 @@ This is **industrial safety training**, not an arcade game.
 
 ## Three sequential scenarios
 
-| Scene | Build index | Objective | Weight (RN01) |
-|-------|------------|-----------|---------------|
-| `VR-LOTO-S1` | 1 | Equip 5 mandatory PPE; reject defective items | 20% + 10% |
-| `VR-LOTO-S2` | 2 | Report 4 unsafe conditions near stopped conveyor | 25% |
-| `VR-LOTO-S3` | 3 | Execute LOTO sequence + zero-energy verification | 35% + 10% |
+| Scenario | Scene / build | Objective | Weight (RN01) |
+|----------|---------------|-----------|---------------|
+| S1 | `VR-LOTO-S1` (1) | Equip 5 mandatory PPE; reject defective items | 20% + 10% |
+| S2 | `VR-LOTO-S2` (2) | Report 4 unsafe conditions near stopped conveyor | 25% |
+| S3 | `VR-LOTO-S2` (2, in-scene) | Execute LOTO sequence + zero-energy verification | 35% + 10% |
 
 Entry point: `StandardMainMenu.unity` (build 0) → carousel → LOTO simulation.
 

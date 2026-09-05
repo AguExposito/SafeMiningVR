@@ -73,6 +73,13 @@
 	<string name="loto_briefing_title">LOTO Training</string>
 	<string name="loto_briefing_body">Complete three sequential scenarios before intervening on the equipment: PPE donning, pre-operational hazard inspection, and lockout/tagout (LOTO).</string>
 	<string name="loto_briefing_begin">Begin</string>
+	<string name="loto_briefing_close">Close</string>
+	<string name="loto_briefing_reopen">View briefing</string>
+	<string name="loto_s1_briefing_body">Scenario 1 — PPE equipment. Select and wear mandatory PPE (helmet, glasses, vest, gloves, and boots). Reject defective items. Evaluates correct selection (20%) and defect detection (10%).</string>
+	<string name="loto_s2_briefing_title">Pre-operational inspection</string>
+	<string name="loto_s2_briefing_body">Scenario 2 — Hazard inspection. Report all four unsafe conditions near the stopped conveyor. Avoid false positives. Evaluates hazard identification (25%).</string>
+	<string name="loto_s3_briefing_title">LOTO lockout/tagout</string>
+	<string name="loto_s3_briefing_body">Scenario 3 — LOTO procedure. Stop the belt, isolate energy, place a personal red lock and DANGER DO NOT OPERATE tag. Verify zero energy with START. Evaluates LOTO sequence (35%) and zero-energy verification (10%).</string>
 	<string name="loto_hud_active_objective">Active objective</string>
 	<string name="loto_hud_scenario_label">Scenario {0}/{1}</string>
 	<string name="loto_hud_menu">Menu</string>
@@ -132,6 +139,8 @@
 	<string name="loto_s2_timeout_hint">Unsafe conditions remain unreported. Look more closely around the area.</string>
 	<string name="loto_s2_roller_anomaly">An anomaly was detected on a conveyor roller. Prepare the equipment for a safe intervention.</string>
 	<string name="loto_s2_exit">Continue to LOTO</string>
+	<string name="loto_s2_label_spill">Spilled material</string>
+	<string name="loto_s2_label_tools">Abandoned tools</string>
 	<string name="loto_s2_label_extinguisher">Obstructed extinguisher</string>
 	<string name="loto_s2_label_signage">Damaged signage</string>
 	<string name="loto_s2_report_spill">Spilled material in transit zone reported.</string>

@@ -6,7 +6,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 | Area | Location / notes |
 |------|------------------|
-| Scenes | `VR-LOTO-S1` → `S2` → `S3` (Build Settings). Menu entry: `StandardMainMenu`. |
+| Scenes | Build Settings: `VR-LOTO-S1` → `S2` (S3 LOTO in-scene). `VR-LOTO-S3.unity` on disk only. Menu entry: `StandardMainMenu`. |
 | Prefabs | `PREF_S1_Locker`, `PREF_S2_InspectionYard`, `PREF_S3_ConveyorStation`, `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel` |
 | Materials | `Art/Materials/MAT_S1_*`, `MAT_S2_*`, `MAT_S3_*` (URP Lit) |
 | Managers | `EppEquipmentManager`, `HazardInspectionManager`, `LotoSequenceManager`, `SimulationOrchestratorManager`, `PlayerHudManager` |
@@ -21,11 +21,11 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 ## Player flow
 
-**Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` persists via DontDestroyOnLoad. Direct launch of S1–S3 is for visual inspection only (CC null warning expected).
+**Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` persists via DontDestroyOnLoad. Direct launch of S1–S2 is for visual inspection only (CC null warning expected).
 
 1. Main menu carousel → LOTO simulation.
-2. **S1 Briefing** → Begin → equip 5 mandatory EPP (helmet on body; glasses/vest/gloves/boots consume + FX; optional respirator/hearing allowed) → cyan teleport pad / continue → S2. **PC happy path validated (Fase 5)** via **SafeMining/LOTO/Run Fase 5 S1 E2E Test**. HUD: Ocultar/Mostrar panel; Salir shortcut.
-3. **S2** report 4 real hazards (decoys penalize) → continue → S3.
+2. **Briefing por escenario** (S1/S2/S3 in-scene): cerrable con chip reabrir; **Comenzar** inicia escenario. **S1** EPP → **S2** inspección → **S3** LOTO (same scene). HUD tareas: Ocultar/Mostrar panel + **Menú** (footer o chip); subtítulos pedagógicos visibles con panel oculto; timer oculto.
+3. **S2** report 4 real hazards (decoys penalize) → continue → in-scene S3 briefing (no scene load).
 4. **S3** STOP → breaker OFF → personal lock → danger tag → START verify zero energy → session summary.
 5. Abandon (menu/exit confirm) yields partial score + summary path.
 6. Session summary **Continue** → `CompleteSimulation()` → returns to main menu with score persisted offline.
@@ -41,7 +41,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 ## Input (hands vs controllers)
 
 - **Today:** default **hand tracking** on `PlayerMR` (`Left/Right Hand` on, controllers off).
-- **Target (dual rig):** `PREF_LotoPlayerPC` + `PREF_LotoPlayerVR` + `LotoPlayerRigSelector` (`Auto` / `ForcePc` / `ForceVr`). Contract: [player-rig-baseline.md](player-rig-baseline.md).
+- **Target (dual rig, future):** separate PC/VR player prefabs + rig selector. Not yet in tree; current path remains `PlayerMR` + modality visuals.
 - `XRInputModalityManager` + [`LotoInputModalityVisuals`](Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoInputModalityVisuals.cs): picking up Touch shows controller meshes and hides hands; releasing (~0.6 s hysteresis) returns to hands.
 - Menu Controls help panels follow the live modality; Hands/Joysticks buttons still preview help art.
 - OpenXR **Hand Interaction Profile** is enabled on Android and Standalone.
@@ -56,10 +56,10 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 ## PC playtest (no headset)
 
-1. Play **StandardMainMenu** or S1–S3 with Game view focused. Mouse UI is enabled on the menu and LOTO EventSystems.
+1. Play **StandardMainMenu** or S1–S2 with Game view focused. Mouse UI is enabled on the menu and LOTO EventSystems.
 2. **XR Interaction Simulator** auto-instantiates in Editor (treat as joysticks). Hands remain default until simulator/controller input arrives.
 3. HUD/briefing use `TrackedDeviceGraphicRaycaster` + `GraphicRaycaster`; only buttons block rays.
-4. Select bootstrap → `LotoPcPlaytestDriver` Inspector bools / Context Menu **LOTO/PC/**… for scenario cheats (S1–S3 only).
+4. Select bootstrap → `LotoPcPlaytestDriver` Inspector bools / Context Menu **LOTO/PC/**… for scenario cheats (S1–S2 scene; S3 cheats run in-scene).
 
 ## Where to maintain
 
@@ -68,9 +68,9 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | Scenario rules / scoring | Managers under `Code/Managers/` |
 | Prefab layout / art | `Prefabs/`, `Art/Materials/` |
 | Loc strings | Language assets used by `LanguageManager` (`loto_*` keys) |
-| Input modality | Today: `PlayerMR` + `LotoInputModalityVisuals`. Target: dual prefabs — [player-rig-baseline.md](player-rig-baseline.md) |
+| Input modality | Today: `PlayerMR` + `LotoInputModalityVisuals`. Dual-rig PC/VR prefabs remain future work. |
 | HUD layers | `PlayerHudManager.ApplyState` (summary vs exit confirm mutually exclusive; active chrome hidden on overlays) |
-| Underground lights | Menu **SafeMining/LOTO/Configure Underground Lighting S1-S3** or `LotoUndergroundLightingTool` |
+| Underground lights | Menu **SafeMining/LOTO/Configure Underground Lighting S1-S2** or `LotoUndergroundLightingTool` |
 | Sync payload | `SyncQueueManager` + `PendingSyncEntry` |
 | CC ↔ simulation bridge | `Util_LotoSimulationBridge` (objectives, events, subtitles) |
 | HUD brand colors | `BrandApplicator` on HUD/briefing/objective row prefabs |
@@ -79,11 +79,11 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | Prefab dwell batch | Menu **SafeMining/LOTO/Apply Fase 3 Dwell Reticle Setup** |
 | Menu flow QA | **SafeMining/LOTO/Run Fase 4 Menu Flow Test** (Play Mode from StandardMainMenu) |
 | S1 E2E QA | **SafeMining/LOTO/Run Fase 5 S1 E2E Test** (briefing→5/5→reject→S2); see [s1-scene-inventory.md](s1-scene-inventory.md) §H |
-| Lighting cleanup | **SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S3** |
+| Lighting cleanup | **SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S2** |
 | Quest dev APK | **SafeMining/LOTO/Build Quest 3S Dev APK** → `Builds/SafeMiningVR-Quest3S-Dev.apk` |
 | Device QA | See [qa-quest-fase6.md](../.agent-docs/qa-quest-fase6.md); deploy via `metavr_app install` |
 | Trigger dwell | `LotoDwellReticle` on `XRSimpleInteractable` triggers only |
 
 ## Lighting (Quest budget)
 
-Per S1–S3: Directional sun disabled; custom dark ambient; 1 Mixed Spot key + up to 2 Mixed Point fills; soft shadows only on key.
+Per S1–S2 (build scenes): Directional sun disabled; custom dark ambient; 1 Mixed Spot key (Hard shadows) + up to 2 Mixed Point fills; ceiling assist spots shadowless in S1. Quest shadow distance 8 m. Anti-flicker: **SafeMining/LOTO/Fix Duplicate Lights S1-S2**; rebake S1: **SafeMining/LOTO/Rebake S1 Lightmaps**. Emissive bloom: global `PREF_LotoPostProcessVolume` + `VOL_LotoUnderground` (threshold 0.95, intensity 0.2); setup via **SafeMining/LOTO/Apply Phase 3 Post Process Setup**. Ambient dust: `PREF_LotoAmbientDust` under key light; **SafeMining/LOTO/Apply Phase 4 Ambient Dust Setup**. `VR-LOTO-S3.unity` may remain on disk as a legacy asset and is not in Build Settings.

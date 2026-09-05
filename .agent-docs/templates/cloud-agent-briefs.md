@@ -78,7 +78,7 @@ Refactor S3 LOTO interactables to unified XRI 3.3.1 patterns (grab, dwell, socke
 IN:
 - Assets/SafeMining/LOTOSimulation/Code/Interactables/Loto*.cs
 - Assets/SafeMining/LOTOSimulation/Code/Interactables/*S3*
-- Scene VR-LOTO-S3 (via Unity MCP only)
+- Scene VR-LOTO-S2 in-scene S3 (via Unity MCP only; VR-LOTO-S3.unity is not in Build Settings)
 
 OUT: Scoring weights, backend sync, lighting/perf (unless regression)
 

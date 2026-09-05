@@ -208,6 +208,11 @@ public static class LotoS2InspectionYardPrefabBuilder
 
         GameObject visual = CreateCube("Visual", spot.transform, visualScale, color, lit);
         visual.transform.localPosition = new Vector3(0f, visualScale.y * 0.5f, 0f);
+        if (PrefabUtility.IsPartOfPrefabInstance(visual))
+        {
+            PrefabUtility.UnpackPrefabInstance(visual, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+        }
+
         UnityEngine.Object.DestroyImmediate(visual.GetComponent<Collider>());
 
         XRSimpleInteractable interactable = spot.AddComponent<XRSimpleInteractable>();
@@ -216,8 +221,10 @@ public static class LotoS2InspectionYardPrefabBuilder
         ref_HazardSpot spotRef = spot.AddComponent<ref_HazardSpot>();
         spotRef.hazardType = type;
         spotRef.spotKind = kind;
-        spotRef.spotRenderer = visual.GetComponent<Renderer>();
         spotRef.interactable = interactable;
+        SerializedObject spotSo = new SerializedObject(spotRef);
+        spotSo.FindProperty("spotRenderer").objectReferenceValue = ResolveRenderer(visual);
+        spotSo.ApplyModifiedPropertiesWithoutUndo();
         spotRef.CacheOriginalColor();
 
         HazardReportInteractable logic = spot.AddComponent<HazardReportInteractable>();
@@ -273,6 +280,17 @@ public static class LotoS2InspectionYardPrefabBuilder
         }
 
         return cone;
+    }
+
+    private static Renderer ResolveRenderer(GameObject visual)
+    {
+        Renderer renderer = visual.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            return renderer;
+        }
+
+        return visual.GetComponentInChildren<Renderer>(true);
     }
 
     private static GameObject CreateCube(string name, Transform parent, Vector3 scale, Color color, Shader lit)

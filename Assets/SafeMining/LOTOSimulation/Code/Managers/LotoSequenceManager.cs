@@ -67,6 +67,7 @@ public class LotoSequenceManager : MonoBehaviour
 
     public void Begin()
     {
+        ConfigureChildInteractables();
         currentStep = LotoSequenceStep.BeltRunning;
         sequenceObjectiveScored = false;
         zeroEnergyObjectiveScored = false;
@@ -75,6 +76,45 @@ public class LotoSequenceManager : MonoBehaviour
         SetLockSocketActive(false);
         SetBeltRunning(true);
         NotifyStep(LotoSequenceStep.BeltRunning, "loto_s3_intro");
+    }
+
+    private void ConfigureChildInteractables()
+    {
+        LotoControlButtonInteractable[] buttons = GetComponentsInChildren<LotoControlButtonInteractable>(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i] != null)
+            {
+                buttons[i].Configure(this);
+            }
+        }
+
+        LotoBreakerInteractable[] breakers = GetComponentsInChildren<LotoBreakerInteractable>(true);
+        for (int i = 0; i < breakers.Length; i++)
+        {
+            if (breakers[i] != null)
+            {
+                breakers[i].Configure(this);
+            }
+        }
+
+        LotoLockInteractable[] locks = GetComponentsInChildren<LotoLockInteractable>(true);
+        for (int i = 0; i < locks.Length; i++)
+        {
+            if (locks[i] != null)
+            {
+                locks[i].Configure(this);
+            }
+        }
+
+        LotoTagInteractable[] tags = GetComponentsInChildren<LotoTagInteractable>(true);
+        for (int i = 0; i < tags.Length; i++)
+        {
+            if (tags[i] != null)
+            {
+                tags[i].Configure(this);
+            }
+        }
     }
 
     public void TryStopConveyor()

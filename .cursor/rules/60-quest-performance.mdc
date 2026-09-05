@@ -57,7 +57,7 @@ alwaysApply: false
 
 ## Lighting tool
 
-Editor menu: **SafeMining → LOTO → Configure Underground Lighting S1-S3** (or `LotoUndergroundLightingTool`) sets per-scene key + fill configuration.
+Editor menu: **SafeMining → LOTO → Configure Underground Lighting S1-S2** (or `LotoUndergroundLightingTool`) sets per-scene key + fill configuration.
 
 ## ALWAYS
 

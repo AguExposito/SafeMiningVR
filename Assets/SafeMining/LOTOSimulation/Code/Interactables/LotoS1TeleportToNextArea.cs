@@ -7,7 +7,7 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
 {
     [SerializeField] private EppEquipmentManager equipmentManager;
     [SerializeField] private TeleportationArea teleportationArea;
-    [SerializeField] private Renderer padRenderer;
+    [SerializeField] private Renderer[] padRenderers;
     [SerializeField] private Color readyColor = new Color(0.05f, 0.92f, 0.95f, 1f);
     [SerializeField] private Color idleColor = new Color(0.15f, 0.18f, 0.2f, 0.35f);
 
@@ -23,11 +23,12 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
             teleportationArea = GetComponent<TeleportationArea>();
         }
 
-        if (padRenderer == null)
+        if (padRenderers == null || padRenderers.Length == 0)
         {
-            padRenderer = GetComponent<Renderer>();
+            padRenderers = GetComponentsInChildren<Renderer>(true);
         }
 
+        EnsureTeleportColliders();
         SetReady(false);
     }
 
@@ -66,10 +67,19 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
             teleportationArea.enabled = ready;
         }
 
-        if (padRenderer != null)
+        if (padRenderers != null)
         {
-            padRenderer.enabled = true;
-            ApplyPadColor(ready ? readyColor : idleColor, ready);
+            Color color = ready ? readyColor : idleColor;
+            for (int i = 0; i < padRenderers.Length; i++)
+            {
+                if (padRenderers[i] == null)
+                {
+                    continue;
+                }
+
+                padRenderers[i].enabled = true;
+                ApplyPadColor(padRenderers[i], color, ready);
+            }
         }
 
         gameObject.SetActive(true);
@@ -97,14 +107,31 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
 
     #region Helpers
 
-    private void ApplyPadColor(Color color, bool emissive)
+    private void EnsureTeleportColliders()
     {
-        if (padRenderer == null)
+        if (teleportationArea == null)
         {
             return;
         }
 
-        Material material = padRenderer.material;
+        Collider[] colliders = teleportationArea.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i] != null)
+            {
+                colliders[i].isTrigger = false;
+            }
+        }
+    }
+
+    private void ApplyPadColor(Renderer renderer, Color color, bool emissive)
+    {
+        if (renderer == null)
+        {
+            return;
+        }
+
+        Material material = renderer.material;
         if (material.HasProperty("_BaseColor"))
         {
             material.SetColor("_BaseColor", color);

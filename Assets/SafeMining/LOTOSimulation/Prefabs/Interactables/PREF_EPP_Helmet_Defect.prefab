@@ -424,5 +424,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EppItemInteractable
   equipmentManager: {fileID: 0}
-  equipSnapDistance: 0.55
   rejectSnapDistance: 0.6
+  onGrabbed:
+    m_PersistentCalls:
+      m_Calls: []
+  onReleased:
+    m_PersistentCalls:
+      m_Calls: []
+  onEquipped:
+    m_PersistentCalls:
+      m_Calls: []
+  onRejected:
+    m_PersistentCalls:
+      m_Calls: []
+  hoverOutlineColor: {r: 0.05, g: 0.85, b: 0.95, a: 1}
+  hoverOutlineWidth: 3.5

@@ -10,8 +10,7 @@ public static class LotoFase5LightingCleanupTool
     private static readonly string[] ScenePaths =
     {
         "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S1.unity",
-        "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S2.unity",
-        "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S3.unity"
+        "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S2.unity"
     };
 
     private static readonly string[] PrefabPaths =
@@ -21,30 +20,9 @@ public static class LotoFase5LightingCleanupTool
         "Assets/SafeMining/LOTOSimulation/Prefabs/PREF_S3_ConveyorStation.prefab"
     };
 
-    private static readonly Vector3[] KeyPositions =
-    {
-        new Vector3(0f, 3.2f, 0.5f),
-        new Vector3(0f, 4f, -2f),
-        new Vector3(0f, 3.5f, 1.2f)
-    };
-
-    private static readonly Vector3[] FillAPositions =
-    {
-        new Vector3(-2.2f, 2.4f, -1.5f),
-        new Vector3(-3f, 2.8f, 0f),
-        new Vector3(-2.5f, 2.6f, -0.5f)
-    };
-
-    private static readonly Vector3[] FillBPositions =
-    {
-        new Vector3(2.4f, 2.2f, 1.8f),
-        new Vector3(3f, 2.5f, -1f),
-        new Vector3(2.2f, 2.4f, 2f)
-    };
-
     #region Public API
 
-    [MenuItem("SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S3")]
+    [MenuItem("SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S2")]
     public static void ApplyFase5Cleanup()
     {
         int prefabRemoved = 0;
@@ -57,7 +35,7 @@ public static class LotoFase5LightingCleanupTool
         {
             Scene scene = EditorSceneManager.OpenScene(ScenePaths[i], OpenSceneMode.Single);
             int before = CountSceneLights();
-            LotoUndergroundLightingTool.ConfigureScene(ScenePaths[i], i, KeyPositions[i], FillAPositions[i], FillBPositions[i]);
+            LotoUndergroundLightingTool.FixDuplicateLights(ScenePaths[i]);
             int after = CountSceneLights();
             Debug.Log("[LOTO Fase5] " + scene.name + " lights before=" + before + " after=" + after);
         }

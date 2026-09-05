@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 using XRStandardMenu;
 
@@ -30,11 +31,13 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         ResolveFollowTarget();
         ConfigurePanelFollowers();
         EnsurePcPlaytestDriver();
+        LotoPostProcessVolumeBootstrap.EnsureActive();
         BindTeleportationAreas();
 
         if (ControlCenter.Instance == null)
         {
             Debug.LogWarning("[LOTO] ControlCenter.Instance is null. Open this scene from the main menu.");
+            RefreshAmbientDustPlayback();
             return;
         }
 
@@ -42,6 +45,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         if (orchestrator == null)
         {
             Debug.LogWarning("[LOTO] simulationOrchestratorManager is null.");
+            RefreshAmbientDustPlayback();
             return;
         }
 
@@ -49,6 +53,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         if (playerHudManager == null)
         {
             Debug.LogWarning("[LOTO] PlayerHudManager is missing on LotoScenarioSceneBootstrap.");
+            RefreshAmbientDustPlayback();
             return;
         }
 
@@ -56,7 +61,16 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
 
         if (startWithBriefing)
         {
-            orchestrator.BeginSimulation();
+            if (scenarioIndex == LotoSimulationConstants.ScenarioEpp)
+            {
+                orchestrator.BeginSimulation();
+            }
+            else
+            {
+                orchestrator.BeginScenarioBriefing(scenarioIndex);
+            }
+
+            RefreshAmbientDustPlayback();
             return;
         }
 
@@ -70,6 +84,22 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         if (scenario3Controller != null)
         {
             scenario3Controller.Begin();
+        }
+
+        RefreshAmbientDustPlayback();
+    }
+
+    private void RefreshAmbientDustPlayback()
+    {
+        LotoAmbientDustController[] dustControllers = Object.FindObjectsByType<LotoAmbientDustController>(
+            FindObjectsInactive.Exclude,
+            FindObjectsSortMode.None);
+        for (int i = 0; i < dustControllers.Length; i++)
+        {
+            if (dustControllers[i] != null)
+            {
+                dustControllers[i].RefreshPlayback();
+            }
         }
     }
 
@@ -123,10 +153,21 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         TeleportationArea[] areas = Object.FindObjectsByType<TeleportationArea>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         for (int i = 0; i < areas.Length; i++)
         {
-            if (areas[i] != null)
+            TeleportationArea area = areas[i];
+            if (area == null)
             {
-                areas[i].teleportationProvider = provider;
+                continue;
             }
+
+            if (provider != null)
+            {
+                area.teleportationProvider = provider;
+            }
+
+            area.interactionLayers = new InteractionLayerMask
+            {
+                value = LotoSimulationConstants.XriTeleportInteractionLayerMask
+            };
         }
     }
 

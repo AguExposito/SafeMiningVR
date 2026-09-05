@@ -5,8 +5,8 @@ Assets/SafeMining/
 ├── LOTOSimulation/
 │   ├── Scenes/
 │   │   ├── VR-LOTO-S1.unity          — build index 1 (briefing + HUD 1/3 + PREF_S1_Locker)
-│   │   ├── VR-LOTO-S2.unity          — build index 2 (HUD 2/3 + PREF_S2_InspectionYard)
-│   │   └── VR-LOTO-S3.unity          — build index 3 (HUD 3/3 + PREF_S3_ConveyorStation)
+│   │   ├── VR-LOTO-S2.unity          — build index 2 (HUD 2/3 yard + in-scene HUD 3/3 LOTO)
+│   │   └── VR-LOTO-S3.unity          — on disk only, not in Build Settings
 │   ├── Prefabs/
 │   │   ├── PREF_LotoPlayerHUD.prefab
 │   │   ├── PREF_LotoBriefingPanel.prefab

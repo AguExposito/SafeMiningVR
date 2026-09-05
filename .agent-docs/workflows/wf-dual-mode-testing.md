@@ -34,7 +34,7 @@ Select the bootstrap GameObject in Inspector. Verify each cheat:
 | Continue S1→S2 | Numpad 3 | Scene transitions to VR-LOTO-S2 | [ ] |
 | Reject one defect | Numpad 4 | Defective EPP rejected, defect objective progresses | [ ] |
 | Report 4 hazards | Numpad 5 | 4/4 hazards reported, objective rows update | [ ] |
-| Continue S2→S3 | Numpad 6 | Scene transitions to VR-LOTO-S3 | [ ] |
+| Continue S2→S3 | Numpad 6 | In-scene S3 briefing (no scene load) | [ ] |
 | Run LOTO happy path | Numpad 7 | STOP→breaker→lock→tag→START→summary | [ ] |
 
 - [ ] **PASS:** All 7 cheats produce expected results without console errors.
@@ -43,8 +43,9 @@ Select the bootstrap GameObject in Inspector. Verify each cheat:
 ### A4. HUD interaction via mouse
 
 - [ ] Click briefing "Begin" button with mouse → briefing dismisses.
-- [ ] Click objective row buttons (if any) → no accidental triggers on panel background.
-- [ ] Click exit/menu button → exit-confirm dialog appears.
+- [ ] Click briefing "Close" → briefing content hides; "View briefing" chip reopens it.
+- [ ] Click "Hide panel" on task HUD → objectives hide; "Show panel" chip reappears; subtitles stay visible.
+- [ ] Click "Menu" (footer or reopen chip) → exit-confirm dialog appears.
 - [ ] **PASS:** `GraphicRaycaster` handles all mouse clicks on buttons. Panel background does NOT intercept rays.
 - [ ] **FAIL:** Buttons unresponsive, or panel background blocks world interaction.
 
@@ -178,27 +179,3 @@ For each grabbable (EPP items in S1, locks/tags in S3):
 | B — Quest 3S Device | | | |
 
 **Workflow complete when both phases show PASS.**
-
----
-
-## Player rig acceptance (post dual migration)
-
-Sign-off for player dual-rig Fases 1–5 only. Does not require full S1–S3 happy path. Source: [player-rig-baseline.md](../player-rig-baseline.md).
-
-| ID | Mode | Check |
-|----|------|-------|
-| ACC-PC-01 | Editor ForcePc / Auto Editor | [ ] WASD + look; click interactables; `LotoPcPlaytestDriver` cheats work |
-| ACC-PC-02 | Editor | [ ] Single active XR Origin; HUD follow `Camera.main` |
-| ACC-VR-01 | Quest / ForceVr | [ ] Quest hand visuals default; controllers via modality |
-| ACC-VR-02 | Quest | [ ] No artificial gravity (origin does not fall) |
-| ACC-VR-03 | Quest | [ ] SnapTurn on; ContinuousTurn off; vignette providers assigned |
-| ACC-VR-04 | Quest standing | [ ] Floor / room-scale; physical play area |
-| ACC-SEL-01 | Both | [ ] Auto → PC in Editor, VR on Android |
-| ACC-SEL-02 | Editor | [ ] `ForcePc` / `ForceVr` switch rig without project reload |
-| ACC-COM-01 | Both | [ ] Zero rig setup `LogError`; no `OVRCameraRig` |
-
-| Field | Value |
-|-------|-------|
-| Tester | |
-| Date | |
-| Result | |

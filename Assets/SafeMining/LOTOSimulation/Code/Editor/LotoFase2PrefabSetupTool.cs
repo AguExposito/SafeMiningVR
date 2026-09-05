@@ -24,6 +24,11 @@ public static class LotoFase2PrefabSetupTool
         Debug.Log("[LOTO Fase2] Prefab brand/loc setup complete.");
     }
 
+    public static void EnsureS2YardWorldLabels()
+    {
+        FixS2YardLabels();
+    }
+
     #region S2 Labels
 
     private static void FixS2YardLabels()
@@ -52,31 +57,40 @@ public static class LotoFase2PrefabSetupTool
             worldLabel.gameObject.SetActive(true);
         }
 
-        EnsureS2ExtinguisherLabel(root);
+        EnsureS2HazardLabels(root);
 
         PrefabUtility.SaveAsPrefabAsset(root, YardPrefabPath);
         PrefabUtility.UnloadPrefabContents(root);
     }
 
-    private static void EnsureS2ExtinguisherLabel(GameObject yardRoot)
+    private static void EnsureS2HazardLabels(GameObject yardRoot)
     {
-        Transform extinguisher = FindDeepChild(yardRoot.transform, "Hazard_Extinguisher");
-        if (extinguisher == null)
+        EnsureNamedWorldLabel(yardRoot, "Hazard_Spill", "loto_s2_label_spill", new Vector3(0f, 0.35f, 0f));
+        EnsureNamedWorldLabel(yardRoot, "Hazard_Tools", "loto_s2_label_tools", new Vector3(0f, 0.35f, 0f));
+        EnsureNamedWorldLabel(yardRoot, "Hazard_Signage", "loto_s2_label_signage", new Vector3(0f, 0.45f, 0f));
+        EnsureNamedWorldLabel(yardRoot, "Hazard_Extinguisher", "loto_s2_label_extinguisher", new Vector3(0f, 0.9f, 0f));
+        EnsureNamedWorldLabel(yardRoot, "ExitDoor", "loto_s2_exit", new Vector3(0f, 0.85f, 0f));
+    }
+
+    private static void EnsureNamedWorldLabel(GameObject yardRoot, string objectName, string locKey, Vector3 localPosition)
+    {
+        Transform target = FindDeepChild(yardRoot.transform, objectName);
+        if (target == null)
         {
             return;
         }
 
-        LotoWorldLabel existing = extinguisher.GetComponentInChildren<LotoWorldLabel>(true);
-        if (existing != null && existing.transform.IsChildOf(extinguisher))
+        LotoWorldLabel existing = target.GetComponentInChildren<LotoWorldLabel>(true);
+        if (existing != null && existing.transform.IsChildOf(target))
         {
             SerializedObject serializedExisting = new SerializedObject(existing);
-            serializedExisting.FindProperty("locKey").stringValue = "loto_s2_label_extinguisher";
+            serializedExisting.FindProperty("locKey").stringValue = locKey;
             serializedExisting.ApplyModifiedPropertiesWithoutUndo();
             existing.gameObject.SetActive(true);
             return;
         }
 
-        EnsureWorldLabel(extinguisher, "loto_s2_label_extinguisher", new Vector3(0f, 0.9f, 0f));
+        EnsureWorldLabel(target, locKey, localPosition);
     }
 
     private static string ResolveS2StaticLabelKey(Transform labelTransform, Transform yardRoot)
@@ -84,6 +98,16 @@ public static class LotoFase2PrefabSetupTool
         Transform walk = labelTransform;
         while (walk != null && walk != yardRoot)
         {
+            if (walk.name == "Hazard_Spill")
+            {
+                return "loto_s2_label_spill";
+            }
+
+            if (walk.name == "Hazard_Tools")
+            {
+                return "loto_s2_label_tools";
+            }
+
             if (walk.name == "Hazard_Extinguisher")
             {
                 return "loto_s2_label_extinguisher";
@@ -92,6 +116,11 @@ public static class LotoFase2PrefabSetupTool
             if (walk.name == "Hazard_Signage")
             {
                 return "loto_s2_label_signage";
+            }
+
+            if (walk.name == "ExitDoor")
+            {
+                return "loto_s2_exit";
             }
 
             walk = walk.parent;

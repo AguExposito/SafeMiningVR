@@ -291,6 +291,12 @@ public class LotoPcPlaytestDriver : MonoBehaviour
         manager.TryStartVerification();
     }
 
+    [ContextMenu("LOTO/PC/Request Exit")]
+    public void RequestExit()
+    {
+        GetOrchestrator()?.RequestExitToMenu();
+    }
+
     [ContextMenu("LOTO/PC/Confirm Exit")]
     public void ConfirmExit()
     {

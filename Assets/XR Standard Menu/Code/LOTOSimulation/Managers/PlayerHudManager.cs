@@ -20,8 +20,9 @@ public class PlayerHudManager : MonoBehaviour
     private float nextTimerRefreshTime;
     private float subtitleHideTime;
     private bool hudChromeVisible = true;
-    private Button hudReopenButton;
-    private Button hudExitShortcutButton;
+    private bool briefingPanelVisible = true;
+    private LotoSimulationState lastAppliedState = LotoSimulationState.Initializing;
+    private LotoPanelVisibilityController briefingVisibilityController;
 
     #region Initialization
 
@@ -37,9 +38,9 @@ public class PlayerHudManager : MonoBehaviour
         SubscribeOrchestratorEvents();
         ApplyState(orchestrator != null ? orchestrator.CurrentState : LotoSimulationState.Initializing);
         RefreshBriefingTexts();
-        RefreshScenarioIndicator(1, LotoSimulationConstants.TotalScenarios);
+        RefreshScenarioIndicator(orchestrator != null ? orchestrator.CurrentScenarioIndex : 1, LotoSimulationConstants.TotalScenarios);
         RefreshActiveObjectiveTitle();
-        RefreshTimerDisplay();
+        HideTimerElements();
     }
 
     private void OnDestroy()
@@ -71,13 +72,17 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         nextTimerRefreshTime = Time.unscaledTime + LotoSimulationConstants.HudTimerRefreshInterval;
-        RefreshTimerDisplay();
     }
 
     private void RefreshButtonLabels()
     {
         EnsureButtonLabel(briefingPanel?.beginButton, "loto_briefing_begin");
+        EnsureButtonLabel(briefingPanel?.closeButton, "loto_briefing_close");
+        EnsureButtonLabel(briefingPanel?.reopenButton, "loto_briefing_reopen");
         EnsureButtonLabel(playerHud?.menuButton, "loto_hud_hide_panel");
+        EnsureButtonLabel(playerHud?.exitToMenuButton, "loto_hud_menu");
+        EnsureButtonLabel(playerHud?.hudReopenButton, "loto_hud_show_panel");
+        EnsureButtonLabel(playerHud?.hudReopenExitButton, "loto_hud_menu");
         EnsureButtonLabel(playerHud?.exitConfirmYes, "loto_exit_confirm_yes");
         EnsureButtonLabel(playerHud?.exitConfirmNo, "loto_exit_confirm_no");
     }
@@ -182,9 +187,25 @@ public class PlayerHudManager : MonoBehaviour
 
     private void ApplyState(LotoSimulationState state)
     {
+        bool showBriefingCanvas = state == LotoSimulationState.Briefing;
         if (briefingPanel != null && briefingPanel.rootPanel != null)
         {
-            briefingPanel.rootPanel.SetActive(state == LotoSimulationState.Briefing);
+            briefingPanel.rootPanel.SetActive(showBriefingCanvas);
+        }
+
+        if (showBriefingCanvas)
+        {
+            if (lastAppliedState != LotoSimulationState.Briefing)
+            {
+                briefingPanelVisible = true;
+            }
+
+            ApplyBriefingPanelVisibility();
+            RefreshBriefingTexts();
+        }
+        else if (briefingPanel != null && briefingPanel.reopenButton != null)
+        {
+            briefingPanel.reopenButton.gameObject.SetActive(false);
         }
 
         if (playerHud != null && playerHud.rootPanel != null)
@@ -210,27 +231,13 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         SetActiveChromeVisible(showActiveChrome);
-        if (hudReopenButton != null)
-        {
-            hudReopenButton.gameObject.SetActive(!hudChromeVisible && state == LotoSimulationState.Active);
-        }
-
-        EnsureExitShortcutButton();
-        if (hudExitShortcutButton != null)
-        {
-            hudExitShortcutButton.gameObject.SetActive(state == LotoSimulationState.Active);
-        }
-
-        if (state == LotoSimulationState.Briefing)
-        {
-            RefreshBriefingTexts();
-        }
+        ApplyHudReopenVisibility(state);
 
         if (state == LotoSimulationState.Active)
         {
             RefreshActiveObjectiveTitle();
             RefreshAllObjectiveRows();
-            RefreshTimerDisplay();
+            HideTimerElements();
         }
 
         if (state == LotoSimulationState.ExitConfirm)
@@ -241,6 +248,43 @@ public class PlayerHudManager : MonoBehaviour
         if (state == LotoSimulationState.SessionSummary)
         {
             RefreshSessionSummary();
+        }
+
+        lastAppliedState = state;
+    }
+
+    private void ApplyBriefingPanelVisibility()
+    {
+        if (briefingPanel == null)
+        {
+            return;
+        }
+
+        GameObject contentRoot = briefingPanel.contentRoot != null
+            ? briefingPanel.contentRoot
+            : briefingPanel.rootPanel;
+        if (contentRoot != null)
+        {
+            contentRoot.SetActive(briefingPanelVisible);
+        }
+
+        if (briefingPanel.reopenButton != null)
+        {
+            briefingPanel.reopenButton.gameObject.SetActive(!briefingPanelVisible);
+        }
+    }
+
+    private void ApplyHudReopenVisibility(LotoSimulationState state)
+    {
+        bool showReopen = !hudChromeVisible && state == LotoSimulationState.Active;
+        if (playerHud != null && playerHud.hudReopenButton != null)
+        {
+            playerHud.hudReopenButton.gameObject.SetActive(showReopen);
+        }
+
+        if (playerHud != null && playerHud.hudReopenExitButton != null)
+        {
+            playerHud.hudReopenExitButton.gameObject.SetActive(showReopen);
         }
     }
 
@@ -278,7 +322,12 @@ public class PlayerHudManager : MonoBehaviour
 
         if (playerHud.subtitleText != null)
         {
-            playerHud.subtitleText.gameObject.SetActive(visible);
+            playerHud.subtitleText.gameObject.SetActive(true);
+        }
+
+        if (playerHud.exitToMenuButton != null)
+        {
+            playerHud.exitToMenuButton.gameObject.SetActive(visible);
         }
 
         if (playerHud.menuButtonRoot != null)
@@ -436,12 +485,42 @@ public class PlayerHudManager : MonoBehaviour
             briefingPanel.beginButton.onClick.AddListener(() => orchestrator?.DismissBriefing());
         }
 
+        if (briefingPanel != null && briefingPanel.closeButton != null)
+        {
+            briefingPanel.closeButton.onClick.RemoveAllListeners();
+            briefingPanel.closeButton.onClick.AddListener(OnBriefingClosePressed);
+        }
+
+        if (briefingPanel != null && briefingPanel.reopenButton != null)
+        {
+            briefingPanel.reopenButton.onClick.RemoveAllListeners();
+            briefingPanel.reopenButton.onClick.AddListener(OnBriefingReopenPressed);
+        }
+
         EnsureHudPanelController();
 
         if (playerHud != null && playerHud.menuButton != null)
         {
             playerHud.menuButton.onClick.RemoveAllListeners();
             playerHud.menuButton.onClick.AddListener(OnMenuButtonPressed);
+        }
+
+        if (playerHud != null && playerHud.exitToMenuButton != null)
+        {
+            playerHud.exitToMenuButton.onClick.RemoveAllListeners();
+            playerHud.exitToMenuButton.onClick.AddListener(OnExitToMenuPressed);
+        }
+
+        if (playerHud != null && playerHud.hudReopenButton != null)
+        {
+            playerHud.hudReopenButton.onClick.RemoveAllListeners();
+            playerHud.hudReopenButton.onClick.AddListener(OnHudReopenPressed);
+        }
+
+        if (playerHud != null && playerHud.hudReopenExitButton != null)
+        {
+            playerHud.hudReopenExitButton.onClick.RemoveAllListeners();
+            playerHud.hudReopenExitButton.onClick.AddListener(OnExitToMenuPressed);
         }
 
         if (playerHud != null && playerHud.exitConfirmYes != null)
@@ -463,6 +542,29 @@ public class PlayerHudManager : MonoBehaviour
         }
     }
 
+    private void OnBriefingClosePressed()
+    {
+        briefingPanelVisible = false;
+        ApplyBriefingPanelVisibility();
+    }
+
+    private void OnBriefingReopenPressed()
+    {
+        briefingPanelVisible = true;
+        ApplyBriefingPanelVisibility();
+    }
+
+    private void OnExitToMenuPressed()
+    {
+        orchestrator?.RequestExitToMenu();
+    }
+
+    private void OnHudReopenPressed()
+    {
+        hudChromeVisible = true;
+        ApplyChromeVisibilityForCurrentState();
+    }
+
     private void OnMenuButtonPressed()
     {
         ToggleHudChrome();
@@ -482,10 +584,7 @@ public class PlayerHudManager : MonoBehaviour
             && state != LotoSimulationState.ExitConfirm
             && state != LotoSimulationState.SessionSummary;
         SetActiveChromeVisible(showActiveChrome);
-        if (hudReopenButton != null)
-        {
-            hudReopenButton.gameObject.SetActive(!hudChromeVisible && state == LotoSimulationState.Active);
-        }
+        ApplyHudReopenVisibility(state);
     }
 
     private void EnsureHudPanelController()
@@ -503,8 +602,9 @@ public class PlayerHudManager : MonoBehaviour
 
         Util_PanelFollower follower = playerHud.GetComponent<Util_PanelFollower>();
         controller.Configure(follower);
-        hudReopenButton = EnsureReopenButton(playerHud.transform);
-        EnsureExitShortcutButton();
+        EnsureHudPanelButtonFallbacks();
+        EnsureBriefingPanelButtonFallbacks();
+        EnsureBriefingVisibilityController();
 
         if (briefingPanel != null)
         {
@@ -524,99 +624,98 @@ public class PlayerHudManager : MonoBehaviour
         }
     }
 
-    private Button EnsureReopenButton(Transform hudRoot)
+    private void EnsureBriefingVisibilityController()
     {
-        if (hudRoot == null)
-        {
-            return null;
-        }
-
-        Transform existing = hudRoot.Find("HudReopenButton");
-        GameObject buttonObject;
-        if (existing != null)
-        {
-            buttonObject = existing.gameObject;
-        }
-        else
-        {
-            buttonObject = new GameObject("HudReopenButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-            buttonObject.transform.SetParent(hudRoot, false);
-            RectTransform rect = buttonObject.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.5f, 0f);
-            rect.anchorMax = new Vector2(0.5f, 0f);
-            rect.pivot = new Vector2(0.5f, 0f);
-            rect.anchoredPosition = new Vector2(0f, 24f);
-            rect.sizeDelta = new Vector2(220f, 64f);
-            Image image = buttonObject.GetComponent<Image>();
-            image.color = secondaryAccentColor;
-            GameObject labelObject = new GameObject("Label", typeof(RectTransform));
-            labelObject.transform.SetParent(buttonObject.transform, false);
-            RectTransform labelRect = labelObject.GetComponent<RectTransform>();
-            labelRect.anchorMin = Vector2.zero;
-            labelRect.anchorMax = Vector2.one;
-            labelRect.offsetMin = Vector2.zero;
-            labelRect.offsetMax = Vector2.zero;
-            TextMeshProUGUI label = labelObject.AddComponent<TextMeshProUGUI>();
-            label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = 28;
-            label.color = Color.white;
-            label.text = GetTranslation("loto_hud_show_panel");
-        }
-
-        Button button = buttonObject.GetComponent<Button>();
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() =>
-        {
-            hudChromeVisible = true;
-            ApplyChromeVisibilityForCurrentState();
-        });
-        buttonObject.SetActive(false);
-        return button;
-    }
-
-    private void EnsureExitShortcutButton()
-    {
-        if (playerHud == null || hudExitShortcutButton != null)
+        if (briefingPanel == null || briefingVisibilityController != null)
         {
             return;
         }
 
-        Transform hudRoot = playerHud.transform;
-        Transform existing = hudRoot.Find("HudExitShortcutButton");
-        GameObject buttonObject;
-        if (existing != null)
+        briefingVisibilityController = briefingPanel.GetComponent<LotoPanelVisibilityController>();
+        if (briefingVisibilityController == null)
         {
-            buttonObject = existing.gameObject;
-        }
-        else
-        {
-            buttonObject = new GameObject("HudExitShortcutButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-            buttonObject.transform.SetParent(hudRoot, false);
-            RectTransform rect = buttonObject.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(1f, 1f);
-            rect.anchorMax = new Vector2(1f, 1f);
-            rect.pivot = new Vector2(1f, 1f);
-            rect.anchoredPosition = new Vector2(-24f, -24f);
-            rect.sizeDelta = new Vector2(160f, 56f);
-            Image image = buttonObject.GetComponent<Image>();
-            image.color = primaryPanelColor;
-            GameObject labelObject = new GameObject("Label", typeof(RectTransform));
-            labelObject.transform.SetParent(buttonObject.transform, false);
-            RectTransform labelRect = labelObject.GetComponent<RectTransform>();
-            labelRect.anchorMin = Vector2.zero;
-            labelRect.anchorMax = Vector2.one;
-            labelRect.offsetMin = Vector2.zero;
-            labelRect.offsetMax = Vector2.zero;
-            TextMeshProUGUI label = labelObject.AddComponent<TextMeshProUGUI>();
-            label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = 24;
-            label.color = Color.white;
-            label.text = GetTranslation("loto_hud_menu");
+            briefingVisibilityController = briefingPanel.gameObject.AddComponent<LotoPanelVisibilityController>();
         }
 
-        hudExitShortcutButton = buttonObject.GetComponent<Button>();
-        hudExitShortcutButton.onClick.RemoveAllListeners();
-        hudExitShortcutButton.onClick.AddListener(() => orchestrator?.RequestExitToMenu());
+        GameObject contentRoot = briefingPanel.contentRoot != null
+            ? briefingPanel.contentRoot
+            : briefingPanel.rootPanel;
+        briefingVisibilityController.Configure(contentRoot, briefingPanel.closeButton, briefingPanel.reopenButton);
+    }
+
+    private void EnsureHudPanelButtonFallbacks()
+    {
+        if (playerHud == null)
+        {
+            return;
+        }
+
+        if (playerHud.hudReopenButton == null)
+        {
+            Transform existing = playerHud.transform.Find("HudReopenButton");
+            if (existing != null)
+            {
+                playerHud.hudReopenButton = existing.GetComponent<Button>();
+            }
+        }
+
+        if (playerHud.hudReopenExitButton == null)
+        {
+            Transform existing = playerHud.transform.Find("HudReopenExitButton");
+            if (existing != null)
+            {
+                playerHud.hudReopenExitButton = existing.GetComponent<Button>();
+            }
+        }
+
+        if (playerHud.exitToMenuButton == null)
+        {
+            Transform existing = playerHud.transform.Find("ExitToMenuButton");
+            if (existing != null)
+            {
+                playerHud.exitToMenuButton = existing.GetComponent<Button>();
+            }
+        }
+    }
+
+    private void EnsureBriefingPanelButtonFallbacks()
+    {
+        if (briefingPanel == null)
+        {
+            return;
+        }
+
+        if (briefingPanel.contentRoot == null)
+        {
+            Transform content = briefingPanel.transform.Find("BriefingContent");
+            if (content != null)
+            {
+                briefingPanel.contentRoot = content.gameObject;
+            }
+        }
+
+        if (briefingPanel.closeButton == null)
+        {
+            Transform close = briefingPanel.transform.Find("BriefingContent/CloseButton");
+            if (close == null)
+            {
+                close = briefingPanel.transform.Find("CloseButton");
+            }
+
+            if (close != null)
+            {
+                briefingPanel.closeButton = close.GetComponent<Button>();
+            }
+        }
+
+        if (briefingPanel.reopenButton == null)
+        {
+            Transform reopen = briefingPanel.transform.Find("BriefingReopenButton");
+            if (reopen != null)
+            {
+                briefingPanel.reopenButton = reopen.GetComponent<Button>();
+            }
+        }
     }
 
     #endregion
@@ -713,19 +812,68 @@ public class PlayerHudManager : MonoBehaviour
 
     private void RefreshBriefingTexts()
     {
-        if (briefingPanel == null)
+        if (briefingPanel == null || orchestrator == null)
         {
             return;
         }
 
+        int scenarioIndex = orchestrator.CurrentScenarioIndex;
         if (briefingPanel.titleText != null)
         {
-            briefingPanel.titleText.text = GetTranslation("loto_briefing_title");
+            briefingPanel.titleText.text = GetScenarioBriefingTitle(scenarioIndex);
         }
 
         if (briefingPanel.bodyText != null)
         {
-            briefingPanel.bodyText.text = GetTranslation("loto_briefing_body");
+            briefingPanel.bodyText.text = GetScenarioBriefingBody(scenarioIndex);
+        }
+    }
+
+    private static string GetScenarioBriefingTitle(int scenarioIndex)
+    {
+        if (scenarioIndex == LotoSimulationConstants.ScenarioInspection)
+        {
+            return GetTranslation("loto_s2_briefing_title");
+        }
+
+        if (scenarioIndex >= LotoSimulationConstants.ScenarioLoto)
+        {
+            return GetTranslation("loto_s3_briefing_title");
+        }
+
+        return GetTranslation("loto_briefing_title");
+    }
+
+    private static string GetScenarioBriefingBody(int scenarioIndex)
+    {
+        if (scenarioIndex == LotoSimulationConstants.ScenarioInspection)
+        {
+            return GetTranslation("loto_s2_briefing_body");
+        }
+
+        if (scenarioIndex >= LotoSimulationConstants.ScenarioLoto)
+        {
+            return GetTranslation("loto_s3_briefing_body");
+        }
+
+        return GetTranslation("loto_s1_briefing_body");
+    }
+
+    private void HideTimerElements()
+    {
+        if (playerHud == null)
+        {
+            return;
+        }
+
+        if (playerHud.timerText != null)
+        {
+            playerHud.timerText.gameObject.SetActive(false);
+        }
+
+        if (playerHud.timerFill != null)
+        {
+            playerHud.timerFill.gameObject.SetActive(false);
         }
     }
 
@@ -872,6 +1020,33 @@ public class PlayerHudManager : MonoBehaviour
             if (menuImage != null)
             {
                 menuImage.color = secondary;
+            }
+        }
+
+        if (playerHud.exitToMenuButton != null)
+        {
+            Image exitImage = playerHud.exitToMenuButton.GetComponent<Image>();
+            if (exitImage != null)
+            {
+                exitImage.color = primary;
+            }
+        }
+
+        if (playerHud.hudReopenButton != null)
+        {
+            Image reopenImage = playerHud.hudReopenButton.GetComponent<Image>();
+            if (reopenImage != null)
+            {
+                reopenImage.color = secondary;
+            }
+        }
+
+        if (playerHud.hudReopenExitButton != null)
+        {
+            Image reopenExitImage = playerHud.hudReopenExitButton.GetComponent<Image>();
+            if (reopenExitImage != null)
+            {
+                reopenExitImage.color = primary;
             }
         }
     }

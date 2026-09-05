@@ -12,8 +12,7 @@ public static class LotoFase6QuestBuildTool
     {
         "Assets/XR Standard Menu/Level/Scenes/StandardMainMenu.unity",
         "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S1.unity",
-        "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S2.unity",
-        "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S3.unity"
+        "Assets/SafeMining/LOTOSimulation/Scenes/VR-LOTO-S2.unity"
     };
 
     #region Public API

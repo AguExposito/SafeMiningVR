@@ -23,6 +23,7 @@ public class ref_HazardSpot : MonoBehaviour
 
     public void CacheOriginalColor()
     {
+        ResolveRenderer();
         if (spotRenderer == null || spotRenderer.sharedMaterial == null)
         {
             return;
@@ -82,6 +83,7 @@ public class ref_HazardSpot : MonoBehaviour
 
     public void PulseHint()
     {
+        ResolveRenderer();
         if (isReported || spotRenderer == null || spotRenderer.sharedMaterial == null)
         {
             return;
@@ -97,12 +99,23 @@ public class ref_HazardSpot : MonoBehaviour
 
     public void RestoreHintColor()
     {
+        ResolveRenderer();
         if (isReported || spotRenderer == null || spotRenderer.sharedMaterial == null)
         {
             return;
         }
 
         spotRenderer.material.color = originalColor;
+    }
+
+    private void ResolveRenderer()
+    {
+        if (spotRenderer != null)
+        {
+            return;
+        }
+
+        spotRenderer = GetComponentInChildren<Renderer>(true);
     }
 
     private IEnumerator PulseRoutine()

@@ -83,5 +83,16 @@ public static class Util_LotoSimulationBridge
         }
     }
 
+    public static void NotifySessionSummary()
+    {
+        ControlCenter center = ControlCenter.ResolveInstance();
+        if (center == null || center.simulationOrchestratorManager == null)
+        {
+            return;
+        }
+
+        center.simulationOrchestratorManager.ShowSessionSummary();
+    }
+
     #endregion
 }

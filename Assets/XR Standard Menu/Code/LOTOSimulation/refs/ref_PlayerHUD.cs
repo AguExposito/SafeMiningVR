@@ -13,6 +13,9 @@ public class ref_PlayerHUD : MonoBehaviour
     public TMP_Text scenarioIndicatorText;
     public TMP_Text subtitleText;
     public GameObject menuButtonRoot;
+    public Button exitToMenuButton;
+    public Button hudReopenButton;
+    public Button hudReopenExitButton;
     public GameObject exitConfirmPanel;
     public TMP_Text exitConfirmTitleText;
     public TMP_Text exitConfirmBodyText;

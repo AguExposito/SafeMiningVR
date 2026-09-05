@@ -23,8 +23,8 @@ Ensure every LOTO scene (S1–S3) is testable both in PC Editor (no headset) and
 ## Preconditions
 
 1. Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`.
-2. Build Settings contain: `StandardMainMenu` (0), `VR-LOTO-S1` (1), `VR-LOTO-S2` (2), `VR-LOTO-S3` (3).
-3. `LotoScenarioSceneBootstrap` present on each S scene's bootstrap GameObject.
+2. Build Settings contain: `StandardMainMenu` (0), `VR-LOTO-S1` (1), `VR-LOTO-S2` (2). LOTO S3 runs in-scene inside S2.
+3. `LotoScenarioSceneBootstrap` present on each build S scene's bootstrap GameObject.
 
 ## Procedure: PC playtest smoke test
 

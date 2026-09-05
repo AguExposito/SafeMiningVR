@@ -138,7 +138,7 @@ Use profiler tools during WF4 (Build & Performance Verification) workflow execut
 |------|----------|------------|
 | List available menu items | `Unity_ManageMenuItem` | `Action: "List", Search: "<filter>"` |
 | Execute menu command | `Unity_ManageMenuItem` | `Action: "Execute", MenuPath: "<path>"` |
-| Run lighting tool | `Unity_ManageMenuItem` | `Action: "Execute", MenuPath: "SafeMining/LOTO/Configure Underground Lighting S1-S3"` |
+| Run lighting tool | `Unity_ManageMenuItem` | `Action: "Execute", MenuPath: "SafeMining/LOTO/Configure Underground Lighting S1-S2"` |
 
 ## Meta VR MCP bindings
 

@@ -7,6 +7,9 @@ public class LotoS2ContinueInteractable : MonoBehaviour
     [SerializeField] private XRSimpleInteractable interactable;
 
     private LotoDwellReticle dwellReticle;
+    private Renderer doorRenderer;
+    private bool lastReadyState;
+    private bool hasPaintedReadyState;
 
     #region Lifecycle
 
@@ -15,6 +18,12 @@ public class LotoS2ContinueInteractable : MonoBehaviour
         if (interactable == null)
         {
             interactable = GetComponent<XRSimpleInteractable>();
+        }
+
+        doorRenderer = GetComponent<Renderer>();
+        if (doorRenderer == null)
+        {
+            doorRenderer = GetComponentInChildren<Renderer>(true);
         }
 
         BindDwellReticle();
@@ -35,6 +44,7 @@ public class LotoS2ContinueInteractable : MonoBehaviour
     public void Configure(HazardInspectionManager manager)
     {
         inspectionManager = manager;
+        hasPaintedReadyState = false;
     }
 
     #endregion
@@ -73,15 +83,23 @@ public class LotoS2ContinueInteractable : MonoBehaviour
 
     private void Update()
     {
-        Renderer doorRenderer = GetComponent<Renderer>();
         if (doorRenderer == null || inspectionManager == null)
         {
             return;
         }
 
-        Color ready = new Color(0.133f, 0.773f, 0.369f, 1f);
-        Color blocked = new Color(0.45f, 0.47f, 0.5f, 1f);
-        doorRenderer.material.color = inspectionManager.IsReadyToAdvance ? ready : blocked;
+        bool ready = inspectionManager.IsReadyToAdvance;
+        if (hasPaintedReadyState && ready == lastReadyState)
+        {
+            return;
+        }
+
+        lastReadyState = ready;
+        hasPaintedReadyState = true;
+        Color readyColor = Brand.Secondary;
+        Color blockedColor = Brand.Tertiary;
+        blockedColor.a = 0.85f;
+        doorRenderer.material.color = ready ? readyColor : blockedColor;
     }
 
     private void BindDwellReticle()

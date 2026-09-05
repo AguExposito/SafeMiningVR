@@ -37,7 +37,10 @@ Typography: **Inter** family for web; in-VR use **TMP** with `LiberationSans SDF
 - **Top-left:** active objective + checklist (up to 5 objective rows via `PREF_LotoObjectiveRow`).
 - **Top-right:** session timer + scenario indicator (1/3, 2/3, 3/3).
 - **Bottom:** subtitles / briefing text (`TranslatableText`).
-- **Menu button:** opens exit-confirm dialog. Session summary and exit confirm are **mutually exclusive** — `PlayerHudManager.ApplyState` manages visibility.
+- **Footer-left:** Ocultar panel (hide task chrome).
+- **Footer-right:** Menú (exit-confirm dialog). Same control on reopen chip when chrome hidden.
+- **Subtitles:** remain visible when task chrome is hidden (pedagogical feedback).
+- Session summary and exit confirm are **mutually exclusive** — `PlayerHudManager.ApplyState` manages visibility.
 - Active chrome (objectives, timer) hides when session summary or exit confirm overlays are shown.
 
 ## Raycasting

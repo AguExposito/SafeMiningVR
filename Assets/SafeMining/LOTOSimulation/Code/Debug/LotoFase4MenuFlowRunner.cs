@@ -38,6 +38,12 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         StartCoroutine(S1E2eRoutine());
     }
 
+    public void RunAbandonMidS2Flow()
+    {
+        StopAllCoroutines();
+        StartCoroutine(AbandonMidS2Routine());
+    }
+
     #endregion
 
     #region Flow Routines
@@ -141,13 +147,14 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         LogStep("A3.4 report 4 hazards", hazardManager != null && hazardManager.IsReadyToAdvance, string.Empty);
 
         playtestDriver.ContinueS2();
-        yield return WaitForScene(LotoSimulationConstants.Scenario3BuildIndex);
-        if (!AssertScene(LotoSimulationConstants.Scenario3BuildIndex, "A3.5 continue S2→S3"))
-        {
-            yield break;
-        }
+        yield return WaitForOrchestratorState(LotoSimulationState.Briefing);
+        LogStep("A3.5 continue S2→S3 briefing", OrchestratorStateIs(LotoSimulationState.Briefing), string.Empty);
 
-        playtestDriver = ResolvePlaytestDriver();
+        playtestDriver.DismissBriefing();
+        yield return WaitForOrchestratorState(LotoSimulationState.Active);
+        LogStep("A3.5b dismiss S3 briefing", OrchestratorStateIs(LotoSimulationState.Active), string.Empty);
+        LogStep("A3.5c HUD 3/3", ScenarioIndicatorShows(3, 3), string.Empty);
+
         playtestDriver.RunLotoHappyPath();
         yield return WaitForOrchestratorState(LotoSimulationState.SessionSummary);
         LogStep("A3.6 LOTO happy path summary", OrchestratorStateIs(LotoSimulationState.SessionSummary), string.Empty);
@@ -201,6 +208,52 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         Debug.Log("[LOTO Fase4] Negative gate test finished.");
     }
 
+    private IEnumerator AbandonMidS2Routine()
+    {
+        yield return null;
+
+        if (ControlCenter.Instance == null)
+        {
+            LogStep("A5 CC present", false, "ControlCenter.Instance is null");
+            yield break;
+        }
+
+        ControlCenter.Instance.scoreManager.LoadSceneByBuildIndex(LotoSimulationConstants.Scenario1BuildIndex);
+        yield return WaitForScene(LotoSimulationConstants.Scenario1BuildIndex);
+        if (!AssertScene(LotoSimulationConstants.Scenario1BuildIndex, "A5 load S1"))
+        {
+            yield break;
+        }
+
+        playtestDriver = ResolvePlaytestDriver();
+        if (playtestDriver == null)
+        {
+            LogStep("A5 playtest driver", false, "LotoPcPlaytestDriver missing");
+            yield break;
+        }
+
+        playtestDriver.DismissBriefing();
+        yield return WaitForOrchestratorState(LotoSimulationState.Active);
+        playtestDriver.EquipMandatoryFive();
+        playtestDriver.ContinueS1();
+        yield return WaitForScene(LotoSimulationConstants.Scenario2BuildIndex);
+        if (!AssertScene(LotoSimulationConstants.Scenario2BuildIndex, "A5 reach S2"))
+        {
+            yield break;
+        }
+
+        playtestDriver = ResolvePlaytestDriver();
+        playtestDriver.RequestExit();
+        yield return WaitForOrchestratorState(LotoSimulationState.ExitConfirm);
+        LogStep("A5.1 exit confirm", OrchestratorStateIs(LotoSimulationState.ExitConfirm), string.Empty);
+
+        playtestDriver.ConfirmExit();
+        yield return WaitForScene(LotoSimulationConstants.MainMenuBuildIndex);
+        LogStep("A5.2 abandon returns to menu", SceneManager.GetActiveScene().buildIndex == LotoSimulationConstants.MainMenuBuildIndex, string.Empty);
+
+        Debug.Log("[LOTO Fase5] Abandon mid-S2 test finished.");
+    }
+
     #endregion
 
     #region Helpers
@@ -245,6 +298,24 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         return pass;
     }
 
+    private static bool ScenarioIndicatorShows(int currentScenario, int totalScenarios)
+    {
+        ref_PlayerHUD hud = FindFirstObjectByType<ref_PlayerHUD>();
+        if (hud == null || hud.scenarioIndicatorText == null)
+        {
+            return false;
+        }
+
+        string text = hud.scenarioIndicatorText.text;
+        if (string.IsNullOrEmpty(text))
+        {
+            return false;
+        }
+
+        string token = currentScenario.ToString() + "/" + totalScenarios.ToString();
+        return text.IndexOf(token, System.StringComparison.Ordinal) >= 0;
+    }
+
     private static bool OrchestratorStateIs(LotoSimulationState state)
     {
         SimulationOrchestratorManager orchestrator = GetOrchestrator();
@@ -253,9 +324,10 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
 
     private static SimulationOrchestratorManager GetOrchestrator()
     {
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
+        ControlCenter center = ControlCenter.ResolveInstance();
+        if (center != null && center.simulationOrchestratorManager != null)
         {
-            return ControlCenter.Instance.simulationOrchestratorManager;
+            return center.simulationOrchestratorManager;
         }
 
         return FindFirstObjectByType<SimulationOrchestratorManager>();

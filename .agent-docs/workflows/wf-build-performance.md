@@ -42,11 +42,11 @@ Validates Quest 3S build configuration, rendering performance, script efficiency
 | 0 | `StandardMainMenu` | [ ] | [ ] |
 | 1 | `VR-LOTO-S1` | [ ] | [ ] |
 | 2 | `VR-LOTO-S2` | [ ] | [ ] |
-| 3 | `VR-LOTO-S3` | [ ] | [ ] |
 
+- [ ] `VR-LOTO-S3` is NOT in the build list (`VR-LOTO-S3.unity` may remain on disk).
 - [ ] `VR-LOTO-Placeholder` is NOT in build list.
-- [ ] **PASS:** Correct 4 scenes in correct order.
-- [ ] **FAIL:** Wrong order, missing scenes, or placeholder included.
+- [ ] **PASS:** Correct 3 scenes in correct order.
+- [ ] **FAIL:** Wrong order, missing scenes, leftover S3 in build, or placeholder included.
 
 ### A4. APK build
 
@@ -60,7 +60,7 @@ Validates Quest 3S build configuration, rendering performance, script efficiency
 
 ## Phase B — Scene Lighting Budget
 
-Run for each LOTO scene (S1, S2, S3).
+Run for each build LOTO scene (S1, S2). S3 lighting lives on the nested `PREF_S3_ConveyorStation` inside S2.
 
 ### B1. Light count audit
 
@@ -70,7 +70,6 @@ For each scene, use `Unity_ManageScene` or `Unity_FindProjectAssets` type `Light
 |-------|----------------------|--------------------------|----------------|-----------|
 | VR-LOTO-S1 | ≤1 [ ] | ≤2 [ ] | Disabled [ ] | [ ] |
 | VR-LOTO-S2 | ≤1 [ ] | ≤2 [ ] | Disabled [ ] | [ ] |
-| VR-LOTO-S3 | ≤1 [ ] | ≤2 [ ] | Disabled [ ] | [ ] |
 
 - [ ] Soft shadows only on key light.
 - [ ] Custom dark ambient for underground/industrial feel.
@@ -232,7 +231,7 @@ For imported meshes (Sketchfab, FBX) in SafeMining folders:
 ### F1. Error count
 
 - [ ] Play each scene in Editor → `Unity_ReadConsole` (Errors) → 0 entries.
-- [ ] **PASS:** Zero errors for all 4 scenes.
+- [ ] **PASS:** Zero errors for all 3 build scenes.
 - [ ] **FAIL:** Any error → fix before proceeding.
 
 ### F2. Warning audit

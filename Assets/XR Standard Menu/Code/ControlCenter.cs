@@ -6,6 +6,17 @@ using NJ.Finder;
 public class ControlCenter : MonoBehaviour
 {
     public static ControlCenter Instance;
+
+    public static ControlCenter ResolveInstance()
+    {
+        if (Instance != null)
+        {
+            return Instance;
+        }
+
+        Instance = FindFirstObjectByType<ControlCenter>(FindObjectsInactive.Include);
+        return Instance;
+    }
     #region Managers
     private protected PersistantDataManager _persistantDataManager;
     public PersistantDataManager persistantDataManager

@@ -70,6 +70,13 @@
 	<string name="loto_briefing_title">Capacitación LOTO</string>
 	<string name="loto_briefing_body">Completá tres escenarios secuenciales antes de intervenir el equipo: equipamiento de EPP, inspección preoperacional e identificación de riesgos, y aplicación de bloqueo y etiquetado (LOTO).</string>
 	<string name="loto_briefing_begin">Comenzar</string>
+	<string name="loto_briefing_close">Cerrar</string>
+	<string name="loto_briefing_reopen">Ver briefing</string>
+	<string name="loto_s1_briefing_body">Escenario 1 — Equipamiento de EPP. Seleccioná y colocá el EPP obligatorio (casco, lentes, chaleco, guantes y botas). Rechazá piezas defectuosas. Se evalúa selección correcta (20%) y detección de defectos (10%).</string>
+	<string name="loto_s2_briefing_title">Inspección preoperacional</string>
+	<string name="loto_s2_briefing_body">Escenario 2 — Inspección de riesgos. Reportá las cuatro condiciones inseguras cerca de la correa detenida. Evitá reportar falsos positivos. Se evalúa identificación de peligros (25%).</string>
+	<string name="loto_s3_briefing_title">Bloqueo y etiquetado LOTO</string>
+	<string name="loto_s3_briefing_body">Escenario 3 — Procedimiento LOTO. Detené la correa, aislá energía, colocá candado personal rojo y etiqueta PELIGRO NO OPERAR. Verificá energía cero con START. Se evalúa secuencia LOTO (35%) y verificación de energía cero (10%).</string>
 	<string name="loto_hud_active_objective">Objetivo activo</string>
 	<string name="loto_hud_scenario_label">Escenario {0}/{1}</string>
 	<string name="loto_hud_menu">Menú</string>
@@ -129,6 +136,8 @@
 	<string name="loto_s2_timeout_hint">Aún hay condiciones inseguras sin reportar. Observe el área con más detalle.</string>
 	<string name="loto_s2_roller_anomaly">Se detectó una anomalía en un rodillo de la correa. Prepare el equipo para una intervención segura.</string>
 	<string name="loto_s2_exit">Continuar a LOTO</string>
+	<string name="loto_s2_label_spill">Material derramado</string>
+	<string name="loto_s2_label_tools">Herramientas abandonadas</string>
 	<string name="loto_s2_label_extinguisher">Extintor obstruido</string>
 	<string name="loto_s2_label_signage">Señalización deteriorada</string>
 	<string name="loto_s2_report_spill">Material derramado en zona de tránsito reportado.</string>

@@ -4,6 +4,7 @@ public class LotoScenario3Controller : MonoBehaviour
 {
     [SerializeField] private GameObject s3ZoneRoot;
     [SerializeField] private LotoSequenceManager sequenceManager;
+    [SerializeField] private LotoConveyorInspectionMode conveyorInspectionMode;
 
     private bool hasBegun;
 
@@ -29,16 +30,26 @@ public class LotoScenario3Controller : MonoBehaviour
 
     public void Begin()
     {
-        if (hasBegun)
-        {
-            return;
-        }
-
-        hasBegun = true;
-
         if (s3ZoneRoot != null)
         {
             s3ZoneRoot.SetActive(true);
+        }
+
+        Transform searchRoot = s3ZoneRoot != null ? s3ZoneRoot.transform : transform;
+
+        if (conveyorInspectionMode == null)
+        {
+            conveyorInspectionMode = searchRoot.GetComponentInChildren<LotoConveyorInspectionMode>(true);
+        }
+
+        if (sequenceManager == null)
+        {
+            sequenceManager = searchRoot.GetComponentInChildren<LotoSequenceManager>(true);
+        }
+
+        if (sequenceManager == null)
+        {
+            sequenceManager = FindFirstObjectByType<LotoSequenceManager>(FindObjectsInactive.Include);
         }
 
         if (sequenceManager == null)
@@ -47,18 +58,32 @@ public class LotoScenario3Controller : MonoBehaviour
             return;
         }
 
+        sequenceManager.OnSequenceCompleted -= OnSequenceCompleted;
         sequenceManager.OnSequenceCompleted += OnSequenceCompleted;
+
+        if (hasBegun)
+        {
+            return;
+        }
+
+        hasBegun = true;
+
+        if (conveyorInspectionMode != null)
+        {
+            conveyorInspectionMode.Revert();
+        }
+
         sequenceManager.Begin();
     }
 
     public void OnSequenceCompleted(bool success)
     {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.simulationOrchestratorManager == null)
+        if (!success)
         {
             return;
         }
 
-        ControlCenter.Instance.simulationOrchestratorManager.ShowSessionSummary();
+        Util_LotoSimulationBridge.NotifySessionSummary();
     }
 
     #endregion

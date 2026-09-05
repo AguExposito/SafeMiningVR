@@ -46,4 +46,44 @@ public class LotoConveyorInspectionMode : MonoBehaviour
             }
         }
     }
+
+    public void Revert()
+    {
+        if (beltAnimator == null)
+        {
+            beltAnimator = GetComponentInChildren<BeltAnimator>(true);
+        }
+
+        if (beltAnimator != null)
+        {
+            beltAnimator.SetRunning(true);
+        }
+
+        XRGrabInteractable[] grabs = GetComponentsInChildren<XRGrabInteractable>(true);
+        for (int i = 0; i < grabs.Length; i++)
+        {
+            if (grabs[i] != null)
+            {
+                grabs[i].enabled = true;
+            }
+        }
+
+        XRSimpleInteractable[] simples = GetComponentsInChildren<XRSimpleInteractable>(true);
+        for (int i = 0; i < simples.Length; i++)
+        {
+            if (simples[i] != null)
+            {
+                simples[i].enabled = true;
+            }
+        }
+
+        XRSocketInteractor[] sockets = GetComponentsInChildren<XRSocketInteractor>(true);
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            if (sockets[i] != null)
+            {
+                sockets[i].enabled = true;
+            }
+        }
+    }
 }
