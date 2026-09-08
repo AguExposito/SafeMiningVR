@@ -21,6 +21,8 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
     public event Action<bool> OnSessionSummaryRequested;
 
+    [SerializeField] private bool skipExperimentalBriefing = true;
+
     private LotoSimulationState currentState = LotoSimulationState.Initializing;
     private int currentScenarioIndex = 1;
     private bool sessionScoreInitialized;
@@ -80,6 +82,10 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
         SetState(LotoSimulationState.Briefing);
         OnScenarioChanged?.Invoke(currentScenarioIndex, LotoSimulationConstants.TotalScenarios);
+        if (skipExperimentalBriefing)
+        {
+            DismissBriefing();
+        }
     }
 
     public void DismissBriefing()
@@ -382,7 +388,7 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
         if (canShowWaiter)
         {
-            await ControlCenter.Instance.loadManager.LoadScene_VisualProgress(buildIndex);
+            await ControlCenter.Instance.loadManager.LoadScene_ComfortProgress(buildIndex);
             return;
         }
 
@@ -433,6 +439,10 @@ public class SimulationOrchestratorManager : MonoBehaviour
         SetState(LotoSimulationState.Briefing);
         OnScenarioChanged?.Invoke(currentScenarioIndex, LotoSimulationConstants.TotalScenarios);
         OnSubtitleChanged?.Invoke(GetTranslation("loto_briefing_body"), false);
+        if (skipExperimentalBriefing)
+        {
+            DismissBriefing();
+        }
     }
 
     private void SetState(LotoSimulationState newState)

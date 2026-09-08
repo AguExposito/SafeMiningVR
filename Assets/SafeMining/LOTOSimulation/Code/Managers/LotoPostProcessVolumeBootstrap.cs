@@ -13,6 +13,7 @@ public static class LotoPostProcessVolumeBootstrap
     {
         EnsureCameraPostProcessing();
         EnsureGlobalVolume();
+        DisableNearBlur();
     }
 
     #endregion
@@ -80,6 +81,44 @@ public static class LotoPostProcessVolumeBootstrap
         }
 
         return null;
+    }
+
+    private static void DisableNearBlur()
+    {
+        Volume[] volumes = Object.FindObjectsByType<Volume>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < volumes.Length; i++)
+        {
+            Volume volume = volumes[i];
+            if (volume == null)
+            {
+                continue;
+            }
+
+            OverrideDepthOfFieldOff(volume.profile);
+        }
+    }
+
+    private static void OverrideDepthOfFieldOff(VolumeProfile profile)
+    {
+        if (profile == null)
+        {
+            return;
+        }
+
+        if (!profile.TryGet(out DepthOfField depthOfField))
+        {
+            depthOfField = profile.Add<DepthOfField>(true);
+        }
+
+        depthOfField.active = true;
+        depthOfField.mode.overrideState = true;
+        depthOfField.mode.value = DepthOfFieldMode.Off;
+        depthOfField.gaussianStart.overrideState = true;
+        depthOfField.gaussianStart.value = 1000f;
+        depthOfField.gaussianEnd.overrideState = true;
+        depthOfField.gaussianEnd.value = 1000f;
+        depthOfField.focusDistance.overrideState = true;
+        depthOfField.focusDistance.value = 1000f;
     }
 
     #endregion

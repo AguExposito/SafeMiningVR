@@ -21,14 +21,9 @@ public class MenuInteractionManager : MonoBehaviour
         ref_logout = ComponentFinder.FindComponentInScene<ref_Logout>();
         controlCenter = ComponentFinder.FindComponentInScene<ControlCenter>();
         Initialize();
-        LotoInputModalityVisuals.OnHandsModeChanged += SyncControlsHelpToModality;
-        SyncControlsHelpToModality(LotoInputModalityVisuals.IsHandsMode);
+        DisconnectHandsHelp();
     }
 
-    private void OnDestroy()
-    {
-        LotoInputModalityVisuals.OnHandsModeChanged -= SyncControlsHelpToModality;
-    }
     void Initialize()
     {
         #region MainMenu Interactions
@@ -50,7 +45,7 @@ public class MenuInteractionManager : MonoBehaviour
         {
             ref_controls.gameObject.SetActive(true);
             ref_mainMenu.gameObject.SetActive(false);
-            SyncControlsHelpToModality(LotoInputModalityVisuals.IsHandsMode);
+            DisconnectHandsHelp();
         });
         ref_mainMenu.go_btn_exit.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -100,16 +95,9 @@ public class MenuInteractionManager : MonoBehaviour
         ref_controls.go_btn_back.GetComponent<Button>().onClick.AddListener(() =>
         {
             ref_mainMenu.gameObject.SetActive(true);
-            ref_controls.gameObject.SetActive(false);   
+            ref_controls.gameObject.SetActive(false);
         });
-        ref_controls.go_btn_handSwitch.GetComponent<Button>().onClick.AddListener(() =>{
-            ref_controls.go_panel_contentHands.SetActive(true);
-            ref_controls.go_panel_contentVR.SetActive(false);
-        });
-        ref_controls.go_btn_controlsSwitch.GetComponent<Button>().onClick.AddListener(() =>{
-            ref_controls.go_panel_contentVR.SetActive(true);
-            ref_controls.go_panel_contentHands.SetActive(false);
-        });
+        DisconnectHandsHelp();
         #endregion
 
         #region Exit Interactions
@@ -145,7 +133,9 @@ public class MenuInteractionManager : MonoBehaviour
         ref_logout.text_userdata.text = $"{fullName} / PIN {pinValue}";
     }
 
-    private void SyncControlsHelpToModality(bool handsMode)
+    #region Controls Help
+
+    private void DisconnectHandsHelp()
     {
         if (ref_controls == null)
         {
@@ -154,12 +144,24 @@ public class MenuInteractionManager : MonoBehaviour
 
         if (ref_controls.go_panel_contentHands != null)
         {
-            ref_controls.go_panel_contentHands.SetActive(handsMode);
+            ref_controls.go_panel_contentHands.SetActive(false);
+        }
+
+        if (ref_controls.go_btn_handSwitch != null)
+        {
+            ref_controls.go_btn_handSwitch.SetActive(false);
+        }
+
+        if (ref_controls.go_btn_controlsSwitch != null)
+        {
+            ref_controls.go_btn_controlsSwitch.SetActive(false);
         }
 
         if (ref_controls.go_panel_contentVR != null)
         {
-            ref_controls.go_panel_contentVR.SetActive(!handsMode);
+            ref_controls.go_panel_contentVR.SetActive(true);
         }
     }
+
+    #endregion
 }

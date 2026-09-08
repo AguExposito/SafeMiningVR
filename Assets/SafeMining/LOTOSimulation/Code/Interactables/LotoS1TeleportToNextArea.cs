@@ -1,15 +1,18 @@
+using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
-[RequireComponent(typeof(TeleportationArea))]
 public class LotoS1TeleportToNextArea : MonoBehaviour
 {
     [SerializeField] private EppEquipmentManager equipmentManager;
-    [SerializeField] private TeleportationArea teleportationArea;
+    [SerializeField] private Collider triggerCollider;
     [SerializeField] private Renderer[] padRenderers;
     [SerializeField] private Color readyColor = new Color(0.05f, 0.92f, 0.95f, 1f);
     [SerializeField] private Color idleColor = new Color(0.15f, 0.18f, 0.2f, 0.35f);
+    [SerializeField] private UnityEvent onActivated;
+    [SerializeField] private UnityEvent onTriggered;
+    [SerializeField] private UnityEvent onBlocked;
 
     private bool isReady;
     private bool transitionTriggered;
@@ -18,34 +21,14 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
 
     private void Awake()
     {
-        if (teleportationArea == null)
-        {
-            teleportationArea = GetComponent<TeleportationArea>();
-        }
-
+        DisableLocomotionTeleport();
         if (padRenderers == null || padRenderers.Length == 0)
         {
             padRenderers = GetComponentsInChildren<Renderer>(true);
         }
 
-        EnsureTeleportColliders();
+        EnsureTriggerCollider();
         SetReady(false);
-    }
-
-    private void OnEnable()
-    {
-        if (teleportationArea != null)
-        {
-            teleportationArea.teleporting.AddListener(OnTeleporting);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (teleportationArea != null)
-        {
-            teleportationArea.teleporting.RemoveListener(OnTeleporting);
-        }
     }
 
     #endregion
@@ -62,9 +45,14 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
         isReady = ready;
         transitionTriggered = false;
 
-        if (teleportationArea != null)
+        gameObject.SetActive(true);
+        EnsureTriggerCollider();
+        DisableLocomotionTeleport();
+
+        if (triggerCollider != null)
         {
-            teleportationArea.enabled = ready;
+            triggerCollider.enabled = true;
+            triggerCollider.isTrigger = true;
         }
 
         if (padRenderers != null)
@@ -82,21 +70,50 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
             }
         }
 
-        gameObject.SetActive(true);
+        if (ready)
+        {
+            onActivated?.Invoke();
+        }
     }
 
     #endregion
 
     #region Event Handlers
 
-    private void OnTeleporting(TeleportingEventArgs args)
+    private void OnTriggerEnter(Collider other)
     {
-        if (!isReady || transitionTriggered)
+        TryHandlePlayerOverlap(other, true);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        TryHandlePlayerOverlap(other, false);
+    }
+
+    private void TryHandlePlayerOverlap(Collider other, bool invokeBlocked)
+    {
+        if (!IsPlayerCollider(other))
+        {
+            return;
+        }
+
+        if (!isReady)
+        {
+            if (invokeBlocked)
+            {
+                onBlocked?.Invoke();
+            }
+
+            return;
+        }
+
+        if (transitionTriggered)
         {
             return;
         }
 
         transitionTriggered = true;
+        onTriggered?.Invoke();
         if (equipmentManager != null)
         {
             equipmentManager.TryContinue();
@@ -107,24 +124,67 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
 
     #region Helpers
 
-    private void EnsureTeleportColliders()
+    private void DisableLocomotionTeleport()
     {
-        if (teleportationArea == null)
+        TeleportationArea teleportationArea = GetComponent<TeleportationArea>();
+        if (teleportationArea != null)
         {
-            return;
-        }
-
-        Collider[] colliders = teleportationArea.GetComponentsInChildren<Collider>(true);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i] != null)
-            {
-                colliders[i].isTrigger = false;
-            }
+            teleportationArea.enabled = false;
         }
     }
 
-    private void ApplyPadColor(Renderer renderer, Color color, bool emissive)
+    private void EnsureTriggerCollider()
+    {
+        if (triggerCollider == null)
+        {
+            triggerCollider = GetComponent<Collider>();
+        }
+
+        if (triggerCollider == null)
+        {
+            BoxCollider box = gameObject.AddComponent<BoxCollider>();
+            box.center = new Vector3(0f, 0f, -0.5f);
+            box.size = new Vector3(1.4f, 1.4f, 1f);
+            triggerCollider = box;
+        }
+
+        triggerCollider.isTrigger = true;
+        EnsureTriggerBody();
+    }
+
+    private void EnsureTriggerBody()
+    {
+        Rigidbody body = GetComponent<Rigidbody>();
+        if (body == null)
+        {
+            body = gameObject.AddComponent<Rigidbody>();
+        }
+
+        body.isKinematic = true;
+        body.useGravity = false;
+    }
+
+    private static bool IsPlayerCollider(Collider other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+
+        if (other is CharacterController)
+        {
+            return true;
+        }
+
+        if (other.GetComponentInParent<XROrigin>() != null)
+        {
+            return true;
+        }
+
+        return other.CompareTag("Player");
+    }
+
+    private static void ApplyPadColor(Renderer renderer, Color color, bool emissive)
     {
         if (renderer == null)
         {

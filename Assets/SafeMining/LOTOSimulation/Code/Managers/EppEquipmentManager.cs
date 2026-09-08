@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class EppEquipmentManager : MonoBehaviour
@@ -23,6 +24,9 @@ public class EppEquipmentManager : MonoBehaviour
     [SerializeField] private Transform vestAnchor;
     [SerializeField] private Transform glovesAnchor;
     [SerializeField] private Transform bootsAnchor;
+    [SerializeField] private LotoS1TeleportToNextArea teleportToNextArea;
+    [SerializeField] private UnityEvent onAllMandatoryEquipped;
+    [SerializeField] private UnityEvent onContinueAccepted;
 
     private readonly HashSet<EppItemType> equippedMandatory = new HashSet<EppItemType>();
     private readonly HashSet<EppItemType> equippedOptional = new HashSet<EppItemType>();
@@ -32,7 +36,8 @@ public class EppEquipmentManager : MonoBehaviour
     private bool selectionObjectiveScored;
     private bool defectObjectiveScored;
     private bool attemptedDefectiveWear;
-    private LotoS1TeleportToNextArea teleportToNextArea;
+    private GameObject helmetVisor;
+    private static Material helmetVisorMaterial;
 
     public Transform rejectZoneAnchor;
 
@@ -68,10 +73,12 @@ public class EppEquipmentManager : MonoBehaviour
 
         WireChildInteractables();
         ActivateLogicRoots();
+        FreezeWorldItems();
         BindBodyAnchors();
         ResolveTeleportPad();
         LotoSafetyGlassesVisionFilter.SetGlassesEquipped(false);
         LotoGloveHandVisuals.SetGlovesEquipped(false);
+        SetHelmetVisorVisible(false);
 
         NotifyProgress();
         NotifyOrchestratorSubtitle("loto_s1_step_select");
@@ -88,11 +95,12 @@ public class EppEquipmentManager : MonoBehaviour
         }
 
         Transform origin = cameraTransform.root;
-        ReparentAnchor(helmetAnchor, cameraTransform, new Vector3(0f, 0.12f, 0.04f));
+        ReparentAnchor(helmetAnchor, cameraTransform, new Vector3(0f, 0f, 0f));
         ReparentAnchor(glassesAnchor, cameraTransform, new Vector3(0f, 0f, 0.12f));
         ReparentAnchor(vestAnchor, cameraTransform, new Vector3(0f, -0.38f, 0.16f));
         ReparentAnchor(glovesAnchor, origin, new Vector3(-0.22f, 0.95f, 0.28f));
         ReparentAnchor(bootsAnchor, origin, new Vector3(0.12f, 0.08f, 0.22f));
+        EnsureHelmetVisor();
     }
 
     public void RegisterSpawnedItem(ref_EppItem item)
@@ -205,6 +213,7 @@ public class EppEquipmentManager : MonoBehaviour
             ScoreSelectionObjective();
             NotifyOrchestratorSubtitle("loto_s1_step_ready");
             RefreshTeleportPad();
+            onAllMandatoryEquipped?.Invoke();
         }
 
         LotoTrainingFeedback.PlaySuccess();
@@ -266,6 +275,7 @@ public class EppEquipmentManager : MonoBehaviour
             return;
         }
 
+        onContinueAccepted?.Invoke();
         if (scenarioController != null)
         {
             scenarioController.OnEquipmentCompleted();
@@ -486,7 +496,7 @@ public class EppEquipmentManager : MonoBehaviour
     {
         if (teleportToNextArea == null)
         {
-            teleportToNextArea = FindFirstObjectByType<LotoS1TeleportToNextArea>();
+            teleportToNextArea = FindFirstObjectByType<LotoS1TeleportToNextArea>(FindObjectsInactive.Include);
         }
     }
 
@@ -506,33 +516,47 @@ public class EppEquipmentManager : MonoBehaviour
             return;
         }
 
+        HideItemRenderers(item);
+        item.gameObject.SetActive(false);
+
         if (item.itemType == EppItemType.Helmet)
         {
-            Transform attach = attachAnchor != null ? attachAnchor : GetAttachAnchor(EppItemType.Helmet);
-            AttachEquippedItem(item, attach);
+            SetHelmetVisorVisible(true);
             return;
         }
 
-        item.gameObject.SetActive(false);
-
-        switch (item.itemType)
+        if (item.itemType == EppItemType.SafetyGlasses)
         {
-            case EppItemType.SafetyGlasses:
-                LotoSafetyGlassesVisionFilter.SetGlassesEquipped(true);
-                break;
-            case EppItemType.Gloves:
-                LotoGloveHandVisuals.SetGlovesEquipped(true);
-                break;
+            LotoSafetyGlassesVisionFilter.SetGlassesEquipped(true);
         }
     }
 
     private void ActivateLogicRoots()
     {
-        ActivateLogicRoot("BodyAnchors", true);
-        ActivateLogicRoot("LockerSlots", false);
+        ActivateLogicRoot("BodyAnchors");
+        ActivateLogicRoot("LockerSlots");
     }
 
-    private void ActivateLogicRoot(string rootName, bool disableSocketActive)
+    private void FreezeWorldItems()
+    {
+        ref_EppItem[] items = GetComponentsInChildren<ref_EppItem>(true);
+        for (int i = 0; i < items.Length; i++)
+        {
+            ref_EppItem item = items[i];
+            if (item == null || item.IsLocked)
+            {
+                continue;
+            }
+
+            EppItemInteractable interactable = item.GetComponent<EppItemInteractable>();
+            if (interactable != null)
+            {
+                interactable.ApplyRestingPhysics();
+            }
+        }
+    }
+
+    private void ActivateLogicRoot(string rootName)
     {
         Transform root = transform.Find(rootName);
         if (root == null)
@@ -554,37 +578,12 @@ public class EppEquipmentManager : MonoBehaviour
 
             typed.BindManager(this);
 
-            if (!disableSocketActive)
-            {
-                continue;
-            }
-
             XRSocketInteractor xrSocket = typed.GetComponent<XRSocketInteractor>();
             if (xrSocket != null)
             {
                 xrSocket.socketActive = false;
             }
         }
-    }
-
-    private static void AttachEquippedItem(ref_EppItem item, Transform attach)
-    {
-        if (item == null)
-        {
-            return;
-        }
-
-        if (attach == null)
-        {
-            item.gameObject.SetActive(false);
-            return;
-        }
-
-        item.transform.SetParent(attach, false);
-        item.transform.localPosition = Vector3.zero;
-        item.transform.localRotation = Quaternion.identity;
-        item.transform.localScale = Vector3.one;
-        item.gameObject.SetActive(true);
     }
 
     private static void DisableRenderersRecursive(Transform root)
@@ -630,6 +629,111 @@ public class EppEquipmentManager : MonoBehaviour
             default:
                 return type.ToString();
         }
+    }
+
+    private static void HideItemRenderers(ref_EppItem item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        Renderer[] renderers = item.GetComponentsInChildren<Renderer>(true);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null)
+            {
+                renderers[i].enabled = false;
+            }
+        }
+    }
+
+    private void EnsureHelmetVisor()
+    {
+        if (helmetAnchor == null)
+        {
+            return;
+        }
+
+        if (helmetVisor == null)
+        {
+            Transform existing = helmetAnchor.Find("HelmetVisor");
+            if (existing != null)
+            {
+                helmetVisor = existing.gameObject;
+            }
+        }
+
+        if (helmetVisor == null)
+        {
+            helmetVisor = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            helmetVisor.name = "HelmetVisor";
+            helmetVisor.SetActive(false);
+            Collider visorCollider = helmetVisor.GetComponent<Collider>();
+            if (visorCollider != null)
+            {
+                Destroy(visorCollider);
+            }
+        }
+
+        helmetVisor.transform.SetParent(helmetAnchor, false);
+        helmetVisor.transform.localPosition = new Vector3(0f, -0.04f, 0.12f);
+        helmetVisor.transform.localRotation = Quaternion.identity;
+        helmetVisor.transform.localScale = new Vector3(0.18f, 0.035f, 1f);
+
+        MeshRenderer visorRenderer = helmetVisor.GetComponent<MeshRenderer>();
+        if (visorRenderer != null)
+        {
+            visorRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            visorRenderer.receiveShadows = false;
+            visorRenderer.sharedMaterial = GetHelmetVisorMaterial();
+        }
+    }
+
+    private void SetHelmetVisorVisible(bool visible)
+    {
+        EnsureHelmetVisor();
+        if (helmetVisor != null)
+        {
+            helmetVisor.SetActive(visible);
+        }
+    }
+
+    private static Material GetHelmetVisorMaterial()
+    {
+        if (helmetVisorMaterial != null)
+        {
+            return helmetVisorMaterial;
+        }
+
+        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+        if (shader == null)
+        {
+            shader = Shader.Find("Sprites/Default");
+        }
+
+        Material material = new Material(shader);
+        helmetVisorMaterial = material;
+        Color visorColor = new Color(0.12f, 0.1f, 0.08f, 0.22f);
+        if (material.HasProperty("_BaseColor"))
+        {
+            material.SetColor("_BaseColor", visorColor);
+        }
+        else if (material.HasProperty("_Color"))
+        {
+            material.SetColor("_Color", visorColor);
+        }
+
+        material.SetFloat("_Surface", 1f);
+        material.SetOverrideTag("RenderType", "Transparent");
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.EnableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = 3000;
+        return material;
     }
 
     private static void ReparentAnchor(Transform anchor, Transform parent, Vector3 localPosition)

@@ -25,7 +25,8 @@ public class ref_EppItem : MonoBehaviour
         Rigidbody body = GetComponent<Rigidbody>();
         if (body != null)
         {
-            body.isKinematic = equipped;
+            body.useGravity = false;
+            body.isKinematic = true;
         }
     }
 

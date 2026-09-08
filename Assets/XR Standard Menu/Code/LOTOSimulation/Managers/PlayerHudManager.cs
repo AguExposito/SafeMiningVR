@@ -12,6 +12,8 @@ public class PlayerHudManager : MonoBehaviour
     [SerializeField] private Sprite objectiveAchievedSprite;
     [SerializeField] private Color primaryPanelColor = new Color(0.102f, 0.212f, 0.365f, 0.92f);
     [SerializeField] private Color secondaryAccentColor = new Color(0.976f, 0.451f, 0.086f, 1f);
+    [SerializeField] private bool showGameplayHud;
+    [SerializeField] private bool showExperimentalBriefing;
 
     private ref_PlayerHUD playerHud;
     private ref_BriefingPanel briefingPanel;
@@ -187,10 +189,18 @@ public class PlayerHudManager : MonoBehaviour
 
     private void ApplyState(LotoSimulationState state)
     {
-        bool showBriefingCanvas = state == LotoSimulationState.Briefing;
-        if (briefingPanel != null && briefingPanel.rootPanel != null)
+        bool showBriefingCanvas = showExperimentalBriefing && state == LotoSimulationState.Briefing;
+        if (briefingPanel != null)
         {
-            briefingPanel.rootPanel.SetActive(showBriefingCanvas);
+            if (!showExperimentalBriefing)
+            {
+                briefingPanel.gameObject.SetActive(false);
+            }
+
+            if (briefingPanel.rootPanel != null)
+            {
+                briefingPanel.rootPanel.SetActive(showBriefingCanvas);
+            }
         }
 
         if (showBriefingCanvas)
@@ -210,15 +220,15 @@ public class PlayerHudManager : MonoBehaviour
 
         if (playerHud != null && playerHud.rootPanel != null)
         {
-            bool showHud = state == LotoSimulationState.Active ||
-                           state == LotoSimulationState.ExitConfirm ||
-                           state == LotoSimulationState.SessionSummary;
+            bool showHud = state == LotoSimulationState.ExitConfirm ||
+                           state == LotoSimulationState.SessionSummary ||
+                           (showGameplayHud && state == LotoSimulationState.Active);
             playerHud.rootPanel.SetActive(showHud);
         }
 
         bool showExitConfirm = state == LotoSimulationState.ExitConfirm;
         bool showSessionSummary = state == LotoSimulationState.SessionSummary;
-        bool showActiveChrome = hudChromeVisible && state == LotoSimulationState.Active;
+        bool showActiveChrome = showGameplayHud && hudChromeVisible && state == LotoSimulationState.Active;
 
         if (playerHud != null && playerHud.exitConfirmPanel != null)
         {
@@ -276,7 +286,7 @@ public class PlayerHudManager : MonoBehaviour
 
     private void ApplyHudReopenVisibility(LotoSimulationState state)
     {
-        bool showReopen = !hudChromeVisible && state == LotoSimulationState.Active;
+        bool showReopen = showGameplayHud && !hudChromeVisible && state == LotoSimulationState.Active;
         if (playerHud != null && playerHud.hudReopenButton != null)
         {
             playerHud.hudReopenButton.gameObject.SetActive(showReopen);
@@ -579,7 +589,7 @@ public class PlayerHudManager : MonoBehaviour
     private void ApplyChromeVisibilityForCurrentState()
     {
         LotoSimulationState state = orchestrator != null ? orchestrator.CurrentState : LotoSimulationState.Initializing;
-        bool showActiveChrome = hudChromeVisible
+        bool showActiveChrome = showGameplayHud && hudChromeVisible
             && state != LotoSimulationState.Briefing
             && state != LotoSimulationState.ExitConfirm
             && state != LotoSimulationState.SessionSummary;

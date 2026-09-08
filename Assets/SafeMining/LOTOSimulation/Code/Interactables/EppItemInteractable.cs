@@ -56,6 +56,27 @@ public class EppItemInteractable : MonoBehaviour
         equipmentManager = manager;
         EnsureGrabInteractable();
         EnsureGrabCollider();
+        ApplyRestingPhysics();
+    }
+
+    public void ApplyRestingPhysics()
+    {
+        Rigidbody body = GetComponent<Rigidbody>();
+        if (body == null)
+        {
+            body = gameObject.AddComponent<Rigidbody>();
+        }
+
+        body.useGravity = false;
+        body.isKinematic = true;
+        body.linearVelocity = Vector3.zero;
+        body.angularVelocity = Vector3.zero;
+
+        if (itemRef != null && itemRef.grabInteractable != null)
+        {
+            itemRef.grabInteractable.movementType = XRBaseInteractable.MovementType.Kinematic;
+            itemRef.grabInteractable.throwOnDetach = false;
+        }
     }
 
     public void RaiseEquipped()
@@ -98,6 +119,8 @@ public class EppItemInteractable : MonoBehaviour
 
     private void OnReleased(UnityEngine.XR.Interaction.Toolkit.SelectExitEventArgs args)
     {
+        ApplyRestingPhysics();
+
         if (equipmentManager == null || itemRef == null || itemRef.IsLocked)
         {
             return;
@@ -179,7 +202,10 @@ public class EppItemInteractable : MonoBehaviour
             itemRef.grabInteractable = gameObject.AddComponent<XRGrabInteractable>();
         }
 
+        itemRef.grabInteractable.movementType = XRBaseInteractable.MovementType.Kinematic;
+        itemRef.grabInteractable.throwOnDetach = false;
         itemRef.grabInteractable.enabled = !itemRef.IsLocked;
+        ApplyRestingPhysics();
     }
 
     private void EnsureGrabCollider()
@@ -192,15 +218,59 @@ public class EppItemInteractable : MonoBehaviour
             box.size = new Vector3(0.28f, 0.12f, 0.28f);
         }
 
-        Vector3 minSize = new Vector3(0.22f, 0.1f, 0.22f);
+        Vector3 minSize = new Vector3(0.18f, 0.18f, 0.18f);
         if (itemRef != null && itemRef.itemType == EppItemType.SafetyGlasses)
         {
             minSize = new Vector3(0.34f, 0.16f, 0.3f);
         }
 
-        box.size = Vector3.Max(box.size, minSize);
+        Bounds? worldBounds = ComputeRendererWorldBounds();
+        if (worldBounds.HasValue)
+        {
+            Bounds bounds = worldBounds.Value;
+            Vector3 localMin = transform.InverseTransformPoint(bounds.min);
+            Vector3 localMax = transform.InverseTransformPoint(bounds.max);
+            Vector3 localCenter = (localMin + localMax) * 0.5f;
+            Vector3 localSize = localMax - localMin;
+            localSize.x = Mathf.Abs(localSize.x);
+            localSize.y = Mathf.Abs(localSize.y);
+            localSize.z = Mathf.Abs(localSize.z);
+            box.center = localCenter;
+            box.size = Vector3.Max(localSize, minSize);
+        }
+        else
+        {
+            box.size = Vector3.Max(box.size, minSize);
+        }
+
         box.isTrigger = false;
         box.enabled = true;
+    }
+
+    private Bounds? ComputeRendererWorldBounds()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+        Bounds? combined = null;
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            Renderer renderer = renderers[i];
+            if (renderer == null)
+            {
+                continue;
+            }
+
+            if (!combined.HasValue)
+            {
+                combined = renderer.bounds;
+                continue;
+            }
+
+            Bounds current = combined.Value;
+            current.Encapsulate(renderer.bounds);
+            combined = current;
+        }
+
+        return combined;
     }
 
     #endregion

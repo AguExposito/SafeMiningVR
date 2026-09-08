@@ -298,6 +298,28 @@ public class LoadManager : MonoBehaviour
         );
     }
 
+    public async Task LoadScene_ComfortProgress(int val)
+    {
+        await ExecuteWithLoading(LoadingMode.Simple,
+            async () =>
+            {
+                var asyncOperation = SceneManager.LoadSceneAsync(val);
+                if (asyncOperation == null)
+                {
+                    Debug.LogError($"[LoadManager] No se pudo cargar build index {val}.");
+                    return;
+                }
+                while (!asyncOperation.isDone)
+                {
+                    await Task.Yield();
+                }
+            },
+            "",
+            "Cargando escena...",
+            true
+        );
+    }
+
     public async Task WaitTasks_VisualProgress(string title, Func<Task> taskFunc) {
         await ExecuteWithLoading(LoadingMode.Blur, taskFunc, title, "", false);
     }
