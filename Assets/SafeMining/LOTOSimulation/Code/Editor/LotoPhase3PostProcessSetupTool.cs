@@ -86,11 +86,11 @@ public static class LotoPhase3PostProcessSetupTool
         if (profile.TryGet(out Bloom bloom))
         {
             bloom.active = true;
-            bloom.threshold.Override(0.95f);
-            bloom.intensity.Override(0.2f);
-            bloom.scatter.Override(0.55f);
+            bloom.threshold.Override(0.8f);
+            bloom.intensity.Override(0.55f);
+            bloom.scatter.Override(0.65f);
             bloom.highQualityFiltering.Override(false);
-            bloom.maxIterations.Override(3);
+            bloom.maxIterations.Override(4);
         }
 
         if (profile.TryGet(out ColorAdjustments colorAdjustments))

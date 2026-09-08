@@ -21,19 +21,23 @@ public static class LotoPostProcessVolumeBootstrap
 
     private static void EnsureCameraPostProcessing()
     {
-        Camera mainCamera = Camera.main;
-        if (mainCamera == null)
+        Camera[] cameras = Object.FindObjectsByType<Camera>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        for (int i = 0; i < cameras.Length; i++)
         {
-            return;
-        }
+            Camera camera = cameras[i];
+            if (camera == null)
+            {
+                continue;
+            }
 
-        UniversalAdditionalCameraData cameraData = mainCamera.GetUniversalAdditionalCameraData();
-        if (cameraData == null)
-        {
-            return;
-        }
+            UniversalAdditionalCameraData cameraData = camera.GetUniversalAdditionalCameraData();
+            if (cameraData == null || cameraData.renderType != CameraRenderType.Base)
+            {
+                continue;
+            }
 
-        cameraData.renderPostProcessing = true;
+            cameraData.renderPostProcessing = true;
+        }
     }
 
     private static void EnsureGlobalVolume()
