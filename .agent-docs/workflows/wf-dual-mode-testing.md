@@ -30,12 +30,12 @@ Select the bootstrap GameObject in Inspector. Verify each cheat:
 | Cheat | Hotkey | Expected result | Pass/Fail |
 |-------|--------|-----------------|-----------|
 | Dismiss briefing | Numpad 1 | Briefing closes, HUD shows objectives | [ ] |
-| Equip 5 mandatory EPP | Numpad 2 | 5/5 EPP equipped, objective rows update | [ ] |
-| Continue S1→S2 | Numpad 3 | Scene transitions to VR-LOTO-S2 | [ ] |
-| Reject one defect | Numpad 4 | Defective EPP rejected, defect objective progresses | [ ] |
-| Report 4 hazards | Numpad 5 | 4/4 hazards reported, objective rows update | [ ] |
+| Equip 5 mandatory EPP | Numpad 2 | `LotoGameManager.IsS1Complete`; HUD rows if CC present | [ ] |
+| Continue S1→S2 | Numpad 3 | Scene transitions to `VR-LOTO-S2S3` (`TryContinueS1`, needs CC) | [ ] |
+| Reject one defect | Numpad 4 | `S1DefectScore` → 0; 5/5 still complete | [ ] |
+| Report hazards | Numpad 5 | Board counts meet `IsS2Complete` | [ ] |
 | Continue S2→S3 | Numpad 6 | In-scene S3 briefing (no scene load) | [ ] |
-| Run LOTO happy path | Numpad 7 | STOP→breaker→lock→tag→START→summary | [ ] |
+| Run LOTO happy path | Numpad 7 | Board S3 Notify* → `CheckStartButton` → summary (tag is interactable, not a board flag) | [ ] |
 
 - [ ] **PASS:** All 7 cheats produce expected results without console errors.
 - [ ] **FAIL:** Any cheat triggers an exception, soft-locks, or leaves an inconsistent state.
@@ -59,9 +59,9 @@ Select the bootstrap GameObject in Inspector. Verify each cheat:
 ### A6. Direct scene launch (S1/S2/S3)
 
 - [ ] Open `VR-LOTO-S1.unity` directly (without menu flow) → Press Play.
-- [ ] **PASS:** Scene loads, `ControlCenter.Instance is null` warning appears (expected), but visual layout and PC cheats work for visual inspection.
-- [ ] **FAIL:** Hard crash or scene fails to initialize visuals.
-- [ ] Repeat for S2 and S3.
+- [ ] **PASS:** Scene loads, `LotoGameManager` works, `ControlCenter.Instance` is null (expected). `TryContinueS1` / `SetObjective` no-op. Do not edit world art.
+- [ ] **FAIL:** Hard crash or board missing.
+- [ ] Repeat for `VR-LOTO-S2S3` (relay present; board persists only if coming from S1).
 
 **Phase A sign-off:** All checkboxes passed → PC Playmode validated.
 

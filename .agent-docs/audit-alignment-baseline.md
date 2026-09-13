@@ -1,5 +1,7 @@
 # Audit Alignment Baseline — Fase 0
 
+> **Superseded for gameplay state.** Use [loto-game-board.md](loto-game-board.md) and [s1-scene-inventory.md](s1-scene-inventory.md). Rows below that name `EppEquipmentManager` / `HazardInspectionManager` / `LotoSequenceManager` as gates are historical. World art is frozen; HUD may change.
+
 > **S1 scene wiring (post-Cabin art):** Prefer [`s1-scene-inventory.md`](s1-scene-inventory.md) (2026-08-30). It supersedes S1-03 / S1-04 and related VR-LOTO-S1 PASS rows below that reflected prefab/code — live MCP shows Continue / Reject / Outline absent and `rejectZoneAnchor` null.
 
 ## Metadata

@@ -7,7 +7,7 @@ Executable checklists for validating the LOTO training simulation across all qua
 | ID | Workflow | Scope | Primary rules |
 |----|----------|-------|---------------|
 | WF1 | [Dual-Mode Testing & Ergonomics](wf-dual-mode-testing.md) | PC Playmode + Quest 3S device, input modality, dwell-time, HUD comfort | `40-vr-interaction`, `50-hud-ui-brand` |
-| WF2 | [LOTO Serious Gaming & Step Compliance](wf-loto-step-compliance.md) | S1–S3 procedure fidelity, scoring, gates, pedagogy, branding, localization | `30-loto-domain`, `50-hud-ui-brand` |
+| WF2 | [LOTO Serious Gaming & Step Compliance](wf-loto-step-compliance.md) | S1–S3 on `LotoGameManager` + `ScoreManager`, pedagogy, branding, localization | `30-loto-domain`, `50-hud-ui-brand` |
 | WF3 | [HTTP Network, Auth & Telemetry Pipeline](wf-network-auth-telemetry.md) | Offline-first sync, DTOs, API contracts, auth readiness, network resilience | `70-backend-sync` |
 | WF4 | [Build & Performance Verification](wf-build-performance.md) | Build settings, lighting budget, script perf, asset optimization, 72 FPS target | `60-quest-performance`, `10-unity-architecture` |
 

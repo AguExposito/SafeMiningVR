@@ -32,10 +32,12 @@ public class TranslatableText : MonoBehaviour
 
     private void SubscribeToLanguageChanges()
     {
-        if (ControlCenter.Instance.languageManager != null)
+        if (ControlCenter.Instance == null || ControlCenter.Instance.languageManager == null)
         {
-            ControlCenter.Instance.languageManager.OnLanguageChanged += OnLanguageChanged;
+            return;
         }
+
+        ControlCenter.Instance.languageManager.OnLanguageChanged += OnLanguageChanged;
     }
 
     private void UnsubscribeFromLanguageChanges()
@@ -54,14 +56,18 @@ public class TranslatableText : MonoBehaviour
 
     private IEnumerator WaitForLanguageManagerAndUpdate()
     {
-        // Esperar hasta que el LanguageManager esté disponible y las traducciones estén cargadas
-        while (ControlCenter.Instance?.languageManager == null || 
+        while (ControlCenter.Instance == null ||
+               ControlCenter.Instance.languageManager == null ||
                !ControlCenter.Instance.languageManager.resourcesLoaded.Value)
         {
+            if (ControlCenter.Instance == null)
+            {
+                yield break;
+            }
+
             yield return null;
         }
-        
-        // Una vez que esté listo, actualizar el texto
+
         UpdateText();
     }
 

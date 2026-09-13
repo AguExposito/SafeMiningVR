@@ -32,7 +32,9 @@
 
 ## Test plan
 
-- [ ] PC Editor Play Mode
+- [ ] PC Editor Play Mode from `StandardMainMenu` (CC + ScoreManager)
+- [ ] Gates verified on `LotoGameManager` (not leftover scenario managers)
+- [ ] World art untouched; HUD changes only if required
 - [ ] Quest 3S device (if XR/interaction changed)
 - [ ] Scenario slice tested: S1 | S2 | S3 | full flow
 

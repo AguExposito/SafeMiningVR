@@ -35,7 +35,7 @@ Assign **one primary domain** (or primary + secondary if genuinely multi-domain)
 | `network` | backend, adapter, sync, queue, DTO, payload, JWT, auth, REST, endpoint, IBManager, offline | `70-backend-sync` | `network-session-pipeline` | `/network-session` | WF3 |
 | `compliance` | LOTO, EPP, hazard, lock, tag, scoring, objective, gate, threshold, branding, localization, pedagogical | `30-loto-domain` + `50-hud-ui-brand` | `safemining-compliance` | `/loto-compliance` | WF2 |
 | `perf` | FPS, frame time, lighting, LOD, draw call, batching, GC, IL2CPP, Vulkan, URP | `60-quest-performance` + `10-unity-architecture` | — | `/unity-performance` | WF4 |
-| `arch` | ControlCenter, Manager, SDB, ref_, Initialize, singleton, scene bootstrap | `10-unity-architecture` + `15-code-style` | — | `/unity-performance` | — |
+| `arch` | ControlCenter, LotoGameManager, Relay, ScoreManager, SDB, HUD bind, KISS | `10-unity-architecture` + `15-code-style` | — | `/unity-performance` | — |
 | `qa` | "run QA", "validate", "audit", "WF1"–"WF4", workflow | — | `workflow-runner` | delegate per workflow domain | WF1–WF4 |
 
 Multi-domain example: "add interactable + verify scoring" → primary `xr`, secondary `compliance`. Execute primary first.
@@ -79,7 +79,7 @@ MCP gates are mandatory. Skipping requires explicit user approval.
 
 Launch the mapped native subagent when:
 - Task modifies 3+ files across subsystems
-- Scene authoring + code changes simultaneously
+- HUD prefab bindings + code changes simultaneously (world art is frozen)
 - Deep domain expertise needed in isolated context
 - User explicitly requests a specialist
 
@@ -151,4 +151,5 @@ Task received
 - Orchestrate only — never override domain rules or specialist acceptance criteria
 - Never load `Doc_SMVR/SafeMining_VR_v1.1.md` in full — use `.agent-docs/INDEX.md`
 - Never hand-edit `.unity`, `.prefab`, or `.asset` YAML
+- KISS: `LotoGameManager` + relay + `ScoreManager`. Do not author world art. HUD may change. `.agent-docs/loto-game-board.md`
 - Delegate rather than dilute context when a specialist subagent is the better fit

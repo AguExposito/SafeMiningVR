@@ -18,7 +18,7 @@ You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — 
 2. `.cursor/rules/50-hud-ui-brand.mdc` — branding, UI, localization
 3. `.cursor/skills/safemining-compliance/SKILL.md` — audit procedures
 4. `.agent-docs/INDEX.md` — locate RN/RNF/HU line ranges in `Doc_SMVR/SafeMining_VR_v1.1.md`
-5. `.agent-docs/loto-simulation-handbook.md` + `.agent-docs/loto-objectives.md`
+5. `.agent-docs/loto-simulation-handbook.md` + `.agent-docs/loto-objectives.md` + `.agent-docs/loto-game-board.md`
 6. `Propuesta Simulacion LOTO.txt` — gameplay brief (full read OK, ~100 lines)
 7. `.cursor/rules/15-code-style.mdc` — naming conventions
 
@@ -27,9 +27,9 @@ You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — 
 ## Domain ownership
 
 - Requirement traceability: RN01–RN09, RNF01–RNF21, HU-220 through HU-223
-- LOTO fidelity: S1 EPP (5 mandatory + defect rejection), S2 hazards (4 real + decoys), S3 sequence (STOP→breaker OFF→red lock→PELIGRO NO OPERAR tag→START verify)
+- LOTO fidelity: S1 EPP (5 mandatory + defect rejection), S2 spec types + board counts (`IsS2Complete`), S3 pedagogy includes tag; board does not
 - Scoring: weights 20+10+25+35+10=100%, 60% threshold, false-positive penalty
-- Scenario gates: S1→S2 (5/5 mandatory EPP), S2→S3 (4/4 real hazards)
+- Scenario gates: S1→S2 (`LotoGameManager.IsS1Complete`), S2→S3 (`IsS2Complete` board counts)
 - Failure paths: Malo 1 (incomplete LOTO + START), Malo 2 (breaker without gloves)
 - Pedagogical feedback: localized subtitles explaining WHY, retry without penalty beyond score
 - Branding: Primary `#1A365D`, Secondary `#F97316`, Tertiary `#334155`, Neutral `#F9FAFB`, Success `#22C55E`, Error `#EF4444`
@@ -56,11 +56,13 @@ You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — 
 | Rules | `.cursor/rules/30-loto-domain.mdc` | Domain rules |
 | Rules | `.cursor/rules/50-hud-ui-brand.mdc` | UI/brand rules |
 | Skills | `.cursor/skills/safemining-compliance/SKILL.md` | Audit procedures |
+| Docs | `.agent-docs/loto-game-board.md` | KISS board + relay + ScoreManager |
 | Docs | `.agent-docs/loto-simulation-handbook.md` | Scenario handbook |
 | Docs | `.agent-docs/loto-objectives.md` | Objective IDs |
 | Docs | `.agent-docs/INDEX.md` | Spec line lookup |
-| Code | `Assets/SafeMining/LOTOSimulation/Code/Data/` | Objectives, types, scoring |
-| Code | `Assets/SafeMining/LOTOSimulation/Code/Managers/` | Scenario controllers |
+| Code | `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameManager.cs` | Board |
+| Code | `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameEventRelay.cs` | Relay |
+| Code | `Assets/XR Standard Menu/Code/Managers/ScoreManager.cs` | HUD/lobby scores |
 | Code | `Assets/Resources/es.xml`, `en.xml` | Localization |
 | Code | `Assets/XR Standard Menu/Code/LOTOSimulation/` | HUD, PlayerHudManager |
 | Workflow | `.agent-docs/workflows/wf-loto-step-compliance.md` | WF2 validation |
@@ -71,13 +73,14 @@ You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — 
 - Errors are learning moments: explain WHY via `LanguageManager`, let trainee retry
 - Trainee-controlled pacing — no artificial urgency
 - Feedback: subtitles + outline hints + audio — no camera shake, particle bursts, score multipliers
-- S3 strict order: STOP → breaker OFF → red lock (not blue/yellow) → PELIGRO NO OPERAR tag → START verify
+- S3 pedagogy: STOP → breaker OFF → red lock → PELIGRO NO OPERAR tag → START. Board: `IsS3SequenceReady` then `CheckStartButton` (no tag flag).
 - Approval threshold 60% (`LotoObjectiveIds.DefaultApprovalThresholdPercent`)
 - All user-facing strings via `TranslatableText` — never hardcode Spanish in scripts
 - All colors via `Brand.*` — never hardcode hex in scripts
 - HUD = World Space canvas, not Screen Space Overlay
 - No non-diegetic UI chrome breaking VR immersion
 - No comments in C# code
+- KISS: gates on `LotoGameManager`; scores on `ScoreManager`; HUD may change; world art frozen
 
 ## Acceptance criteria
 
@@ -89,7 +92,8 @@ You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — 
 6. Colors use `Brand.*` runtime accessors
 7. HUD follows world-space standards (scale, distance, WCAG AA contrast ≥4.5:1, min 48×48px targets)
 8. No arcade mechanics introduced
-9. `Unity_ReadConsole` → 0 errors
+9. Gates verified on `LotoGameManager`; HUD/score on `ScoreManager`
+10. `Unity_ReadConsole` → 0 errors
 
 ## Audit output format
 
@@ -102,6 +106,6 @@ Report findings as:
 
 - XRI wiring, dwell reticle implementation → `/vr-usability-interaction`
 - Backend adapters, sync queue, HTTP → `/network-session`
-- Lighting, LOD, framerate, scene authoring → `/unity-performance`
+- Lighting, LOD, framerate → `/unity-performance` (do not author world art)
 
 When invoked, declare sources consulted, execute MCP gates, and produce structured pass/fail audit reports.

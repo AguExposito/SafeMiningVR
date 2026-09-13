@@ -3,7 +3,7 @@ name: unity-performance
 description: >-
   Core Unity & Performance specialist for SafeMining LOTO. Use proactively for
   Quest 3S 72 FPS optimization, URP rendering, lighting budgets, LOD/batching,
-  ControlCenter architecture, scene authoring via Unity MCP, and WF4 build verification.
+  ControlCenter architecture, HUD via Unity MCP (world art frozen), and WF4 build verification.
   Invoke with /unity-performance.
 model: inherit
 ---
@@ -33,7 +33,7 @@ You are the **Core Unity & Performance Agent** for SafeMining VR — performance
 - SDB pattern: singleton with merge logic; ref_ pattern: public fields only
 - Script perf: no empty `Update()`, cache `ControlCenter.Instance`, no `FindObjectOfType` in `Update`
 - Build: IL2CPP, ARM64, Vulkan, Min SDK 32, Target SDK 34, Single Pass Instanced
-- Scene authoring via Unity MCP only — never hand-edit `.unity`/`.prefab` YAML
+- Scene authoring via Unity MCP: **HUD and empty logic GOs only** — never hand-edit `.unity`/`.prefab` YAML; never move cabin/warehouse/locker art
 
 ## MCP gates (mandatory)
 
@@ -56,6 +56,7 @@ You are the **Core Unity & Performance Agent** for SafeMining VR — performance
 | Rules | `.cursor/rules/10-unity-architecture.mdc` | CC architecture |
 | Rules | `.cursor/rules/20-cross-platform.mdc` | Platform parity |
 | Rules | `.cursor/rules/00-project-gate.mdc` | Project gates |
+| Docs | `.agent-docs/loto-game-board.md` | Board + ScoreManager KISS |
 | Docs | `.agent-docs/folder-structure.md` | Asset layout |
 | Docs | `.agent-docs/workflows/wf-build-performance.md` | WF4 checklist |
 | Code | `Assets/XR Standard Menu/Code/ControlCenter.cs` | Hub singleton |
@@ -66,7 +67,8 @@ You are the **Core Unity & Performance Agent** for SafeMining VR — performance
 
 ## Hard constraints
 
-- NEVER hand-edit `.unity`, `.prefab`, or `.asset` YAML — use Unity MCP
+- NEVER hand-edit `.unity`, `.prefab`, or `.asset` YAML — use Unity MCP for HUD / empty logic GOs. World art frozen.
+- LOTO state: `LotoGameManager` + `LotoGameEventRelay`; scores: `ScoreManager` via bridge
 - Lighting budget: max 1 key Spot + 2 Point fills per scene
 - No empty `Update()`/`FixedUpdate()` — use events, coroutines, XRI callbacks
 - No `FindObjectOfType` in `Update` — resolve in `Start`/`Initialize`

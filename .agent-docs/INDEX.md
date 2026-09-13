@@ -83,7 +83,7 @@ Source: `Doc_SMVR/SafeMining_VR_v1.1.md`
 
 ## LOTO Simulation Objectives
 
-Source: `.agent-docs/loto-objectives.md` (full file, 25 lines — safe to load entirely)
+Source: `.agent-docs/loto-objectives.md` (full file — safe to load entirely). Runtime gates: `.agent-docs/loto-game-board.md`.
 
 | Objective ID | Weight | Scenario |
 |--------------|--------|----------|
@@ -112,9 +112,9 @@ Source: `Propuesta Simulacion LOTO.txt` (full file, 100 lines — safe to load e
 
 | Scenario | Gate | Key elements |
 |----------|------|--------------|
-| S1 — EPP | 5/5 mandatory equipped | Helmet, glasses, vest, gloves, boots; reject defective |
-| S2 — Hazards | 4/4 real hazards reported | Spill, tools, signage, extinguisher; decoys penalize |
-| S3 — LOTO | Strict order: STOP→breaker→lock→tag→START | Red lock only; PELIGRO NO OPERAR tag only |
+| S1 — EPP | `LotoGameManager.IsS1Complete` (5/5 good) | Helmet, glasses, vest, gloves, boots; defective grab zeros `S1DefectScore` |
+| S2 — Hazards | `IsS2Complete` | Board counts: tools 3, sign 1, puddle 2, extinguisher 1 |
+| S3 — LOTO | `IsS3SequenceReady` then `CheckStartButton` | STOP → panel → power cut → close → hasp → lock → START |
 
 ## Operational Docs (.agent-docs/)
 
@@ -123,10 +123,12 @@ All files are small enough to load entirely when needed.
 | File | Lines | Content |
 |------|-------|---------|
 | `project-overview.md` | ~40 | Stack, state, architecture, branding |
-| `loto-simulation-handbook.md` | ~60 | Player flow, outline hints, input, lighting |
-| `loto-objectives.md` | ~25 | Objective IDs, weights, threshold |
+| `loto-game-board.md` | ~120 | KISS: LotoGameManager, relay, ScoreManager, spec vs board |
+| `loto-simulation-handbook.md` | ~90 | Player flow, outline hints, input, lighting |
+| `loto-objectives.md` | ~30 | Objective IDs, weights, threshold |
+| `s1-scene-inventory.md` | ~120 | VR-LOTO-S1 inventory; art frozen; board GOs |
+| `s2-scene-inventory.md` | ~170 | VR-LOTO-S2S3 inventory; art frozen; board/relay |
 | `loto-asset-list.md` | ~30 | MVP and polish asset requirements |
-| `s1-scene-inventory.md` | ~120 | Live VR-LOTO-S1 inventory, NO-DELETE / placeholders, gaps → phases |
 | `integration-vr-backend.md` | ~82 | API contracts, DTOs, auth flow |
 | `folder-structure.md` | ~65 | Canonical folder layout |
 | `qa-quest-fase6.md` | ~45 | Build settings, comfort, fail paths, device checklist |

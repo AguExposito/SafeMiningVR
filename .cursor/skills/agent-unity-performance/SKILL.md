@@ -3,7 +3,7 @@ name: agent-unity-performance
 description: >-
   Launch a specialized Core Unity & Performance subagent for SafeMining LOTO.
   Handles Quest 3S framerate optimization, URP rendering pipeline, lighting budgets,
-  LOD/mesh decimation, C# code quality, ControlCenter architecture, scene authoring via MCP,
+  LOD/mesh decimation, C# code quality, ControlCenter architecture, HUD MCP (world art frozen),
   and build configuration. Use when delegating performance profiling, scene setup,
   rendering optimization, architecture enforcement, or code quality reviews to a focused subagent.
 disable-model-invocation: true
@@ -20,7 +20,7 @@ Specialized subagent for Unity engine architecture, Quest 3S performance optimiz
 - Optimizing framerate for a LOTO scene on Quest 3S.
 - Setting up scene lighting within the per-scene budget (1 key + 2 fill).
 - Configuring URP rendering settings for Quest.
-- Authoring or restructuring scene hierarchy via Unity MCP.
+- Authoring HUD or empty logic GOs via Unity MCP (cabin/warehouse art is frozen).
 - Creating new Managers, SDBs, or ref scripts following ControlCenter patterns.
 - Reviewing C# code for architecture compliance (manager isolation, Initialize() pattern).
 - Setting up LOD groups, static batching, or occlusion culling.
@@ -49,7 +49,9 @@ BEFORE ANY WORK:
 YOUR DOMAIN — you own these areas exclusively:
 - Quest 3S performance: 72 FPS target, 13.9ms frame budget, CPU + GPU optimization.
 - URP 17 rendering: Single Pass Instanced, Vulkan, baked lighting, shadow budget, overdraw control.
-- Scene lighting budget: 1 key Mixed Spot + 2 Mixed Point fills per scene. No realtime directional sun.
+- Scene lighting budget: 1 key Mixed Spot + 2 Mixed Point fills per scene. No realtime directional sun. Do not move frozen world art.
+- LOTO board: LotoGameManager + LotoGameEventRelay + ScoreManager. Contract: .agent-docs/loto-game-board.md.
+- HUD may change; cabin/warehouse/locker/conveyor transforms may not.
 - LOD pipeline: decimate Sketchfab imports, create LOD groups, texture size limits (2048 env, 1024 UI).
 - Static batching and occlusion culling for industrial environments.
 - ControlCenter architecture: singleton lifecycle, DontDestroyOnLoad, SDB init before managers.
@@ -59,7 +61,7 @@ YOUR DOMAIN — you own these areas exclusively:
 - Util_ pattern: static methods, no game-state dependencies.
 - Script performance: no empty Update(), cache ControlCenter.Instance, no FindObjectOfType in Update, object pooling.
 - Build settings: IL2CPP, ARM64, Vulkan, Min SDK 32, Target SDK 34, Single Pass Instanced.
-- Scene authoring: prefab placement, hierarchy organization, teleport area setup — via Unity MCP only.
+- Scene authoring: HUD and empty logic GOs only — via Unity MCP. World art frozen.
 - Asset pipeline: mesh decimation, texture atlasing, static batching flags.
 
 MCP TOOLS YOU MUST USE:
@@ -75,20 +77,22 @@ MCP TOOLS YOU MUST USE:
 KEY FILES (read as needed):
 - Assets/XR Standard Menu/Code/ControlCenter.cs
 - Assets/XR Standard Menu/Code/Managers/PersistantDataManager.cs
+- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameManager.cs
+- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameEventRelay.cs
 - Assets/XR Standard Menu/Code/Managers/ScoreManager.cs
 - Assets/XR Standard Menu/Code/Managers/SoundManager.cs
 - Assets/XR Standard Menu/Code/Managers/LanguageManager.cs
 - Assets/XR Standard Menu/Code/SBD/I_SBD.cs
 - Assets/XR Standard Menu/Code/SBD/SBD_Audio.cs
 - Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenarioSceneBootstrap.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/SimulationOrchestratorManager.cs (in XR Standard Menu)
+- Assets/XR Standard Menu/Code/LOTOSimulation/Managers/SimulationOrchestratorManager.cs
 - Assets/SafeMining/LOTOSimulation/Code/Debug/LotoUndergroundLightingTool.cs
 - Assets/SafeMining/LOTOSimulation/Code/Data/LotoSimulationConstants.cs
 - Packages/manifest.json (package versions)
 - .agent-docs/folder-structure.md
 
 CONSTRAINTS:
-- NEVER hand-edit .unity or .prefab YAML — use Unity_ManageScene / Unity_ManageGameObject.
+- NEVER hand-edit .unity or .prefab YAML — use Unity MCP for HUD / empty logic GOs only. World art frozen. KISS: .agent-docs/loto-game-board.md.
 - Scene lighting: max 1 realtime/mixed Spot (key) + 2 realtime/mixed Point (fill). No realtime directional.
 - No empty Update()/FixedUpdate() methods. Use events, coroutines, or XRI callbacks.
 - No FindObjectOfType in Update — resolve in Start/Awake/Initialize.

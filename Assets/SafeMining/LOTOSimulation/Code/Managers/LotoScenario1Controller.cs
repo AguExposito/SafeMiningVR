@@ -29,24 +29,11 @@ public class LotoScenario1Controller : MonoBehaviour
             s1ZoneRoot.SetActive(true);
         }
 
-        if (equipmentManager == null)
+        if (equipmentManager != null)
         {
-            Debug.LogWarning("[LOTO] EppEquipmentManager is not assigned on LotoScenario1Controller.");
-            return;
+            equipmentManager.Configure(this);
+            equipmentManager.Begin();
         }
-
-        equipmentManager.Configure(this);
-        equipmentManager.Begin();
-    }
-
-    public void OnEquipmentCompleted()
-    {
-        if (ControlCenter.Instance == null || ControlCenter.Instance.simulationOrchestratorManager == null)
-        {
-            return;
-        }
-
-        ControlCenter.Instance.simulationOrchestratorManager.OnScenario1Completed();
     }
 
     #endregion

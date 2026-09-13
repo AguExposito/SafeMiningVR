@@ -192,8 +192,13 @@ public class SimulationOrchestratorManager : MonoBehaviour
 
     public void OnScenario1Completed()
     {
-        EppEquipmentManager manager = FindFirstObjectByType<EppEquipmentManager>(FindObjectsInactive.Include);
-        if (manager != null && !manager.IsReadyToAdvance)
+        if (scenario1Completed)
+        {
+            return;
+        }
+
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board == null || !board.IsS1Complete)
         {
             return;
         }

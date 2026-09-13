@@ -39,13 +39,13 @@ Review the feature or scene being audited. Map it to the LOTO scenario(s):
 | Scenario | Key requirements |
 |----------|-----------------|
 | S1 — EPP Selection | RN01 (select 5 mandatory EPP), RN03 (reject ≥1 defective), RN05 (briefing) |
-| S2 — Hazard Inspection | RN02 (inspect 4 hazards, 60% threshold), RN05 (briefing) |
-| S3 — LOTO Procedure | RN04 (STOP→breaker→lock→tag→START), RN05 (briefing) |
+| S2 — Hazard Inspection | RN01 25% + HU-222 types; gate `IsS2Complete` (board counts) |
+| S3 — LOTO Procedure | RN04 pedagogy STOP→breaker→lock→tag→START; board has no tag flag |
 | Cross-cutting | RN09 (session register before load), RNF01 (Quest 3S), RNF03 (72 FPS), RNF04 (offline-first), RNF08 (JWT 2h expiry) |
 
 ### Step 2 — Verify objective IDs and weights
 
-Confirm the code uses the canonical objective IDs from `LotoObjectiveIds`:
+Confirm the code uses the canonical objective IDs from `LotoObjectiveIds`. Gates live on `LotoGameManager`. HUD/lobby checks go through `ScoreManager` via `Util_LotoSimulationBridge.SetObjective` (indices in `LotoSimulationConstants`). Do not audit leftover `EppEquipmentManager` / `HazardInspectionManager` / `LotoSequenceManager` as source of truth. Contract: `.agent-docs/loto-game-board.md`.
 
 | Objective | ID constant | Weight |
 |-----------|------------|--------|
@@ -107,7 +107,7 @@ Review code against the project's enforced patterns:
 - `#region` grouping: Lifecycle → Configuration → Interaction (or domain-specific).
 - No comments explaining what code does. Comments only for non-obvious constraints.
 - `[RequireComponent]` on MonoBehaviours that need sibling refs.
-- `Configure(ManagerType manager)` pattern for dependency injection from scene controllers.
+- `Configure(ManagerType manager)` is presentation DI only. Evaluable actions notify `LotoGameManager` / `LotoGameEventRelay`.
 - `ActivateFromPc()` public method on interactables for PC playtest bypass.
 
 ### Prohibited

@@ -112,8 +112,7 @@ public static class LotoS1LockerPrefabBuilder
         exitDoor.transform.localPosition = new Vector3(-1.25f, 0.72f, 0.05f);
         XRSimpleInteractable exitInteractable = exitDoor.AddComponent<XRSimpleInteractable>();
         exitInteractable.interactionLayers = new InteractionLayerMask { value = -1 };
-        LotoS1ContinueInteractable continueLogic = exitDoor.AddComponent<LotoS1ContinueInteractable>();
-        continueLogic.Configure(manager);
+        exitDoor.AddComponent<LotoS1ContinueInteractable>();
 
         SerializedObject so = new SerializedObject(manager);
         so.FindProperty("helmetAnchor").objectReferenceValue = helmetAnchor;

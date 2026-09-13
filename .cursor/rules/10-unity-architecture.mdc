@@ -50,30 +50,49 @@ ControlCenter.Instance.GetManager<SomeManager>()
 - **Location:** `Code/Utils/` — **Naming:** `Util_[Purpose].cs`
 - Static methods. No game-state dependencies.
 
+## LOTO board (KISS)
+
+Gameplay state is **not** a ControlCenter manager. Contract: `.agent-docs/loto-game-board.md`.
+
+| Piece | Role |
+|-------|------|
+| `LotoGameManager` | DDOL singleton on an empty GO in `VR-LOTO-S1`. Flags, gates, C# events. Resets when S1 reloads. |
+| `LotoGameEventRelay` | Scene-local UnityEvent API (S1 and `VR-LOTO-S2S3`). Forwards to the board; re-fires local events. |
+| `ScoreManager` | CC manager. HUD checks + lobby points via `Util_LotoSimulationBridge.SetObjective`. |
+
+Interactables and PC cheats notify the board/relay. `EppEquipmentManager` (and leftover hazard/LOTO managers) are presentation only.
+
+**Visual scenes are frozen** (cabin, warehouse, conveyor, locker meshes/transforms). **HUD may change** (`PREF_LotoPlayerHUD`, briefing, objective rows, `PlayerHudManager`).
+
+Do not duplicate board/relay GOs. Do not author decorative scene objects to fix logic.
+
 ## SafeMining simulation code
 
 All LOTO gameplay code lives under `Assets/SafeMining/LOTOSimulation/`. Do not add simulation logic to `Assets/XR Standard Menu/` except minimal hooks in `ControlCenter` and `ScoreManager`.
 
 | Subfolder | Contents |
 |-----------|----------|
-| `Code/Managers/` | `EppEquipmentManager`, `HazardInspectionManager`, `LotoSequenceManager`, `SimulationSessionManager`, `SyncQueueManager`, `SimulationOrchestratorManager`, `PlayerHudManager`, scenario bootstraps/controllers |
+| `Code/Managers/` | `LotoGameManager`, `LotoGameEventRelay`, `EppEquipmentManager` (presentation), scenario bootstraps |
+| `XR Standard Menu/.../LOTOSimulation/Managers/` | `SimulationOrchestratorManager`, `SimulationSessionManager`, `SyncQueueManager`, `PlayerHudManager` |
 | `Code/Data/` | `LotoObjectiveIds`, `LotoSessionScore`, DTOs (`SimulationSessionContext`, `SimulationEventRecord`, `SimulationResultPayload`, `PendingSyncEntry`) |
 | `Code/Adapters/` | `ISimulationBackendAdapter`, `OfflineBackendAdapter`, `SafeMiningBackendAdapter` |
-| `Code/Interactables/` | `LotoInputModalityVisuals`, `LotoOutlineHint`, environment builders |
+| `Code/Interactables/` | `LotoInputModalityVisuals`, `LotoOutlineHint`, S1 continue/teleport, EPP/hazard/LOTO interactables |
 | `Code/Debug/` | `LotoPcPlaytestDriver`, smoke tests |
 | `Prefabs/` | `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel`, `PREF_S1_Locker`, `PREF_S2_InspectionYard`, `PREF_S3_ConveyorStation` |
-| `Scenes/` | `VR-LOTO-S1` (build 1), `VR-LOTO-S2` (build 2; S3 LOTO in-scene). `VR-LOTO-S3.unity` is not in Build Settings. |
+| `Scenes/` | `VR-LOTO-S1` (build 1), `VR-LOTO-S2S3` (build 2; logical S2 then in-scene S3). `VR-LOTO-S3.unity` is not in Build Settings. |
 
 ## ALWAYS
 
-1. Use `Initialize()` for Managers and SDBs.
-2. Access managers through `ControlCenter.Instance`.
+1. Use `Initialize()` for ControlCenter Managers and SDBs (`LotoGameManager` is a scene DDOL board, not a CC manager).
+2. Access CC managers through `ControlCenter.Instance`; access the LOTO board through `LotoGameManager.Instance`.
 3. Subscribe events in `OnEnable`/`Start`; unsubscribe in `OnDisable`/`OnDestroy`.
 4. Use `Application.persistentDataPath` for runtime saves.
+5. Push LOTO HUD/score through `ScoreManager` via `Util_LotoSimulationBridge.SetObjective`.
 
 ## NEVER
 
-1. Direct references between managers.
-2. `Awake`/`Start` for manager/SDB initialization.
+1. Direct references between CC managers.
+2. `Awake`/`Start` for CC manager/SDB initialization.
 3. Circular dependencies.
-4. Duplicate `ControlCenter` or `PersistantDataManager` logic.
+4. Duplicate `ControlCenter`, `PersistantDataManager`, `LotoGameManager`, or `LotoGameEventRelay`.
+5. Move cabin/warehouse/locker/conveyor art to fix gameplay. HUD prefabs are the allowed visual exception.

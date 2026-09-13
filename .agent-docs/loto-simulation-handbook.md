@@ -2,31 +2,34 @@
 
 Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
+**KISS contract:** [loto-game-board.md](loto-game-board.md) — `LotoGameManager` + `LotoGameEventRelay` + `ScoreManager`. World art frozen. HUD may change.
+
 ## What exists today
 
 | Area | Location / notes |
 |------|------------------|
-| Scenes | Build Settings: `VR-LOTO-S1` → `S2` (S3 LOTO in-scene). `VR-LOTO-S3.unity` on disk only. Menu entry: `StandardMainMenu`. |
+| Scenes | Build Settings: `VR-LOTO-S1` → `VR-LOTO-S2S3` (logical S2 then in-scene S3). `VR-LOTO-S3.unity` on disk only. Menu entry: `StandardMainMenu`. |
 | Prefabs | `PREF_S1_Locker`, `PREF_S2_InspectionYard`, `PREF_S3_ConveyorStation`, `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel` |
 | Materials | `Art/Materials/MAT_S1_*`, `MAT_S2_*`, `MAT_S3_*` (URP Lit) |
-| Managers | `EppEquipmentManager`, `HazardInspectionManager`, `LotoSequenceManager`, `SimulationOrchestratorManager`, `PlayerHudManager` |
-| Bootstrap | `LotoScenarioSceneBootstrap` on each S scene (+ runtime `LotoPcPlaytestDriver`) |
-| Outline | QuickOutline shaders ported to URP; `LotoOutlineHint` driven by managers per pedagogical step |
-| Scoring | RN01/RN02 via `ScoreManager` + session context; pass threshold 60 |
+| Board | `LotoGameManager` (DDOL, empty GO in S1) owns flags/gates. `LotoGameEventRelay` in S1 and S2S3 for Inspector UnityEvents. |
+| Score | `ScoreManager` via `Util_LotoSimulationBridge.SetObjective` (needs `ControlCenter` from menu Play). Weights in `LotoObjectiveIds`; pass 60. |
+| Presentation | `EppEquipmentManager` hides locker meshes / visor / body anchors only. Do not restore hazard/sequence managers as gates. |
+| Orchestration | `SimulationOrchestratorManager`, `PlayerHudManager`, `LotoScenarioSceneBootstrap` |
+| Outline | QuickOutline shaders ported to URP; `LotoOutlineHint` should follow **board** steps |
 | Sync | Offline queue 24h via `SyncQueueManager` (Fase 7 JWT later) |
-| Malo | Malo 1 incomplete START jolt; Malo 2 breaker without gloves alert |
+| Malo | Malo 1 incomplete START → `CheckStartButton` / `S3StartTooEarly`; Malo 2 breaker without gloves alert |
 | Branding | `BrandApplicator` on `PREF_LotoPlayerHUD`, `PREF_LotoBriefingPanel`, `PREF_LotoObjectiveRow`; colors via `BrandConfig` at runtime |
 | World labels | S2 static keys `loto_s2_label_*`; S3 lock/tag keys `loto_lock_*` / `loto_tag_*` on interactable prefabs |
 | Dwell reticle | `LotoDwellReticle` on trigger interactables (hazards, buttons, breaker, continue doors); ~1 s radial fill Secondary; grabs direct |
 
 ## Player flow
 
-**Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` persists via DontDestroyOnLoad. Direct launch of S1–S2 is for visual inspection only (CC null warning expected).
+**Entry path:** always launch from `StandardMainMenu` (build 0) so `ControlCenter` and `ScoreManager` persist via DontDestroyOnLoad. Direct launch of S1/S2S3 drives the **board** but `TryContinueS1` / `SetObjective` no-op (CC null). Do not edit world art for that.
 
 1. Main menu carousel → LOTO simulation.
 2. **Briefing por escenario** (S1/S2/S3 in-scene): cerrable con chip reabrir; **Comenzar** inicia escenario. **S1** EPP → **S2** inspección → **S3** LOTO (same scene). HUD tareas: Ocultar/Mostrar panel + **Menú** (footer o chip); subtítulos pedagógicos visibles con panel oculto; timer oculto.
-3. **S2** report 4 real hazards (decoys penalize) → continue → in-scene S3 briefing (no scene load).
-4. **S3** STOP → breaker OFF → personal lock → danger tag → START verify zero energy → session summary.
+3. **S2** report hazards via board `NotifyTools/Sign/Puddle/Extinguisher` (counts 3/1/2/1) → continue → in-scene S3 briefing (no scene load).
+4. **S3** pedagogy: STOP → breaker OFF → personal lock → danger tag → START. Board: `NotifyStop`…`NotifyLockPlaced` then `CheckStartButton` (no tag flag). Session summary.
 5. Abandon (menu/exit confirm) yields partial score + summary path.
 6. Session summary **Continue** → `CompleteSimulation()` → returns to main menu with score persisted offline.
 
@@ -34,9 +37,9 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 - Color Secondary `#F97316` via `Brand.GetColor(Secondary)` when BrandConfig is loaded (fallback hardcoded), width ~4.
 - One hint set at a time; cleared when the step completes.
-- S1: next pending good mandatory EPP in **MandatoryTypes order** (Helmet → Glasses → Vest → Gloves → Boots) → continue door when ready.
-- S2: unreported real hazards → continue door when ready (no decoys).
-- S3: STOP → breaker → personal lock → danger tag → START.
+- S1: next pending good mandatory EPP in **MandatoryTypes order** (Helmet → Glasses → Vest → Gloves → Boots) → continue door when `IsS1Complete`.
+- S2: unreported required board hazards → continue when `IsS2Complete` (no decoys).
+- S3: STOP → breaker → hasp/lock → START (`CheckStartButton`).
 
 ## Input (hands vs controllers)
 
@@ -65,8 +68,12 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 
 | Concern | Touch |
 |---------|--------|
-| Scenario rules / scoring | Managers under `Code/Managers/` |
-| Prefab layout / art | `Prefabs/`, `Art/Materials/` |
+| Scenario rules / gates | `LotoGameManager` — see [loto-game-board.md](loto-game-board.md) |
+| Inspector wiring | `LotoGameEventRelay` UnityEvents (empty GOs already in S1 and S2S3) |
+| HUD / lobby score | `ScoreManager` via `Util_LotoSimulationBridge.SetObjective`; `PlayerHudManager` |
+| Locker presentation | `EppEquipmentManager` (hide mesh / visor only) |
+| Prefab **art** / transforms | **Do not change.** Cabin, warehouse, conveyor, locker meshes are frozen. |
+| HUD prefabs | **May change.** `PREF_LotoPlayerHUD`, briefing, objective rows. |
 | Loc strings | Language assets used by `LanguageManager` (`loto_*` keys) |
 | Input modality | Today: `PlayerMR` + `LotoInputModalityVisuals`. Dual-rig PC/VR prefabs remain future work. |
 | HUD layers | `PlayerHudManager.ApplyState` (summary vs exit confirm mutually exclusive; active chrome hidden on overlays) |
@@ -81,7 +88,7 @@ Post Fase 6 visual polish + PC playtest. JWT/online (Fase 7) is out of scope.
 | S1 E2E QA | **SafeMining/LOTO/Run Fase 5 S1 E2E Test** (briefing→5/5→reject→S2); see [s1-scene-inventory.md](s1-scene-inventory.md) §H |
 | Lighting cleanup | **SafeMining/LOTO/Apply Fase 5 Lighting Cleanup S1-S2** |
 | Quest dev APK | **SafeMining/LOTO/Build Quest 3S Dev APK** → `Builds/SafeMiningVR-Quest3S-Dev.apk` |
-| Device QA | See [qa-quest-fase6.md](../.agent-docs/qa-quest-fase6.md); deploy via `metavr_app install` |
+| Device QA | See [qa-quest-fase6.md](qa-quest-fase6.md); deploy via `metavr_app install` |
 | Trigger dwell | `LotoDwellReticle` on `XRSimpleInteractable` triggers only |
 
 ## Lighting (Quest budget)

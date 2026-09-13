@@ -19,7 +19,7 @@ Interpret and execute the QA workflow checklists in `.agent-docs/workflows/` aga
 | Shorthand | File | Scope |
 |-----------|------|-------|
 | `WF1` | `.agent-docs/workflows/wf-dual-mode-testing.md` | PC Playmode + Quest 3S input/ergonomics |
-| `WF2` | `.agent-docs/workflows/wf-loto-step-compliance.md` | S1–S3 LOTO fidelity, scoring, branding |
+| `WF2` | `.agent-docs/workflows/wf-loto-step-compliance.md` | S1–S3 on `LotoGameManager` + `ScoreManager`, branding |
 | `WF3` | `.agent-docs/workflows/wf-network-auth-telemetry.md` | Offline-first sync, DTOs, API contracts |
 | `WF4` | `.agent-docs/workflows/wf-build-performance.md` | Build settings, lighting, script perf, 72 FPS |
 | `all` | All four in order: WF4 → WF1 → WF2 → WF3 | Full QA pass |

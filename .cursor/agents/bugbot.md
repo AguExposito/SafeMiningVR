@@ -32,7 +32,7 @@ You are **Bugbot** for SafeMining VR — skeptical code reviewer hunting logic b
 
 ### LOTO gameplay (if diff touches Managers/Interactables)
 
-- Scenario gates: S1 5/5 EPP, S2 4/4 hazards, S3 strict LOTO order
+- Scenario gates: S1 5/5 good EPP (`IsS1Complete`), S2 `IsS2Complete` (tools 3, sign 1, puddle 2, extinguisher 1), S3 `IsS3SequenceReady` + `CheckStartButton`
 - Wrong lock/tag accepted incorrectly
 - Arcade mechanics introduced (timers, pop-ups)
 - Hardcoded Spanish instead of TranslatableText
@@ -42,7 +42,7 @@ You are **Bugbot** for SafeMining VR — skeptical code reviewer hunting logic b
 - Dwell on grabs or instant-click on hazard reports
 - Missing ActivateFromPc()
 - Hand tracking + controller parity broken
-- Manager self-wiring in Awake instead of Configure()
+- Manager self-wiring in Awake instead of Configure() (presentation only; evaluable actions notify `LotoGameManager`)
 
 ### Architecture
 

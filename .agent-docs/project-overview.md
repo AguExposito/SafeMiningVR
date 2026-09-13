@@ -13,7 +13,8 @@
 - **Docs:** [loto-simulation-handbook.md](loto-simulation-handbook.md), [loto-asset-list.md](loto-asset-list.md).
 - **Shell:** XR Standard Menu framework (`Assets/XR Standard Menu/`)
 - **Entry scene:** `StandardMainMenu.unity` (build index 0). World-space menu is XR-clickable; **mouse enabled** in Play Mode.
-- **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD 1/3 + locker EPP), `VR-LOTO-S2` (2, HUD 2/3 inspection yard → in-scene HUD 3/3 LOTO station → session summary). `VR-LOTO-S3.unity` remains on disk but is **not** in Build Settings.
+- **Simulation scenes:** `VR-LOTO-S1` (1, briefing → HUD + locker EPP), `VR-LOTO-S2S3` (2, inspection then in-scene LOTO → session summary). `VR-LOTO-S3.unity` remains on disk but is **not** in Build Settings.
+- **Board:** `LotoGameManager` (DDOL) + `LotoGameEventRelay`. Scores: `ScoreManager` via `Util_LotoSimulationBridge`. KISS: [loto-game-board.md](loto-game-board.md). World art frozen; HUD may change.
 - **HUD:** World-space `PREF_LotoPlayerHUD` and `PREF_LotoBriefingPanel` (scale 0.001, `TrackedDeviceGraphicRaycaster` + `GraphicRaycaster`, follow ~1.75 m). Raycasts only on buttons. Session summary / exit confirm mutually exclusive.
 - **Bootstrap:** `LotoScenarioSceneBootstrap` on each S scene with serialized HUD refs + runtime PC cheats driver. Shared CC bridge: `Util_LotoSimulationBridge`.
 - **PC playtest:** XRI Interaction Simulator auto-instantiate (Editor); Inspector bools / ContextMenus on `LotoPcPlaytestDriver`.
@@ -22,7 +23,8 @@
 ## Architecture
 
 - **ControlCenter:** Singleton hub, DontDestroyOnLoad
-- **Managers:** PersistantDataManager, ScoreManager, IBManager, LanguageManager, SyncQueueManager, SimulationSessionManager, SimulationOrchestratorManager
+- **CC Managers:** PersistantDataManager, ScoreManager, IBManager, LanguageManager, SyncQueueManager, SimulationSessionManager, SimulationOrchestratorManager
+- **LOTO board:** LotoGameManager (not a CC manager) + LotoGameEventRelay
 - **New code:** `Assets/SafeMining/LOTOSimulation/`
 
 ## Branding

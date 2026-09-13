@@ -79,12 +79,10 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         LogStep("F5.1 dismiss briefing", OrchestratorStateIs(LotoSimulationState.Active), string.Empty);
 
         playtestDriver.EquipMandatoryFive();
-        EppEquipmentManager eppManager = FindFirstObjectByType<EppEquipmentManager>();
-        LogStep("F5.2 equip 5/5", eppManager != null && eppManager.IsReadyToAdvance, string.Empty);
+        LotoGameManager board = LotoGameManager.Instance;
+        LogStep("F5.2 equip 5/5", board != null && board.IsS1Complete, string.Empty);
 
-        playtestDriver.RejectAllDefects();
-        eppManager = FindFirstObjectByType<EppEquipmentManager>();
-        LogStep("F5.3 reject defect", eppManager != null && eppManager.IsDefectObjectiveScored, string.Empty);
+        LogStep("F5.3 no defective grab", board != null && board.S1DefectScore == LotoGameManager.DefectScoreMax, string.Empty);
 
         playtestDriver.ContinueS1();
         yield return WaitForScene(LotoSimulationConstants.Scenario2BuildIndex);
@@ -127,12 +125,10 @@ public class LotoFase4MenuFlowRunner : MonoBehaviour
         LogStep("A3.1 dismiss briefing", OrchestratorStateIs(LotoSimulationState.Active), string.Empty);
 
         playtestDriver.EquipMandatoryFive();
-        EppEquipmentManager eppManager = FindFirstObjectByType<EppEquipmentManager>();
-        LogStep("A3.2 equip 5/5", eppManager != null && eppManager.IsReadyToAdvance, string.Empty);
+        LotoGameManager board = LotoGameManager.Instance;
+        LogStep("A3.2 equip 5/5", board != null && board.IsS1Complete, string.Empty);
 
-        playtestDriver.RejectAllDefects();
-        eppManager = FindFirstObjectByType<EppEquipmentManager>();
-        LogStep("A3.2b reject defect", eppManager != null && eppManager.IsDefectObjectiveScored, string.Empty);
+        LogStep("A3.2b no defective grab", board != null && board.S1DefectScore == LotoGameManager.DefectScoreMax, string.Empty);
 
         playtestDriver.ContinueS1();
         yield return WaitForScene(LotoSimulationConstants.Scenario2BuildIndex);

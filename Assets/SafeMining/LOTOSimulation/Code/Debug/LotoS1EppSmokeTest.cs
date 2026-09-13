@@ -3,93 +3,56 @@ using UnityEngine;
 
 public class LotoS1EppSmokeTest : MonoBehaviour
 {
-    [SerializeField] private EppEquipmentManager equipmentManager;
-
     [ContextMenu("LOTO/S1 Smoke Test - Happy Path")]
     public void RunHappyPathSmokeTest()
     {
-        equipmentManager = ResolveManager();
-        if (equipmentManager == null)
+        NotifyGood(EppItemType.Helmet);
+        NotifyGood(EppItemType.SafetyGlasses);
+        NotifyGood(EppItemType.ReflectiveVest);
+        NotifyGood(EppItemType.Gloves);
+        NotifyGood(EppItemType.SafetyBoots);
+
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board == null || !board.IsS1Complete)
         {
-            Debug.LogError("[LOTO-S1-SMOKE] EppEquipmentManager not found.");
+            Debug.LogError("[LOTO-S1-SMOKE] Board did not complete S1.");
             return;
         }
 
-        equipmentManager.Begin();
-        EquipGood(EppItemType.Helmet);
-        EquipGood(EppItemType.SafetyGlasses);
-        EquipGood(EppItemType.ReflectiveVest);
-        EquipGood(EppItemType.Gloves);
-        EquipGood(EppItemType.SafetyBoots);
+        board.TryContinueS1();
         Debug.Log("[LOTO-S1-SMOKE] Happy path completed without exceptions.");
     }
 
     [ContextMenu("LOTO/S1 Smoke Test - Reject Paths")]
     public void RunRejectPathsSmokeTest()
     {
-        equipmentManager = ResolveManager();
-        if (equipmentManager == null)
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board == null)
         {
-            Debug.LogError("[LOTO-S1-SMOKE] EppEquipmentManager not found.");
+            Debug.LogError("[LOTO-S1-SMOKE] LotoGameManager not found.");
             return;
         }
 
-        equipmentManager.Begin();
-        TryEquipDefective(EppItemType.Helmet);
-        equipmentManager.TryContinue();
-        EquipGood(EppItemType.Helmet);
-        EquipGood(EppItemType.SafetyGlasses);
-        EquipGood(EppItemType.ReflectiveVest);
-        EquipGood(EppItemType.Gloves);
-        EquipGood(EppItemType.SafetyBoots);
-        equipmentManager.TryContinue();
+        board.NotifyEppGrabbed(EppItemType.Helmet, EppItemCondition.Defective);
+        board.TryContinueS1();
+        NotifyGood(EppItemType.Helmet);
+        NotifyGood(EppItemType.SafetyGlasses);
+        NotifyGood(EppItemType.ReflectiveVest);
+        NotifyGood(EppItemType.Gloves);
+        NotifyGood(EppItemType.SafetyBoots);
+        board.TryContinueS1();
         Debug.Log("[LOTO-S1-SMOKE] Reject paths invoked without exceptions.");
     }
 
-    private void EquipGood(EppItemType type)
+    private static void NotifyGood(EppItemType type)
     {
-        ref_EppItem item = FindItem(type, EppItemCondition.Good);
-        if (item == null)
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board == null)
         {
             return;
         }
 
-        equipmentManager.TryEquip(item, null);
-    }
-
-    private void TryEquipDefective(EppItemType type)
-    {
-        ref_EppItem item = FindItem(type, EppItemCondition.Defective);
-        if (item == null)
-        {
-            return;
-        }
-
-        equipmentManager.TryEquip(item, null);
-    }
-
-    private static ref_EppItem FindItem(EppItemType type, EppItemCondition condition)
-    {
-        ref_EppItem[] items = FindObjectsByType<ref_EppItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i] != null && items[i].itemType == type && items[i].condition == condition)
-            {
-                return items[i];
-            }
-        }
-
-        return null;
-    }
-
-    private EppEquipmentManager ResolveManager()
-    {
-        if (equipmentManager != null)
-        {
-            return equipmentManager;
-        }
-
-        return FindFirstObjectByType<EppEquipmentManager>();
+        board.NotifyEppGrabbed(type, EppItemCondition.Good);
     }
 }
 #endif

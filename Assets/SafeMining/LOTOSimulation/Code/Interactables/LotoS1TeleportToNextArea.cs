@@ -5,7 +5,6 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
 public class LotoS1TeleportToNextArea : MonoBehaviour
 {
-    [SerializeField] private EppEquipmentManager equipmentManager;
     [SerializeField] private Collider triggerCollider;
     [SerializeField] private Renderer[] padRenderers;
     [SerializeField] private Color readyColor = new Color(0.05f, 0.92f, 0.95f, 1f);
@@ -31,14 +30,40 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
         SetReady(false);
     }
 
+    private void OnEnable()
+    {
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null)
+        {
+            board.S1Completed += HandleS1Completed;
+            if (board.IsS1Complete)
+            {
+                SetReady(true);
+            }
+        }
+    }
+
+    private void Start()
+    {
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null && board.IsS1Complete)
+        {
+            SetReady(true);
+        }
+    }
+
+    private void OnDisable()
+    {
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null)
+        {
+            board.S1Completed -= HandleS1Completed;
+        }
+    }
+
     #endregion
 
     #region Public API
-
-    public void Configure(EppEquipmentManager manager)
-    {
-        equipmentManager = manager;
-    }
 
     public void SetReady(bool ready)
     {
@@ -97,14 +122,20 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
             return;
         }
 
+        LotoGameManager board = LotoGameManager.Instance;
         if (!isReady)
         {
-            if (invokeBlocked)
+            if (board == null || !board.IsS1Complete)
             {
-                onBlocked?.Invoke();
+                if (invokeBlocked)
+                {
+                    onBlocked?.Invoke();
+                }
+
+                return;
             }
 
-            return;
+            SetReady(true);
         }
 
         if (transitionTriggered)
@@ -114,9 +145,9 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
 
         transitionTriggered = true;
         onTriggered?.Invoke();
-        if (equipmentManager != null)
+        if (board != null)
         {
-            equipmentManager.TryContinue();
+            board.TryContinueS1();
         }
     }
 
@@ -182,6 +213,11 @@ public class LotoS1TeleportToNextArea : MonoBehaviour
         }
 
         return other.CompareTag("Player");
+    }
+
+    private void HandleS1Completed()
+    {
+        SetReady(true);
     }
 
     private static void ApplyPadColor(Renderer renderer, Color color, bool emissive)

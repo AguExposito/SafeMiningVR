@@ -137,7 +137,7 @@ A cloud/background job is **complete** only when the PR or final summary include
 
 - [ ] PR title: `[domain] short description`
 - [ ] PR body: Classification, gates passed, changes, verification, risks
-- [ ] No `.unity`/`.prefab` YAML hand-edits (MCP authoring only)
+- [ ] No `.unity`/`.prefab` YAML hand-edits (MCP for HUD / empty logic GOs only; world art frozen)
 - [ ] Security review triggered if paths match `80-security-review.mdc` globs
 
 ### F. Reviews before merge

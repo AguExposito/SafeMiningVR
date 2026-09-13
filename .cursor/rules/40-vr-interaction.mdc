@@ -35,9 +35,9 @@ For non-grab interactions (buttons, hazard reporting, panel switches), use a **r
 
 - Color: Secondary `#F97316`, width ~4.
 - One active hint set at a time; cleared when the step completes.
-- S1: pending mandatory EPP items → continue door when ready.
-- S2: unreported real hazards → continue door when all 4 reported (no decoy outlines).
-- S3: STOP → breaker → personal lock → danger tag → START.
+- S1: pending mandatory EPP → continue when `LotoGameManager.IsS1Complete`.
+- S2: unreported board hazards → continue when `IsS2Complete` (no decoy outlines). Not a 4/4 leftover-manager gate.
+- S3: STOP → panel/breaker → hasp/lock → START (`CheckStartButton`). Tag remains grab/socket validation.
 
 ## XRI 3.3.1 — reuse, don't reinvent
 

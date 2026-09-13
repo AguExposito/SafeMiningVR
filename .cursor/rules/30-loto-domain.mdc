@@ -21,10 +21,18 @@ This is **industrial safety training**, not an arcade game.
 | Scenario | Scene / build | Objective | Weight (RN01) |
 |----------|---------------|-----------|---------------|
 | S1 | `VR-LOTO-S1` (1) | Equip 5 mandatory PPE; reject defective items | 20% + 10% |
-| S2 | `VR-LOTO-S2` (2) | Report 4 unsafe conditions near stopped conveyor | 25% |
-| S3 | `VR-LOTO-S2` (2, in-scene) | Execute LOTO sequence + zero-energy verification | 35% + 10% |
+| S2 | `VR-LOTO-S2S3` (2) | Report unsafe conditions near stopped conveyor | 25% |
+| S3 | `VR-LOTO-S2S3` (2, in-scene) | Execute LOTO sequence + zero-energy verification | 35% + 10% |
 
-Entry point: `StandardMainMenu.unity` (build 0) → carousel → LOTO simulation.
+Entry point: `StandardMainMenu.unity` (build 0) → carousel → LOTO simulation (needed for `ControlCenter` + `ScoreManager`).
+
+Runtime state lives on `LotoGameManager` + `LotoGameEventRelay`. Scoring/HUD checks go to `ScoreManager` via `Util_LotoSimulationBridge.SetObjective`. Full contract: `.agent-docs/loto-game-board.md`.
+
+## KISS
+
+- Notify the board (or relay). Do not put gates in `EppEquipmentManager` / leftover hazard or sequence managers.
+- Do not modify cabin, warehouse, conveyor, or locker **visuals**. HUD prefabs and `PlayerHudManager` **may** change.
+- Empty logic GOs only for board/relay. Already in scenes — do not duplicate.
 
 ## Mandatory EPP — S1
 
@@ -41,16 +49,20 @@ Casco de seguridad · Lentes de seguridad · Chaleco reflectante · Guantes · B
 3. Señalización caída o deteriorada
 4. Extintor parcialmente obstruido
 
-- **Decoys** (clean floor, stored tools, upright sign): reporting a decoy **penalizes** score but does **not** block S3 if 4 real hazards are reported.
-- Gate: all 4 required hazards must be reported before transition to S3.
+- **Decoys** (clean floor, stored tools, upright sign): reporting a decoy **penalizes** score but does **not** block S3 if the board S2 counts are met.
+- Board gate (`IsS2Complete`): `NotifyTools`×3, `NotifySign`×1, `NotifyPuddle`×2, `NotifyExtinguisher`×1. Spec HU-222 still names four condition types.
 
 ## LOTO sequence — S3 (strict order)
+
+Pedagogy (spec):
 
 1. **STOP** conveyor at control station.
 2. Open electrical panel; switch isolation breaker to **OFF**.
 3. Place **red lock** (PERSONAL LOCKOUT) on hasp — not blue (VISITOR) or yellow (GRUPAL).
 4. Attach tag **PELIGRO NO OPERAR** on lock shackle — not INSPECCIONADO, EQUIPO OPERATIVO, MANTENIMIENTO TERMINADO.
 5. Press **START** to verify zero energy — belt must not move.
+
+Board (`IsS3SequenceReady`): `NotifyStop` → `NotifyPanelOpened` → `NotifyPowerCut` → `NotifyPanelClosed` → `NotifyHaspPlaced` → `NotifyLockPlaced`. Then `CheckStartButton`. Tag is interactable validation, not a board flag.
 
 ## Failure paths
 
@@ -83,13 +95,15 @@ Offline override: `LotoObjectiveIds.DefaultApprovalThresholdPercent`.
 ## ALWAYS
 
 1. Use objective IDs from `LotoObjectiveIds` constants.
-2. Enforce scenario gates before scene transitions.
+2. Enforce scenario gates on `LotoGameManager` (`IsS1Complete`, `IsS2Complete`, `IsS3SequenceReady`) before continue / START.
 3. Record evaluable interactions via `SimulationEventRecord` for backend sync.
 4. Provide localized feedback (subtitles via `LanguageManager`) for every trainee error.
+5. Push HUD/score through `ScoreManager` (`Util_LotoSimulationBridge.SetObjective`) when CC exists.
 
 ## NEVER
 
-1. Allow S3 approach without completed LOTO when START would energize equipment.
+1. Allow S3 START to count as zero-energy without `IsS3SequenceReady` (board raises `S3StartTooEarly` / Malo 1).
 2. Accept wrong lock color or wrong tag as valid LOTO steps.
-3. Skip mandatory hazard reports without configured timeout behavior.
+3. Skip mandatory hazard reports on the board (`NotifyTools` / `NotifySign` / `NotifyPuddle` / `NotifyExtinguisher`).
 4. Add arcade mechanics: timers, combos, streaks, point pop-ups, leaderboards.
+5. Treat leftover scenario managers as source of truth, or move world art to fix logic.

@@ -24,7 +24,8 @@ When a design or domain question arises, consult this hierarchy before assuming.
 
 - Config: `.cursor/mcp.json` (project) and `~/.cursor/mcp.json` (user). Both must point to `%USERPROFILE%\.unity\relay\relay_win.exe` with `--mcp` and `--project-path D:\Unity\Projects\SafeMiningVR`.
 - Unity Editor must be open with this project and **Project Settings > AI > Unity MCP Server** bridge running before Cursor connects.
-- Author scenes and prefabs with `Unity_ManageScene` / `Unity_ManageGameObject`. Never hand-edit `.unity` or `.prefab` YAML.
+- Author **HUD** and empty logic GOs with `Unity_ManageScene` / `Unity_ManageGameObject`. Never hand-edit `.unity` or `.prefab` YAML.
+- Do **not** author cabin/warehouse/conveyor/locker visuals (transforms, meshes, lights) to fix gameplay. Contract: `.agent-docs/loto-game-board.md`.
 - After each block of work call `Unity_ReadConsole` (Errors). Require **0 entries**.
 - Validate scripts with Unity MCP tools, not a second Editor batch compile.
 

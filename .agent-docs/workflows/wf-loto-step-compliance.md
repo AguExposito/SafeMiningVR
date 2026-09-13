@@ -2,7 +2,9 @@
 
 Audits every step of the LOTO training simulation for industrial procedure fidelity, ensuring no arcade mechanics have been introduced and all feedback follows serious-gaming pedagogy.
 
-**Source of truth:** `Doc_SMVR/SafeMining_VR_v1.1.md` (RN01, RN02, HU-220 through HU-223), `Propuesta Simulacion LOTO.txt`, `.cursor/rules/30-loto-domain.mdc`.
+**Source of truth:** `Doc_SMVR/SafeMining_VR_v1.1.md` (RN01, RN02, HU-220 through HU-223), `Propuesta Simulacion LOTO.txt`, `.cursor/rules/30-loto-domain.mdc`, `.agent-docs/loto-game-board.md`.
+
+Gates and flags: `LotoGameManager`. HUD/lobby checks: `ScoreManager` via `Util_LotoSimulationBridge.SetObjective`. Do not treat leftover scenario managers as source of truth. World art frozen; HUD may change.
 
 ---
 
@@ -80,10 +82,11 @@ Before auditing individual steps, verify the simulation's overarching design pos
 
 ### B4. S1 → S2 gate
 
-- [ ] Continue door/transition is ONLY available after all 5 mandatory EPP are equipped.
-- [ ] Outline hint appears on continue door when 5/5 is achieved.
-- [ ] **PASS:** Gate enforced correctly.
-- [ ] **FAIL:** Transition available before 5/5 or gate doesn't trigger.
+- [ ] Continue door/transition is ONLY available after `LotoGameManager.IsS1Complete` (5 good EPP).
+- [ ] Outline hint appears on continue door when 5/5 is achieved (HUD/outline may be bound to board events).
+- [ ] `TryContinueS1` requires `ControlCenter` (Play from `StandardMainMenu`).
+- [ ] **PASS:** Gate enforced on the board.
+- [ ] **FAIL:** Transition available before 5/5, or gate still lives on `EppEquipmentManager`.
 
 ---
 
@@ -91,7 +94,9 @@ Before auditing individual steps, verify the simulation's overarching design pos
 
 **Requirement:** RN01 (25% weight), HU-221.
 
-### C1. Required hazards (4/4)
+### C1. Required hazard types (spec HU-222)
+
+Four pedagogical types. Runtime complete is `LotoGameManager.IsS2Complete` (tools 3, sign 1, puddle 2, extinguisher 1) — not a leftover 4/4 manager gate.
 
 | Hazard | Present | Reportable | Localized feedback | Pass/Fail |
 |--------|---------|-----------|-------------------|-----------|
@@ -100,14 +105,14 @@ Before auditing individual steps, verify the simulation's overarching design pos
 | Señalización caída o deteriorada | [ ] | [ ] | [ ] | [ ] |
 | Extintor parcialmente obstruido | [ ] | [ ] | [ ] | [ ] |
 
-- [ ] **PASS:** All 4 hazards present, reportable, with localized confirmation subtitles.
-- [ ] **FAIL:** Any hazard missing, unreportable, or feedback absent.
+- [ ] **PASS:** Spec types are present and reportable; board counts can reach `IsS2Complete`.
+- [ ] **FAIL:** Types missing, unreportable, or interactables do not notify the board.
 
 ### C2. Decoys
 
 - [ ] At least one decoy present (clean floor, stored tools, upright sign, or equivalent).
 - [ ] Reporting a decoy penalizes score (reduces hazard partial by 25% of weight per false positive).
-- [ ] Reporting a decoy does NOT block transition to S3 if 4 real hazards are reported.
+- [ ] Reporting a decoy does NOT block transition to S3 if `IsS2Complete`.
 - [ ] Decoy reporting triggers localized subtitle explaining why it's not a real hazard.
 - [ ] Outline hints do NOT appear on decoys.
 - [ ] **PASS:** Decoys test trainee judgment without blocking progression.
@@ -115,10 +120,10 @@ Before auditing individual steps, verify the simulation's overarching design pos
 
 ### C3. S2 → S3 gate
 
-- [ ] Continue transition is ONLY available after all 4 real hazards are reported.
-- [ ] Outline hint appears on continue when 4/4 achieved.
-- [ ] **PASS:** Gate enforced correctly.
-- [ ] **FAIL:** Transition before 4/4 or with unreported hazards.
+- [ ] Continue is ONLY available after `LotoGameManager.IsS2Complete` (tools 3, sign 1, puddle 2, extinguisher 1).
+- [ ] Interactables call `NotifyTools` / `NotifySign` / `NotifyPuddle` / `NotifyExtinguisher` (or relay).
+- [ ] **PASS:** Gate enforced on the board.
+- [ ] **FAIL:** Transition before board complete, or gate still lives on `HazardInspectionManager`.
 
 ---
 
@@ -128,7 +133,7 @@ Before auditing individual steps, verify the simulation's overarching design pos
 
 ### D1. Strict LOTO order
 
-Execute each step in order, verifying the system enforces sequence:
+Execute each pedagogical step. Board flags: `NotifyStop`, `NotifyPanelOpened`, `NotifyPowerCut`, `NotifyPanelClosed`, `NotifyHaspPlaced`, `NotifyLockPlaced`, then `CheckStartButton`. Tag has no board flag.
 
 | Step | Action | System response | Pass/Fail |
 |------|--------|----------------|-----------|
@@ -179,6 +184,12 @@ Execute each step in order, verifying the system enforces sequence:
 ---
 
 ## Phase E — Scoring Validation
+
+### E0. Board vs ScoreManager
+
+- [ ] Evaluable actions notify `LotoGameManager` (or `LotoGameEventRelay`).
+- [ ] HUD/lobby checks go through `Util_LotoSimulationBridge.SetObjective` → `ScoreManager` (Play from menu so CC exists).
+- [ ] **FAIL:** New scoring or gates added to `EppEquipmentManager` / `HazardInspectionManager` / `LotoSequenceManager`.
 
 ### E1. Objective weights
 

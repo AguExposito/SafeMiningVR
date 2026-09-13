@@ -4,8 +4,8 @@
 Assets/SafeMining/
 ├── LOTOSimulation/
 │   ├── Scenes/
-│   │   ├── VR-LOTO-S1.unity          — build index 1 (briefing + HUD 1/3 + PREF_S1_Locker)
-│   │   ├── VR-LOTO-S2.unity          — build index 2 (HUD 2/3 yard + in-scene HUD 3/3 LOTO)
+│   │   ├── VR-LOTO-S1.unity          — build index 1 (briefing + HUD + PREF_S1_Locker + LotoGameManager + relay)
+│   │   ├── VR-LOTO-S2S3.unity        — build index 2 (logical S2 then in-scene S3 + relay)
 │   │   └── VR-LOTO-S3.unity          — on disk only, not in Build Settings
 │   ├── Prefabs/
 │   │   ├── PREF_LotoPlayerHUD.prefab
@@ -20,13 +20,13 @@ Assets/SafeMining/
 │   │   └── UI/
 │   └── Code/
 │       ├── Managers/
+│       │   ├── LotoGameManager.cs            — DDOL board (KISS)
+│       │   ├── LotoGameEventRelay.cs         — scene UnityEvent API
 │       │   ├── LotoScenarioSceneBootstrap.cs
+│       │   ├── EppEquipmentManager.cs        — locker presentation only
 │       │   ├── LotoScenario1Controller.cs
 │       │   ├── LotoScenario2Controller.cs
-│       │   ├── LotoScenario3Controller.cs
-│       │   ├── EppEquipmentManager.cs
-│       │   ├── HazardInspectionManager.cs
-│       │   └── LotoSequenceManager.cs
+│       │   └── LotoScenario3Controller.cs
 │       ├── Utils/
 │       │   └── Util_LotoSimulationBridge.cs
 │       ├── Data/
@@ -108,3 +108,5 @@ Assets/Resources/            — es.xml, en.xml, SimScore.asset, BrandConfig
 **Fase 5 (2026-08):** Lighting budget 3 lights/scene via `LotoFase5LightingCleanupTool`; retired `PREF_PH_*` placeholders and Scenery2 duplicates.
 
 **Fase 6 (2026-08):** Quest 3S device install/launch via metavr; `LotoFase6QuestBuildTool`; WF1-B/WF4-E PARTIAL pending in-headset + fresh APK + Perfetto adb.
+
+**Board (2026-09):** Gameplay state on `LotoGameManager` + `LotoGameEventRelay`. Scores on `ScoreManager` via `Util_LotoSimulationBridge`. World art frozen; HUD may change. See [loto-game-board.md](loto-game-board.md).

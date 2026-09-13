@@ -42,6 +42,7 @@ Typography: **Inter** family for web; in-VR use **TMP** with `LiberationSans SDF
 - **Subtitles:** remain visible when task chrome is hidden (pedagogical feedback).
 - Session summary and exit confirm are **mutually exclusive** — `PlayerHudManager.ApplyState` manages visibility.
 - Active chrome (objectives, timer) hides when session summary or exit confirm overlays are shown.
+- HUD **may** be modified (prefab layout, `TranslatableText`, BrandApplicator, relay UnityEvents). Bind progress to `LotoGameManager` events / `ScoreManager` via `Util_LotoSimulationBridge.SetObjective`. World art stays frozen.
 
 ## Raycasting
 

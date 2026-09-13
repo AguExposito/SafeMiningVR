@@ -35,7 +35,10 @@ Manager classes: `[SystemName]Manager`. Controllers: `[Scenario]Controller`.
 | Term | Meaning |
 |------|---------|
 | `ControlCenter` | Singleton hub. Centralizes managers, persists across scenes. |
-| `SimulationOrchestratorManager` | Orchestrates S1→S2→S3 flow for the LOTO simulation. |
+| `LotoGameManager` | DDOL LOTO board. S1/S2/S3 flags and gates. Not a CC manager. |
+| `LotoGameEventRelay` | Scene-local UnityEvent forwarder to the board. |
+| `ScoreManager` | CC manager. HUD objective checks + lobby points (`AchiveObjective`). |
+| `SimulationOrchestratorManager` | Scene loads, briefing/HUD chrome, S1→S2 after `TryContinueS1`. |
 | `SimulationSessionManager` | Creates and persists `SimulationSessionContext` on simulation start. |
 | `SyncQueueManager` | Offline JSON queue for backend sync (`PendingSyncQueue.json`). |
 | `ISimulationBackendAdapter` | Interface for `OfflineBackendAdapter` / `SafeMiningBackendAdapter`. |

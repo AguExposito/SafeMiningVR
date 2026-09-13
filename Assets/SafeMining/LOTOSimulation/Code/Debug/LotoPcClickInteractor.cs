@@ -76,18 +76,23 @@ public class LotoPcClickInteractor : MonoBehaviour
         {
             EppEquipmentManager equipment = Object.FindFirstObjectByType<EppEquipmentManager>();
             Debug.Log($"[LOTO-PC] Click EPP {EppEquipmentManager.GetDisplayName(epp.itemType)} ({epp.condition}) a {distance:F2}m");
-            if (equipment == null)
+
+            LotoGameManager board = LotoGameManager.Instance;
+            if (board != null)
             {
-                return true;
+                board.NotifyEppGrabbed(epp.itemType, epp.condition);
             }
 
             if (epp.condition == EppItemCondition.Defective)
             {
-                Debug.Log("[LOTO-PC] EPP defectuoso: sueltalo en el contenedor de rechazo");
                 return true;
             }
 
-            equipment.TryEquip(epp, null);
+            if (equipment != null)
+            {
+                equipment.TryEquip(epp, null);
+            }
+
             return true;
         }
 

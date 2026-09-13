@@ -41,7 +41,7 @@ Validates Quest 3S build configuration, rendering performance, script efficiency
 |------------|-------|---------|-----------|
 | 0 | `StandardMainMenu` | [ ] | [ ] |
 | 1 | `VR-LOTO-S1` | [ ] | [ ] |
-| 2 | `VR-LOTO-S2` | [ ] | [ ] |
+| 2 | `VR-LOTO-S2S3` | [ ] | [ ] |
 
 - [ ] `VR-LOTO-S3` is NOT in the build list (`VR-LOTO-S3.unity` may remain on disk).
 - [ ] `VR-LOTO-Placeholder` is NOT in build list.
@@ -69,7 +69,7 @@ For each scene, use `Unity_ManageScene` or `Unity_FindProjectAssets` type `Light
 | Scene | Key light (Mixed Spot) | Fill lights (Mixed Point) | Directional sun | Pass/Fail |
 |-------|----------------------|--------------------------|----------------|-----------|
 | VR-LOTO-S1 | ≤1 [ ] | ≤2 [ ] | Disabled [ ] | [ ] |
-| VR-LOTO-S2 | ≤1 [ ] | ≤2 [ ] | Disabled [ ] | [ ] |
+| VR-LOTO-S2S3 | ≤1 [ ] | ≤2 [ ] | Disabled [ ] | [ ] |
 
 - [ ] Soft shadows only on key light.
 - [ ] Custom dark ambient for underground/industrial feel.

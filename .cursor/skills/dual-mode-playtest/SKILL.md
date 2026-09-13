@@ -23,8 +23,9 @@ Ensure every LOTO scene (S1–S3) is testable both in PC Editor (no headset) and
 ## Preconditions
 
 1. Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`.
-2. Build Settings contain: `StandardMainMenu` (0), `VR-LOTO-S1` (1), `VR-LOTO-S2` (2). LOTO S3 runs in-scene inside S2.
+2. Build Settings contain: `StandardMainMenu` (0), `VR-LOTO-S1` (1), `VR-LOTO-S2S3` (2). Logical S3 runs in-scene inside S2S3.
 3. `LotoScenarioSceneBootstrap` present on each build S scene's bootstrap GameObject.
+4. `LotoGameManager` on `VR-LOTO-S1`; `LotoGameEventRelay` on S1 and `VR-LOTO-S2S3`. Full flow Play from `StandardMainMenu` so `ControlCenter` / `ScoreManager` exist.
 
 ## Procedure: PC playtest smoke test
 
@@ -40,7 +41,7 @@ Open `StandardMainMenu.unity` (for full flow) or any `VR-LOTO-S*` scene directly
 - Adds `LotoPcPlaytestDriver` if absent.
 - Binds `TeleportationArea` instances to the scene's `TeleportationProvider`.
 
-If `ControlCenter.Instance` is null, the scene was opened directly without menu flow — expected warning, not a blocker for visual testing.
+If `ControlCenter.Instance` is null, the scene was opened directly without menu flow — expected. The board still works; `TryContinueS1` and `ScoreManager` no-op until CC exists. Do not treat that as a reason to edit world art.
 
 ### Step 3 — Use PC cheats
 
@@ -49,14 +50,14 @@ Select the bootstrap GameObject → Inspector → `LotoPcPlaytestDriver`:
 | Inspector bool | Hotkey | Effect |
 |----------------|--------|--------|
 | `dismissBriefing` | Numpad 1 | Skip briefing panel |
-| `equipMandatoryFive` | Numpad 2 | Auto-equip 5 mandatory EPP |
-| `rejectOneDefect` | Numpad 4 | Reject one defective EPP |
-| `continueS1ToS2` | Numpad 3 | Transition to S2 |
-| `reportFourHazards` | Numpad 5 | Report all 4 real hazards |
-| `continueS2ToS3` | Numpad 6 | Transition to S3 |
-| `runLotoHappyPath` | Numpad 7 | Execute full LOTO sequence |
+| `equipMandatoryFive` | Numpad 2 | `NotifyEppGrabbed` ×5 good → `IsS1Complete` |
+| `rejectOneDefect` | Numpad 4 | Defective grab → `S1DefectScore` 0 (does not block 5/5) |
+| `continueS1ToS2` | Numpad 3 | `TryContinueS1` (needs CC) |
+| `reportFourHazards` | Numpad 5 | Board `NotifyTools/Sign/Puddle/Extinguisher` to required counts |
+| `continueS2ToS3` | Numpad 6 | Transition to S3 when `IsS2Complete` |
+| `runLotoHappyPath` | Numpad 7 | Board S3 Notify* then `CheckStartButton` |
 | `forceNoGloves` | — | Trigger Malo 2 path |
-| `forceIncompleteStart` | — | Trigger Malo 1 path |
+| `forceIncompleteStart` | — | `CheckStartButton` before sequence ready |
 | `confirmExit` | — | Trigger exit confirm dialog |
 | `completeSummary` | — | Complete session summary |
 
@@ -132,8 +133,10 @@ Or via Meta Quest Developer Hub / `metavr install`.
 
 | File | Role |
 |------|------|
+| `Code/Managers/LotoGameManager.cs` | Persistent S1–S3 board |
+| `Code/Managers/LotoGameEventRelay.cs` | Scene UnityEvent API |
 | `Code/Managers/LotoScenarioSceneBootstrap.cs` | Scene auto-setup and PC driver injection |
-| `Code/Debug/LotoPcPlaytestDriver.cs` | Inspector bools, hotkeys, scenario cheats |
+| `Code/Debug/LotoPcPlaytestDriver.cs` | Inspector bools, hotkeys; notifies the board |
 | `Code/Interactables/LotoInputModalityVisuals.cs` | Hand/controller visual auto-switch |
 | `Code/Debug/LotoPcLocomotion.cs` | WASD locomotion for Editor testing |
-| `Code/Debug/LotoPcClickInteractor.cs` | Mouse click → interactable activation |
+| `Code/Debug/LotoPcClickInteractor.cs` | Mouse click → interactable + board notify |

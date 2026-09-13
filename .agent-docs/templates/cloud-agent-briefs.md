@@ -24,6 +24,7 @@ Execute WF2 (LOTO Serious Gaming & Step Compliance) end-to-end audit on branch `
 - @.cursor/rules/50-hud-ui-brand.mdc
 - @.agent-docs/INDEX.md → RN01, RN02, HU-220–223 line ranges in Doc_SMVR/SafeMining_VR_v1.1.md
 - @.agent-docs/loto-objectives.md
+- @.agent-docs/loto-game-board.md
 - @Propuesta Simulacion LOTO.txt
 
 ## Scope
@@ -32,14 +33,16 @@ OUT: Backend adapters, rendering perf (unless blocking compliance UX)
 
 ## MCP gates
 1. Unity_ManageEditor → GetProjectRoot = D:/Unity/Projects/SafeMiningVR
-2. Unity_ManageScene → inspect VR-LOTO-S1, S2, S3 hierarchies as needed
+2. Unity_ManageScene → inspect VR-LOTO-S1 and VR-LOTO-S2S3 as needed. Do not move world art. HUD OK.
 3. Unity_ReadConsole (Errors) → 0 before and after any fixes
 4. Do NOT hand-edit .unity/.prefab YAML
+5. Do NOT move cabin/warehouse/locker/conveyor art. HUD prefabs OK.
+6. Gates on LotoGameManager; scores on ScoreManager via Util_LotoSimulationBridge
 
 ## Constraints
 - Industrial safety training — no arcade mechanics
 - Approval threshold 60%, weights sum 100%
-- S3 strict order: STOP → breaker OFF → red lock → PELIGRO NO OPERAR → START verify
+- S3 strict order (pedagogy): STOP → breaker OFF → red lock → PELIGRO NO OPERAR → START. Runtime: LotoGameManager.IsS3SequenceReady + CheckStartButton.
 
 ## Deliverables
 1. Sign-off matrix (Phases A–F) with PASS/FAIL per checklist item
@@ -78,7 +81,7 @@ Refactor S3 LOTO interactables to unified XRI 3.3.1 patterns (grab, dwell, socke
 IN:
 - Assets/SafeMining/LOTOSimulation/Code/Interactables/Loto*.cs
 - Assets/SafeMining/LOTOSimulation/Code/Interactables/*S3*
-- Scene VR-LOTO-S2 in-scene S3 (via Unity MCP only; VR-LOTO-S3.unity is not in Build Settings)
+- Scene VR-LOTO-S2S3 in-scene S3 (notify LotoGameManager / relay; do not move conveyor art)
 
 OUT: Scoring weights, backend sync, lighting/perf (unless regression)
 

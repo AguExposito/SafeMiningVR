@@ -1,6 +1,8 @@
 # VR-LOTO-S1 — Scene Inventory & Contract
 
-Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `audit-alignment-baseline.md` that reflected prefab/code, not the post-Cabin art scene.
+Living inventory for S1 alignment. Gameplay SoT: [loto-game-board.md](loto-game-board.md). **World art frozen. HUD may change.**
+
+> Historical PASS rows in `audit-alignment-baseline.md` are not the board contract.
 
 ## A. Metadata
 
@@ -17,9 +19,11 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 
 | Root | Role | Policy |
 |------|------|--------|
-| `Cabin` (+ `cabin2`, props, `CabinLights`, doors `container_door_*`) | Art — locker room | **NO DELETE** / do not relocate meshes |
-| `LOTO_S1Root` | Simulation logic hub | KEEP; modify refs only |
-| `PREF_S1_Locker` | `EppEquipmentManager` + Items + sockets + Fase 1 placeholders | KEEP |
+| `Cabin` (+ `cabin2`, props, `CabinLights`, doors `container_door_*`) | Art — locker room | **NO DELETE** / do not relocate meshes (**frozen**) |
+| `LotoGameManager` | DDOL board (empty GO) | KEEP; do not duplicate |
+| `LotoGameEventRelay` | Scene UnityEvent API (empty GO) | KEEP; do not duplicate |
+| `LOTO_S1Root` | Bootstrap / HUD host if present | KEEP logic refs; do not rebuild cabin art. Gates are on `LotoGameManager` |
+| `PREF_S1_Locker` | `EppEquipmentManager` presentation + Items + sockets | KEEP art; gates are on the board |
 | `PREF_LotoPlayerHUD` / `PREF_LotoBriefingPanel` | World-space UI | KEEP |
 | `PlayerMR` | XR rig (hands/controllers, locomotion) | KEEP |
 | `TeleportFloor` | `TeleportationArea` | KEEP |
@@ -31,7 +35,7 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 | GO | Components (MCP) | Notes |
 |----|------------------|-------|
 | `LOTO_S1Root` | `PlayerHudManager`, `LotoScenarioSceneBootstrap`, `LotoScenario1Controller` | Briefing→Begin wired |
-| `PREF_S1_Locker` | `EppEquipmentManager` + `LotoOutlineHint` | Ordered outline + Brand Secondary |
+| `PREF_S1_Locker` | `EppEquipmentManager` presentation + `LotoOutlineHint` | Outlines should follow the board; art frozen |
 | `S1_RejectZone` | Reject socket; MeshRenderer off | Fase 1 |
 | `S1_ContinueTrigger` | Dwell continue + `onContinue` | Outlined at 5/5 |
 | `Items` | 11 EPP | — |
@@ -79,7 +83,9 @@ Living inventory for S1 alignment roadmap. Supersedes stale S1 PASS rows in `aud
 
 All FLOW / INT / RULE / PED gaps CLOSED. Cabin art intact.
 
-## H. Fase 5 E2E results (post-align)
+## H. Fase 5 E2E results (post-align, historical)
+
+Rows below are a 2026-08 snapshot. Runtime gates now live on `LotoGameManager` ([loto-game-board.md](loto-game-board.md)). “4/4” in this table is historical naming.
 
 | Step | Mode | Result |
 |------|------|--------|

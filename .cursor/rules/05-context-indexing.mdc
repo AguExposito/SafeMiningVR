@@ -32,7 +32,7 @@ Never assume or invent requirements. If the hierarchy is exhausted without an an
 3. Read **only** the line range indicated: `Read(path, offset=<start>, limit=<span>)`.
 4. Cite the ID and source file in your response before generating code or analysis.
 
-For `.agent-docs/` files (all <100 lines), full reads are acceptable.
+For `.agent-docs/` files, full reads are acceptable (most are short; `loto-game-board.md` is the KISS contract).
 
 For `Propuesta Simulacion LOTO.txt` (100 lines), full reads are acceptable.
 
@@ -45,9 +45,12 @@ When working on interactables, hand tracking, controllers, dwell-time, outline h
 **Read first:**
 - `.cursor/rules/40-vr-interaction.mdc`
 - `.cursor/skills/meta-xr-interaction/SKILL.md`
+- `.agent-docs/loto-game-board.md` (interactables notify the board; do not move world art)
 
 **Key code files:**
 - `Assets/SafeMining/LOTOSimulation/Code/Interactables/` — all interactable scripts
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameManager.cs` — `Notify*` / `NotifyEppGrabbed`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameEventRelay.cs`
 - `Assets/XR Standard Menu/Code/XRS_HandGrab.cs` — fist-based grab
 - `Assets/XR Standard Menu/Code/Utils/Util_HandGesture.cs` — hand tracking utilities
 - `Assets/SafeMining/LOTOSimulation/Code/Interactables/LotoInputModalityVisuals.cs` — modality switch
@@ -79,6 +82,7 @@ When working on HUD layout, briefing panels, world-space canvas, localization, o
 **Read first:**
 - `.cursor/rules/50-hud-ui-brand.mdc`
 - `Doc_SMVR/paleta de colores.jpg`
+- `.agent-docs/loto-game-board.md` (HUD may change; bind to board / ScoreManager)
 
 **Key code files:**
 - `Assets/XR Standard Menu/Code/LOTOSimulation/refs/ref_PlayerHUD.cs`
@@ -97,35 +101,36 @@ When working on scenario logic, gates, scoring weights, objective IDs, or proced
 **Read first:**
 - `.cursor/rules/30-loto-domain.mdc`
 - `.cursor/skills/safemining-compliance/SKILL.md`
+- `.agent-docs/loto-game-board.md`
 - `.agent-docs/loto-objectives.md`
 - `.agent-docs/loto-simulation-handbook.md`
 
 **Key code files:**
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameEventRelay.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Utils/Util_LotoSimulationBridge.cs`
+- `Assets/XR Standard Menu/Code/Managers/ScoreManager.cs`
 - `Assets/SafeMining/LOTOSimulation/Code/Data/LotoObjectiveIds.cs`
 - `Assets/SafeMining/LOTOSimulation/Code/Data/LotoSessionScore.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Data/LotoSimulationConstants.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Managers/EppEquipmentManager.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Managers/HazardInspectionManager.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoSequenceManager.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario1Controller.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario2Controller.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario3Controller.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Interactables/EppItemInteractable.cs`
 
 ### Architecture & performance tasks
 
-When working on manager creation, ControlCenter integration, scene setup, lighting, or build optimization:
+When working on manager creation, ControlCenter integration, LOTO board, HUD, or build optimization:
 
 **Read first:**
 - `.cursor/rules/10-unity-architecture.mdc`
 - `.cursor/rules/60-quest-performance.mdc`
 - `.cursor/rules/20-cross-platform.mdc`
+- `.agent-docs/loto-game-board.md`
 
 **Key code files:**
 - `Assets/XR Standard Menu/Code/ControlCenter.cs`
 - `Assets/XR Standard Menu/Code/Managers/PersistantDataManager.cs`
+- `Assets/XR Standard Menu/Code/Managers/ScoreManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameManager.cs`
+- `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameEventRelay.cs`
 - `Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenarioSceneBootstrap.cs`
-- `Assets/SafeMining/LOTOSimulation/Code/Debug/LotoUndergroundLightingTool.cs`
-- `Packages/manifest.json`
 
 ### QA & validation tasks
 
@@ -152,7 +157,10 @@ When using codebase-wide search, follow these rules to avoid noise:
 | Find an objective ID | `loto_obj_` | `Code/Data/LotoObjectiveIds.cs` |
 | Find scoring logic | `LotoSessionScore` or `ComputePartial` | `Code/Data/LotoSessionScore.cs` |
 | Find an interactable pattern | class name (e.g., `HazardReportInteractable`) | `Code/Interactables/` |
-| Find a manager | `Manager` + domain (e.g., `EppEquipmentManager`) | `Code/Managers/` |
+| Find the LOTO board | `LotoGameManager` or `NotifyEppGrabbed` | `LotoGameManager.cs` |
+| Find UnityEvent relay | `LotoGameEventRelay` | `LotoGameEventRelay.cs` |
+| Find HUD score sink | `SetObjective` or `AchiveObjective` | `Util_LotoSimulationBridge.cs`, `ScoreManager.cs` |
+| Find a manager | `Manager` + domain (e.g., `PlayerHudManager`) | `Code/Managers/` |
 | Find localization keys | `loto_s1_` or `loto_s3_alert` | `Assets/Resources/es.xml` |
 | Find brand color usage | `Brand.PrimaryColor` or `Brand.SecondaryColor` | `Code/Managers/BrandConfig.cs` |
 | Find adapter methods | `StartSessionAsync` or `CompleteSessionAsync` | `Code/Adapters/` |

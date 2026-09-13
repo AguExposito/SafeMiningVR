@@ -85,7 +85,7 @@ Unity_ValidateScript → Action: "validate", name: "<script name>"
 | Create GameObject | `Unity_ManageGameObject` | `action: "create", name: "<name>", parent: "<parent>", position: [x,y,z]` |
 | Modify GO transform/parent | `Unity_ManageGameObject` | `action: "modify", target: "<name>", position/rotation/scale/parent` |
 
-**Never hand-edit `.unity` or `.prefab` YAML.** Always use these tools for scene authoring.
+**Never hand-edit `.unity` or `.prefab` YAML.** Use these tools for **HUD** and empty logic GOs (`LotoGameManager`, `LotoGameEventRelay`). Do not create/move/scale cabin, warehouse, conveyor, or locker art. Visual scenes are frozen; HUD prefabs may change. Contract: `.agent-docs/loto-game-board.md`.
 
 ### Script operations
 
@@ -258,3 +258,5 @@ This reporting:
 3. Write XR SDK code without verifying the API in Meta docs.
 4. Skip the post-change console error check.
 5. Use MCP asset generation tools without explicit user consent.
+6. Duplicate `LotoGameManager` / `LotoGameEventRelay` or move world art to fix logic.
+

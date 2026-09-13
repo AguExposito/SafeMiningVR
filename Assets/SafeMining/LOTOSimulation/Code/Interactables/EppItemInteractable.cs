@@ -95,7 +95,7 @@ public class EppItemInteractable : MonoBehaviour
 
     private void OnGrabbed(UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs args)
     {
-        if (equipmentManager == null || itemRef == null || itemRef.IsLocked)
+        if (itemRef == null || itemRef.IsLocked)
         {
             return;
         }
@@ -107,36 +107,30 @@ public class EppItemInteractable : MonoBehaviour
 
         SetHoverOutline(false);
         onGrabbed?.Invoke();
+        NotifyBoard();
 
         if (itemRef.condition == EppItemCondition.Defective)
         {
-            equipmentManager.NotifyDefectiveInspected(itemRef);
             return;
         }
 
-        equipmentManager.TryEquip(itemRef, null);
+        if (equipmentManager != null)
+        {
+            equipmentManager.TryEquip(itemRef, null);
+        }
     }
 
     private void OnReleased(UnityEngine.XR.Interaction.Toolkit.SelectExitEventArgs args)
     {
         ApplyRestingPhysics();
 
-        if (equipmentManager == null || itemRef == null || itemRef.IsLocked)
+        if (itemRef == null || itemRef.IsLocked)
         {
             return;
         }
 
         onReleased?.Invoke();
-
-        if (TryRejectAtZone())
-        {
-            return;
-        }
-
-        if (itemRef.condition == EppItemCondition.Defective)
-        {
-            equipmentManager.TryWearDefectiveNearBody(itemRef);
-        }
+        TryRejectAtZone();
     }
 
     private void OnHoverEntered(UnityEngine.XR.Interaction.Toolkit.HoverEnterEventArgs args)
@@ -159,8 +153,24 @@ public class EppItemInteractable : MonoBehaviour
         SetHoverOutline(false);
     }
 
+    private void NotifyBoard()
+    {
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board == null || itemRef == null)
+        {
+            return;
+        }
+
+        board.NotifyEppGrabbed(itemRef.itemType, itemRef.condition);
+    }
+
     private bool TryRejectAtZone()
     {
+        if (equipmentManager == null)
+        {
+            return false;
+        }
+
         Transform rejectZone = equipmentManager.rejectZoneAnchor;
         if (rejectZone == null || itemRef.condition != EppItemCondition.Defective)
         {

@@ -47,7 +47,7 @@ Read the task and assign it to **one primary domain** (or two if it genuinely sp
 | `network` | backend, adapter, sync, queue, DTO, payload, JWT, auth, token, REST, endpoint, IBManager, offline | `70-backend-sync` | `network-session-pipeline` | `agent-network-security` | WF3 |
 | `compliance` | LOTO step, EPP, hazard, lock color, tag, scoring, objective, gate, threshold, branding, palette, localization, TranslatableText, pedagogical, serious game | `30-loto-domain` + `50-hud-ui-brand` | `safemining-compliance` | `agent-serious-games` | WF2 |
 | `perf` | FPS, frame time, lighting, LOD, draw call, batching, Update loop, GC, build settings, IL2CPP, Vulkan, occlusion, URP | `60-quest-performance` + `10-unity-architecture` | — | `agent-unity-performance` | WF4 |
-| `arch` | ControlCenter, Manager, SDB, ref_, Initialize, singleton, scene bootstrap, DontDestroyOnLoad | `10-unity-architecture` + `15-code-style` | — | `agent-unity-performance` | — |
+| `arch` | ControlCenter, LotoGameManager, Relay, ScoreManager, SDB, ref_, Initialize, singleton, HUD bind, KISS | `10-unity-architecture` + `15-code-style` | — | `agent-unity-performance` | — |
 
 If the task spans two domains (e.g., "add a new interactable and verify scoring"), assign a primary and a secondary. Execute primary first, then secondary.
 
@@ -114,7 +114,7 @@ For complex tasks requiring focused context, launch the mapped subagent:
 
 **Delegate when:**
 - The task requires modifying 3+ files across different subsystems.
-- The task involves scene authoring + code changes simultaneously.
+- HUD prefab bindings + code changes simultaneously (world art is frozen).
 - The user explicitly requests a subagent.
 
 ### Workflow execution
@@ -195,3 +195,4 @@ Task received
 - The source-of-truth hierarchy in `AGENTS.md` always takes precedence.
 - MCP gates are mandatory, not advisory. Skipping a gate requires explicit user approval.
 - Never invent requirements. If the hierarchy is exhausted, ask.
+- KISS: gameplay on `LotoGameManager` + relay + `ScoreManager`. Do not author world art. HUD may change. Contract: `.agent-docs/loto-game-board.md`.

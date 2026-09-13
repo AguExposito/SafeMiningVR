@@ -71,15 +71,15 @@ For non-grab interactions (hazard reporting, buttons, breaker switches):
    - Visual: world-space `Canvas` child with radial `Image` (fill method = Radial 360), color = Secondary `#F97316`.
    - Scale: ~0.03 m at pointer contact point.
 
-3. **Wire interaction event** to the manager via the same `Configure()` + `ActivateFromPc()` pattern used by `HazardReportInteractable` and `LotoControlButtonInteractable`.
+3. **Wire the evaluable action** to `LotoGameManager` / `LotoGameEventRelay` (`Notify*` / `NotifyEppGrabbed`). Keep `ActivateFromPc()` for PC bypass. Do not put gates in leftover scenario managers.
 
 4. **PC fallback.** Ensure `ActivateFromPc()` is public so `LotoPcPlaytestDriver` can invoke it directly, bypassing dwell.
 
 ## Procedure: Wire outline hints to a new step
 
-1. Locate the scenario manager (e.g., `EppEquipmentManager`, `HazardInspectionManager`, `LotoSequenceManager`).
+1. Subscribe to `LotoGameManager` events (or relay UnityEvents). Do not add outline ownership to `EppEquipmentManager` / leftover hazard or sequence managers.
 
-2. Find the method that fires after each step completion. Add or modify the `RefreshOutlineHints()` call.
+2. After each board step, call `LotoOutlineHint.Show(targets)` for the next actionable objects. `LotoOutlineHint.ClearAll()` removes all outlines.
 
 3. `LotoOutlineHint.Show(targets)` highlights the next actionable objects. `LotoOutlineHint.ClearAll()` removes all outlines.
 
@@ -99,7 +99,7 @@ For non-grab interactions (hazard reporting, buttons, breaker switches):
 
 - **Before creating interactables:** call `meta_docs_search` with the interaction type (e.g., "XRGrabInteractable hand tracking") to verify no API changes in current Meta OpenXR version.
 - **After wiring:** call `Unity_ReadConsole` (Errors) — require 0 entries.
-- **Scene authoring:** use `Unity_ManageGameObject` to add components; never hand-edit prefab YAML.
+- **Scene / HUD:** use `Unity_ManageGameObject` to add HUD components; never hand-edit prefab YAML. Do not move world art. Contract: `.agent-docs/loto-game-board.md`.
 
 ## Key project files
 
@@ -109,7 +109,9 @@ For non-grab interactions (hazard reporting, buttons, breaker switches):
 | `Code/Interactables/LotoOutlineHint.cs` | Pedagogical outline hints |
 | `Code/Interactables/HazardReportInteractable.cs` | S2 dwell-trigger reference pattern |
 | `Code/Interactables/LotoControlButtonInteractable.cs` | S3 button trigger reference pattern |
-| `Code/Interactables/EppItemInteractable.cs` | S1 grab reference pattern |
+| `Code/Interactables/EppItemInteractable.cs` | S1 grab → `NotifyEppGrabbed` |
+| `Code/Managers/LotoGameManager.cs` | Board gates |
+| `Code/Managers/LotoGameEventRelay.cs` | Inspector UnityEvents |
 | `Code/Interactables/LotoLockInteractable.cs` | S3 socket/grab reference pattern |
 | `XR Standard Menu/Code/XRS_HandGrab.cs` | Fist-based grab for hand tracking |
 

@@ -146,12 +146,6 @@ public class LotoPcPlaytestDriver : MonoBehaviour
     public void EquipMandatoryFive()
     {
         EppEquipmentManager manager = FindFirstObjectByType<EppEquipmentManager>();
-        if (manager == null)
-        {
-            Debug.LogWarning("[LOTO-PC] EppEquipmentManager not found.");
-            return;
-        }
-
         EquipGood(manager, EppItemType.Helmet);
         EquipGood(manager, EppItemType.SafetyGlasses);
         EquipGood(manager, EppItemType.ReflectiveVest);
@@ -205,8 +199,11 @@ public class LotoPcPlaytestDriver : MonoBehaviour
     [ContextMenu("LOTO/PC/Continue S1→S2")]
     public void ContinueS1()
     {
-        EppEquipmentManager manager = FindFirstObjectByType<EppEquipmentManager>();
-        manager?.TryContinue();
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null)
+        {
+            board.TryContinueS1();
+        }
     }
 
     [ContextMenu("LOTO/PC/Report 4 Hazards")]
@@ -334,7 +331,16 @@ public class LotoPcPlaytestDriver : MonoBehaviour
             return;
         }
 
-        manager.TryEquip(item, null);
+        if (manager != null)
+        {
+            manager.TryEquip(item, null);
+        }
+
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null)
+        {
+            board.NotifyEppGrabbed(type, EppItemCondition.Good);
+        }
     }
 
     private static ref_EppItem FindItem(EppItemType type, EppItemCondition condition)

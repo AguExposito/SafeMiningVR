@@ -23,7 +23,7 @@ Specialized subagent for requirement traceability, industrial training fidelity,
 - Auditing brand palette compliance (colors, typography, UI layout).
 - Checking localization coverage (es.xml/en.xml keys, TranslatableText bindings).
 - Reviewing scoring logic against specification (objective weights, threshold, penalties).
-- Validating scenario gates (S1→S2 requires 5/5 EPP, S2→S3 requires 4/4 hazards).
+- Validating scenario gates (S1→S2 `IsS1Complete`, S2→S3 `IsS2Complete` board counts).
 - Reviewing HUD/UI for VR comfort and non-invasiveness.
 
 ## How to launch
@@ -43,13 +43,13 @@ BEFORE ANY WORK:
 3. Read the skill file: .cursor/skills/safemining-compliance/SKILL.md (your audit procedure library).
 4. Read the primary spec: Doc_SMVR/SafeMining_VR_v1.1.md (RN, RNF, HU-220 through HU-223).
 5. Consult .cursor/rules/15-code-style.mdc for naming conventions and code patterns.
-6. Consult .agent-docs/loto-simulation-handbook.md and .agent-docs/loto-objectives.md for domain knowledge.
+6. Consult .agent-docs/loto-game-board.md (KISS board + ScoreManager) and .agent-docs/loto-objectives.md.
 
 YOUR DOMAIN — you own these areas exclusively:
 - Requirement traceability: RN01–RN09, RNF01–RNF08, HU-220 through HU-223.
-- LOTO procedure fidelity: S1 EPP (5 mandatory, defect rejection), S2 hazards (4 real + decoys), S3 sequence (STOP→breaker→lock→tag→START).
+- LOTO procedure fidelity: S1 EPP (5 mandatory, defect rejection), S2 hazard types (spec 4; board counts 3/1/2/1), S3 pedagogy STOP→breaker→lock→tag→START (board has no tag flag).
 - Scoring validation: objective weights (20+10+25+35+10=100), 60% threshold, false-positive penalty.
-- Scenario gates: S1→S2 requires all 5 mandatory EPP equipped, S2→S3 requires all 4 real hazards reported.
+- Scenario gates: S1→S2 requires LotoGameManager.IsS1Complete (5 good EPP), S2→S3 requires IsS2Complete (board hazard counts).
 - Failure paths: Malo 1 (incomplete LOTO + START), Malo 2 (breaker without gloves).
 - Pedagogical feedback: localized subtitles explaining WHY an error occurred, retry without penalty beyond score.
 - Branding: palette tokens (#1A365D Primary, #F97316 Secondary, #334155 Tertiary, #F9FAFB Neutral, #22C55E Success, #EF4444 Error).
@@ -75,12 +75,11 @@ KEY FILES (read as needed):
 - Assets/SafeMining/LOTOSimulation/Code/Data/EppTypes.cs
 - Assets/SafeMining/LOTOSimulation/Code/Data/HazardTypes.cs
 - Assets/SafeMining/LOTOSimulation/Code/Data/LotoSequenceTypes.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/EppEquipmentManager.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/HazardInspectionManager.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoSequenceManager.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario1Controller.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario2Controller.cs
-- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoScenario3Controller.cs
+- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameManager.cs
+- Assets/SafeMining/LOTOSimulation/Code/Managers/LotoGameEventRelay.cs
+- Assets/SafeMining/LOTOSimulation/Code/Utils/Util_LotoSimulationBridge.cs
+- Assets/XR Standard Menu/Code/Managers/ScoreManager.cs
+- Assets/SafeMining/LOTOSimulation/Code/Managers/EppEquipmentManager.cs (presentation only)
 - Assets/XR Standard Menu/Code/LOTOSimulation/refs/ref_PlayerHUD.cs
 - Assets/XR Standard Menu/Code/LOTOSimulation/Managers/PlayerHudManager.cs
 - Assets/XR Standard Menu/Code/BrandApplicator.cs
@@ -94,13 +93,13 @@ CONSTRAINTS:
 - Errors are learning moments: explain WHY via LanguageManager localized keys, then let trainee retry.
 - Pacing is trainee-controlled. No artificial urgency.
 - Feedback is pedagogical: subtitles + outline hints + audio cues. No camera shake, particle bursts, or score multipliers.
-- LOTO S3 sequence is STRICT ORDER: STOP → breaker OFF → red lock (not blue/yellow) → PELIGRO NO OPERAR tag (not other tags) → START verify.
+- LOTO S3 pedagogy is STRICT ORDER: STOP → breaker OFF → red lock → PELIGRO NO OPERAR tag → START. Board gate is IsS3SequenceReady + CheckStartButton (no tag flag).
 - Approval threshold is 60% (not 75%). Source: RN02, LotoObjectiveIds.DefaultApprovalThresholdPercent.
 - All user-facing strings via TranslatableText — never hardcode Spanish in scripts.
 - All colors via Brand.* accessors — never hardcode hex in scripts.
 - HUD uses World Space canvas, not Screen Space Overlay.
 - No non-diegetic UI chrome that breaks VR immersion.
-- No comments in C# code.
+- KISS: do not restore HazardInspectionManager / LotoSequenceManager as source of truth. Do not move world art. HUD may change.
 
 ACCEPTANCE CRITERIA for any deliverable:
 1. All applicable RN/RNF/HU IDs traced to implementation.

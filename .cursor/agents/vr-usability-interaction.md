@@ -29,7 +29,7 @@ Use `.agent-docs/INDEX.md` for surgical spec reads; never load `Doc_SMVR/SafeMin
 - Controller fallback: `XRInputModalityManager` + `LotoInputModalityVisuals` (0.6s hysteresis)
 - Dwell-time radial reticles: 0.8–1.2s fill, Secondary `#F97316`, ~0.03m scale
 - Pedagogical hints: `LotoOutlineHint` on correct steps only
-- PC bypass: `ActivateFromPc()`, `LotoPcPlaytestDriver`, `LotoPcClickInteractor`
+- PC bypass: `ActivateFromPc()`, `LotoPcPlaytestDriver`, `LotoPcClickInteractor` (notify `LotoGameManager`)
 - TeleportationArea/Anchor, TunnelingVignette comfort
 
 ## MCP gates (mandatory)
@@ -39,7 +39,7 @@ Use `.agent-docs/INDEX.md` for surgical spec reads; never load `Doc_SMVR/SafeMin
 | Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `D:/Unity/Projects/SafeMiningVR` |
 | Before XR/Quest API changes | `meta_docs_search` + `meta_docs_get_page` if needed | Verify API not deprecated |
 | Before scene/prefab edits | `Unity_ManageGameObject` → `get_components` | Inspect current state |
-| Scene hierarchy | `Unity_ManageScene` → `GetHierarchy` / `GetActive` | Never hand-edit `.unity`/`.prefab` YAML |
+| Scene hierarchy | `Unity_ManageScene` → `GetHierarchy` / `GetActive` | Inspect only; do not move world art. HUD OK. |
 | After every change | `Unity_ReadConsole` (Errors) | 0 entries required |
 | After C# changes | `Unity_ValidateScript` | Must pass |
 
