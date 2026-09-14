@@ -395,6 +395,14 @@ public class LotoGameManager : MonoBehaviour
         s3CompleteRaised = false;
         s3StartTooEarlyRaised = false;
     }
+    public bool GetPowerCutState() { 
+        if(powerCut) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     #endregion
 

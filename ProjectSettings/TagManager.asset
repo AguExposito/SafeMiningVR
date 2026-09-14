@@ -8,6 +8,8 @@ TagManager:
   - Anchor
   - Welcome Screen
   - Hand
+  - Hasp
+  - Lock
   layers:
   - Default
   - TransparentFX

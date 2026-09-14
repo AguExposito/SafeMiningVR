@@ -67,16 +67,29 @@
 	<string name="loto_obj_hazard_report">Reporte de condiciones inseguras</string>
 	<string name="loto_obj_loto_sequence">Secuencia LOTO completa</string>
 	<string name="loto_obj_zero_energy">Verificación de energía cero</string>
-	<string name="loto_briefing_title">Capacitación LOTO</string>
 	<string name="loto_briefing_body">Completá tres escenarios secuenciales antes de intervenir el equipo: equipamiento de EPP, inspección preoperacional e identificación de riesgos, y aplicación de bloqueo y etiquetado (LOTO).</string>
 	<string name="loto_briefing_begin">Comenzar</string>
 	<string name="loto_briefing_close">Cerrar</string>
 	<string name="loto_briefing_reopen">Ver briefing</string>
-	<string name="loto_s1_briefing_body">Escenario 1 — Equipamiento de EPP. Seleccioná y colocá el EPP obligatorio (casco, lentes, chaleco, guantes y botas). Rechazá piezas defectuosas. Se evalúa selección correcta (20%) y detección de defectos (10%).</string>
+	<string name="loto_briefing_title">Colocamiento de EPP - LOTO</string>
+	<string name="loto_s1_briefing_body">
+		Escenario 1 — Equipamiento de EPP. \n
+		Seleccioná y colocá el EPP obligatorio. \n
+		Rechazá piezas defectuosas. \n
+		Se evalúa selección correcta y detección de defectos.
+	</string>
 	<string name="loto_s2_briefing_title">Inspección preoperacional</string>
-	<string name="loto_s2_briefing_body">Escenario 2 — Inspección de riesgos. Reportá las cuatro condiciones inseguras cerca de la correa detenida. Evitá reportar falsos positivos. Se evalúa identificación de peligros (25%).</string>
+	<string name="loto_s2_briefing_body">
+		Escenario 2 — Inspección de riesgos. La correa transportadora está detenida. Antes de cualquier intervención, recorré el área e identificá las condiciones inseguras.\n
+		Reportá únicamente lo que represente un riesgo\n
+		Se evalúa la identificación de peligros, no es necesario identificarlos a todos pero restará puntaje por elemento no identificado.
+	</string>
 	<string name="loto_s3_briefing_title">Bloqueo y etiquetado LOTO</string>
-	<string name="loto_s3_briefing_body">Escenario 3 — Procedimiento LOTO. Detené la correa, aislá energía, colocá candado personal rojo y etiqueta PELIGRO NO OPERAR. Verificá energía cero con START. Se evalúa secuencia LOTO (35%) y verificación de energía cero (10%).</string>
+	<string name="loto_s3_briefing_body">
+		Escenario 3 — Procedimiento LOTO. Se detectó una anomalía en un rodillo. Antes de acercarte al equipo, asegurate de que no pueda arrancar.\n
+		Presioná START (Botón Verde) para verificar energía cero: la correa no debe moverse.\n
+		Se evalúa la secuencia LOTO y la verificación de energía cero.
+	</string>
 	<string name="loto_hud_active_objective">Objetivo activo</string>
 	<string name="loto_hud_scenario_label">Escenario {0}/{1}</string>
 	<string name="loto_hud_menu">Menú</string>

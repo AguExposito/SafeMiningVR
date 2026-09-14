@@ -224,5 +224,15 @@ public class LotoGameEventRelay : MonoBehaviour
         action(manager);
     }
 
+    public bool GetPowerCutState() {
+        LotoGameManager manager = LotoGameManager.Instance;
+        if (manager == null)
+        {
+            return false;
+        }
+
+        return manager.GetPowerCutState();
+
+    }
     #endregion
 }

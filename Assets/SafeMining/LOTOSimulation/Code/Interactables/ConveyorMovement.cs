@@ -3,22 +3,26 @@ using UnityEngine;
 public class ConveyorMovement : MonoBehaviour
 {
     [Header("Configuración")]
-    [Tooltip("Velocidad a la que se mueve la textura")]
-    public float velocidadMovimiento = 0.5f;
+    [Tooltip("Velocidad máxima a la que se mueve la textura")]
+    public float velocidadMaxima = 0.5f;
 
-    [Tooltip("Define si la cinta está en movimiento actualmente")]
+    [Tooltip("Qué tan rápido acelera y desacelera (cuánto mayor, más rápido reacciona)")]
+    public float tasaAceleracion = 2.0f;
+
+    [Tooltip("Define si la cinta debe estar en movimiento o detenida")]
     public bool estaMoviendose = false;
+
+    public bool locked = false;
 
     private Material materialCinta;
     private Vector2 offsetActual;
+    private float velocidadActual = 0f;
 
     void Start()
     {
-        // Obtenemos el material del Renderer del objeto
         Renderer rendererCinta = GetComponent<Renderer>();
         if (rendererCinta != null)
         {
-            // Usamos material en lugar de sharedMaterial para no afectar a otros objetos que usen el mismo material
             materialCinta = rendererCinta.material;
         }
     }
@@ -27,13 +31,33 @@ public class ConveyorMovement : MonoBehaviour
     {
         if (materialCinta == null) return;
 
-        if (estaMoviendose)
-        {
-            // Desplazamos la textura en el eje Y (puedes cambiarlo a X dependiendo de cómo esté mapeada la UV)
-            offsetActual.y += velocidadMovimiento * Time.deltaTime;
+        // Definimos la velocidad a la que queremos llegar según el estado
+        float velocidadObjetivo = estaMoviendose ? velocidadMaxima : 0f;
 
-            // Aplicamos el nuevo offset a la textura principal del material
+        // Suavizamos el cambio de velocidad (aceleración / desaceleración)
+        velocidadActual = Mathf.MoveTowards(velocidadActual, velocidadObjetivo, tasaAceleracion * Time.deltaTime);
+
+        // Si la velocidad es distinta de cero, desplazamos la textura
+        if (velocidadActual != 0f)
+        {
+            offsetActual.y += velocidadActual * Time.deltaTime;
             materialCinta.mainTextureOffset = offsetActual;
+        }
+    }
+
+    public void SetMovementState(bool estado)
+    {
+        if (locked) return;
+        estaMoviendose = estado;
+    }
+
+    public void SetLocked(bool state) { 
+        if (state) { 
+            locked = true;
+            estaMoviendose = false;
+        }
+        else { 
+            locked = false;
         }
     }
 }

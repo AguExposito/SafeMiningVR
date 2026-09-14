@@ -4355,6 +4355,10 @@ PrefabInstance:
       value: 0.5411765
       objectReference: {fileID: 0}
     - target: {fileID: 5803973122342218035, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: m_text
+      value: Colocamiento de EPP - LOTO
+      objectReference: {fileID: 0}
+    - target: {fileID: 5803973122342218035, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_fontMaterial
       value: 
       objectReference: {fileID: 1596454054}

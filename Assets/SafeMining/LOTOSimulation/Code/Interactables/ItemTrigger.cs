@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class S2ItemTrigger : MonoBehaviour
+public class ItemTrigger : MonoBehaviour
 {
+    public bool triggerCompletedEvent = false;
     [Header("Hold Settings")]
     [Tooltip("Tiempo necesario para completar la interacción.")]
     [SerializeField] private float holdDuration = 2f;
@@ -67,6 +69,27 @@ public class S2ItemTrigger : MonoBehaviour
 
     private void Update()
     {
+        if (triggerCompletedEvent)
+        {
+            triggerCompletedEvent = false;
+
+            OnHoldComplete?.Invoke();
+
+            if (TryGetComponent(out XRGrabInteractable grabInteractable))
+            {
+                grabInteractable.selectEntered?.Invoke(
+                    new UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs()
+                );
+            }
+
+            if (TryGetComponent(out XRSimpleInteractable simpleInteractable))
+            {
+                simpleInteractable.selectEntered?.Invoke(
+                    new UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs()
+                );
+            }
+        }
+
         if (!isInside)
             return;
 
@@ -89,7 +112,8 @@ public class S2ItemTrigger : MonoBehaviour
         if (progress >= 1f)
         {
             CompleteHold();
-        }
+        }       
+
     }
 
 
