@@ -4258,7 +4258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: 2.2148
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4318,9 +4318,9 @@ PrefabInstance:
       objectReference: {fileID: 855459172}
     - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_text
-      value: "\nEscenario 1 \u2014 Equipamiento de EPP. \n\nSeleccion\xE1 y coloc\xE1
-        el EPP obligatorio. \nRechaz\xE1 piezas defectuosas. \nSe eval\xFAa selecci\xF3n
-        correcta y detecci\xF3n de defectos."
+      value: "\nEscenario 1 \u2014 Equipamiento de EPP. \\n\n\\nSeleccion\xE1 y coloc\xE1
+        el EPP obligatorio. \\n\nRechaz\xE1 piezas defectuosas. \\n\nSe eval\xFAa
+        selecci\xF3n correcta y detecci\xF3n de defectos."
       objectReference: {fileID: 0}
     - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_fontMaterial

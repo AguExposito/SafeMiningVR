@@ -18069,7 +18069,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2000, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_Pivot.x
@@ -18113,7 +18113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: -1.42
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -18133,7 +18133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -24.55
       objectReference: {fileID: 0}
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18151,6 +18151,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2003, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: reopenButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2507097690172468194, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_sharedMaterial
       value: 
@@ -18164,6 +18168,23 @@ PrefabInstance:
       value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: m_text
+      value: "Escenario 2 \u2014 Inspecci\xF3n de riesgos. La correa transportadora
+        est\xE1 detenida. Antes de cualquier intervenci\xF3n, recorr\xE9 el \xE1rea
+        e identific\xE1 las condiciones inseguras.\\n\nReport\xE1 \xFAnicamente lo
+        que represente un riesgo\\n\nSe eval\xFAa la identificaci\xF3n de peligros,
+        no es necesario identificarlos a todos pero restar\xE1 puntaje por elemento
+        no identificado."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: m_margin.z
+      value: 78.29285
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -18174,6 +18195,14 @@ PrefabInstance:
     - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_TextStyleHashCode
       value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5803973122342218035, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: m_text
+      value: "Inspecci\xF3n preoperacional"
       objectReference: {fileID: 0}
     - target: {fileID: 5803973122342218035, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_sharedMaterial
@@ -18200,10 +18229,32 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
---- !u!1 &1241069180 stripped
+--- !u!114 &1239693563 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4422717290641346273, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+  m_PrefabInstance: {fileID: 1239693562}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &1239693564 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5803973122342218035, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+  m_PrefabInstance: {fileID: 1239693562}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1239693565 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3000, guid: a3b4c5d5e5f6012345678901234abcd0, type: 3}
-  m_PrefabInstance: {fileID: 889087093}
+  m_CorrespondingSourceObject: {fileID: 2000, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+  m_PrefabInstance: {fileID: 1239693562}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1243830445
 PrefabInstance:
@@ -31620,7 +31671,7 @@ MonoBehaviour:
   onS2Complete:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1241069180}
+      - m_Target: {fileID: 1239693565}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -31630,6 +31681,34 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1239693564}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Bloqueo y Etiquetado (LOTO)
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1239693563}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: "Escenario 3 \u2014 Procedimiento LOTO. Se detect\xF3
+            una anomal\xEDa en un rodillo. Antes de acercarte al equipo, asegurate
+            de que no pueda arrancar.\\n  Presion\xE1 START (Bot\xF3n Verde) para
+            verificar energ\xEDa cero: la correa no debe moverse.\\n Se eval\xFAa
+            la secuencia LOTO y la verificaci\xF3n de energ\xEDa cero."
           m_BoolArgument: 1
         m_CallState: 2
   onS3Complete:
