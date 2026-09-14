@@ -29,7 +29,6 @@ public class EppEquipmentManager : MonoBehaviour
     private readonly HashSet<int> rejectedDefectiveIds = new HashSet<int>();
     private readonly HashSet<int> pendingDefectiveIds = new HashSet<int>();
 
-
     public Transform rejectZoneAnchor;
 
     public bool IsReadyToAdvance => equippedMandatory.Count >= MandatoryTypes.Length;

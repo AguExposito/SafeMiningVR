@@ -453,7 +453,7 @@ MonoBehaviour:
   onS1Complete:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 39221352}
+      - m_Target: {fileID: 525969892}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -489,11 +489,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &39221352 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4947647415646292872, guid: 5726aa3ffad42e54c8eeaf9d593f176d, type: 3}
-  m_PrefabInstance: {fileID: 678769388}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &48388966
 Mesh:
   m_ObjectHideFlags: 0
@@ -4300,6 +4295,10 @@ PrefabInstance:
     - target: {fileID: 2001, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2003, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
+      propertyPath: reopenButton
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2507097690172468194, guid: a2b3c4d4e5f6012345678901234abcd0, type: 3}
       propertyPath: m_fontMaterial

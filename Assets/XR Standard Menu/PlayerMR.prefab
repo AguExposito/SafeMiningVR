@@ -107,7 +107,7 @@ MonoBehaviour:
     m_Bits: 8
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -587,7 +587,7 @@ GameObject:
   - component: {fileID: 4179837991753676761}
   m_Layer: 0
   m_Name: L_RingProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -619,7 +619,7 @@ GameObject:
   - component: {fileID: 8544584817601599650}
   m_Layer: 0
   m_Name: R_ThumbTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -669,7 +669,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 257362592298640126}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -896,7 +896,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -928,7 +928,7 @@ GameObject:
   - component: {fileID: 77093459052817017}
   m_Layer: 0
   m_Name: L_RingProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -960,7 +960,7 @@ GameObject:
   - component: {fileID: 5675002885942014621}
   m_Layer: 0
   m_Name: R_ThumbDistal.002
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -991,7 +991,7 @@ GameObject:
   - component: {fileID: 7322823035297223084}
   m_Layer: 0
   m_Name: R_LittleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1026,7 +1026,7 @@ GameObject:
   - component: {fileID: 1653862195175857961}
   m_Layer: 0
   m_Name: LineVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1414,7 +1414,7 @@ GameObject:
   - component: {fileID: 9207481050214792990}
   m_Layer: 0
   m_Name: L_ThumbDistal.001
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1448,7 +1448,7 @@ GameObject:
   - component: {fileID: 5936995768792593065}
   m_Layer: 0
   m_Name: Material Affordance
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1639,7 +1639,7 @@ GameObject:
   - component: {fileID: 338414651365963843}
   m_Layer: 0
   m_Name: L_ThumbDistal.004
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1673,7 +1673,7 @@ GameObject:
   - component: {fileID: 2953609837896647106}
   m_Layer: 0
   m_Name: LineVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2061,7 +2061,7 @@ GameObject:
   - component: {fileID: 7254649058838159491}
   m_Layer: 0
   m_Name: R_IndexIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2093,7 +2093,7 @@ GameObject:
   - component: {fileID: 1610439927953729082}
   m_Layer: 0
   m_Name: L_RingMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2127,10 +2127,10 @@ GameObject:
   - component: {fileID: 1954738875984846016}
   m_Layer: 0
   m_Name: Button_B
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &5748883902670124692
 Transform:
@@ -2217,10 +2217,10 @@ GameObject:
   - component: {fileID: 2758691561674710518}
   m_Layer: 0
   m_Name: ThumbStick
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &7811274867081967435
 Transform:
@@ -2308,7 +2308,7 @@ GameObject:
   - component: {fileID: 3615808137394458607}
   m_Layer: 0
   m_Name: NearFar
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2477,7 +2477,7 @@ GameObject:
   - component: {fileID: 6975130937415174126}
   m_Layer: 0
   m_Name: L_LittleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2510,7 +2510,7 @@ GameObject:
   - component: {fileID: 156835664881096757}
   m_Layer: 0
   m_Name: Poke Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2671,7 +2671,7 @@ GameObject:
   - component: {fileID: 6969609632926460817}
   m_Layer: 0
   m_Name: Material Affordance
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2862,7 +2862,7 @@ GameObject:
   - component: {fileID: 3214618655087780414}
   m_Layer: 0
   m_Name: R_MiddleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2896,10 +2896,10 @@ GameObject:
   - component: {fileID: 845956240004175681}
   m_Layer: 0
   m_Name: Button_A
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4782419067262600612
 Transform:
@@ -2983,9 +2983,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7681587080852137310}
   - component: {fileID: 2269195238563557891}
+  - component: {fileID: 1559488005929161446}
   m_Layer: 0
   m_Name: 'Capsule Collider Distal '
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3028,6 +3029,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1559488005929161446
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939117081835128983}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &955803280323810499
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,10 +3069,10 @@ GameObject:
   - component: {fileID: 2881425851689606474}
   m_Layer: 0
   m_Name: Controller_Base
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &3460609969212149163
 Transform:
@@ -3176,7 +3204,7 @@ GameObject:
   - component: {fileID: 1793681416027792412}
   m_Layer: 0
   m_Name: R_IndexTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3207,7 +3235,7 @@ GameObject:
   - component: {fileID: 8360000579713018947}
   m_Layer: 0
   m_Name: R_IndexProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3239,7 +3267,7 @@ GameObject:
   - component: {fileID: 6228241426286965141}
   m_Layer: 0
   m_Name: L_LittleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3271,7 +3299,7 @@ GameObject:
   - component: {fileID: 4743503792106441460}
   m_Layer: 0
   m_Name: L_Wrist
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3296,6 +3324,7 @@ Transform:
   - {fileID: 3296435100726923732}
   - {fileID: 1610439927953729082}
   - {fileID: 2001113336764715587}
+  - {fileID: 2381343102381190732}
   m_Father: {fileID: 3759627998076540516}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1107514746745593884
@@ -3309,7 +3338,7 @@ GameObject:
   - component: {fileID: 6450835672747916903}
   m_Layer: 0
   m_Name: R_RingProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3345,7 +3374,7 @@ GameObject:
   - component: {fileID: 2888302466428723383}
   m_Layer: 0
   m_Name: LeftHandAndroidXRVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3522,7 +3551,7 @@ GameObject:
   - component: {fileID: 3117256672494894982}
   m_Layer: 0
   m_Name: Aim Pose
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3624,10 +3653,10 @@ GameObject:
   - component: {fileID: 8528255602418929034}
   m_Layer: 0
   m_Name: Controller_Base
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6879526333063305689
 Transform:
@@ -3712,7 +3741,7 @@ GameObject:
   - component: {fileID: 9034334831287397401}
   m_Layer: 0
   m_Name: Poke Point Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3747,10 +3776,10 @@ GameObject:
   - component: {fileID: 2915958394758061400}
   m_Layer: 0
   m_Name: Bumper
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &699158054275461968
 Transform:
@@ -3835,7 +3864,7 @@ GameObject:
   - component: {fileID: 5150190219029790159}
   m_Layer: 0
   m_Name: R_RingMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3869,10 +3898,10 @@ GameObject:
   - component: {fileID: 6058946012194189788}
   m_Layer: 0
   m_Name: ThumbStick
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &763904329365094708
 Transform:
@@ -3961,7 +3990,7 @@ GameObject:
   - component: {fileID: 7083473004687147895}
   m_Layer: 6
   m_Name: Contact Spawn Trigger
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4070,7 +4099,7 @@ GameObject:
   - component: {fileID: 8575992942804346289}
   m_Layer: 0
   m_Name: Hand Poke Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4313,7 +4342,7 @@ GameObject:
   - component: {fileID: 770704030040147230}
   m_Layer: 0
   m_Name: L_IndexDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4344,9 +4373,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6366300937848430399}
   - component: {fileID: 887458015502733372}
+  - component: {fileID: 5506937198108584754}
   m_Layer: 0
   m_Name: Capsule Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4389,6 +4419,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5506937198108584754
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712164220539186495}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1713627106571810728
 GameObject:
   m_ObjectHideFlags: 0
@@ -4404,7 +4461,7 @@ GameObject:
   - component: {fileID: 948018587634754779}
   m_Layer: 0
   m_Name: Right Controller
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4584,7 +4641,7 @@ GameObject:
   - component: {fileID: 8670634920059467919}
   m_Layer: 0
   m_Name: R_MiddleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4616,7 +4673,7 @@ GameObject:
   - component: {fileID: 4002258852132157991}
   m_Layer: 0
   m_Name: R_IndexMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4649,7 +4706,7 @@ GameObject:
   - component: {fileID: 8768896387190218344}
   m_Layer: 0
   m_Name: L_ThumbDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4681,7 +4738,7 @@ GameObject:
   - component: {fileID: 6067242431932527639}
   m_Layer: 0
   m_Name: R_ThumbDistal.001
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4716,7 +4773,7 @@ GameObject:
   - component: {fileID: 1239924425699934334}
   m_Layer: 6
   m_Name: Contact Spawn Trigger
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4946,7 +5003,7 @@ GameObject:
   - component: {fileID: 2668598234250415821}
   m_Layer: 0
   m_Name: Pinch Visual Offset
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4977,7 +5034,7 @@ GameObject:
   - component: {fileID: 8144433480292788487}
   m_Layer: 0
   m_Name: L_LittleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5011,7 +5068,7 @@ GameObject:
   - component: {fileID: 2155715985868842199}
   m_Layer: 0
   m_Name: Poke Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5169,7 +5226,7 @@ GameObject:
   - component: {fileID: 1761689421098874080}
   m_Layer: 0
   m_Name: R_RingDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5201,7 +5258,7 @@ GameObject:
   - component: {fileID: 8753087566619286619}
   m_Layer: 0
   m_Name: R_ThumbDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5233,7 +5290,7 @@ GameObject:
   - component: {fileID: 6687211001345807307}
   m_Layer: 0
   m_Name: L_LittleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5265,7 +5322,7 @@ GameObject:
   - component: {fileID: 1153710889084400281}
   m_Layer: 0
   m_Name: L_MiddleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5300,7 +5357,7 @@ GameObject:
   - component: {fileID: 8048605908236855587}
   m_Layer: 0
   m_Name: NearFar
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5469,7 +5526,7 @@ GameObject:
   - component: {fileID: 3057987803635301493}
   m_Layer: 0
   m_Name: R_LittleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5505,7 +5562,7 @@ GameObject:
   - component: {fileID: 3247654936737795218}
   m_Layer: 0
   m_Name: Hand Poke Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5749,7 +5806,7 @@ GameObject:
   - component: {fileID: 1061806859157114794}
   m_Layer: 0
   m_Name: Pinch_Pointer_LOD0
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5840,7 +5897,7 @@ GameObject:
   - component: {fileID: 6052720386853196061}
   m_Layer: 0
   m_Name: L_IndexProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5873,7 +5930,7 @@ GameObject:
   - component: {fileID: 186135009856589446}
   m_Layer: 0
   m_Name: R_LittleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5904,7 +5961,7 @@ GameObject:
   - component: {fileID: 2563191583744663997}
   m_Layer: 0
   m_Name: R_IndexProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5942,7 +5999,7 @@ GameObject:
   - component: {fileID: 6747079915128394636}
   m_Layer: 0
   m_Name: Hand Near-Far Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6258,9 +6315,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7500265485994757101}
   - component: {fileID: 5400385263175404992}
+  - component: {fileID: 7772908600957206780}
   m_Layer: 0
   m_Name: Box Collider Wrist
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6301,6 +6359,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.075, y: 0.01, z: 0.075}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &7772908600957206780
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344380094226182129}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2356145865223742345
 GameObject:
   m_ObjectHideFlags: 0
@@ -6312,7 +6397,7 @@ GameObject:
   - component: {fileID: 988073479746723086}
   m_Layer: 0
   m_Name: L_Wrist_WeightFix
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6343,7 +6428,7 @@ GameObject:
   - component: {fileID: 3362353796373601465}
   m_Layer: 0
   m_Name: L_Palm
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6374,7 +6459,7 @@ GameObject:
   - component: {fileID: 7287677553828797392}
   m_Layer: 0
   m_Name: R_Palm
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6405,7 +6490,7 @@ GameObject:
   - component: {fileID: 7764645592127775534}
   m_Layer: 0
   m_Name: L_IndexMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6438,7 +6523,7 @@ GameObject:
   - component: {fileID: 7732482842741176482}
   m_Layer: 0
   m_Name: L_RingIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6469,9 +6554,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4850192285735586406}
   - component: {fileID: 1907579341485901423}
+  - component: {fileID: 1657834530052126734}
   m_Layer: 0
   m_Name: 'Capsule Collider Distal '
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6514,6 +6600,33 @@ CapsuleCollider:
   m_Height: 0.03
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1657834530052126734
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2495113577114583372}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2498482474983234370
 GameObject:
   m_ObjectHideFlags: 0
@@ -6588,7 +6701,7 @@ GameObject:
   - component: {fileID: 6179657622563197022}
   m_Layer: 0
   m_Name: R_IndexDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6619,9 +6732,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4022341351902146593}
   - component: {fileID: 2064371706179959417}
+  - component: {fileID: 2134386554524922919}
   m_Layer: 0
   m_Name: Capsule Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6664,6 +6778,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &2134386554524922919
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605793544493286014}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2749069511021039149
 GameObject:
   m_ObjectHideFlags: 0
@@ -6675,7 +6816,7 @@ GameObject:
   - component: {fileID: 200959448718395124}
   m_Layer: 0
   m_Name: L_ThumbProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6710,7 +6851,7 @@ GameObject:
   - component: {fileID: 1880688808117284742}
   m_Layer: 0
   m_Name: poke_pointer
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6887,7 +7028,7 @@ GameObject:
   - component: {fileID: 3982261635666851510}
   m_Layer: 0
   m_Name: R_ThumbProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7155,9 +7296,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1026657335667726286}
   - component: {fileID: 4651174828714904259}
+  - component: {fileID: 965322310597307683}
   m_Layer: 0
   m_Name: Capsule Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7200,6 +7342,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &965322310597307683
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2793367679950906252}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2901862892238422923
 GameObject:
   m_ObjectHideFlags: 0
@@ -7211,7 +7380,7 @@ GameObject:
   - component: {fileID: 6412545134210628367}
   m_Layer: 0
   m_Name: L_LittleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7243,7 +7412,7 @@ GameObject:
   - component: {fileID: 1363427499824091649}
   m_Layer: 0
   m_Name: L_RingDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7275,7 +7444,7 @@ GameObject:
   - component: {fileID: 5395274868221883999}
   m_Layer: 0
   m_Name: R_MiddleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7307,7 +7476,7 @@ GameObject:
   - component: {fileID: 6833234578995222013}
   m_Layer: 0
   m_Name: R_MiddleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7341,7 +7510,7 @@ GameObject:
   - component: {fileID: 3600121282385810719}
   m_Layer: 0
   m_Name: Poke Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7477,7 +7646,7 @@ GameObject:
   - component: {fileID: 927142569314766261}
   m_Layer: 0
   m_Name: L_Wrist
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7516,7 +7685,7 @@ GameObject:
   - component: {fileID: 6866130020752920270}
   m_Layer: 0
   m_Name: L_RingDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7548,7 +7717,7 @@ GameObject:
   - component: {fileID: 5224736234762177447}
   m_Layer: 0
   m_Name: R_ThumbDistal.005
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7579,7 +7748,7 @@ GameObject:
   - component: {fileID: 6719549312610138918}
   m_Layer: 0
   m_Name: UniversalController
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7617,7 +7786,7 @@ GameObject:
   - component: {fileID: 4285968628085528256}
   m_Layer: 0
   m_Name: LeftHand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7735,7 +7904,7 @@ GameObject:
   - component: {fileID: 3114111389012361950}
   m_Layer: 0
   m_Name: R_LittleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7771,7 +7940,7 @@ GameObject:
   - component: {fileID: 3120243971856026155}
   m_Layer: 0
   m_Name: Left Hand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8099,10 +8268,10 @@ GameObject:
   - component: {fileID: 4388162102982714328}
   m_Layer: 0
   m_Name: Button_A
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &8340734190275858189
 Transform:
@@ -8187,7 +8356,7 @@ GameObject:
   - component: {fileID: 1424528131221564333}
   m_Layer: 0
   m_Name: R_Wrist
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8231,7 +8400,7 @@ GameObject:
   - component: {fileID: 2086347486417872878}
   m_Layer: 0
   m_Name: Near-Far Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8602,7 +8771,7 @@ GameObject:
   - component: {fileID: 5437986461613944661}
   m_Layer: 0
   m_Name: R_IndexDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8634,7 +8803,7 @@ GameObject:
   - component: {fileID: 3801231185058128667}
   m_Layer: 0
   m_Name: L_ThumbMetacarpal_WeightFix
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8667,10 +8836,10 @@ GameObject:
   - component: {fileID: 918350973364197471}
   m_Layer: 0
   m_Name: TouchPad
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2679165488513317747
 Transform:
@@ -8755,7 +8924,7 @@ GameObject:
   - component: {fileID: 667525977763312974}
   m_Layer: 0
   m_Name: R_ThumbMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8789,7 +8958,7 @@ GameObject:
   - component: {fileID: 5254310015477662099}
   m_Layer: 0
   m_Name: L_MiddleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8822,7 +8991,7 @@ GameObject:
   - component: {fileID: 182047904456400465}
   m_Layer: 0
   m_Name: Hand Visualizer
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8876,7 +9045,7 @@ GameObject:
   - component: {fileID: 2243548307403223755}
   m_Layer: 0
   m_Name: L_MiddleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8906,9 +9075,10 @@ GameObject:
   m_Component:
   - component: {fileID: 16773411603557324}
   - component: {fileID: 4267196035185388120}
+  - component: {fileID: 1907488704160105289}
   m_Layer: 0
   m_Name: 'Capsule Collider Distal '
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8951,6 +9121,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1907488704160105289
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3469594773609973976}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3498257816556073511
 GameObject:
   m_ObjectHideFlags: 0
@@ -8967,7 +9164,7 @@ GameObject:
   - component: {fileID: 6512450601671650244}
   m_Layer: 0
   m_Name: Hand Near-Far Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9284,7 +9481,7 @@ GameObject:
   - component: {fileID: 2900495042206654006}
   m_Layer: 0
   m_Name: R_RingIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9315,9 +9512,10 @@ GameObject:
   m_Component:
   - component: {fileID: 543077495583112800}
   - component: {fileID: 665500990415718232}
+  - component: {fileID: 1964552124531468464}
   m_Layer: 0
   m_Name: 'Capsule Collider Distal '
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9360,6 +9558,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1964552124531468464
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3538749213770394451}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3555921691784772937
 GameObject:
   m_ObjectHideFlags: 0
@@ -9371,7 +9596,7 @@ GameObject:
   - component: {fileID: 5308320964314530411}
   m_Layer: 0
   m_Name: R_RingTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9391,6 +9616,87 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1761689421098874080}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3589419853265243505
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3276414183226890453}
+  - component: {fileID: 1790287591464505595}
+  - component: {fileID: 6041214809987404419}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Hand
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3276414183226890453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3589419853265243505}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5386915486875053097}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1790287591464505595
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3589419853265243505}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &6041214809987404419
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3589419853265243505}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.0116235
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3630724497218299339
 GameObject:
   m_ObjectHideFlags: 0
@@ -9402,7 +9708,7 @@ GameObject:
   - component: {fileID: 4128381857506037861}
   m_Layer: 0
   m_Name: L_ThumbTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9433,7 +9739,7 @@ GameObject:
   - component: {fileID: 897097278760269878}
   m_Layer: 0
   m_Name: L_LittleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9465,7 +9771,7 @@ GameObject:
   - component: {fileID: 7601427388593669147}
   m_Layer: 0
   m_Name: L_RingIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9500,7 +9806,7 @@ GameObject:
   - component: {fileID: 6354048053179155776}
   m_Layer: 0
   m_Name: Poke
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9669,7 +9975,7 @@ GameObject:
   - component: {fileID: 8214432837477403118}
   m_Layer: 0
   m_Name: R_Palm
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9750,7 +10056,7 @@ GameObject:
   - component: {fileID: 4830142587425038983}
   m_Layer: 0
   m_Name: L_ThumbMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9784,7 +10090,7 @@ GameObject:
   - component: {fileID: 4595656838728002282}
   m_Layer: 0
   m_Name: L_MiddleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9816,7 +10122,7 @@ GameObject:
   - component: {fileID: 2384589619597597680}
   m_Layer: 0
   m_Name: L_LittleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9938,7 +10244,7 @@ GameObject:
   - component: {fileID: 3160459374525462244}
   m_Layer: 0
   m_Name: Right Hand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10265,7 +10571,7 @@ GameObject:
   - component: {fileID: 1701058826717444890}
   m_Layer: 0
   m_Name: Select Input
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10341,7 +10647,7 @@ GameObject:
   - component: {fileID: 7856310598221516404}
   m_Layer: 0
   m_Name: Pinch_Pointer_LOD0
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10433,7 +10739,7 @@ GameObject:
   - component: {fileID: 2419382444385380081}
   m_Layer: 0
   m_Name: Pinch Grab Pose
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10537,7 +10843,7 @@ GameObject:
   - component: {fileID: 5858858374832032665}
   m_Layer: 0
   m_Name: Hand Poke Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10780,7 +11086,7 @@ GameObject:
   - component: {fileID: 6299338701775527263}
   m_Layer: 0
   m_Name: L_IndexDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10813,7 +11119,7 @@ GameObject:
   - component: {fileID: 9209248270100135920}
   m_Layer: 0
   m_Name: Palm
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10914,7 +11220,7 @@ GameObject:
   - component: {fileID: 7563460926482083307}
   m_Layer: 0
   m_Name: R_ThumbProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10948,10 +11254,10 @@ GameObject:
   - component: {fileID: 741056112921196258}
   m_Layer: 0
   m_Name: Trigger
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &851112227306994202
 Transform:
@@ -11140,7 +11446,7 @@ GameObject:
   - component: {fileID: 4527727888845159228}
   m_Layer: 0
   m_Name: L_MiddleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11172,7 +11478,7 @@ GameObject:
   - component: {fileID: 750690510502270554}
   m_Layer: 0
   m_Name: L_ThumbDistal.002
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11203,7 +11509,7 @@ GameObject:
   - component: {fileID: 9046935942689774162}
   m_Layer: 0
   m_Name: L_RingMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11235,7 +11541,7 @@ GameObject:
   - component: {fileID: 4160679473725336505}
   m_Layer: 0
   m_Name: R_LittleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11267,7 +11573,7 @@ GameObject:
   - component: {fileID: 3456431187871472598}
   m_Layer: 0
   m_Name: Poke Point
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11299,9 +11605,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7391636223842421494}
   - component: {fileID: 147263199196580605}
+  - component: {fileID: 5688131660073597614}
   m_Layer: 0
   m_Name: Capsule Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11344,6 +11651,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5688131660073597614
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4581100459182223732}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4625338893326742430
 GameObject:
   m_ObjectHideFlags: 0
@@ -11359,7 +11693,7 @@ GameObject:
   - component: {fileID: 1951221451721057733}
   m_Layer: 0
   m_Name: Near-Far Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11687,7 +12021,7 @@ GameObject:
   - component: {fileID: 5649311761178785614}
   m_Layer: 0
   m_Name: R_ThumbTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11718,7 +12052,7 @@ GameObject:
   - component: {fileID: 758449251869704358}
   m_Layer: 0
   m_Name: R_ThumbMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11749,9 +12083,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4487923578490316247}
   - component: {fileID: 3377724867684804328}
+  - component: {fileID: 2719859807513917001}
   m_Layer: 0
   m_Name: Capsule Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11794,6 +12129,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &2719859807513917001
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747809594404558812}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4782606087252632013
 GameObject:
   m_ObjectHideFlags: 0
@@ -11995,7 +12357,7 @@ GameObject:
   - component: {fileID: 8975062087642905987}
   m_Layer: 0
   m_Name: R_LittleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12027,7 +12389,7 @@ GameObject:
   - component: {fileID: 5386915486875053097}
   m_Layer: 0
   m_Name: R_Wrist
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12052,6 +12414,7 @@ Transform:
   - {fileID: 8214432837477403118}
   - {fileID: 5150190219029790159}
   - {fileID: 758449251869704358}
+  - {fileID: 3276414183226890453}
   m_Father: {fileID: 4272465505006174471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4955501022547499568
@@ -12065,7 +12428,7 @@ GameObject:
   - component: {fileID: 1759871813629435074}
   m_Layer: 0
   m_Name: R_RingDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12098,7 +12461,7 @@ GameObject:
   - component: {fileID: 1462047461518811911}
   m_Layer: 0
   m_Name: poke_pointer
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12190,7 +12553,7 @@ GameObject:
   - component: {fileID: 5084819562865782403}
   m_Layer: 0
   m_Name: R_MiddleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12221,7 +12584,7 @@ GameObject:
   - component: {fileID: 6644395485117599362}
   m_Layer: 0
   m_Name: Poke Point
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12258,7 +12621,7 @@ GameObject:
   - component: {fileID: 4551110758976542120}
   m_Layer: 0
   m_Name: Pinch Visual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12606,7 +12969,7 @@ GameObject:
   - component: {fileID: 5695288834418085507}
   m_Layer: 0
   m_Name: L_MiddleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12637,9 +13000,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6927443891294192055}
   - component: {fileID: 8346261874631963773}
+  - component: {fileID: 7116533229948305016}
   m_Layer: 0
   m_Name: Box Collider Wrist
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12680,6 +13044,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.075, y: 0.01, z: 0.075}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &7116533229948305016
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5081317246363961172}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5118322577874181012
 GameObject:
   m_ObjectHideFlags: 0
@@ -12691,7 +13082,7 @@ GameObject:
   - component: {fileID: 7046156678810621039}
   m_Layer: 0
   m_Name: L_LittleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12723,7 +13114,7 @@ GameObject:
   - component: {fileID: 3526187511798625094}
   m_Layer: 0
   m_Name: R_ThumbMetacarpal_WeightFix
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12755,7 +13146,7 @@ GameObject:
   - component: {fileID: 5037417878010180204}
   m_Layer: 0
   m_Name: Pinch Grab Pose
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12859,7 +13250,7 @@ GameObject:
   - component: {fileID: 808775521051524777}
   m_Layer: 0
   m_Name: LeftHandQuestVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13037,10 +13428,10 @@ GameObject:
   - component: {fileID: 9087777819651718125}
   m_Layer: 0
   m_Name: ThumbStick_Base
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &5774942111586019529
 Transform:
@@ -13175,7 +13566,7 @@ GameObject:
   - component: {fileID: 1807215004300054782}
   m_Layer: 0
   m_Name: L_IndexIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13207,7 +13598,7 @@ GameObject:
   - component: {fileID: 6629537091113485773}
   m_Layer: 0
   m_Name: L_ThumbDistal.005
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13281,10 +13672,10 @@ GameObject:
   - component: {fileID: 337729385484802931}
   m_Layer: 0
   m_Name: ThumbStick_Base
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &5432494816706183031
 Transform:
@@ -13419,7 +13810,7 @@ GameObject:
   - component: {fileID: 2375019602365049383}
   m_Layer: 0
   m_Name: R_ThumbDistal.004
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13482,7 +13873,7 @@ GameObject:
   - component: {fileID: 1816718215160763598}
   m_Layer: 0
   m_Name: Aim Pose
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13587,7 +13978,7 @@ GameObject:
   - component: {fileID: 1997598657190579848}
   m_Layer: 0
   m_Name: Hand Near-Far Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13904,7 +14295,7 @@ GameObject:
   - component: {fileID: 5282409876611904188}
   m_Layer: 0
   m_Name: R_ThumbDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13936,7 +14327,7 @@ GameObject:
   - component: {fileID: 6784307300727321556}
   m_Layer: 0
   m_Name: R_ThumbDistal.003
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13967,7 +14358,7 @@ GameObject:
   - component: {fileID: 1718719950273366037}
   m_Layer: 0
   m_Name: grabPoint
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13998,7 +14389,7 @@ GameObject:
   - component: {fileID: 8959425330144476777}
   m_Layer: 0
   m_Name: R_RingIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14030,7 +14421,7 @@ GameObject:
   - component: {fileID: 3599436822679473214}
   m_Layer: 0
   m_Name: R_MiddleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14062,7 +14453,7 @@ GameObject:
   - component: {fileID: 4782926219614440919}
   m_Layer: 0
   m_Name: R_MiddleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14096,10 +14487,10 @@ GameObject:
   - component: {fileID: 3985315588830922553}
   m_Layer: 0
   m_Name: Button_Home
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4918177383973742928
 Transform:
@@ -14187,7 +14578,7 @@ GameObject:
   - component: {fileID: 6447034057666520839}
   m_Layer: 0
   m_Name: LineVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14575,7 +14966,7 @@ GameObject:
   - component: {fileID: 4338874600586074472}
   m_Layer: 0
   m_Name: L_RingTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14607,7 +14998,7 @@ GameObject:
   - component: {fileID: 7129373214456378427}
   m_Layer: 0
   m_Name: RightHand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14725,7 +15116,7 @@ GameObject:
   - component: {fileID: 2563783508927764012}
   m_Layer: 0
   m_Name: L_MiddleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14852,7 +15243,7 @@ GameObject:
   - component: {fileID: 40077759213400500}
   m_Layer: 0
   m_Name: Palm
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14953,7 +15344,7 @@ GameObject:
   - component: {fileID: 2264595335942136233}
   m_Layer: 0
   m_Name: L_ThumbDistal.003
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14984,7 +15375,7 @@ GameObject:
   - component: {fileID: 5249342576940253589}
   m_Layer: 0
   m_Name: L_LittleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15005,6 +15396,87 @@ Transform:
   - {fileID: 7562155883531849495}
   m_Father: {fileID: 6228241426286965141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6404571300917270570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2381343102381190732}
+  - component: {fileID: 2101228385182326546}
+  - component: {fileID: 2475021459159528302}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Hand
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2381343102381190732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6404571300917270570}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4743503792106441460}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &2101228385182326546
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6404571300917270570}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &2475021459159528302
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6404571300917270570}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.0116235
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6407118278691188854
 GameObject:
   m_ObjectHideFlags: 0
@@ -15016,7 +15488,7 @@ GameObject:
   - component: {fileID: 492061179968284865}
   m_Layer: 0
   m_Name: L_ThumbDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15049,7 +15521,7 @@ GameObject:
   - component: {fileID: 4648501960043882525}
   m_Layer: 0
   m_Name: RightHand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15297,7 +15769,7 @@ GameObject:
   - component: {fileID: 6683925883801028384}
   m_Layer: 0
   m_Name: L_MiddleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15333,7 +15805,7 @@ GameObject:
   - component: {fileID: 2757284855591061907}
   m_Layer: 0
   m_Name: Hand Poke Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15580,7 +16052,7 @@ GameObject:
   - component: {fileID: 7804432953259308851}
   m_Layer: 0
   m_Name: RightHandAndroidXRVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15756,7 +16228,7 @@ GameObject:
   - component: {fileID: 2517695570078542306}
   m_Layer: 0
   m_Name: R_IndexIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15787,9 +16259,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6234922221930256251}
   - component: {fileID: 5918635091571695621}
+  - component: {fileID: 8285768519447021627}
   m_Layer: 0
   m_Name: Capsule Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15832,6 +16305,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &8285768519447021627
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6887046873862330890}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6913410469310660722
 GameObject:
   m_ObjectHideFlags: 0
@@ -15843,7 +16343,7 @@ GameObject:
   - component: {fileID: 2001113336764715587}
   m_Layer: 0
   m_Name: L_ThumbMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15876,7 +16376,7 @@ GameObject:
   - component: {fileID: 9165709270584702878}
   m_Layer: 0
   m_Name: UI Press Input
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15951,7 +16451,7 @@ GameObject:
   - component: {fileID: 107111494740710540}
   m_Layer: 0
   m_Name: R_IndexMetacarpal_WeightFix
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15981,9 +16481,10 @@ GameObject:
   m_Component:
   - component: {fileID: 58431487582209625}
   - component: {fileID: 7655448416815892943}
+  - component: {fileID: 6827967357042101491}
   m_Layer: 0
   m_Name: 'Capsule Collider Distal '
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16026,6 +16527,33 @@ CapsuleCollider:
   m_Height: 0.03
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6827967357042101491
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6979149220322585915}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7002452392021380340
 GameObject:
   m_ObjectHideFlags: 0
@@ -16040,7 +16568,7 @@ GameObject:
   - component: {fileID: 3054400855333753829}
   m_Layer: 0
   m_Name: Pinch Point Stabilized
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16155,7 +16683,7 @@ GameObject:
   - component: {fileID: 5161016447543072938}
   m_Layer: 0
   m_Name: XRController_Thumbstick_Buttons
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16194,7 +16722,7 @@ GameObject:
   - component: {fileID: 3700153711278880674}
   m_Layer: 6
   m_Name: Contact Spawn Trigger
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16299,7 +16827,7 @@ GameObject:
   - component: {fileID: 7562155883531849495}
   m_Layer: 0
   m_Name: L_LittleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16329,9 +16857,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7814558399184605751}
   - component: {fileID: 2393615163204356730}
+  - component: {fileID: 8736503743833702886}
   m_Layer: 0
   m_Name: Capsule  Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16374,6 +16903,33 @@ CapsuleCollider:
   m_Height: 0.03
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &8736503743833702886
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7130918168020369356}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7142961466847284611
 GameObject:
   m_ObjectHideFlags: 0
@@ -16387,10 +16943,10 @@ GameObject:
   - component: {fileID: 2913229622862830247}
   m_Layer: 0
   m_Name: Button_Home
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &9176817039212195159
 Transform:
@@ -16475,7 +17031,7 @@ GameObject:
   - component: {fileID: 2252100167006407544}
   m_Layer: 0
   m_Name: L_IndexIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16509,10 +17065,10 @@ GameObject:
   - component: {fileID: 5939293847718342520}
   m_Layer: 0
   m_Name: Button_B
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &7318834147799782632
 Transform:
@@ -16597,7 +17153,7 @@ GameObject:
   - component: {fileID: 5726413552867291223}
   m_Layer: 0
   m_Name: R_LittleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16629,7 +17185,7 @@ GameObject:
   - component: {fileID: 293689776962761219}
   m_Layer: 0
   m_Name: L_MiddleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16661,7 +17217,7 @@ GameObject:
   - component: {fileID: 5372183137785745754}
   m_Layer: 0
   m_Name: R_IndexTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16697,7 +17253,7 @@ GameObject:
   - component: {fileID: 2081295671917631334}
   m_Layer: 0
   m_Name: Teleport Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17381,7 +17937,7 @@ GameObject:
   - component: {fileID: 7092497484165899086}
   m_Layer: 0
   m_Name: Pinch Point Stabilized
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17496,7 +18052,7 @@ GameObject:
   - component: {fileID: 6459111641775134077}
   m_Layer: 0
   m_Name: Poke Point Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17532,7 +18088,7 @@ GameObject:
   - component: {fileID: 3866843106373247747}
   m_Layer: 0
   m_Name: Poke
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17701,7 +18257,7 @@ GameObject:
   - component: {fileID: 7101979561288087762}
   m_Layer: 0
   m_Name: UniversalController
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17743,7 +18299,7 @@ GameObject:
   - component: {fileID: 6745858894382695800}
   m_Layer: 0
   m_Name: Hand Near-Far Interactor Affordances
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18060,7 +18616,7 @@ GameObject:
   - component: {fileID: 1422869486821844796}
   m_Layer: 0
   m_Name: XRController_Thumbstick_Buttons
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18097,10 +18653,10 @@ GameObject:
   - component: {fileID: 610335994467190458}
   m_Layer: 0
   m_Name: TouchPad
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4893644841291492324
 Transform:
@@ -18184,9 +18740,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4390217056092354090}
   - component: {fileID: 4856231401607002449}
+  - component: {fileID: 1322536960263787350}
   m_Layer: 0
   m_Name: Capsule  Collider Proximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18229,6 +18786,33 @@ CapsuleCollider:
   m_Height: 0.03
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1322536960263787350
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7555639642240144523}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7566322118620472773
 GameObject:
   m_ObjectHideFlags: 0
@@ -18240,7 +18824,7 @@ GameObject:
   - component: {fileID: 6934211699589527844}
   m_Layer: 0
   m_Name: R_RingProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18276,7 +18860,7 @@ GameObject:
   - component: {fileID: 2204419783993266267}
   m_Layer: 0
   m_Name: Left Controller
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18456,7 +19040,7 @@ GameObject:
   - component: {fileID: 8593929580777618223}
   m_Layer: 0
   m_Name: R_MiddleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18488,7 +19072,7 @@ GameObject:
   - component: {fileID: 8363887229680119930}
   m_Layer: 0
   m_Name: L_MiddleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18520,7 +19104,7 @@ GameObject:
   - component: {fileID: 6990508047231793697}
   m_Layer: 0
   m_Name: L_ThumbProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18553,7 +19137,7 @@ GameObject:
   - component: {fileID: 1490454183233221322}
   m_Layer: 0
   m_Name: Select Input
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18630,7 +19214,7 @@ GameObject:
   - component: {fileID: 540112024454932398}
   m_Layer: 0
   m_Name: Poke Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18767,7 +19351,7 @@ GameObject:
   - component: {fileID: 1785749557957377039}
   m_Layer: 0
   m_Name: Right Controller Visual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18859,7 +19443,7 @@ GameObject:
   - component: {fileID: 406624832305136446}
   m_Layer: 0
   m_Name: L_IndexTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18894,7 +19478,7 @@ GameObject:
   - component: {fileID: 3162102436731952285}
   m_Layer: 0
   m_Name: RightHandQuestVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19070,7 +19654,7 @@ GameObject:
   - component: {fileID: 8670938130108817751}
   m_Layer: 0
   m_Name: R_Wrist_WeightFix
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19105,7 +19689,7 @@ GameObject:
   - component: {fileID: 8356490235237941215}
   m_Layer: 0
   m_Name: Pinch Visual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19454,7 +20038,7 @@ GameObject:
   - component: {fileID: 5701568011242688816}
   m_Layer: 0
   m_Name: LeftHand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19572,7 +20156,7 @@ GameObject:
   - component: {fileID: 5208964280997588117}
   m_Layer: 0
   m_Name: L_ThumbTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19603,7 +20187,7 @@ GameObject:
   - component: {fileID: 3296435100726923732}
   m_Layer: 0
   m_Name: L_Palm
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19634,7 +20218,7 @@ GameObject:
   - component: {fileID: 513629677015230354}
   m_Layer: 0
   m_Name: R_RingTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19665,7 +20249,7 @@ GameObject:
   - component: {fileID: 6729132044718546117}
   m_Layer: 0
   m_Name: R_LittleMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19698,7 +20282,7 @@ GameObject:
   - component: {fileID: 5527425831775353061}
   m_Layer: 0
   m_Name: UI Press Input
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19778,7 +20362,7 @@ GameObject:
   - component: {fileID: 5160148010198604971}
   m_Layer: 0
   m_Name: Near-Far Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20149,7 +20733,7 @@ GameObject:
   - component: {fileID: 8947571225790246198}
   m_Layer: 0
   m_Name: R_MiddleTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20180,7 +20764,7 @@ GameObject:
   - component: {fileID: 590438397023533048}
   m_Layer: 0
   m_Name: R_LittleProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20217,7 +20801,7 @@ GameObject:
   - component: {fileID: 4614026532219203536}
   m_Layer: 0
   m_Name: Teleport Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20898,7 +21482,7 @@ GameObject:
   - component: {fileID: 1202642509056917370}
   m_Layer: 0
   m_Name: R_MiddleIntermediate
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20932,10 +21516,10 @@ GameObject:
   - component: {fileID: 7296306300117896365}
   m_Layer: 0
   m_Name: Trigger
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6638883194883368428
 Transform:
@@ -21024,7 +21608,7 @@ GameObject:
   - component: {fileID: 3840854361262018297}
   m_Layer: 6
   m_Name: Contact Spawn Trigger
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21129,7 +21713,7 @@ GameObject:
   - component: {fileID: 2028931012739867495}
   m_Layer: 0
   m_Name: L_IndexMetacarpal_WeightFix
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21164,7 +21748,7 @@ GameObject:
   - component: {fileID: 4997506979026992448}
   m_Layer: 0
   m_Name: Near-Far Interactor
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21492,7 +22076,7 @@ GameObject:
   - component: {fileID: 7785096971452049774}
   m_Layer: 0
   m_Name: R_LittleDistal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21524,7 +22108,7 @@ GameObject:
   - component: {fileID: 1667197873745784252}
   m_Layer: 0
   m_Name: L_IndexTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21555,7 +22139,7 @@ GameObject:
   - component: {fileID: 8912407984326484298}
   m_Layer: 0
   m_Name: L_IndexProximal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21587,7 +22171,7 @@ GameObject:
   - component: {fileID: 6222641205860081779}
   m_Layer: 0
   m_Name: GrabPoint
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21617,9 +22201,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4153207748891325899}
   - component: {fileID: 5462220479421524366}
+  - component: {fileID: 1727302669072205915}
   m_Layer: 0
   m_Name: 'Capsule Collider Distal '
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21662,6 +22247,33 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1727302669072205915
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8870663284175114923}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8953378560560151071
 GameObject:
   m_ObjectHideFlags: 0
@@ -21676,7 +22288,7 @@ GameObject:
   - component: {fileID: 6014512664977945097}
   m_Layer: 0
   m_Name: LineVisual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22064,7 +22676,7 @@ GameObject:
   - component: {fileID: 506664887367557211}
   m_Layer: 0
   m_Name: Pinch Visual Offset
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22095,7 +22707,7 @@ GameObject:
   - component: {fileID: 3256905476857400235}
   m_Layer: 0
   m_Name: R_IndexMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22158,7 +22770,7 @@ GameObject:
   - component: {fileID: 5686595563425663391}
   m_Layer: 0
   m_Name: R_RingMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22191,7 +22803,7 @@ GameObject:
   - component: {fileID: 530147052808180594}
   m_Layer: 0
   m_Name: Left Controller Visual
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22285,10 +22897,10 @@ GameObject:
   - component: {fileID: 1895807455818947199}
   m_Layer: 0
   m_Name: Bumper
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4721565897378529376
 Transform:
@@ -22373,7 +22985,7 @@ GameObject:
   - component: {fileID: 5140858956682013796}
   m_Layer: 0
   m_Name: L_IndexMetacarpal
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22405,7 +23017,7 @@ GameObject:
   - component: {fileID: 5370280178548608830}
   m_Layer: 0
   m_Name: L_RingTip
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22436,6 +23048,10 @@ PrefabInstance:
     - target: {fileID: 8429981633443581377, guid: 6c8af5c8012f01440af6cb2bc3eb987c, type: 3}
       propertyPath: m_Name
       value: TunnelingVignette
+      objectReference: {fileID: 0}
+    - target: {fileID: 8429981633443581377, guid: 6c8af5c8012f01440af6cb2bc3eb987c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8429981633443581382, guid: 6c8af5c8012f01440af6cb2bc3eb987c, type: 3}
       propertyPath: m_RootOrder
