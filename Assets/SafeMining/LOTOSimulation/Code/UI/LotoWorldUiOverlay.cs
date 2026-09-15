@@ -5,7 +5,10 @@ using TMPro;
 
 public class LotoWorldUiOverlay : MonoBehaviour
 {
+    #region Overlay
+
     [SerializeField] private int sortingOrder = 500;
+
 
     private void Awake()
     {
@@ -56,4 +59,7 @@ public class LotoWorldUiOverlay : MonoBehaviour
             text.fontMaterial = overlay;
         }
     }
+
+    #endregion
 }
+

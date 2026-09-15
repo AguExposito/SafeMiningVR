@@ -8096,7 +8096,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001836275}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d088cd337b986d14daba96fb3a790756, type: 3}
   m_Name: 
@@ -8105,8 +8105,6 @@ MonoBehaviour:
   languages:
   - language: 0
     filename: es
-  - language: 1
-    filename: en
   languageDropdown: {fileID: 0}
 --- !u!114 &1001836285
 MonoBehaviour:
@@ -10689,7 +10687,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 6b8164d376626c34282a0f1fe16372a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

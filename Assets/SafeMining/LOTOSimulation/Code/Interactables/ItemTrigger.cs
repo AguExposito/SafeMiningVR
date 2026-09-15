@@ -7,10 +7,10 @@ public class ItemTrigger : MonoBehaviour
 {
     public bool triggerCompletedEvent = false;
     [Header("Hold Settings")]
-    [Tooltip("Tiempo necesario para completar la interacciÛn.")]
+    [Tooltip("Tiempo necesario para completar la interacci√≥n.")]
     [SerializeField] private float holdDuration = 2f;
 
-    [Tooltip("Si est· activo, el evento solo podr· ejecutarse una vez.")]
+    [Tooltip("Si est√° activo, el evento solo podr√° ejecutarse una vez.")]
     [SerializeField] private bool triggerOnce = false;
 
 
@@ -29,15 +29,15 @@ public class ItemTrigger : MonoBehaviour
     [Tooltip("Image utilizada para mostrar el progreso de carga.")]
     [SerializeField] private Image reticleFill;
 
-    [Tooltip("Objeto raÌz de la retÌcula.")]
+    [Tooltip("Objeto ra√≠z de la ret√≠cula.")]
     [SerializeField] private GameObject reticleObject;
 
 
     [Header("Events")]
-    [Tooltip("Se ejecuta cuando comienza la interacciÛn.")]
+    [Tooltip("Se ejecuta cuando comienza la interacci√≥n.")]
     public UnityEvent OnEnter;
 
-    [Tooltip("Se ejecuta cuando termina la interacciÛn antes de completarse.")]
+    [Tooltip("Se ejecuta cuando termina la interacci√≥n antes de completarse.")]
     public UnityEvent OnExit;
 
     [Tooltip("Se ejecuta cuando la carga llega al 100%.")]
@@ -53,7 +53,7 @@ public class ItemTrigger : MonoBehaviour
     private bool isInside;
     private bool hasTriggered;
 
-    // Estado de cada mÈtodo de detecciÛn.
+    // Estado de cada m√©todo de detecci√≥n.
     private bool colliderInside;
     private bool raycastInside;
 
@@ -211,7 +211,7 @@ public class ItemTrigger : MonoBehaviour
     private void UpdateInteractionState()
     {
         // Si seguimos dentro por cualquiera de los dos sistemas,
-        // no debemos cancelar la interacciÛn.
+        // no debemos cancelar la interacci√≥n.
         bool stillInside = colliderInside || raycastInside;
 
         if (stillInside)
@@ -250,10 +250,10 @@ public class ItemTrigger : MonoBehaviour
         {
             /*
              * Para interacciones repetibles no dejamos la
-             * retÌcula permanentemente al 100%.
+             * ret√≠cula permanentemente al 100%.
              *
-             * El jugador deber· salir y volver a entrar
-             * para comenzar otra interacciÛn.
+             * El jugador deber√° salir y volver a entrar
+             * para comenzar otra interacci√≥n.
              */
             currentTime = 0f;
             hasTriggered = false;

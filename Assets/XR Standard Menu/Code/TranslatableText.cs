@@ -73,6 +73,11 @@ public class TranslatableText : MonoBehaviour
 
     public void UpdateText()
     {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+
         if (translationID.StartsWith("$"))
         {
             ExceptionSystemTexts(translationID);

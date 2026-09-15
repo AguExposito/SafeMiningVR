@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class Util_LotoSimulationBridge
 {
@@ -92,6 +93,10 @@ public static class Util_LotoSimulationBridge
         }
 
         center.simulationOrchestratorManager.ShowSessionSummary();
+    }
+
+    public static void NotifyS3Briefing()
+    {
     }
 
     #endregion

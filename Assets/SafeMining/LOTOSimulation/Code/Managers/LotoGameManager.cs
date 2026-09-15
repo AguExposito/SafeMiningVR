@@ -10,6 +10,8 @@ public class LotoGameManager : MonoBehaviour
     public const int SignRequired = 1;
     public const int PuddleRequired = 2;
     public const int ExtinguisherRequired = 1;
+    public const int S2RequiredTotal = ToolsRequired + SignRequired + PuddleRequired + ExtinguisherRequired;
+    public const int S3RequiredSteps = 6;
     public const int DefectScoreMax = 10;
 
     public const string Scenario1SceneName = "VR-LOTO-S1";
@@ -61,6 +63,10 @@ public class LotoGameManager : MonoBehaviour
     [SerializeField] private bool s2CompleteRaised;
     [SerializeField] private bool s3CompleteRaised;
     [SerializeField] private bool s3StartTooEarlyRaised;
+    [SerializeField] private bool s2InspectionClosed;
+    [SerializeField] private int s2FrozenReports;
+    [SerializeField] private bool s3ScoreFrozen;
+    [SerializeField] private int s3FrozenStepCount;
 
     public bool HelmetGood => helmetGood;
     public bool GlassesGood => glassesGood;
@@ -90,6 +96,8 @@ public class LotoGameManager : MonoBehaviour
     public bool LockPlaced => lockPlaced;
     public bool StartedBeforeSequence => startedBeforeSequence;
     public bool ZeroEnergyVerified => zeroEnergyVerified;
+    public int S2ScoredReportCount => s2InspectionClosed ? s2FrozenReports : CountS2Reports();
+    public int S3ScoredStepCount => s3ScoreFrozen ? s3FrozenStepCount : 0;
 
     public bool IsS1Complete => helmetGood && glassesGood && vestGood && glovesGood && bootsGood;
 
@@ -274,68 +282,44 @@ public class LotoGameManager : MonoBehaviour
         IncrementHazard(ref extinguisherReported, ExtinguisherRequired);
     }
 
+    public void NotifyEquipmentUsed()
+    {
+        CloseS2Inspection();
+    }
+
     public void NotifyStop()
     {
-        if (stopPressed)
-        {
-            return;
-        }
-
-        stopPressed = true;
+        TrySetS3Flag(ref stopPressed, true);
     }
 
     public void NotifyPanelOpened()
     {
-        if (panelOpened)
-        {
-            return;
-        }
-
-        panelOpened = true;
+        TrySetS3Flag(ref panelOpened, stopPressed);
     }
 
     public void NotifyPowerCut()
     {
-        if (powerCut)
-        {
-            return;
-        }
-
-        powerCut = true;
+        TrySetS3Flag(ref powerCut, panelOpened);
     }
 
     public void NotifyPanelClosed()
     {
-        if (panelClosed)
-        {
-            return;
-        }
-
-        panelClosed = true;
+        TrySetS3Flag(ref panelClosed, powerCut);
     }
 
     public void NotifyHaspPlaced()
     {
-        if (haspPlaced)
-        {
-            return;
-        }
-
-        haspPlaced = true;
+        TrySetS3Flag(ref haspPlaced, panelClosed);
     }
 
     public void NotifyLockPlaced()
     {
-        if (lockPlaced)
-        {
-            return;
-        }
-
-        lockPlaced = true;
+        TrySetS3Flag(ref lockPlaced, haspPlaced);
     }
 
     public void CheckStartButton()
     {
+        CloseS2Inspection();
         if (s3CompleteRaised)
         {
             return;
@@ -343,22 +327,35 @@ public class LotoGameManager : MonoBehaviour
 
         if (!IsS3SequenceReady)
         {
-            startedBeforeSequence = true;
             if (s3StartTooEarlyRaised)
             {
                 return;
             }
 
+            startedBeforeSequence = true;
             s3StartTooEarlyRaised = true;
+            FreezeS3Score();
+            Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveLotoSequenceIndex, false);
+            Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveZeroEnergyIndex, false);
+            Util_LotoSimulationBridge.NotifySubtitle("loto_s3_alert_incomplete", isError: true);
             onS3StartTooEarly?.Invoke();
             S3StartTooEarly?.Invoke();
             return;
         }
 
-        zeroEnergyVerified = true;
+        if (!startedBeforeSequence)
+        {
+            zeroEnergyVerified = true;
+            FreezeS3Score();
+            Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveLotoSequenceIndex, true);
+            Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveZeroEnergyIndex, true);
+        }
+
         s3CompleteRaised = true;
+        LockConveyorBelts();
         onS3Complete?.Invoke();
         S3Completed?.Invoke();
+        Util_LotoSimulationBridge.NotifySessionSummary();
     }
 
     public void ResetBoard()
@@ -394,6 +391,10 @@ public class LotoGameManager : MonoBehaviour
         s2CompleteRaised = false;
         s3CompleteRaised = false;
         s3StartTooEarlyRaised = false;
+        s2InspectionClosed = false;
+        s2FrozenReports = 0;
+        s3ScoreFrozen = false;
+        s3FrozenStepCount = 0;
     }
     public bool GetPowerCutState() { 
         if(powerCut) {
@@ -477,7 +478,7 @@ public class LotoGameManager : MonoBehaviour
 
     private void IncrementHazard(ref int count, int required)
     {
-        if (count >= required)
+        if (s2InspectionClosed || count >= required)
         {
             return;
         }
@@ -506,8 +507,104 @@ public class LotoGameManager : MonoBehaviour
         }
 
         s2CompleteRaised = true;
+        Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveHazardReportIndex, true);
+        Util_LotoSimulationBridge.NotifySubtitle("loto_s2_step_ready");
         onS2Complete?.Invoke();
         S2Completed?.Invoke();
+        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
+        {
+            ControlCenter.Instance.simulationOrchestratorManager.OnScenario2Completed();
+        }
+    }
+
+    private void CloseS2Inspection()
+    {
+        if (s2InspectionClosed)
+        {
+            return;
+        }
+
+        s2InspectionClosed = true;
+        s2FrozenReports = CountS2Reports();
+        if (!s2CompleteRaised)
+        {
+            Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveHazardReportIndex, false);
+        }
+    }
+
+    private void TrySetS3Flag(ref bool flag, bool prerequisite)
+    {
+        CloseS2Inspection();
+        if (!prerequisite || flag)
+        {
+            return;
+        }
+
+        flag = true;
+    }
+
+    private void FreezeS3Score()
+    {
+        if (s3ScoreFrozen)
+        {
+            return;
+        }
+
+        s3ScoreFrozen = true;
+        s3FrozenStepCount = CountS3Steps();
+    }
+
+    private int CountS2Reports()
+    {
+        return Mathf.Min(toolsReported, ToolsRequired)
+            + Mathf.Min(signReported, SignRequired)
+            + Mathf.Min(puddlesReported, PuddleRequired)
+            + Mathf.Min(extinguisherReported, ExtinguisherRequired);
+    }
+
+    private int CountS3Steps()
+    {
+        int count = 0;
+        if (stopPressed)
+        {
+            count++;
+        }
+
+        if (panelOpened)
+        {
+            count++;
+        }
+
+        if (powerCut)
+        {
+            count++;
+        }
+
+        if (panelClosed)
+        {
+            count++;
+        }
+
+        if (haspPlaced)
+        {
+            count++;
+        }
+
+        if (lockPlaced)
+        {
+            count++;
+        }
+
+        return count;
+    }
+
+    private static void LockConveyorBelts()
+    {
+        ConveyorMovement[] belts = FindObjectsByType<ConveyorMovement>(FindObjectsSortMode.None);
+        for (int i = 0; i < belts.Length; i++)
+        {
+            belts[i].SetLocked(true);
+        }
     }
 
     #endregion

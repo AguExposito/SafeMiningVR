@@ -23,6 +23,11 @@ public class ElectricalBoxDoor : MonoBehaviour
     }
 
     public void TriggerDoorAnimation() {
+        if (lotoGameEventRelay != null)
+        {
+            lotoGameEventRelay.NotifyEquipmentUsed();
+        }
+
         doorAnimatorController.SetTrigger("OpenClose");
         hingeCollider.enabled = false; // Disable the hinge collider during the animation
         isDoorOpen = !isDoorOpen; // Toggle the door state

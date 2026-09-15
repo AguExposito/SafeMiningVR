@@ -63,13 +63,21 @@ Completing 5 good still raises `S1Completed` even if defectives were grabbed.
 | `NotifyPuddle` | 2 |
 | `NotifyExtinguisher` | 1 |
 
+First S3 control (`NotifyStop`, `NotifyPanelOpened`, `CheckStartButton`, `NotifyEquipmentUsed` on the electrical door) **closes** inspection: further reports no longer count. HUD `HazardReport` is achieved only if `IsS2Complete` at that moment; session score is `25% × reported/7` (still reduced by decoy false positives).
+
 Spec HU-222 still names four unsafe-condition *types*. Operational gates use these **counts**, not `HazardInspectionManager` and not “4/4 spots”.
 
 ### S3 — sequence
 
+Flags are **ordered**. Each `Notify*` no-ops unless the previous flag is set:
+
 `NotifyStop` → `NotifyPanelOpened` → `NotifyPowerCut` → `NotifyPanelClosed` → `NotifyHaspPlaced` → `NotifyLockPlaced`.
 
-`CheckStartButton`: if sequence not ready → `S3StartTooEarly` (Malo 1); if ready → `zeroEnergyVerified` + `S3Completed`.
+`CheckStartButton`:
+- Sequence not ready → `S3StartTooEarly` (Malo 1), subtitle `loto_s3_alert_incomplete`, freeze S3 step score (`35% × steps/6`), no zero-energy.
+- Sequence ready (and no early Start) → `zeroEnergyVerified` + `S3Completed`, lock conveyor, session summary. Green Start must **not** restart the belt (`ConveyorMovement.SetMovementState(true)` is ignored).
+- Early Start then later complete sequence → still ends the simulation; zero-energy stays false; step score stays frozen.
+- Sequence points are awarded only after `CheckStartButton` (frozen). Abandon before Start scores S3 as 0.
 
 Lock color / tag text remain **interactable validation** (spec still requires red lock + PELIGRO NO OPERAR). The board has **no** `NotifyTag` flag. `IsS3SequenceReady` is Stop + panel opened + power cut + panel closed + hasp + lock.
 

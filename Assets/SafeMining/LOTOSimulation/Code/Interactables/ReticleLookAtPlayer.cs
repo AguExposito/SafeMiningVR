@@ -3,11 +3,11 @@ using UnityEngine;
 public class ReticleLookAtPlayer : MonoBehaviour
 {
     [Header("Target")]
-    [Tooltip("Transform del jugador. Si está vacío, buscará la Main Camera.")]
+    [Tooltip("Transform del jugador. Si estÃ¡ vacÃ­o, buscarÃ¡ la Main Camera.")]
     [SerializeField] private Transform player;
 
     [Header("Rotation")]
-    [Tooltip("Velocidad de rotación sobre el eje Y.")]
+    [Tooltip("Velocidad de rotaciÃ³n sobre el eje Y.")]
     [SerializeField] private float rotationSpeed = 90f;
 
     private void Start()
@@ -25,12 +25,12 @@ public class ReticleLookAtPlayer : MonoBehaviour
         if (player == null)
             return;
 
-        // Dirección desde la retícula hacia el jugador.
+        // DirecciÃ³n desde la retÃ­cula hacia el jugador.
         Vector3 direction = player.position - transform.position;
 
         if (direction.sqrMagnitude > 0.001f)
         {
-            // Hacer que la retícula mire al jugador.
+            // Hacer que la retÃ­cula mire al jugador.
             Quaternion lookRotation = Quaternion.LookRotation(direction);
 
             transform.rotation = Quaternion.Slerp(
@@ -40,7 +40,7 @@ public class ReticleLookAtPlayer : MonoBehaviour
             );
         }
 
-        // Rotación adicional sobre el eje Y.
+        // RotaciÃ³n adicional sobre el eje Y.
         transform.Rotate(
             0f,
             rotationSpeed * Time.deltaTime,

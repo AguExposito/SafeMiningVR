@@ -62,17 +62,39 @@ public static class LotoSessionScore
 
     private static float ComputePartial(string objectiveId, bool achieved, int weight, int falsePositiveCount)
     {
+        LotoGameManager board = LotoGameManager.Instance;
+
+        if (objectiveId == LotoObjectiveIds.HazardReport)
+        {
+            float ratio = 0f;
+            if (board != null)
+            {
+                ratio = board.S2ScoredReportCount / (float)LotoGameManager.S2RequiredTotal;
+            }
+            else if (achieved)
+            {
+                ratio = 1f;
+            }
+
+            float penaltyRatio = Mathf.Max(0f, 1f - (falsePositiveCount / (float)RequiredHazardCount));
+            return Mathf.Round(weight * Mathf.Clamp01(ratio) * penaltyRatio);
+        }
+
+        if (objectiveId == LotoObjectiveIds.LotoSequence)
+        {
+            if (board != null)
+            {
+                return Mathf.Round(weight * (board.S3ScoredStepCount / (float)LotoGameManager.S3RequiredSteps));
+            }
+
+            return achieved ? weight : 0f;
+        }
+
         if (!achieved)
         {
             return 0f;
         }
 
-        if (objectiveId != LotoObjectiveIds.HazardReport)
-        {
-            return weight;
-        }
-
-        float penaltyRatio = Mathf.Max(0f, 1f - (falsePositiveCount / (float)RequiredHazardCount));
-        return Mathf.Round(weight * penaltyRatio);
+        return weight;
     }
 }

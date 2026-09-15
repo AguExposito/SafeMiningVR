@@ -101,6 +101,11 @@ public class LotoGameEventRelay : MonoBehaviour
         Forward(manager => manager.NotifyExtinguisher());
     }
 
+    public void NotifyEquipmentUsed()
+    {
+        Forward(manager => manager.NotifyEquipmentUsed());
+    }
+
     public void NotifyStop()
     {
         Forward(manager => manager.NotifyStop());

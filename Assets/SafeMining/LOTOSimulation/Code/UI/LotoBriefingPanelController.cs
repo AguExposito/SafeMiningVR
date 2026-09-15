@@ -12,26 +12,30 @@ public class LotoBriefingPanelController : MonoBehaviour
     private Canvas canvas;
     private GraphicRaycaster graphicRaycaster;
     private TrackedDeviceGraphicRaycaster trackedRaycaster;
+    private string authoredTitle;
+    private string authoredBody;
+    private string authoredBeginLabel;
+    private string authoredCloseLabel;
+    private string authoredReopenLabel;
 
     #region Lifecycle
 
     private void Awake()
     {
         CacheComponents();
+        CacheAuthoredTexts();
+        DisableAuthoredTextOverrides();
         ConfigureInteraction();
-        ApplyContent();
     }
 
     private void OnEnable()
     {
         ConfigureInteraction();
-        ApplyContent();
     }
 
     private void Start()
     {
         ConfigureInteraction();
-        ApplyContent();
         StartCoroutine(BindAfterHudInitialize());
     }
 
@@ -54,9 +58,73 @@ public class LotoBriefingPanelController : MonoBehaviour
     private IEnumerator BindAfterHudInitialize()
     {
         yield return null;
+        RestoreAuthoredTexts();
         ConfigureInteraction();
-        ApplyContent();
         BindButtons();
+    }
+
+    private void CacheAuthoredTexts()
+    {
+        authoredTitle = ReadText(briefingPanel != null ? briefingPanel.titleText : null);
+        authoredBody = ReadText(briefingPanel != null ? briefingPanel.bodyText : null);
+        authoredBeginLabel = ReadButtonLabel(briefingPanel != null ? briefingPanel.beginButton : null);
+        authoredCloseLabel = ReadButtonLabel(briefingPanel != null ? briefingPanel.closeButton : null);
+        authoredReopenLabel = ReadButtonLabel(briefingPanel != null ? briefingPanel.reopenButton : null);
+    }
+
+    private void RestoreAuthoredTexts()
+    {
+        WriteText(briefingPanel != null ? briefingPanel.titleText : null, authoredTitle);
+        WriteText(briefingPanel != null ? briefingPanel.bodyText : null, authoredBody);
+        WriteButtonLabel(briefingPanel != null ? briefingPanel.beginButton : null, authoredBeginLabel);
+        WriteButtonLabel(briefingPanel != null ? briefingPanel.closeButton : null, authoredCloseLabel);
+        WriteButtonLabel(briefingPanel != null ? briefingPanel.reopenButton : null, authoredReopenLabel);
+    }
+
+    private static string ReadText(TMP_Text field)
+    {
+        return field != null ? field.text : null;
+    }
+
+    private static void WriteText(TMP_Text field, string value)
+    {
+        if (field != null && !string.IsNullOrEmpty(value))
+        {
+            field.text = value;
+        }
+    }
+
+    private static string ReadButtonLabel(Button button)
+    {
+        if (button == null)
+        {
+            return null;
+        }
+
+        TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
+        return ReadText(label);
+    }
+
+    private static void WriteButtonLabel(Button button, string value)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        WriteText(button.GetComponentInChildren<TMP_Text>(true), value);
+    }
+
+    private void DisableAuthoredTextOverrides()
+    {
+        TranslatableText[] translatableTexts = GetComponentsInChildren<TranslatableText>(true);
+        for (int i = 0; i < translatableTexts.Length; i++)
+        {
+            if (translatableTexts[i] != null)
+            {
+                translatableTexts[i].enabled = false;
+            }
+        }
     }
 
     #endregion
@@ -188,96 +256,6 @@ public class LotoBriefingPanelController : MonoBehaviour
 
     #endregion
 
-    #region Content
-
-    private void ApplyContent()
-    {
-        if (briefingPanel == null)
-        {
-            return;
-        }
-
-        int scenarioIndex = ResolveScenarioIndex();
-        ApplyText(briefingPanel.titleText, ResolveTitleKey(scenarioIndex), "Title");
-        ApplyText(briefingPanel.bodyText, ResolveBodyKey(scenarioIndex), "Body");
-        ApplyButtonLabel(briefingPanel.beginButton, "loto_briefing_begin");
-        ApplyButtonLabel(briefingPanel.closeButton, "loto_briefing_close");
-        ApplyButtonLabel(briefingPanel.reopenButton, "loto_briefing_reopen");
-    }
-
-    private static int ResolveScenarioIndex()
-    {
-        if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
-        {
-            return ControlCenter.Instance.simulationOrchestratorManager.CurrentScenarioIndex;
-        }
-
-        return LotoSimulationConstants.ScenarioEpp;
-    }
-
-    private static string ResolveTitleKey(int scenarioIndex)
-    {
-        if (scenarioIndex == LotoSimulationConstants.ScenarioInspection)
-        {
-            return "loto_s2_briefing_title";
-        }
-
-        if (scenarioIndex >= LotoSimulationConstants.ScenarioLoto)
-        {
-            return "loto_s3_briefing_title";
-        }
-
-        return "loto_briefing_title";
-    }
-
-    private static string ResolveBodyKey(int scenarioIndex)
-    {
-        if (scenarioIndex == LotoSimulationConstants.ScenarioInspection)
-        {
-            return "loto_s2_briefing_body";
-        }
-
-        if (scenarioIndex >= LotoSimulationConstants.ScenarioLoto)
-        {
-            return "loto_s3_briefing_body";
-        }
-
-        return "loto_s1_briefing_body";
-    }
-
-    private static void ApplyText(TMP_Text field, string localizationKey, string placeholder)
-    {
-        if (field == null)
-        {
-            return;
-        }
-
-        string translated = Util_LotoSimulationBridge.Translate(localizationKey);
-        if (!string.IsNullOrEmpty(translated) && translated != localizationKey)
-        {
-            field.text = translated;
-            return;
-        }
-
-        if (string.IsNullOrEmpty(field.text) || field.text == placeholder)
-        {
-            field.text = translated;
-        }
-    }
-
-    private static void ApplyButtonLabel(Button button, string localizationKey)
-    {
-        if (button == null)
-        {
-            return;
-        }
-
-        TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
-        ApplyText(label, localizationKey, string.Empty);
-    }
-
-    #endregion
-
     #region Event Handlers
 
     private void BindButtons()
@@ -308,13 +286,11 @@ public class LotoBriefingPanelController : MonoBehaviour
 
     private void HandleBeginPressed()
     {
+        HideContent();
         if (ControlCenter.Instance != null && ControlCenter.Instance.simulationOrchestratorManager != null)
         {
             ControlCenter.Instance.simulationOrchestratorManager.DismissBriefing();
-            return;
         }
-
-        HideContent();
     }
 
     private void HandleClosePressed()
@@ -331,12 +307,21 @@ public class LotoBriefingPanelController : MonoBehaviour
     {
         if (briefingPanel == null)
         {
+            gameObject.SetActive(false);
             return;
         }
 
         if (briefingPanel.contentRoot != null)
         {
             briefingPanel.contentRoot.SetActive(false);
+        }
+        else if (briefingPanel.rootPanel != null)
+        {
+            briefingPanel.rootPanel.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(false);
         }
 
         if (briefingPanel.reopenButton != null)
@@ -363,7 +348,6 @@ public class LotoBriefingPanelController : MonoBehaviour
         }
 
         ConfigureInteraction();
-        ApplyContent();
     }
 
     #endregion

@@ -1,6 +1,9 @@
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
+using UnityEngine.XR.Interaction.Toolkit.UI;
 using XRStandardMenu;
 
 public class LotoScenarioSceneBootstrap : MonoBehaviour
@@ -12,14 +15,43 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
     [SerializeField] private bool startWithBriefing = true;
     [SerializeField] private LotoScenario2Controller scenario2Controller;
     [SerializeField] private LotoScenario3Controller scenario3Controller;
+    [SerializeField] private GameObject inspectionBriefing;
+    [SerializeField] private GameObject lotoBriefing;
+    [SerializeField] private float briefingFollowDistance = 0.9f;
 
     private PlayerHudManager playerHudManager;
+    private bool s3BriefingRequested;
 
     #region Lifecycle
 
     private void Start()
     {
         InitializeScene();
+        InitializeStandaloneBriefings();
+        SubscribeS3Briefing();
+    }
+
+    private void OnDestroy()
+    {
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null)
+        {
+            board.S2Completed -= HandleS2CompletedForBriefing;
+        }
+    }
+
+    private void Update()
+    {
+        if (s3BriefingRequested || scenarioIndex < LotoSimulationConstants.ScenarioInspection)
+        {
+            return;
+        }
+
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board != null && board.IsS2Complete)
+        {
+            RequestS3Briefing();
+        }
     }
 
     #endregion
@@ -28,6 +60,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
 
     private void InitializeScene()
     {
+        ResolveHudRefs();
         ResolveFollowTarget();
         ConfigurePanelFollowers();
         EnsurePcPlaytestDriver();
@@ -57,7 +90,7 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
             return;
         }
 
-        playerHudManager.Initialize(playerHud, briefingPanel, orchestrator);
+        playerHudManager.Initialize(playerHud, null, orchestrator);
 
         if (startWithBriefing)
         {
@@ -89,6 +122,39 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
         RefreshAmbientDustPlayback();
     }
 
+    private void SubscribeS3Briefing()
+    {
+        LotoGameManager board = LotoGameManager.Instance;
+        if (board == null)
+        {
+            return;
+        }
+
+        board.S2Completed -= HandleS2CompletedForBriefing;
+        board.S2Completed += HandleS2CompletedForBriefing;
+        if (board.IsS2Complete)
+        {
+            RequestS3Briefing();
+        }
+    }
+
+    private void HandleS2CompletedForBriefing()
+    {
+        RequestS3Briefing();
+    }
+
+    private void RequestS3Briefing()
+    {
+        if (s3BriefingRequested)
+        {
+            return;
+        }
+
+        s3BriefingRequested = true;
+        SetPanelActive(inspectionBriefing, false);
+        SetPanelActive(lotoBriefing, true);
+    }
+
     private void RefreshAmbientDustPlayback()
     {
         LotoAmbientDustController[] dustControllers = Object.FindObjectsByType<LotoAmbientDustController>(
@@ -100,6 +166,19 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
             {
                 dustControllers[i].RefreshPlayback();
             }
+        }
+    }
+
+    private void ResolveHudRefs()
+    {
+        if (playerHud == null)
+        {
+            playerHud = FindFirstObjectByType<ref_PlayerHUD>(FindObjectsInactive.Include);
+        }
+
+        if (briefingPanel == null)
+        {
+            briefingPanel = FindFirstObjectByType<ref_BriefingPanel>(FindObjectsInactive.Include);
         }
     }
 
@@ -168,6 +247,130 @@ public class LotoScenarioSceneBootstrap : MonoBehaviour
             {
                 value = LotoSimulationConstants.XriTeleportInteractionLayerMask
             };
+        }
+    }
+
+    #endregion
+
+    #region Standalone Briefings
+
+    private void InitializeStandaloneBriefings()
+    {
+        if (inspectionBriefing == null)
+        {
+            inspectionBriefing = FindNamedChild("Briefing_S2");
+        }
+
+        if (lotoBriefing == null)
+        {
+            lotoBriefing = FindNamedChild("Briefing_S3");
+        }
+
+        BindDismissButtons(inspectionBriefing, HideInspectionBriefing);
+        BindDismissButtons(lotoBriefing, HideLotoBriefing);
+        ConfigureStandalonePanel(inspectionBriefing);
+        ConfigureStandalonePanel(lotoBriefing);
+        SetPanelActive(inspectionBriefing, true);
+        SetPanelActive(lotoBriefing, false);
+    }
+
+    private GameObject FindNamedChild(string childName)
+    {
+        Transform child = transform.Find(childName);
+        return child != null ? child.gameObject : null;
+    }
+
+    private void HideInspectionBriefing()
+    {
+        SetPanelActive(inspectionBriefing, false);
+    }
+
+    private void HideLotoBriefing()
+    {
+        SetPanelActive(lotoBriefing, false);
+    }
+
+    private static void SetPanelActive(GameObject panel, bool active)
+    {
+        if (panel != null)
+        {
+            panel.SetActive(active);
+        }
+    }
+
+    private void ConfigureStandalonePanel(GameObject panel)
+    {
+        if (panel == null)
+        {
+            return;
+        }
+
+        Canvas canvas = panel.GetComponent<Canvas>();
+        if (canvas != null)
+        {
+            canvas.renderMode = RenderMode.WorldSpace;
+            canvas.worldCamera = Camera.main;
+        }
+
+        GraphicRaycaster graphicRaycaster = panel.GetComponent<GraphicRaycaster>();
+        if (graphicRaycaster != null)
+        {
+            graphicRaycaster.enabled = true;
+        }
+
+        TrackedDeviceGraphicRaycaster trackedRaycaster = panel.GetComponent<TrackedDeviceGraphicRaycaster>();
+        if (trackedRaycaster != null)
+        {
+            trackedRaycaster.enabled = true;
+        }
+
+        CanvasGroup canvasGroup = panel.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = panel.AddComponent<CanvasGroup>();
+        }
+
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.ignoreParentGroups = true;
+
+        Util_PanelFollower follower = panel.GetComponent<Util_PanelFollower>();
+        if (follower != null)
+        {
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                follower.SetTarget(mainCamera.transform);
+            }
+
+            follower.SetFixedDistance(briefingFollowDistance);
+            follower.SetOffset(new Vector3(0f, -0.05f, briefingFollowDistance));
+        }
+    }
+
+    private static void BindDismissButtons(GameObject panel, UnityAction hide)
+    {
+        if (panel == null || hide == null)
+        {
+            return;
+        }
+
+        Button[] buttons = panel.GetComponentsInChildren<Button>(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Button button = buttons[i];
+            if (button == null)
+            {
+                continue;
+            }
+
+            string buttonName = button.gameObject.name;
+            if (buttonName != "BeginButton" && buttonName != "CloseButton")
+            {
+                continue;
+            }
+
+            button.onClick.AddListener(hide);
         }
     }
 

@@ -35,13 +35,13 @@ public class PlayerHudManager : MonoBehaviour
         orchestrator = orchestratorManager;
         ApplyBrandColors();
         BindButtons();
-        RefreshButtonLabels();
-        BuildObjectiveRows();
+        //RefreshButtonLabels();
+        //BuildObjectiveRows();
         SubscribeOrchestratorEvents();
-        ApplyState(orchestrator != null ? orchestrator.CurrentState : LotoSimulationState.Initializing);
-        RefreshBriefingTexts();
-        RefreshScenarioIndicator(orchestrator != null ? orchestrator.CurrentScenarioIndex : 1, LotoSimulationConstants.TotalScenarios);
-        RefreshActiveObjectiveTitle();
+        //ApplyState(orchestrator != null ? orchestrator.CurrentState : LotoSimulationState.Initializing);
+        //RefreshBriefingTexts();
+        //RefreshScenarioIndicator(orchestrator != null ? orchestrator.CurrentScenarioIndex : 1, LotoSimulationConstants.TotalScenarios);
+        //RefreshActiveObjectiveTitle();
         HideTimerElements();
     }
 
@@ -190,32 +190,27 @@ public class PlayerHudManager : MonoBehaviour
     private void ApplyState(LotoSimulationState state)
     {
         bool showBriefingCanvas = showExperimentalBriefing && state == LotoSimulationState.Briefing;
-        if (briefingPanel != null)
+        if (showExperimentalBriefing && briefingPanel != null)
         {
-            if (!showExperimentalBriefing)
-            {
-                briefingPanel.gameObject.SetActive(false);
-            }
-
             if (briefingPanel.rootPanel != null)
             {
                 briefingPanel.rootPanel.SetActive(showBriefingCanvas);
             }
-        }
 
-        if (showBriefingCanvas)
-        {
-            if (lastAppliedState != LotoSimulationState.Briefing)
+            if (showBriefingCanvas)
             {
-                briefingPanelVisible = true;
-            }
+                if (lastAppliedState != LotoSimulationState.Briefing)
+                {
+                    briefingPanelVisible = true;
+                }
 
-            ApplyBriefingPanelVisibility();
-            RefreshBriefingTexts();
-        }
-        else if (briefingPanel != null && briefingPanel.reopenButton != null)
-        {
-            briefingPanel.reopenButton.gameObject.SetActive(false);
+                ApplyBriefingPanelVisibility();
+                RefreshBriefingTexts();
+            }
+            else if (briefingPanel.reopenButton != null)
+            {
+                briefingPanel.reopenButton.gameObject.SetActive(false);
+            }
         }
 
         if (playerHud != null && playerHud.rootPanel != null)
@@ -489,22 +484,25 @@ public class PlayerHudManager : MonoBehaviour
 
     private void BindButtons()
     {
-        if (briefingPanel != null && briefingPanel.beginButton != null)
+        if (showExperimentalBriefing)
         {
-            briefingPanel.beginButton.onClick.RemoveAllListeners();
-            briefingPanel.beginButton.onClick.AddListener(() => orchestrator?.DismissBriefing());
-        }
+            if (briefingPanel != null && briefingPanel.beginButton != null)
+            {
+                briefingPanel.beginButton.onClick.RemoveAllListeners();
+                briefingPanel.beginButton.onClick.AddListener(() => orchestrator?.DismissBriefing());
+            }
 
-        if (briefingPanel != null && briefingPanel.closeButton != null)
-        {
-            briefingPanel.closeButton.onClick.RemoveAllListeners();
-            briefingPanel.closeButton.onClick.AddListener(OnBriefingClosePressed);
-        }
+            if (briefingPanel != null && briefingPanel.closeButton != null)
+            {
+                briefingPanel.closeButton.onClick.RemoveAllListeners();
+                briefingPanel.closeButton.onClick.AddListener(OnBriefingClosePressed);
+            }
 
-        if (briefingPanel != null && briefingPanel.reopenButton != null)
-        {
-            briefingPanel.reopenButton.onClick.RemoveAllListeners();
-            briefingPanel.reopenButton.onClick.AddListener(OnBriefingReopenPressed);
+            if (briefingPanel != null && briefingPanel.reopenButton != null)
+            {
+                briefingPanel.reopenButton.onClick.RemoveAllListeners();
+                briefingPanel.reopenButton.onClick.AddListener(OnBriefingReopenPressed);
+            }
         }
 
         EnsureHudPanelController();
@@ -614,23 +612,9 @@ public class PlayerHudManager : MonoBehaviour
         controller.Configure(follower);
         EnsureHudPanelButtonFallbacks();
         EnsureBriefingPanelButtonFallbacks();
-        EnsureBriefingVisibilityController();
-
-        if (briefingPanel != null)
+        if (showExperimentalBriefing)
         {
-            Util_PanelFollower briefingFollower = briefingPanel.GetComponent<Util_PanelFollower>();
-            if (briefingFollower != null)
-            {
-                briefingFollower.SetOffset(new Vector3(0f, -0.05f, 0.78f));
-                briefingFollower.SetFixedDistance(0.78f);
-            }
-
-            RectTransform briefingRect = briefingPanel.GetComponent<RectTransform>();
-            if (briefingRect != null)
-            {
-                briefingRect.sizeDelta = new Vector2(820f, 520f);
-                briefingPanel.transform.localScale = Vector3.one * 0.00075f;
-            }
+            EnsureBriefingVisibilityController();
         }
     }
 
