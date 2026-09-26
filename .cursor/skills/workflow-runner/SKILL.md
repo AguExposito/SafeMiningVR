@@ -64,7 +64,7 @@ Read the full workflow markdown from `.agent-docs/workflows/`. Parse it into pha
 
 Before running any checklist items:
 
-1. `Unity_ManageEditor` → `GetProjectRoot` must return `D:/Unity/Projects/SafeMiningVR`.
+1. `Unity_ManageEditor` → `GetProjectRoot` must return `C:/AGU/Unity/Projects/SafeMiningVR`.
 2. `Unity_ReadConsole` (Errors) → record baseline error count (should be 0).
 3. For device workflows (WF1-B, WF4-E): check `metavr_device` → `action: "list"`. If no device, mark those phases `BLOCKED`.
 

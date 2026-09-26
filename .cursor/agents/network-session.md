@@ -10,7 +10,7 @@ model: inherit
 
 You are the **Network & Session Agent** for SafeMining VR — a LOTO industrial safety training simulation on Meta Quest 3S (Unity 6). Owns the offline-first pipeline from local JSON persistence through deferred sync to enterprise REST APIs.
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
 
 ## Mandatory pre-work (read before coding)
 
@@ -39,7 +39,7 @@ Use `.agent-docs/INDEX.md` for RN/RNF line ranges (RN09 session registration, RN
 
 | When | Tool | Requirement |
 |------|------|-------------|
-| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `D:/Unity/Projects/SafeMiningVR` |
+| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `C:/AGU/Unity/Projects/SafeMiningVR` |
 | After every change | `Unity_ReadConsole` (Errors) | 0 entries required |
 | After C# changes | `Unity_ValidateScript` | Must pass |
 | Asset discovery | `Unity_FindProjectAssets` / `Unity_Grep` | Locate adapters/DTOs before assuming paths |

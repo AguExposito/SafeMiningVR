@@ -29,6 +29,7 @@ public class ScoreManager : MonoBehaviour
 
     public void Initialize()
     {
+        EnsurePhaseScoreTracker();
         LoadSimScore();
         TrySetupLobbyScoreView();
     }
@@ -186,6 +187,15 @@ public class ScoreManager : MonoBehaviour
             state.sceneScore.approbalRate = CalculateApprobalRate(state.sceneScore.objectives);
         }
 
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            tracker.FinalizeRun();
+            int phaseTotal = Mathf.Clamp(Mathf.RoundToInt(tracker.ScoreGlobal * 10f), 0, 100);
+            state.sceneScore.points = phaseTotal;
+            state.sceneScore.approbalRate = phaseTotal;
+        }
+
         SceneScore savedScene = SaveSceneResult(state.sceneScore, index);
         if (ControlCenter.Instance != null && ControlCenter.Instance.ibManager != null)
         {
@@ -294,15 +304,23 @@ public class ScoreManager : MonoBehaviour
         refMainMenu = ComponentFinder.FindComponentInScene<ref_MainMenu>();
         refScore = ComponentFinder.FindComponentInScene<ref_Score>();
         ScorePersistantData scoreData = ControlCenter.Instance.persistantDataManager.scorePersistantData;
+        bool hasLotoAttempts = scoreData != null && scoreData.lotoAttempts != null && scoreData.lotoAttempts.Count > 0;
         bool hasSavedScenes = scoreData != null && scoreData.sceneScores != null && scoreData.sceneScores.Count > 0;
         if (refMainMenu != null && refMainMenu.go_btn_score != null)
         {
-            refMainMenu.go_btn_score.SetActive(hasSavedScenes);
+            refMainMenu.go_btn_score.SetActive(hasLotoAttempts || hasSavedScenes);
         }
-        if (!hasSavedScenes || refScore == null)
+        if (refScore == null || (!hasLotoAttempts && !hasSavedScenes))
         {
             return;
         }
+
+        if (hasLotoAttempts)
+        {
+            BuildLotoAttemptList(scoreData.lotoAttempts);
+            return;
+        }
+
         BuildSceneScoreList(scoreData.sceneScores);
     }
 
@@ -387,6 +405,84 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    private void BuildLotoAttemptList(List<LotoAttemptRecord> attempts)
+    {
+        ClearSceneScoreInstances();
+        if (refScore.sceneScoreContainer == null || refScore.sceneScorePrefab == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < attempts.Count; i++)
+        {
+            LotoAttemptRecord attempt = attempts[i];
+            if (attempt == null)
+            {
+                continue;
+            }
+
+            GameObject sceneScoreObject = Instantiate(refScore.sceneScorePrefab, refScore.sceneScoreContainer);
+            sceneScoreInstances.Add(sceneScoreObject);
+            ref_SceneScore sceneScoreRef = sceneScoreObject.GetComponent<ref_SceneScore>();
+            if (sceneScoreRef == null)
+            {
+                continue;
+            }
+
+            SceneScore capturedSceneScore = CreateSceneScoreFromAttempt(attempt, attempts.Count);
+            if (sceneScoreRef.attempts != null)
+            {
+                sceneScoreRef.attempts.text = (i + 1).ToString();
+            }
+
+            if (sceneScoreRef.title != null)
+            {
+                sceneScoreRef.title.text = GetTranslatedText(LotoObjectiveIds.SimulationSceneId);
+            }
+
+            if (sceneScoreRef.date != null)
+            {
+                sceneScoreRef.date.text = attempt.date;
+            }
+
+            if (sceneScoreRef.time != null)
+            {
+                sceneScoreRef.time.text = attempt.time;
+            }
+
+            if (sceneScoreRef.points != null)
+            {
+                sceneScoreRef.points.text = capturedSceneScore.points.ToString();
+            }
+
+            if (sceneScoreRef.view != null)
+            {
+                sceneScoreRef.view.onClick.RemoveAllListeners();
+                sceneScoreRef.view.onClick.AddListener(() => refScore.SetDetailScreen(capturedSceneScore));
+            }
+        }
+    }
+
+    private static SceneScore CreateSceneScoreFromAttempt(LotoAttemptRecord attempt, int totalAttempts)
+    {
+        int points = Mathf.Clamp(Mathf.RoundToInt(attempt.scoreGlobal * 10f), 0, 100);
+        return new SceneScore
+        {
+            id = LotoObjectiveIds.SimulationSceneId,
+            attempts = totalAttempts,
+            date = attempt.date,
+            time = attempt.time,
+            points = points,
+            approbalRate = points,
+            objectives = new List<ObjectiveScore>
+            {
+                new ObjectiveScore { id = LotoObjectiveIds.PhaseS1, isAchivied = attempt.approvedS1 },
+                new ObjectiveScore { id = LotoObjectiveIds.PhaseS2, isAchivied = attempt.approvedS2 },
+                new ObjectiveScore { id = LotoObjectiveIds.PhaseS3, isAchivied = attempt.approvedS3 }
+            }
+        };
+    }
+
     private void ClearSceneScoreInstances()
     {
         for (int i = 0; i < sceneScoreInstances.Count; i++)
@@ -428,12 +524,41 @@ public class ScoreManager : MonoBehaviour
         return updated;
     }
 
+    public void SaveLotoAttempt(LotoAttemptRecord record)
+    {
+        if (record == null || ControlCenter.Instance == null || ControlCenter.Instance.persistantDataManager == null)
+        {
+            return;
+        }
+
+        ScorePersistantData scoreData = ControlCenter.Instance.persistantDataManager.scorePersistantData;
+        if (scoreData.lotoAttempts == null)
+        {
+            scoreData.lotoAttempts = new List<LotoAttemptRecord>();
+        }
+
+        scoreData.lotoAttempts.Insert(0, record);
+        ControlCenter.Instance.persistantDataManager.SaveScoreData();
+    }
+
+    public List<LotoAttemptRecord> GetLotoAttempts()
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.persistantDataManager == null)
+        {
+            return new List<LotoAttemptRecord>();
+        }
+
+        ScorePersistantData scoreData = ControlCenter.Instance.persistantDataManager.scorePersistantData;
+        return scoreData.lotoAttempts ?? new List<LotoAttemptRecord>();
+    }
+
     [ContextMenu("Debug/Borrar scores guardados")]
     public void DebugClearPersistedScores()
     {
         ScorePersistantData empty = new ScorePersistantData
         {
-            sceneScores = new List<SceneScore>()
+            sceneScores = new List<SceneScore>(),
+            lotoAttempts = new List<LotoAttemptRecord>()
         };
         ControlCenter.Instance.persistantDataManager.scorePersistantData = empty;
         _lobbySetupDoneThisLoad = false;
@@ -449,6 +574,14 @@ public class ScoreManager : MonoBehaviour
     {
         public SceneScore sceneScore;
         public float startTime;
+    }
+
+    private void EnsurePhaseScoreTracker()
+    {
+        if (GetComponent<LotoPhaseScoreTracker>() == null)
+        {
+            gameObject.AddComponent<LotoPhaseScoreTracker>();
+        }
     }
 
     private void LoadSimScore()

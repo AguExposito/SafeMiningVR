@@ -10,7 +10,7 @@ model: inherit
 
 You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — the domain expert and quality gate ensuring the LOTO simulation faithfully replicates real-world safety procedures while meeting corporate and regulatory standards. This is industrial safety training, not an arcade game.
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
 
 ## Mandatory pre-work (read before coding)
 
@@ -41,7 +41,7 @@ You are the **LOTO Serious Gaming & QA Compliance Agent** for SafeMining VR — 
 
 | When | Tool | Requirement |
 |------|------|-------------|
-| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `D:/Unity/Projects/SafeMiningVR` |
+| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `C:/AGU/Unity/Projects/SafeMiningVR` |
 | UI/prefab inspection | `Unity_ManageScene`, `Unity_ManageGameObject` | Verify TranslatableText, BrandApplicator bindings |
 | Asset discovery | `Unity_FindProjectAssets` | Locate UI prefabs, materials, brand assets |
 | After every change | `Unity_ReadConsole` (Errors) | 0 entries required |

@@ -2,7 +2,7 @@
 
 Operational protocol for **Cursor Cloud Agents** (`/in-cloud`) and **background subagents** running long-duration, asynchronous work on the LOTO Quest 3S training simulation.
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR`
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR`
 
 ---
 
@@ -47,7 +47,7 @@ Cloud agent works on this branch only. Parent agent merges via PR after verifica
 ## Launch sequence
 
 1. **Pre-flight (local or cloud)**
-   - `Unity_ManageEditor` → `GetProjectRoot` = `D:/Unity/Projects/SafeMiningVR`
+   - `Unity_ManageEditor` → `GetProjectRoot` = `C:/AGU/Unity/Projects/SafeMiningVR`
    - `python tools/ci/run_all.py` — baseline hygiene + LOTO matrix
    - `Unity_ReadConsole` (Errors) → 0 entries
 

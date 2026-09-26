@@ -24,6 +24,12 @@ public static class LotoSessionScore
             completionStatus = string.IsNullOrEmpty(completionStatus) ? CompletionCompleted : completionStatus
         };
 
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            return FillFromPhaseTracker(payload, tracker);
+        }
+
         if (sceneScore == null || sceneScore.objectives == null)
         {
             payload.objectives = Array.Empty<SimulationObjectiveResult>();
@@ -58,6 +64,32 @@ public static class LotoSessionScore
         payload.scoreTotal = Mathf.Clamp(Mathf.RoundToInt(weightedScore), 0, 100);
         payload.approved = payload.scoreTotal >= ApprovalThresholdPercent;
         return payload;
+    }
+
+    private static SimulationResultPayload FillFromPhaseTracker(SimulationResultPayload payload, LotoPhaseScoreTracker tracker)
+    {
+        float totalWeight = tracker.WeightS1 + tracker.WeightS2 + tracker.WeightS3;
+        payload.objectives = new[]
+        {
+            BuildPhaseResult(LotoObjectiveIds.PhaseS1, tracker.ScoreS1, tracker.WeightS1, totalWeight, tracker.ApprovedS1),
+            BuildPhaseResult(LotoObjectiveIds.PhaseS2, tracker.ScoreS2, tracker.WeightS2, totalWeight, tracker.ApprovedS2),
+            BuildPhaseResult(LotoObjectiveIds.PhaseS3, tracker.ScoreS3, tracker.WeightS3, totalWeight, tracker.ApprovedS3)
+        };
+        payload.scoreTotal = Mathf.Clamp(Mathf.RoundToInt(tracker.ScoreGlobal * 10f), 0, 100);
+        payload.approved = tracker.ApprovedGlobal;
+        return payload;
+    }
+
+    private static SimulationObjectiveResult BuildPhaseResult(string phaseId, float phaseScore, float weight, float totalWeight, bool approved)
+    {
+        float normalizedWeight = totalWeight > 0f ? weight / totalWeight : 0f;
+        return new SimulationObjectiveResult
+        {
+            objectiveId = phaseId,
+            achieved = approved,
+            weightPercent = Mathf.RoundToInt(normalizedWeight * 100f),
+            scorePartial = phaseScore * 10f * normalizedWeight
+        };
     }
 
     private static float ComputePartial(string objectiveId, bool achieved, int weight, int falsePositiveCount)

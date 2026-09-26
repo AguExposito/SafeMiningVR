@@ -2,7 +2,7 @@
 
 Validates that every LOTO scene works correctly in both PC Editor (no headset) and Meta Quest 3S (hand tracking + controllers), with smooth modality transitions and non-invasive gamefeel.
 
-**Prerequisites:** Unity Editor open on `D:/Unity/Projects/SafeMiningVR`. For device testing: Quest 3S with USB debugging enabled.
+**Prerequisites:** Unity Editor open on `C:/AGU/Unity/Projects/SafeMiningVR`. For device testing: Quest 3S with USB debugging enabled.
 
 ---
 

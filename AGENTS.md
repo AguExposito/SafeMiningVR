@@ -18,7 +18,7 @@ Resolve any design, domain, or requirement question using this strict cascade. S
 
 ## MCP gates (mandatory)
 
-- **Session start** — `Unity_ManageEditor → GetProjectRoot` must return `D:/Unity/Projects/SafeMiningVR`. Abort otherwise.
+- **Session start** — `Unity_ManageEditor → GetProjectRoot` must return `C:/AGU/Unity/Projects/SafeMiningVR`. Abort otherwise.
 - **After every code/scene change** — `Unity_ReadConsole` (Errors) → require 0 entries.
 - **Before any XR/Quest change** — `meta_docs_search` to verify the API is current and not deprecated.
 - **Never hand-edit** `.unity`, `.prefab`, or `.asset` YAML — use Unity MCP for HUD and empty logic GOs only. Do not move world art.

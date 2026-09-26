@@ -1,7 +1,7 @@
 using UnityEngine;
 using NJ.Finder;
 using UnityEngine.UI;
-using System.Threading.Tasks;
+
 public class SoundManager : MonoBehaviour
 {
     private Toggle toggle_sound;
@@ -9,37 +9,34 @@ public class SoundManager : MonoBehaviour
     private float volume = 0.5f;
     private bool enableSound = true;
     private AudioSource audioSource;
-    private AudioSource ambientalAudioSource;
+    private LotoAmbientMusicController ambientMusicController;
+
     public void Initialize()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.enabled = true;
 
-        // Cargar estado inicial desde datos persistentes (si existen)
         if (ControlCenter.Instance != null && ControlCenter.Instance.persistantDataManager != null)
         {
             volume = ControlCenter.Instance.persistantDataManager.generalPersistantData.volume;
             enableSound = ControlCenter.Instance.persistantDataManager.generalPersistantData.enableSound;
         }
 
+        EnsureAmbientMusicController();
         ApplyVolumeToManagedSources();
-
-        SetAmbientalMusic();
         FindMiscInteractables();
     }
-    void SetAmbientalMusic()
+
+    private void EnsureAmbientMusicController()
     {
-        ambientalAudioSource = gameObject.AddComponent<AudioSource>();
-        ambientalAudioSource.playOnAwake = false;
-        ambientalAudioSource.enabled = true;
-        ambientalAudioSource.loop = true;
-        ambientalAudioSource.clip = SBD_Audio.Instance != null ? SBD_Audio.Instance.Ambiental_menu_music0 : null;
-        ApplyVolumeToManagedSources();
-        if (ambientalAudioSource.clip != null)
+        ambientMusicController = GetComponent<LotoAmbientMusicController>();
+        if (ambientMusicController == null)
         {
-            ambientalAudioSource.Play();
+            ambientMusicController = gameObject.AddComponent<LotoAmbientMusicController>();
         }
+
+        ambientMusicController.Initialize(volume, enableSound);
     }
     void ChangeSingleASVolume(float _volume)
     {
@@ -124,10 +121,15 @@ public class SoundManager : MonoBehaviour
             audioSource.enabled = true;
             audioSource.volume = effectiveVolume;
         }
-        if (ambientalAudioSource != null)
+
+        if (ambientMusicController == null)
         {
-            ambientalAudioSource.enabled = true;
-            ambientalAudioSource.volume = effectiveVolume;
+            ambientMusicController = GetComponent<LotoAmbientMusicController>();
+        }
+
+        if (ambientMusicController != null)
+        {
+            ambientMusicController.ApplyVolume(volume, enableSound);
         }
     }
 }

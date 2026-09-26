@@ -36,6 +36,10 @@ public class PersistantDataManager : MonoBehaviour
                 {
                     _scorePersistantData.sceneScores = new System.Collections.Generic.List<SceneScore>();
                 }
+                if (_scorePersistantData.lotoAttempts == null)
+                {
+                    _scorePersistantData.lotoAttempts = new System.Collections.Generic.List<LotoAttemptRecord>();
+                }
             }
             return _scorePersistantData;
         }
@@ -45,6 +49,10 @@ public class PersistantDataManager : MonoBehaviour
             if (_scorePersistantData.sceneScores == null)
             {
                 _scorePersistantData.sceneScores = new System.Collections.Generic.List<SceneScore>();
+            }
+            if (_scorePersistantData.lotoAttempts == null)
+            {
+                _scorePersistantData.lotoAttempts = new System.Collections.Generic.List<LotoAttemptRecord>();
             }
             SetData(_scorePersistantData, scorePersistantDataPath);
             SaveScoreData();

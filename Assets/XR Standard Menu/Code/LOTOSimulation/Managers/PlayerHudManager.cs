@@ -454,6 +454,12 @@ public class PlayerHudManager : MonoBehaviour
 
     private static string FormatSessionSummaryBody(SimulationResultPayload payload)
     {
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            return FormatPhaseSummaryBody(tracker);
+        }
+
         StringBuilder builder = new StringBuilder();
         int scoreTotal = payload != null ? payload.scoreTotal : 0;
         bool approved = payload != null && payload.approved;
@@ -480,6 +486,69 @@ public class PlayerHudManager : MonoBehaviour
         }
 
         return builder.ToString();
+    }
+
+    private static string FormatPhaseSummaryBody(LotoPhaseScoreTracker tracker)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.AppendLine(string.Format(
+            GetTranslation("loto_summary_global_line"),
+            FormatPhaseScore(tracker.ScoreGlobal),
+            GetApprovalText(tracker.ApprovedGlobal)));
+        AppendPhaseLine(builder, "loto_phase_s1", tracker.ScoreS1, tracker.ApprovedS1);
+        AppendPhaseLine(builder, "loto_phase_s2", tracker.ScoreS2, tracker.ApprovedS2);
+        AppendPhaseLine(builder, "loto_phase_s3", tracker.ScoreS3, tracker.ApprovedS3);
+
+        List<LotoAttemptRecord> attempts = ControlCenter.Instance != null && ControlCenter.Instance.scoreManager != null
+            ? ControlCenter.Instance.scoreManager.GetLotoAttempts()
+            : new List<LotoAttemptRecord>();
+        if (attempts.Count == 0)
+        {
+            return builder.ToString();
+        }
+
+        builder.AppendLine();
+        builder.AppendLine(GetTranslation("loto_summary_attempts_title"));
+        for (int i = 0; i < attempts.Count; i++)
+        {
+            LotoAttemptRecord attempt = attempts[i];
+            if (attempt == null)
+            {
+                continue;
+            }
+
+            builder.AppendLine(string.Format(
+                GetTranslation("loto_summary_attempt_line"),
+                i + 1,
+                attempt.date,
+                attempt.time,
+                FormatPhaseScore(attempt.scoreGlobal),
+                FormatPhaseScore(attempt.scoreS1),
+                FormatPhaseScore(attempt.scoreS2),
+                FormatPhaseScore(attempt.scoreS3),
+                GetApprovalText(attempt.approved)));
+        }
+
+        return builder.ToString();
+    }
+
+    private static void AppendPhaseLine(StringBuilder builder, string phaseKey, float phaseScore, bool approved)
+    {
+        builder.AppendLine(string.Format(
+            GetTranslation("loto_summary_phase_line"),
+            GetTranslation(phaseKey),
+            FormatPhaseScore(phaseScore),
+            GetApprovalText(approved)));
+    }
+
+    private static string FormatPhaseScore(float phaseScore)
+    {
+        return phaseScore.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private static string GetApprovalText(bool approved)
+    {
+        return GetTranslation(approved ? "loto_summary_approved" : "loto_summary_not_approved");
     }
 
     private void BindButtons()

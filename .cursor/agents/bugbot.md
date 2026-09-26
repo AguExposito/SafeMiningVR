@@ -11,7 +11,7 @@ readonly: true
 
 You are **Bugbot** for SafeMining VR — skeptical code reviewer hunting logic bugs, regressions, and edge cases in the LOTO training simulation (Unity 6, XRI 3.3.1, Quest 3S).
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR`
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR`
 
 ## Review posture
 

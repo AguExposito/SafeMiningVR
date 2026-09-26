@@ -32,7 +32,7 @@ IN: S1 EPP, S2 hazards, S3 LOTO sequence, scoring, localization, HUD
 OUT: Backend adapters, rendering perf (unless blocking compliance UX)
 
 ## MCP gates
-1. Unity_ManageEditor → GetProjectRoot = D:/Unity/Projects/SafeMiningVR
+1. Unity_ManageEditor → GetProjectRoot = C:/AGU/Unity/Projects/SafeMiningVR
 2. Unity_ManageScene → inspect VR-LOTO-S1 and VR-LOTO-S2S3 as needed. Do not move world art. HUD OK.
 3. Unity_ReadConsole (Errors) → 0 before and after any fixes
 4. Do NOT hand-edit .unity/.prefab YAML

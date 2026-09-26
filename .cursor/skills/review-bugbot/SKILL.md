@@ -24,7 +24,7 @@ Or Task tool with subagent reading `.cursor/agents/bugbot.md`.
 ### Prompt shape
 
 ```text
-Full Repository Path: D:/Unity/Projects/SafeMiningVR
+Full Repository Path: C:/AGU/Unity/Projects/SafeMiningVR
 Diff: branch changes
 Custom Instructions: Review for logic bugs, regressions, async pitfalls, LOTO gate violations, and sync queue correctness. Sort findings by severity.
 ```

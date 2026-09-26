@@ -26,7 +26,7 @@ At the beginning of any Unity-related work session:
 Unity_ManageEditor → Action: "GetProjectRoot"
 ```
 
-**Abort** if result differs from `D:/Unity/Projects/SafeMiningVR`.
+**Abort** if result differs from `C:/AGU/Unity/Projects/SafeMiningVR`.
 
 ### Gate 2: Post-change console check
 

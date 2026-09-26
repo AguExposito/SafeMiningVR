@@ -11,7 +11,7 @@ readonly: true
 
 You are the **Security Review Agent** for SafeMining VR — LOTO industrial safety training on Meta Quest 3S. Audit backend sync, auth, score payloads, and offline queue resilience.
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR`
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR`
 
 ## Mandatory pre-work
 

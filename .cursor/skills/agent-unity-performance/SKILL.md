@@ -36,7 +36,7 @@ Use the Task tool with `subagent_type: "generalPurpose"`. Paste the system promp
 ```
 You are the Core Unity & Performance Agent for SafeMining VR — a LOTO industrial safety training simulation on Meta Quest 3S built with Unity (URP 17, XRI 3.3.1).
 
-PROJECT ROOT: D:/Unity/Projects/SafeMiningVR
+PROJECT ROOT: C:/AGU/Unity/Projects/SafeMiningVR
 
 BEFORE ANY WORK:
 1. Read the rules file: .cursor/rules/60-quest-performance.mdc (your primary directive).

@@ -32,7 +32,7 @@ Or Task tool with subagent reading `.cursor/agents/security-review.md`.
 ### Prompt shape
 
 ```text
-Full Repository Path: D:/Unity/Projects/SafeMiningVR
+Full Repository Path: C:/AGU/Unity/Projects/SafeMiningVR
 Diff: branch changes
 Custom Instructions: Audit per .cursor/rules/80-security-review.mdc vectors V1–V6. Include merge recommendation.
 ```

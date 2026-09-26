@@ -95,6 +95,8 @@ Source: `.agent-docs/loto-objectives.md` (full file — safe to load entirely). 
 
 Approval threshold: 60/100 (`LotoObjectiveIds.DefaultApprovalThresholdPercent`).
 
+Runtime scoring (base 10) is `LotoPhaseScoreTracker`: S1 `10*(1-bad/4)`, S2 `10*fixed/7`, S3 `10*steps/6`, global weighted 0.30/0.25/0.45. Attempts persist in `ScorePersistantData.lotoAttempts` (most recent first).
+
 ## API Contracts (Fase 7)
 
 Source: `.agent-docs/integration-vr-backend.md` (full file, 82 lines — safe to load entirely)
@@ -112,7 +114,7 @@ Source: `Propuesta Simulacion LOTO.txt` (full file, 100 lines — safe to load e
 
 | Scenario | Gate | Key elements |
 |----------|------|--------------|
-| S1 — EPP | `LotoGameManager.IsS1Complete` (5/5 good) | Helmet, glasses, vest, gloves, boots; defective grab zeros `S1DefectScore` |
+| S1 — EPP | `LotoGameManager.IsS1Complete` (5/5 good) | Helmet, glasses, vest, gloves, boots; each defective grab lowers S1 score (`10*(1-bad/4)`) |
 | S2 — Hazards | `IsS2Complete` | Board counts: tools 3, sign 1, puddle 2, extinguisher 1 |
 | S3 — LOTO | `IsS3SequenceReady` then `CheckStartButton` | STOP → panel → power cut → close → hasp → lock → START |
 
@@ -125,7 +127,7 @@ All files are small enough to load entirely when needed.
 | `project-overview.md` | ~40 | Stack, state, architecture, branding |
 | `loto-game-board.md` | ~120 | KISS: LotoGameManager, relay, ScoreManager, spec vs board |
 | `loto-simulation-handbook.md` | ~90 | Player flow, outline hints, input, lighting |
-| `loto-objectives.md` | ~30 | Objective IDs, weights, threshold |
+| `loto-objectives.md` | ~45 | Objective IDs, phase scores base 10, threshold |
 | `s1-scene-inventory.md` | ~120 | VR-LOTO-S1 inventory; art frozen; board GOs |
 | `s2-scene-inventory.md` | ~170 | VR-LOTO-S2S3 inventory; art frozen; board/relay |
 | `loto-asset-list.md` | ~30 | MVP and polish asset requirements |

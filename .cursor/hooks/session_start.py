@@ -4,7 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-EXPECTED_ROOT = Path("D:/Unity/Projects/SafeMiningVR")
+EXPECTED_ROOT = Path("C:/AGU/Unity/Projects/SafeMiningVR")
 MARKER = Path("ProjectSettings/ProjectVersion.txt")
 
 def read_input():
@@ -50,7 +50,7 @@ def main():
         f"Root match: {'yes' if root_matches else 'no — abort Unity work until aligned'}",
         "",
         "Mandatory before any Unity/XR work:",
-        "1. Unity_ManageEditor → Action: GetProjectRoot (must be D:/Unity/Projects/SafeMiningVR)",
+        "1. Unity_ManageEditor → Action: GetProjectRoot (must be C:/AGU/Unity/Projects/SafeMiningVR)",
         "2. Unity_ReadConsole → logTypes: Error (baseline should be 0)",
         "3. Before XR/Quest changes: meta_docs_search (scope: unity, mode: verify)",
         "4. After C# edits: Unity_ValidateScript on modified scripts",

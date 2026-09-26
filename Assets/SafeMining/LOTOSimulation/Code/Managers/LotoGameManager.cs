@@ -164,6 +164,7 @@ public class LotoGameManager : MonoBehaviour
         }
 
         helmetGood = true;
+        ForwardToTracker(tracker => tracker.NotifyHelmetGood());
         TryRaiseS1Complete();
     }
 
@@ -175,6 +176,7 @@ public class LotoGameManager : MonoBehaviour
         }
 
         glassesGood = true;
+        ForwardToTracker(tracker => tracker.NotifyGlassesGood());
         TryRaiseS1Complete();
     }
 
@@ -186,6 +188,7 @@ public class LotoGameManager : MonoBehaviour
         }
 
         vestGood = true;
+        ForwardToTracker(tracker => tracker.NotifyVestGood());
         TryRaiseS1Complete();
     }
 
@@ -197,6 +200,7 @@ public class LotoGameManager : MonoBehaviour
         }
 
         glovesGood = true;
+        ForwardToTracker(tracker => tracker.NotifyGlovesGood());
         TryRaiseS1Complete();
     }
 
@@ -208,32 +212,38 @@ public class LotoGameManager : MonoBehaviour
         }
 
         bootsGood = true;
+        ForwardToTracker(tracker => tracker.NotifyBootsGood());
         TryRaiseS1Complete();
     }
 
     public void NotifyHelmetBad()
     {
         RecordDefectiveGrab(ref helmetBad);
+        ForwardToTracker(tracker => tracker.NotifyHelmetBad());
     }
 
     public void NotifyGlassesBad()
     {
         RecordDefectiveGrab(ref glassesBad);
+        ForwardToTracker(tracker => tracker.NotifyGlassesBad());
     }
 
     public void NotifyVestBad()
     {
         RecordDefectiveGrab(ref vestBad);
+        ForwardToTracker(tracker => tracker.NotifyVestBad());
     }
 
     public void NotifyGlovesBad()
     {
         RecordDefectiveGrab(ref glovesBad);
+        ForwardToTracker(tracker => tracker.NotifyGlovesBad());
     }
 
     public void NotifyBootsBad()
     {
         RecordDefectiveGrab(ref bootsBad);
+        ForwardToTracker(tracker => tracker.NotifyBootsBad());
     }
 
     public void NotifyEppGrabbed(EppItemType type, EppItemCondition condition)
@@ -264,21 +274,25 @@ public class LotoGameManager : MonoBehaviour
 
     public void NotifyTools()
     {
+        ForwardToTracker(tracker => tracker.NotifyToolFixed());
         IncrementHazard(ref toolsReported, ToolsRequired);
     }
 
     public void NotifySign()
     {
+        ForwardToTracker(tracker => tracker.NotifySignFixed());
         IncrementHazard(ref signReported, SignRequired);
     }
 
     public void NotifyPuddle()
     {
+        ForwardToTracker(tracker => tracker.NotifyPuddleFixed());
         IncrementHazard(ref puddlesReported, PuddleRequired);
     }
 
     public void NotifyExtinguisher()
     {
+        ForwardToTracker(tracker => tracker.NotifyExtinguisherFixed());
         IncrementHazard(ref extinguisherReported, ExtinguisherRequired);
     }
 
@@ -290,36 +304,43 @@ public class LotoGameManager : MonoBehaviour
     public void NotifyStop()
     {
         TrySetS3Flag(ref stopPressed, true);
+        ForwardToTracker(tracker => tracker.NotifyStop());
     }
 
     public void NotifyPanelOpened()
     {
         TrySetS3Flag(ref panelOpened, stopPressed);
+        ForwardToTracker(tracker => tracker.NotifyPanelOpened());
     }
 
     public void NotifyPowerCut()
     {
         TrySetS3Flag(ref powerCut, panelOpened);
+        ForwardToTracker(tracker => tracker.NotifyPowerCut());
     }
 
     public void NotifyPanelClosed()
     {
         TrySetS3Flag(ref panelClosed, powerCut);
+        ForwardToTracker(tracker => tracker.NotifyPanelClosed());
     }
 
     public void NotifyHaspPlaced()
     {
         TrySetS3Flag(ref haspPlaced, panelClosed);
+        ForwardToTracker(tracker => tracker.NotifyHaspPlaced());
     }
 
     public void NotifyLockPlaced()
     {
         TrySetS3Flag(ref lockPlaced, haspPlaced);
+        ForwardToTracker(tracker => tracker.NotifyLockPlaced());
     }
 
     public void CheckStartButton()
     {
         CloseS2Inspection();
+        ForwardToTracker(tracker => tracker.NotifyStartPressed());
         if (s3CompleteRaised)
         {
             return;
@@ -395,6 +416,7 @@ public class LotoGameManager : MonoBehaviour
         s2FrozenReports = 0;
         s3ScoreFrozen = false;
         s3FrozenStepCount = 0;
+        ForwardToTracker(tracker => tracker.ResetRun());
     }
     public bool GetPowerCutState() { 
         if(powerCut) {
@@ -473,7 +495,28 @@ public class LotoGameManager : MonoBehaviour
         }
 
         flag = true;
-        s1DefectScore = 0;
+        int defectiveCount = Mathf.Min(CountDefectiveGrabs(), LotoPhaseScoreTracker.DefectiveEppTotal);
+        s1DefectScore = Mathf.RoundToInt(DefectScoreMax * (1f - defectiveCount / (float)LotoPhaseScoreTracker.DefectiveEppTotal));
+    }
+
+    private int CountDefectiveGrabs()
+    {
+        int count = 0;
+        count += helmetBad ? 1 : 0;
+        count += glassesBad ? 1 : 0;
+        count += vestBad ? 1 : 0;
+        count += glovesBad ? 1 : 0;
+        count += bootsBad ? 1 : 0;
+        return count;
+    }
+
+    private static void ForwardToTracker(Action<LotoPhaseScoreTracker> action)
+    {
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            action(tracker);
+        }
     }
 
     private void IncrementHazard(ref int count, int required)
@@ -526,6 +569,7 @@ public class LotoGameManager : MonoBehaviour
 
         s2InspectionClosed = true;
         s2FrozenReports = CountS2Reports();
+        ForwardToTracker(tracker => tracker.FreezeS2());
         if (!s2CompleteRaised)
         {
             Util_LotoSimulationBridge.SetObjective(LotoSimulationConstants.ObjectiveHazardReportIndex, false);

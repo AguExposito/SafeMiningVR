@@ -6,6 +6,10 @@ public static class LotoObjectiveIds
     public const string LotoSequence = "loto_obj_loto_sequence";
     public const string ZeroEnergy = "loto_obj_zero_energy";
 
+    public const string PhaseS1 = "loto_phase_s1";
+    public const string PhaseS2 = "loto_phase_s2";
+    public const string PhaseS3 = "loto_phase_s3";
+
     public const string SimulationSceneId = "loto_simulation";
 
     public const int DefaultApprovalThresholdPercent = 60;

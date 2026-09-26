@@ -23,7 +23,7 @@ Guide the agent through creating, wiring, and validating XR interactables for th
 
 ## Preconditions
 
-1. Unity MCP connected — verify with `Unity_ManageEditor` → `GetProjectRoot` = `D:/Unity/Projects/SafeMiningVR`.
+1. Unity MCP connected — verify with `Unity_ManageEditor` → `GetProjectRoot` = `C:/AGU/Unity/Projects/SafeMiningVR`.
 2. XR packages installed: `com.unity.xr.interaction.toolkit` 3.3.1, `com.unity.xr.hands` 1.7.3, `com.unity.xr.meta-openxr` 2.4.0.
 3. `PlayerMR` prefab present in scene with `XRInputModalityManager` and `LotoInputModalityVisuals`.
 

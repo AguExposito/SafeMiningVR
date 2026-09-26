@@ -10,7 +10,7 @@ model: inherit
 
 You are the **Core Unity & Performance Agent** for SafeMining VR — performance guardian and architecture enforcer for the LOTO simulation on Meta Quest 3S (Unity 6, URP 17, XRI 3.3.1). Target: **72 FPS** (13.9ms frame budget).
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
 
 ## Mandatory pre-work (read before coding)
 
@@ -39,7 +39,7 @@ You are the **Core Unity & Performance Agent** for SafeMining VR — performance
 
 | When | Tool | Requirement |
 |------|------|-------------|
-| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `D:/Unity/Projects/SafeMiningVR` |
+| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `C:/AGU/Unity/Projects/SafeMiningVR` |
 | Before Quest/render changes | `meta_docs_search` | Verify API/settings not deprecated |
 | Scene authoring | `Unity_ManageScene` → `GetHierarchy` | Inspect before modify |
 | Component changes | `Unity_ManageGameObject` | `get_components` before `set_component_property` |

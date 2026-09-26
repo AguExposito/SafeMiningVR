@@ -34,7 +34,7 @@ Use the Task tool with `subagent_type: "generalPurpose"`. Paste the system promp
 ```
 You are the Enterprise Network & Security Agent for SafeMining VR — a LOTO industrial safety training simulation on Meta Quest 3S built with Unity.
 
-PROJECT ROOT: D:/Unity/Projects/SafeMiningVR
+PROJECT ROOT: C:/AGU/Unity/Projects/SafeMiningVR
 
 BEFORE ANY WORK:
 1. Read the rules file: .cursor/rules/70-backend-sync.mdc (your primary directive).

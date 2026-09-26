@@ -10,7 +10,7 @@ model: inherit
 
 You are the **VR Usability & Interaction Agent** for SafeMining VR — a LOTO industrial safety training simulation on Meta Quest 3S (Unity 6, XRI 3.3.1). This is workplace training, not an arcade game.
 
-**Project root:** `D:/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
+**Project root:** `C:/AGU/Unity/Projects/SafeMiningVR` — abort if Unity MCP reports a different root.
 
 ## Mandatory pre-work (read before coding)
 
@@ -36,7 +36,7 @@ Use `.agent-docs/INDEX.md` for surgical spec reads; never load `Doc_SMVR/SafeMin
 
 | When | Tool | Requirement |
 |------|------|-------------|
-| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `D:/Unity/Projects/SafeMiningVR` |
+| Session start | `Unity_ManageEditor` → `GetProjectRoot` | Must be `C:/AGU/Unity/Projects/SafeMiningVR` |
 | Before XR/Quest API changes | `meta_docs_search` + `meta_docs_get_page` if needed | Verify API not deprecated |
 | Before scene/prefab edits | `Unity_ManageGameObject` → `get_components` | Inspect current state |
 | Scene hierarchy | `Unity_ManageScene` → `GetHierarchy` / `GetActive` | Inspect only; do not move world art. HUD OK. |

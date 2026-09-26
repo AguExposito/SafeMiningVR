@@ -117,6 +117,13 @@
 	<string name="loto_summary_approved">Aprobado</string>
 	<string name="loto_summary_not_approved">No aprobado</string>
 	<string name="loto_summary_objective_line">{0}: {1}/{2}</string>
+	<string name="loto_summary_global_line">Puntaje global: {0}/10 — {1}</string>
+	<string name="loto_summary_phase_line">{0}: {1}/10 — {2}</string>
+	<string name="loto_summary_attempts_title">Intentos (más reciente primero)</string>
+	<string name="loto_summary_attempt_line">#{0} {1} {2} — Global {3} | S1 {4} | S2 {5} | S3 {6} — {7}</string>
+	<string name="loto_phase_s1">S1 Equipos de protección</string>
+	<string name="loto_phase_s2">S2 Inspección de riesgos</string>
+	<string name="loto_phase_s3">S3 Procedimiento LOTO</string>
 	<string name="loto_lock_personal">PERSONAL LOCKOUT</string>
 	<string name="loto_lock_visitor">VISITOR</string>
 	<string name="loto_lock_group">GRUPAL</string>

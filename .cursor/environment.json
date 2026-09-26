@@ -1,5 +1,5 @@
 {
   "name": "safemining-vr",
   "install": "python3 tools/ci/run_all.py --security",
-  "disableAllMcpServers": true
+  "disableAllMcpServers": false
 }

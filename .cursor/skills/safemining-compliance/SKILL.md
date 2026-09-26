@@ -25,7 +25,7 @@ Systematically verify that LOTO simulation code, assets, and scenes conform to t
 
 ## Preconditions
 
-1. Unity MCP connected to `D:/Unity/Projects/SafeMiningVR`.
+1. Unity MCP connected to `C:/AGU/Unity/Projects/SafeMiningVR`.
 2. Access to `Doc_SMVR/SafeMining_VR_v1.1.md` as requirements source of truth.
 3. Access to `.agent-docs/` for operational knowledge base.
 4. Cursor Rules `.cursor/rules/*.mdc` loaded (especially `15-code-style`, `50-hud-ui-brand`, `60-quest-performance`).

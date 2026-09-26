@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Project root
 
-`D:/Unity/Projects/SafeMiningVR`
+`C:/AGU/Unity/Projects/SafeMiningVR`
 
 At the start of any Unity work call `Unity_ManageEditor` → `GetProjectRoot`. Abort if the root differs from the path above.
 
@@ -22,7 +22,7 @@ When a design or domain question arises, consult this hierarchy before assuming.
 
 ## Unity MCP
 
-- Config: `.cursor/mcp.json` (project) and `~/.cursor/mcp.json` (user). Both must point to `%USERPROFILE%\.unity\relay\relay_win.exe` with `--mcp` and `--project-path D:\Unity\Projects\SafeMiningVR`.
+- Config: `.cursor/mcp.json` (project) and `~/.cursor/mcp.json` (user). Both must point to `%USERPROFILE%\.unity\relay\relay_win.exe` with `--mcp` and `--project-path C:\AGU\Unity\Projects\SafeMiningVR`.
 - Unity Editor must be open with this project and **Project Settings > AI > Unity MCP Server** bridge running before Cursor connects.
 - Author **HUD** and empty logic GOs with `Unity_ManageScene` / `Unity_ManageGameObject`. Never hand-edit `.unity` or `.prefab` YAML.
 - Do **not** author cabin/warehouse/conveyor/locker visuals (transforms, meshes, lights) to fix gameplay. Contract: `.agent-docs/loto-game-board.md`.

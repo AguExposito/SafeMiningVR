@@ -11,7 +11,7 @@
 | Date | 2026-08-29 |
 | Commit | `ede4e6250af7a525803e882a37cf374d356080ac` |
 | Unity | 6000.3.10f1 (`D:/Unity/Editors/6000.3.10f1/Editor/Unity.exe`) |
-| Project root | `D:/Unity/Projects/SafeMiningVR` |
+| Project root | `C:/AGU/Unity/Projects/SafeMiningVR` |
 | Auditor | Agent (read-only Fase 0) |
 | Active scene at close | `VR-LOTO-S3` |
 
@@ -52,7 +52,7 @@
 
 | Gate | Result |
 |------|--------|
-| `Unity_ManageEditor` GetProjectRoot | PASS — `D:/Unity/Projects/SafeMiningVR` |
+| `Unity_ManageEditor` GetProjectRoot | PASS — `C:/AGU/Unity/Projects/SafeMiningVR` |
 | `Unity_GetConsoleLogs` Errors (idle) | PASS — 0 errors |
 | `python tools/ci/run_all.py` | PASS — workspace, LOTO matrix (5 obj, 100%, threshold 60), C# sanity (59 files) |
 | Build settings order | PASS — Menu(0), S1(1), S2(2), S3(3); Placeholder not in build |

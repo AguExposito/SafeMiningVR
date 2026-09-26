@@ -7959,6 +7959,12 @@ GameObject:
   - component: {fileID: 1001836282}
   - component: {fileID: 1001836281}
   - component: {fileID: 1001836280}
+  - component: {fileID: 1001836291}
+  - component: {fileID: 1001836290}
+  - component: {fileID: 1001836289}
+  - component: {fileID: 1001836288}
+  - component: {fileID: 1001836287}
+  - component: {fileID: 1001836292}
   m_Layer: 0
   m_Name: ControlCenter
   m_TagString: Untagged
@@ -8135,6 +8141,135 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4586611b860013641abd8d14a9d704c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PersistantDataManager
+--- !u!114 &1001836287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001836275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7e3c9b14d2f4e6a8c0b1d3e5f708192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoPhaseScoreTracker
+  weightS1: 0.3
+  weightS2: 0.25
+  weightS3: 0.45
+  thresholdS1: 60
+  thresholdS2: 60
+  thresholdS3: 60
+  thresholdGlobal: 60
+  helmetGood: 0
+  glassesGood: 0
+  vestGood: 0
+  glovesGood: 0
+  bootsGood: 0
+  helmetBad: 0
+  glassesBad: 0
+  vestBad: 0
+  glovesBad: 0
+  bootsBad: 0
+  toolsFixed: 0
+  signFixed: 0
+  puddlesFixed: 0
+  extinguisherFixed: 0
+  s2Frozen: 0
+  stopPressed: 0
+  panelOpened: 0
+  powerCut: 0
+  panelClosed: 0
+  haspPlaced: 0
+  lockPlaced: 0
+  startedTooEarly: 0
+  zeroEnergyVerified: 0
+  s3Frozen: 0
+  s3ScoredSteps: 0
+  scoreS1: 10
+  scoreS2: 0
+  scoreS3: 0
+  scoreGlobal: 3
+  approvedS1: 1
+  approvedS2: 0
+  approvedS3: 0
+  approvedGlobal: 0
+  runFinalized: 0
+--- !u!114 &1001836288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001836275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16da83066bbed9e488d0069315acc396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+--- !u!114 &1001836289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001836275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d088cd337b986d14daba96fb3a790756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XRStandardMenu.LanguageManager
+  _currentLanguage: 0
+  languages:
+  - language: 0
+    filename: es
+  - language: 1
+    filename: en
+  languageDropdown: {fileID: 0}
+--- !u!114 &1001836290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001836275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c91db7e1d8c0d54baaa41b13871c435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadManager
+  globalVolumeName: Global Volume
+  restoreVolumeStateOnFinish: 1
+  transitionDuration: 1
+  loadingTitle: Cargando...
+  loadingDescription: Por favor espera...
+--- !u!114 &1001836291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001836275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4586611b860013641abd8d14a9d704c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PersistantDataManager
+--- !u!114 &1001836292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001836275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1d2e3f4a5b60718293a4b5c6d7e8f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LotoAmbientMusicController
+  menuClip: {fileID: 8300000, guid: b11390b13daf0b84085613f8fd780808, type: 3}
+  scenario1Clip: {fileID: 8300000, guid: bcdf5369613b5a946a3c75c04d80d283, type: 3}
+  scenario2Clip: {fileID: 8300000, guid: c8e4d8874fdd68e4082b92f5dd00fb7d, type: 3}
+  ambientVolumeScale: 1
 --- !u!1 &1003444193
 GameObject:
   m_ObjectHideFlags: 0
@@ -15029,6 +15164,8 @@ MonoBehaviour:
   UI_btn_click: {fileID: 8300000, guid: 2e898221c3bcce0419d1aa765b04ac68, type: 3}
   UI_btn_hover: {fileID: 8300000, guid: a0a41cecfef690c4eb67523a34007393, type: 3}
   Ambiental_menu_music0: {fileID: 8300000, guid: b11390b13daf0b84085613f8fd780808, type: 3}
+  Ambiental_s1_music0: {fileID: 8300000, guid: bcdf5369613b5a946a3c75c04d80d283, type: 3}
+  Ambiental_s2_music0: {fileID: 8300000, guid: c8e4d8874fdd68e4082b92f5dd00fb7d, type: 3}
 --- !u!1 &2023600028
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,22 @@ public class SimScore : ScriptableObject
 public class ScorePersistantData
 {
     public List<SceneScore> sceneScores = new List<SceneScore>();
+    public List<LotoAttemptRecord> lotoAttempts = new List<LotoAttemptRecord>();
+}
+
+[Serializable]
+public class LotoAttemptRecord
+{
+    public string date;
+    public string time;
+    public float scoreS1;
+    public float scoreS2;
+    public float scoreS3;
+    public float scoreGlobal;
+    public bool approvedS1;
+    public bool approvedS2;
+    public bool approvedS3;
+    public bool approved;
 }
 
 [Serializable]
