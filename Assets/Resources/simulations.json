@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "simulations": [
+    {
+      "id": "loto_simulation",
+      "name": "Inspeccion Pre-Uso de EPP y Bloqueo y Etiquetado (LOTO)",
+      "platform": "vr",
+      "implemented": true,
+      "approvalThreshold": 60,
+      "phases": [
+        { "id": "loto_phase_s1", "apiKey": "epp", "weight": 0.3, "threshold": 60 },
+        { "id": "loto_phase_s2", "apiKey": "limpieza", "weight": 0.25, "threshold": 60 },
+        { "id": "loto_phase_s3", "apiKey": "loto", "weight": 0.45, "threshold": 60 }
+      ],
+      "objectives": [
+        { "id": "loto_obj_epp_selection", "weightPercent": 20, "phaseId": "loto_phase_s1" },
+        { "id": "loto_obj_epp_defect", "weightPercent": 10, "phaseId": "loto_phase_s1" },
+        { "id": "loto_obj_hazard_report", "weightPercent": 25, "phaseId": "loto_phase_s2" },
+        { "id": "loto_obj_loto_sequence", "weightPercent": 35, "phaseId": "loto_phase_s3" },
+        { "id": "loto_obj_zero_energy", "weightPercent": 10, "phaseId": "loto_phase_s3" }
+      ]
+    },
+    {
+      "id": "sim_prueba",
+      "name": "Simulacion de prueba",
+      "platform": "vr",
+      "implemented": false,
+      "approvalThreshold": 60,
+      "phases": [],
+      "objectives": [
+        { "id": "prueba_obj_1", "weightPercent": 100, "phaseId": "" }
+      ]
+    }
+  ]
+}

@@ -14,6 +14,12 @@ public static class LotoObjectiveIds
 
     public const int DefaultApprovalThresholdPercent = 60;
 
+    private static int catalogApprovalThreshold = -1;
+    private static SimulationCatalogObjective[] catalogObjectives;
+
+    public static int EffectiveApprovalThresholdPercent =>
+        catalogApprovalThreshold >= 0 ? catalogApprovalThreshold : DefaultApprovalThresholdPercent;
+
     public static readonly string[] AllObjectiveIds =
     {
         EppSelection,
@@ -23,8 +29,33 @@ public static class LotoObjectiveIds
         ZeroEnergy
     };
 
+    public static void ApplyCatalog(SimulationCatalogEntry entry)
+    {
+        catalogApprovalThreshold = -1;
+        catalogObjectives = null;
+        if (entry == null || entry.id != SimulationSceneId)
+        {
+            return;
+        }
+
+        catalogApprovalThreshold = entry.approvalThreshold;
+        catalogObjectives = entry.objectives;
+    }
+
     public static int GetWeightPercent(string objectiveId)
     {
+        if (catalogObjectives != null)
+        {
+            for (int i = 0; i < catalogObjectives.Length; i++)
+            {
+                SimulationCatalogObjective objective = catalogObjectives[i];
+                if (objective != null && objective.id == objectiveId)
+                {
+                    return objective.weightPercent;
+                }
+            }
+        }
+
         switch (objectiveId)
         {
             case EppSelection: return 20;

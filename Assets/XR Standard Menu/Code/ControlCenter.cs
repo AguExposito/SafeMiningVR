@@ -168,6 +168,8 @@ public class ControlCenter : MonoBehaviour
     [Tooltip("Optional override. If empty, loads Resources/BrandConfig.")]
     [SerializeField] private BrandConfig brandConfig;
 
+    [SerializeField] private string simulationCatalogUrl = "https://raw.githubusercontent.com/AguExposito/SafeMiningVR/main/Assets/Resources/simulations.json";
+
     public bool test;
     void Awake()
     {
@@ -230,6 +232,7 @@ public class ControlCenter : MonoBehaviour
     void InitializeManagers()
     {
         persistantDataManager.Initialize();
+        SimulationCatalogLoader.Initialize(simulationCatalogUrl);
         syncQueueManager.Initialize();
         simulationSessionManager.Initialize();
         simulationOrchestratorManager.Initialize();
@@ -239,6 +242,11 @@ public class ControlCenter : MonoBehaviour
         if (ibManager != null)
         {
             ibManager.Initialize();
+        }
+        LotoVrLoginController vrLogin = GetComponent<LotoVrLoginController>();
+        if (vrLogin != null)
+        {
+            vrLogin.Initialize();
         }
         if (scoreManager != null)
         {
