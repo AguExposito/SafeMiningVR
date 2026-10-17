@@ -35,6 +35,12 @@ public class SimulationSessionManager : MonoBehaviour
             return;
         }
 
+        if (currentSession != null && currentSession.isActive && !SessionOwnerMatchesLogin())
+        {
+            currentSession.isActive = false;
+            SaveSessionContext();
+        }
+
         if (currentSession != null && currentSession.isActive)
         {
             return;
@@ -55,18 +61,29 @@ public class SimulationSessionManager : MonoBehaviour
         }
 
         string participantId = string.Empty;
-        if (ControlCenter.Instance != null && ControlCenter.Instance.persistantDataManager != null)
+        string loginUsername = string.Empty;
+        string programId = string.Empty;
+        string capacitacionId = LotoObjectiveIds.SimulationSceneId;
+        if (LotoVrLoginController.Instance != null && LotoVrLoginController.Instance.IsLoggedIn)
+        {
+            LotoVrLoginController.VrLoginSession vrSession = LotoVrLoginController.Instance.Session;
+            loginUsername = vrSession != null ? vrSession.username ?? string.Empty : string.Empty;
+        }
+        else if (LotoVrLoginController.Instance == null
+            && ControlCenter.Instance != null
+            && ControlCenter.Instance.persistantDataManager != null)
         {
             participantId = ControlCenter.Instance.persistantDataManager.userPersistantData.participantID;
         }
 
         currentSession = new SimulationSessionContext
         {
-            sessionId = Guid.NewGuid().ToString("N"),
+            sessionId = Guid.NewGuid().ToString("D"),
             intentoId = string.Empty,
-            programId = string.Empty,
-            capacitacionId = LotoObjectiveIds.SimulationSceneId,
+            programId = programId,
+            capacitacionId = capacitacionId,
             participantId = participantId,
+            loginUsername = loginUsername,
             startedAtUtc = DateTime.UtcNow.ToString("o"),
             simulationVersion = Application.version,
             isActive = true,
@@ -98,6 +115,17 @@ public class SimulationSessionManager : MonoBehaviour
         return currentSession.falsePositiveCount;
     }
 
+    public void InvalidateActiveSession()
+    {
+        if (currentSession == null || !currentSession.isActive)
+        {
+            return;
+        }
+
+        currentSession.isActive = false;
+        SaveSessionContext();
+    }
+
     public void CompleteCurrentSession(SimulationResultPayload result)
     {
         if (currentSession == null)
@@ -118,6 +146,28 @@ public class SimulationSessionManager : MonoBehaviour
     #endregion
 
     #region Persistence
+
+    private bool SessionOwnerMatchesLogin()
+    {
+        if (LotoVrLoginController.Instance == null || currentSession == null)
+        {
+            return true;
+        }
+
+        if (LotoVrLoginController.Instance.Mode == LotoVrLoginController.ConnectionMode.Offline)
+        {
+            return true;
+        }
+
+        if (!LotoVrLoginController.Instance.IsLoggedIn || LotoVrLoginController.Instance.Session == null)
+        {
+            return false;
+        }
+
+        string currentName = LotoVrLoginController.Instance.Session.username ?? string.Empty;
+        string bound = currentSession.loginUsername ?? string.Empty;
+        return !string.IsNullOrEmpty(currentName) && currentName == bound;
+    }
 
     private void LoadSessionContext()
     {
@@ -166,6 +216,14 @@ public class SimulationSessionManager : MonoBehaviour
     private void EnqueueSessionStart()
     {
         if (ControlCenter.Instance == null || ControlCenter.Instance.syncQueueManager == null || currentSession == null)
+        {
+            return;
+        }
+
+        LotoVrLoginController login = LotoVrLoginController.Instance;
+        if (login != null
+            && login.Mode == LotoVrLoginController.ConnectionMode.Online
+            && login.IsLoggedIn)
         {
             return;
         }

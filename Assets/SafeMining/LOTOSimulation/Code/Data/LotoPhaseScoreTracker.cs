@@ -72,6 +72,15 @@ public class LotoPhaseScoreTracker : MonoBehaviour
     [SerializeField] private bool approvedGlobal;
     [SerializeField] private bool runFinalized;
 
+    [Header("Phase Durations")]
+    [SerializeField] private int duracionEppSeconds;
+    [SerializeField] private int duracionLimpiezaSeconds;
+    [SerializeField] private int duracionLotoSeconds;
+    private float runTimingStart;
+    private float phase2TimingStart;
+    private float phase3TimingStart;
+    private bool runTimingActive;
+
     public float ScoreS1 => scoreS1;
     public float ScoreS2 => scoreS2;
     public float ScoreS3 => scoreS3;
@@ -94,6 +103,11 @@ public class LotoPhaseScoreTracker : MonoBehaviour
     public int SequenceStepCount => CountTrue(stopPressed, panelOpened, powerCut, panelClosed, haspPlaced, lockPlaced);
     public bool IsSequenceComplete => SequenceStepCount >= SequenceStepTotal;
     public bool RunFinalized => runFinalized;
+    public bool BlocksCatalogApply => runTimingStart > 0f;
+    public int DuracionEppSeconds => duracionEppSeconds;
+    public int DuracionLimpiezaSeconds => duracionLimpiezaSeconds;
+    public int DuracionLotoSeconds => duracionLotoSeconds;
+    public int DuracionTotalSeconds => duracionEppSeconds + duracionLimpiezaSeconds + duracionLotoSeconds;
 
     #region Lifecycle
 
@@ -113,6 +127,7 @@ public class LotoPhaseScoreTracker : MonoBehaviour
     {
         SceneManager.sceneLoaded += HandleSceneLoaded;
         TrySubscribeBoard();
+        SimulationCatalogLoader.ApplyToTracker(this);
     }
 
     private void OnDisable()
@@ -336,6 +351,71 @@ public class LotoPhaseScoreTracker : MonoBehaviour
 
     #region Run Lifecycle
 
+    public void BeginRunTiming()
+    {
+        runTimingStart = Time.time;
+        phase2TimingStart = 0f;
+        phase3TimingStart = 0f;
+        duracionEppSeconds = 0;
+        duracionLimpiezaSeconds = 0;
+        duracionLotoSeconds = 0;
+        runTimingActive = true;
+    }
+
+    public void StampPhase1Complete()
+    {
+        if (!runTimingActive)
+        {
+            return;
+        }
+
+        duracionEppSeconds = ElapsedSecondsSince(runTimingStart);
+        phase2TimingStart = Time.time;
+    }
+
+    public void StampPhase2Complete()
+    {
+        if (!runTimingActive)
+        {
+            return;
+        }
+
+        if (phase2TimingStart <= 0f)
+        {
+            phase2TimingStart = runTimingStart;
+        }
+
+        duracionLimpiezaSeconds = ElapsedSecondsSince(phase2TimingStart);
+        phase3TimingStart = Time.time;
+    }
+
+    public void StampPhase3Complete()
+    {
+        if (!runTimingActive)
+        {
+            return;
+        }
+
+        if (phase3TimingStart <= 0f)
+        {
+            if (phase2TimingStart > 0f)
+            {
+                phase3TimingStart = phase2TimingStart;
+            }
+            else if (runTimingStart > 0f)
+            {
+                phase3TimingStart = runTimingStart;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        duracionLotoSeconds = ElapsedSecondsSince(phase3TimingStart);
+        runTimingActive = false;
+    }
+
     public void ResetRun()
     {
         helmetGood = false;
@@ -364,7 +444,15 @@ public class LotoPhaseScoreTracker : MonoBehaviour
         s3Frozen = false;
         s3ScoredSteps = 0;
         runFinalized = false;
+        duracionEppSeconds = 0;
+        duracionLimpiezaSeconds = 0;
+        duracionLotoSeconds = 0;
+        runTimingStart = 0f;
+        phase2TimingStart = 0f;
+        phase3TimingStart = 0f;
+        runTimingActive = false;
         Recalculate();
+        SimulationCatalogLoader.ApplyDeferredScoring();
     }
 
     public void FinalizeRun()
@@ -403,6 +491,49 @@ public class LotoPhaseScoreTracker : MonoBehaviour
     }
 
     [ContextMenu("Debug/Recalculate")]
+    public void ApplyCatalogEntry(SimulationCatalogEntry entry)
+    {
+        if (entry == null)
+        {
+            return;
+        }
+
+        if (entry.phases != null)
+        {
+            for (int i = 0; i < entry.phases.Length; i++)
+            {
+                SimulationCatalogPhase phase = entry.phases[i];
+                if (phase == null || string.IsNullOrEmpty(phase.id))
+                {
+                    continue;
+                }
+
+                if (phase.id == LotoObjectiveIds.PhaseS1)
+                {
+                    weightS1 = phase.weight;
+                    thresholdS1 = phase.threshold;
+                }
+                else if (phase.id == LotoObjectiveIds.PhaseS2)
+                {
+                    weightS2 = phase.weight;
+                    thresholdS2 = phase.threshold;
+                }
+                else if (phase.id == LotoObjectiveIds.PhaseS3)
+                {
+                    weightS3 = phase.weight;
+                    thresholdS3 = phase.threshold;
+                }
+            }
+        }
+
+        if (entry.approvalThreshold > 0)
+        {
+            thresholdGlobal = entry.approvalThreshold;
+        }
+
+        Recalculate();
+    }
+
     public void Recalculate()
     {
         scoreS1 = MaxPhaseScore * (1f - Mathf.Min(DefectiveGrabbedCount, DefectiveEppTotal) / (float)DefectiveEppTotal);
@@ -528,6 +659,16 @@ public class LotoPhaseScoreTracker : MonoBehaviour
         }
 
         return count;
+    }
+
+    private static int ElapsedSecondsSince(float startTime)
+    {
+        if (startTime <= 0f)
+        {
+            return 0;
+        }
+
+        return Mathf.Max(0, Mathf.RoundToInt(Time.time - startTime));
     }
 
     #endregion

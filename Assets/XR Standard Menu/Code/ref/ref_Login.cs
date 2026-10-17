@@ -10,6 +10,9 @@ public class ref_Login : MonoBehaviour
     public TMP_Text login_status;
     public TMP_Text welcome_text;
     public GameObject welcome_panel;
+    public TMP_InputField usernameField;
+    public TMP_InputField passwordField;
+    public Button confirmLoginBtn;
     #region Pin Panel
     public TMP_Text displayPin;
     public Button Btn_0, Btn_1, Btn_2, Btn_3, Btn_4, Btn_5, Btn_6, Btn_7, Btn_8, Btn_9, Btn_clear, Btn_enter;

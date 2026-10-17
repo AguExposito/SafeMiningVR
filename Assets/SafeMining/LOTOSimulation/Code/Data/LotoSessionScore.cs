@@ -8,7 +8,7 @@ public static class LotoSessionScore
     public const string CompletionAbandoned = "Abandoned";
     public const int RequiredHazardCount = 4;
 
-    public static int ApprovalThresholdPercent => LotoObjectiveIds.DefaultApprovalThresholdPercent;
+    public static int ApprovalThresholdPercent => LotoObjectiveIds.EffectiveApprovalThresholdPercent;
 
     public static SimulationResultPayload Build(
         SceneScore sceneScore,
@@ -128,5 +128,36 @@ public static class LotoSessionScore
         }
 
         return weight;
+    }
+
+    public static VrResultSubmitBody BuildVrSubmitBody(LotoPhaseScoreTracker tracker, int fallbackTotalSeconds)
+    {
+        if (tracker == null)
+        {
+            return new VrResultSubmitBody
+            {
+                duracion_total = Mathf.Max(0, fallbackTotalSeconds)
+            };
+        }
+
+        int duracionEpp = tracker.DuracionEppSeconds;
+        int duracionLimpieza = tracker.DuracionLimpiezaSeconds;
+        int duracionLoto = tracker.DuracionLotoSeconds;
+        int duracionTotal = duracionEpp + duracionLimpieza + duracionLoto;
+        if (duracionTotal <= 0)
+        {
+            duracionTotal = Mathf.Max(0, fallbackTotalSeconds);
+        }
+
+        return new VrResultSubmitBody
+        {
+            epp = tracker.ScoreS1 * 10f,
+            limpieza = tracker.ScoreS2 * 10f,
+            loto = tracker.ScoreS3 * 10f,
+            duracion_epp = duracionEpp,
+            duracion_limpieza = duracionLimpieza,
+            duracion_loto = duracionLoto,
+            duracion_total = duracionTotal
+        };
     }
 }

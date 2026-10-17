@@ -13,10 +13,12 @@ public class SimulationObjectiveResult
 public class SimulationResultPayload
 {
     public string sessionId;
+    public string loginUsername;
     public SimulationObjectiveResult[] objectives;
     public int scoreTotal;
     public bool approved;
     public int durationSeconds;
     public string finishedAtUtc;
     public string completionStatus;
+    public string vrResultJson;
 }

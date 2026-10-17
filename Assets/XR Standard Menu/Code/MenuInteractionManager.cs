@@ -66,6 +66,7 @@ public class MenuInteractionManager : MonoBehaviour
                 }
             });
         }
+        UpdateLogoutUserDataText();
         #endregion
 
         #region SceneViewer Interactions
@@ -112,25 +113,45 @@ public class MenuInteractionManager : MonoBehaviour
 
     }
 
-    private void UpdateLogoutUserDataText()
+    public void UpdateLogoutUserDataText()
     {
         if (ref_logout == null || ref_logout.text_userdata == null)
         {
             return;
         }
+
+        string displayName = ResolveLoggedInDisplayName();
+        ref_logout.text_userdata.text = string.IsNullOrEmpty(displayName) ? "-" : displayName;
+    }
+
+    private static string ResolveLoggedInDisplayName()
+    {
+        if (LotoVrLoginController.Instance != null
+            && LotoVrLoginController.Instance.IsLoggedIn
+            && LotoVrLoginController.Instance.Session != null
+            && !string.IsNullOrEmpty(LotoVrLoginController.Instance.Session.username))
+        {
+            return LotoVrLoginController.Instance.Session.username;
+        }
+
         if (ControlCenter.Instance == null || ControlCenter.Instance.persistantDataManager == null)
         {
-            ref_logout.text_userdata.text = "- / PIN -";
-            return;
+            return string.Empty;
         }
+
         UserPersistantData userData = ControlCenter.Instance.persistantDataManager.userPersistantData;
         string fullName = $"{userData.firstName} {userData.lastName}".Trim();
-        if (string.IsNullOrEmpty(fullName))
+        if (!string.IsNullOrEmpty(fullName))
         {
-            fullName = "-";
+            return fullName;
         }
-        string pinValue = string.IsNullOrEmpty(userData.userPin) ? "-" : userData.userPin;
-        ref_logout.text_userdata.text = $"{fullName} / PIN {pinValue}";
+
+        if (!string.IsNullOrEmpty(userData.userPin))
+        {
+            return userData.userPin;
+        }
+
+        return string.Empty;
     }
 
     #region Controls Help

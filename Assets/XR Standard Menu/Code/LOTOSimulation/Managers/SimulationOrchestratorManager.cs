@@ -42,6 +42,11 @@ public class SimulationOrchestratorManager : MonoBehaviour
         sessionScoreInitialized = false;
         scenario1Completed = false;
         scenario2Completed = false;
+        if (ControlCenter.Instance != null && ControlCenter.Instance.syncQueueManager != null)
+        {
+            ControlCenter.Instance.syncQueueManager.OnSyncFailed -= HandleSyncFailed;
+            ControlCenter.Instance.syncQueueManager.OnSyncFailed += HandleSyncFailed;
+        }
     }
 
     #endregion
@@ -96,6 +101,12 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         activeStartTime = Time.time;
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            tracker.BeginRunTiming();
+        }
+
         SetState(LotoSimulationState.Active);
         EnterScenario(currentScenarioIndex);
         BeginScenarioController(currentScenarioIndex);
@@ -187,6 +198,12 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         scenario2Completed = true;
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            tracker.StampPhase2Complete();
+        }
+
         EnterScenario3();
     }
 
@@ -204,6 +221,12 @@ public class SimulationOrchestratorManager : MonoBehaviour
         }
 
         scenario1Completed = true;
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            tracker.StampPhase1Complete();
+        }
+
         EnterScenario2();
     }
 
@@ -478,10 +501,41 @@ public class SimulationOrchestratorManager : MonoBehaviour
             return;
         }
 
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        if (tracker != null)
+        {
+            tracker.StampPhase3Complete();
+        }
+
         ControlCenter.Instance.scoreManager.EndScene(
             LotoSimulationConstants.LotoSimScoreIndex,
             completionStatus);
         sessionScoreInitialized = false;
+    }
+
+    #endregion
+
+    #region Sync Feedback
+
+    private void HandleSyncFailed(string errorKey)
+    {
+        string locKey = ResolveSyncFailureLocKey(errorKey);
+        NotifySubtitle(GetTranslation(locKey), true);
+    }
+
+    private static string ResolveSyncFailureLocKey(string errorKey)
+    {
+        if (string.IsNullOrEmpty(errorKey))
+        {
+            return "loto_vr_sync_server_unavailable";
+        }
+
+        if (errorKey == SafeMiningBackendAdapter.SyncErrorAuth)
+        {
+            return "loto_vr_sync_auth_failed";
+        }
+
+        return "loto_vr_sync_server_unavailable";
     }
 
     #endregion

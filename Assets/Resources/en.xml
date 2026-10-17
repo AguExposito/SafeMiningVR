@@ -23,6 +23,16 @@
 	<string name="expired">EXPIRED</string>
 	<string name="verificar">VERIFYING...</string>
 	<string name="first_welcome">Welcome</string>
+	<string name="loto_vr_login_title">Sign in</string>
+	<string name="loto_vr_login_hint">Enter your username and password.</string>
+	<string name="loto_vr_login_placeholder">Username</string>
+	<string name="loto_vr_login_password_placeholder">Password</string>
+	<string name="loto_vr_login_confirm">CONFIRM</string>
+	<string name="loto_vr_login_session_invalid">The credentials entered are incorrect.</string>
+	<string name="loto_vr_login_network">Connection error. Check your internet connection and try again.</string>
+	<string name="loto_vr_login_verifying">Verifying...</string>
+	<string name="loto_vr_sync_server_unavailable">Could not send your result to the server. It was saved locally; try again later.</string>
+	<string name="loto_vr_sync_auth_failed">Session expired. Please sign in again.</string>
 	<string name="verifyingLicense">Verifying license</string>
 	<string name="licenseExpiredMessage">We are sorry, your license is no longer valid</string>
 	<!-- Scene Selector -->

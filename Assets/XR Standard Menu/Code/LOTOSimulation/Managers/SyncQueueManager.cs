@@ -14,6 +14,7 @@ public class SyncQueueManager : MonoBehaviour
     private ISimulationBackendAdapter activeAdapter;
     private PendingSyncQueueData queueData;
     private string queueFilePath;
+    private bool flushInProgress;
 
     #region Initialization
 
@@ -76,6 +77,10 @@ public class SyncQueueManager : MonoBehaviour
             endDate,
             completionStatus);
         payload.sessionId = ResolveSessionId();
+        payload.loginUsername = ResolveLoginUsername();
+        LotoPhaseScoreTracker tracker = LotoPhaseScoreTracker.Instance;
+        VrResultSubmitBody vrBody = LotoSessionScore.BuildVrSubmitBody(tracker, payload.durationSeconds);
+        payload.vrResultJson = JsonUtility.ToJson(vrBody);
         EnqueueComplete(payload);
         return payload;
     }
@@ -106,45 +111,77 @@ public class SyncQueueManager : MonoBehaviour
         _ = TryFlushQueueAsync();
     }
 
+    public void RefreshActiveAdapter()
+    {
+        activeAdapter = ResolveActiveAdapter();
+    }
+
     public async Task TryFlushQueueAsync()
     {
-        if (activeAdapter == null || !activeAdapter.IsAvailable)
+        if (flushInProgress)
         {
             return;
         }
-        PurgeExpiredEntries();
-        if (queueData.entries == null || queueData.entries.Count == 0)
+
+        flushInProgress = true;
+        try
         {
-            return;
-        }
-        List<PendingSyncEntry> pendingEntries = new List<PendingSyncEntry>(queueData.entries);
-        List<PendingSyncEntry> completedEntries = new List<PendingSyncEntry>();
-        for (int i = 0; i < pendingEntries.Count; i++)
-        {
-            PendingSyncEntry entry = pendingEntries[i];
-            bool success = await ProcessEntryAsync(entry);
-            if (success)
+            activeAdapter = ResolveActiveAdapter();
+            if (activeAdapter == null || !activeAdapter.IsAvailable)
             {
-                completedEntries.Add(entry);
+                return;
             }
-            else
+
+            PurgeExpiredEntries();
+            if (queueData.entries == null || queueData.entries.Count == 0)
             {
-                entry.retryCount++;
-                entry.lastError = "Sync attempt failed";
+                return;
+            }
+
+            List<PendingSyncEntry> pendingEntries = new List<PendingSyncEntry>(queueData.entries);
+            List<PendingSyncEntry> completedEntries = new List<PendingSyncEntry>();
+            string lastFailureKey = null;
+            int attemptedCount = 0;
+            for (int i = 0; i < pendingEntries.Count; i++)
+            {
+                PendingSyncEntry entry = pendingEntries[i];
+                if (!EntryMatchesCurrentSyncActor(entry))
+                {
+                    continue;
+                }
+
+                attemptedCount++;
+                bool success = await ProcessEntryAsync(entry);
+                if (success)
+                {
+                    completedEntries.Add(entry);
+                }
+                else
+                {
+                    entry.retryCount++;
+                    entry.lastError = ResolveEntryFailureKey(entry);
+                    lastFailureKey = entry.lastError;
+                }
+            }
+
+            for (int i = 0; i < completedEntries.Count; i++)
+            {
+                queueData.entries.Remove(completedEntries[i]);
+            }
+
+            SaveQueue();
+            if (completedEntries.Count > 0)
+            {
+                OnSyncCompleted?.Invoke();
+            }
+            else if (attemptedCount > 0 && !string.IsNullOrEmpty(lastFailureKey))
+            {
+                OnSyncFailed?.Invoke(lastFailureKey);
             }
         }
-        for (int i = 0; i < completedEntries.Count; i++)
+        finally
         {
-            queueData.entries.Remove(completedEntries[i]);
-        }
-        SaveQueue();
-        if (completedEntries.Count > 0)
-        {
-            OnSyncCompleted?.Invoke();
-        }
-        else if (pendingEntries.Count > 0)
-        {
-            OnSyncFailed?.Invoke("No entries synced");
+            flushInProgress = false;
         }
     }
 
@@ -220,11 +257,34 @@ public class SyncQueueManager : MonoBehaviour
 
     private ISimulationBackendAdapter ResolveActiveAdapter()
     {
+        LotoVrLoginController login = LotoVrLoginController.Instance;
+        if (login != null
+            && login.Mode == LotoVrLoginController.ConnectionMode.Online
+            && login.IsLoggedIn)
+        {
+            SafeMiningBackendAdapter vrAdapter = new SafeMiningBackendAdapter();
+            if (vrAdapter.IsAvailable)
+            {
+                return vrAdapter;
+            }
+        }
+
         if (ControlCenter.Instance != null && ControlCenter.Instance.ibManager != null && ControlCenter.Instance.ibManager.ShouldSendResults())
         {
             return new SafeMiningBackendAdapter();
         }
+
         return new OfflineBackendAdapter();
+    }
+
+    private static string ResolveEntryFailureKey(PendingSyncEntry entry)
+    {
+        if (entry != null && entry.entryType == PendingSyncEntry.EntryTypeComplete && !string.IsNullOrEmpty(SafeMiningBackendAdapter.LastCompleteErrorKey))
+        {
+            return SafeMiningBackendAdapter.LastCompleteErrorKey;
+        }
+
+        return SafeMiningBackendAdapter.SyncErrorServer;
     }
 
     private async Task<bool> ProcessEntryAsync(PendingSyncEntry entry)
@@ -253,6 +313,48 @@ public class SyncQueueManager : MonoBehaviour
 
     #region Payload Mapping
 
+    private static bool EntryMatchesCurrentSyncActor(PendingSyncEntry entry)
+    {
+        LotoVrLoginController login = LotoVrLoginController.Instance;
+        if (login == null
+            || login.Mode != LotoVrLoginController.ConnectionMode.Online
+            || !login.IsLoggedIn)
+        {
+            return true;
+        }
+
+        if (entry == null || entry.entryType != PendingSyncEntry.EntryTypeComplete)
+        {
+            return true;
+        }
+
+        if (string.IsNullOrEmpty(entry.payloadJson))
+        {
+            return false;
+        }
+
+        SimulationResultPayload payload = JsonUtility.FromJson<SimulationResultPayload>(entry.payloadJson);
+        if (payload == null)
+        {
+            return false;
+        }
+
+        string bound = payload.loginUsername ?? string.Empty;
+        string current = login.Session != null ? login.Session.username ?? string.Empty : string.Empty;
+        return !string.IsNullOrEmpty(bound) && !string.IsNullOrEmpty(current) && bound == current;
+    }
+
+    private static string ResolveLoginUsername()
+    {
+        if (ControlCenter.Instance == null || ControlCenter.Instance.simulationSessionManager == null)
+        {
+            return string.Empty;
+        }
+
+        SimulationSessionContext session = ControlCenter.Instance.simulationSessionManager.CurrentSession;
+        return session != null ? session.loginUsername ?? string.Empty : string.Empty;
+    }
+
     private static string ResolveSessionId()
     {
         if (ControlCenter.Instance != null && ControlCenter.Instance.simulationSessionManager != null)
@@ -263,7 +365,7 @@ public class SyncQueueManager : MonoBehaviour
                 return session.sessionId;
             }
         }
-        return Guid.NewGuid().ToString("N");
+        return Guid.NewGuid().ToString("D");
     }
 
     #endregion

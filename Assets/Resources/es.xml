@@ -23,6 +23,16 @@
 	<string name="expired">EXPIRADO</string>
 	<string name="verificar">VERIFICANDO...</string>
 	<string name="first_welcome">Bienvenido</string>
+	<string name="loto_vr_login_title">Iniciar sesión</string>
+	<string name="loto_vr_login_hint">Ingresa tu usuario y contraseña.</string>
+	<string name="loto_vr_login_placeholder">Usuario</string>
+	<string name="loto_vr_login_password_placeholder">Contraseña</string>
+	<string name="loto_vr_login_confirm">CONFIRMAR</string>
+	<string name="loto_vr_login_session_invalid">Las credenciales ingresadas son incorrectas.</string>
+	<string name="loto_vr_login_network">Error de conexión. Verifique su conexión a internet e intente nuevamente.</string>
+	<string name="loto_vr_login_verifying">Verificando...</string>
+	<string name="loto_vr_sync_server_unavailable">No se pudo enviar el resultado al servidor. Se guardó localmente; reintente más tarde.</string>
+	<string name="loto_vr_sync_auth_failed">Sesión expirada. Inicie sesión de nuevo.</string>
 	<string name="verifyingLicense">Comprobando licencia</string>
 	<string name="licenseExpiredMessage">Lo sentimos, su licencia ya no se encuentra vigente</string>
 	<!-- Scene Selector -->

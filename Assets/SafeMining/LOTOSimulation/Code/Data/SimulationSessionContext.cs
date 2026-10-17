@@ -8,6 +8,7 @@ public class SimulationSessionContext
     public string programId;
     public string capacitacionId;
     public string participantId;
+    public string loginUsername;
     public string startedAtUtc;
     public string simulationVersion;
     public bool isActive;

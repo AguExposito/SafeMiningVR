@@ -151,6 +151,13 @@ public class IBManager : MonoBehaviour
 
     public void LogoutFromMenu()
     {
+        LotoVrLoginController vrLogin = GetComponent<LotoVrLoginController>();
+        if (vrLogin != null)
+        {
+            vrLogin.Logout();
+            return;
+        }
+
         if (ControlCenter.Instance == null || ControlCenter.Instance.persistantDataManager == null)
         {
             LogError("LogoutFromMenu", "No se pudo ejecutar logout: PersistantDataManager no disponible.");
@@ -326,6 +333,11 @@ public class IBManager : MonoBehaviour
 
     private void SetupLoginFlowForCurrentScene()
     {
+        if (GetComponent<LotoVrLoginController>() != null)
+        {
+            return;
+        }
+
         if (refLogin == null)
         {
             return;
@@ -1419,13 +1431,25 @@ public class IBManager : MonoBehaviour
         }
         if (refLogout != null && refLogout.text_userdata != null)
         {
-            string fullName = $"{userData.firstName} {userData.lastName}".Trim();
-            if (string.IsNullOrEmpty(fullName))
+            string displayName = string.Empty;
+            if (LotoVrLoginController.Instance != null
+                && LotoVrLoginController.Instance.IsLoggedIn
+                && LotoVrLoginController.Instance.Session != null)
             {
-                fullName = "-";
+                displayName = LotoVrLoginController.Instance.Session.username ?? string.Empty;
             }
-            string pinValue = string.IsNullOrEmpty(userData.userPin) ? "-" : userData.userPin;
-            refLogout.text_userdata.text = $"{fullName} / PIN {pinValue}";
+
+            if (string.IsNullOrEmpty(displayName))
+            {
+                displayName = $"{userData.firstName} {userData.lastName}".Trim();
+            }
+
+            if (string.IsNullOrEmpty(displayName))
+            {
+                displayName = "-";
+            }
+
+            refLogout.text_userdata.text = displayName;
         }
     }
 
