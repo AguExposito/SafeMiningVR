@@ -10,7 +10,7 @@
       "phases": [
         { "id": "loto_phase_s1", "apiKey": "epp", "weight": 0.3, "threshold": 60 },
         { "id": "loto_phase_s2", "apiKey": "limpieza", "weight": 0.25, "threshold": 60 },
-        { "id": "loto_phase_s3", "apiKey": "loto", "weight": 0.45, "threshold": 60 }
+        { "id": "loto_phase_s3", "apiKey": "lotoo", "weight": 0.45, "threshold": 60 }
       ],
       "objectives": [
         { "id": "loto_obj_epp_selection", "weightPercent": 20, "phaseId": "loto_phase_s1" },
