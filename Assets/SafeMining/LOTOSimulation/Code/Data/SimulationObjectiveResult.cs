@@ -21,4 +21,5 @@ public class SimulationResultPayload
     public string finishedAtUtc;
     public string completionStatus;
     public string vrResultJson;
+    public string catalogSimulationId;
 }

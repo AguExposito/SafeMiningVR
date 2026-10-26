@@ -54,7 +54,10 @@ public class SafeMiningBackendAdapter : ISimulationBackendAdapter
             return false;
         }
 
-        if (!login.TryBuildResultEndpoint(LotoObjectiveIds.SimulationSceneId, out string endpoint))
+        string simulationId = string.IsNullOrEmpty(result.catalogSimulationId)
+            ? LotoObjectiveIds.SimulationSceneId
+            : result.catalogSimulationId;
+        if (!login.TryBuildResultEndpoint(simulationId, out string endpoint))
         {
             LastCompleteErrorKey = SyncErrorNetwork;
             return false;

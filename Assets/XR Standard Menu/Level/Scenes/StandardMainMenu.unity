@@ -11971,7 +11971,7 @@ PrefabInstance:
     - target: {fileID: 1365934533977485621, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: cfceda48ecab7d34da77e96da74177b2, type: 3}
+      objectReference: {fileID: 21300000, guid: 4cfccffa489b65542a96c5ba7bd94e96, type: 3}
     - target: {fileID: 3433749450350931208, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_text
       value: "Practica el manejo de sustancias peligrosas, derrames qu\xEDmicos,
@@ -14312,7 +14312,7 @@ PrefabInstance:
     - target: {fileID: 1365934533977485621, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 96a4d579fa25c4c46b70d2447403842e, type: 3}
+      objectReference: {fileID: 21300000, guid: 6c574838bf8966e48b66c269c75be42a, type: 3}
     - target: {fileID: 3433749450350931208, guid: e31712660fccda44db264507f9809a18, type: 3}
       propertyPath: m_text
       value: "En este simulador vas a poder identificar y se\xF1alar peligros el\xE9ctricos

@@ -75,8 +75,20 @@ public class MenuInteractionManager : MonoBehaviour
             ref_mainMenu.gameObject.SetActive(true);
             ref_sceneViewer.gameObject.SetActive(false);   
         });
+        if (ref_sceneViewer.GetComponent<SimulationCarouselPresenter>() == null)
+        {
+            ref_sceneViewer.gameObject.AddComponent<SimulationCarouselPresenter>();
+        }
+        ref_sceneViewer.GetComponent<SimulationCarouselPresenter>().Configure(ref_sceneViewer);
         ref_sceneViewer.go_btn_select.GetComponent<Button>().onClick.AddListener(() =>
         {
+            SimulationCarouselPresenter presenter = ref_sceneViewer.GetComponent<SimulationCarouselPresenter>();
+            if (presenter != null && !presenter.IsCurrentPlayable())
+            {
+                presenter.SimulateCurrentScore();
+                return;
+            }
+
             if (ControlCenter.Instance != null && ControlCenter.Instance.ibManager != null)
             {
                 ControlCenter.Instance.ibManager.HandleSceneViewerSelect(ref_sceneViewer != null ? ref_sceneViewer.uIContentCarousel : null);

@@ -18,6 +18,7 @@ public static class SimulationCatalogLoader
 
     public static SimulationCatalogFile Current { get; private set; }
     public static string LastSource { get; private set; }
+    public static event Action CatalogChanged;
 
     #region Public API
 
@@ -193,11 +194,14 @@ public static class SimulationCatalogLoader
         if (IsRunBlockingCatalog())
         {
             scoringDeferred = true;
-            return true;
+        }
+        else
+        {
+            scoringDeferred = false;
+            ApplyScoring();
         }
 
-        scoringDeferred = false;
-        ApplyScoring();
+        CatalogChanged?.Invoke();
         return true;
     }
 

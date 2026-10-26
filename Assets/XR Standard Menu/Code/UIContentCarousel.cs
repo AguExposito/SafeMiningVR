@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -93,6 +94,8 @@ public class UIContentCarousel : MonoBehaviour
     [Tooltip("Specifies the index of the currently displayed page.")]
     public int currentIndex = 0;
 
+    public event Action<int> IndexChanged;
+
     [Tooltip("Manages the layout of page elements.")]
     public GridLayoutGroup gridLayoutGroup;
 
@@ -179,11 +182,19 @@ public class UIContentCarousel : MonoBehaviour
     private void CalculateTotalPages()
     {
         int itemCount = gridLayoutGroup.transform.childCount;
-        totalPages = Mathf.CeilToInt((float)itemCount / gridLayoutGroup.constraintCount);
+        int perPage = Mathf.Max(1, gridLayoutGroup.constraintCount);
+        totalPages = Mathf.CeilToInt((float)itemCount / perPage);
     }
 
     private void SetSnapTarget(int page)
     {
+        if (totalPages <= 0)
+        {
+            currentIndex = 0;
+            IndexChanged?.Invoke(currentIndex);
+            return;
+        }
+
         if (infiniteLooping)
         {
             int totalVisiblePages = totalPages * 2; // Duplicate the pages to allow for looping
@@ -196,6 +207,29 @@ public class UIContentCarousel : MonoBehaviour
         }
 
         currentIndex = page;
+        IndexChanged?.Invoke(currentIndex);
+    }
+
+    public void RefreshPageCount()
+    {
+        if (gridLayoutGroup == null)
+        {
+            gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>(true);
+        }
+
+        if (gridLayoutGroup == null)
+        {
+            return;
+        }
+
+        if (contentRectTransform == null)
+        {
+            contentRectTransform = gridLayoutGroup.transform as RectTransform;
+        }
+
+        CalculateTotalPages();
+        int lastPage = Mathf.Max(0, totalPages - 1);
+        SetSnapTarget(Mathf.Clamp(currentIndex, 0, lastPage));
     }
 
     public void OnBeginDrag(PointerEventData eventData)

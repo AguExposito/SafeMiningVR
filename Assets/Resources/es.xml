@@ -33,6 +33,8 @@
 	<string name="loto_vr_login_verifying">Verificando...</string>
 	<string name="loto_vr_sync_server_unavailable">No se pudo enviar el resultado al servidor. Se guardó localmente; reintente más tarde.</string>
 	<string name="loto_vr_sync_auth_failed">Sesión expirada. Inicie sesión de nuevo.</string>
+	<string name="loto_vr_sim_play">JUGAR</string>
+	<string name="loto_vr_sim_score">SIMULAR SCORE</string>
 	<string name="verifyingLicense">Comprobando licencia</string>
 	<string name="licenseExpiredMessage">Lo sentimos, su licencia ya no se encuentra vigente</string>
 	<!-- Scene Selector -->
