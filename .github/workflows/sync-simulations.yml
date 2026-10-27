@@ -1,0 +1,86 @@
+name: Sync VR Simulations to SafeMining Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Assets/Resources/simulations.json'
+  workflow_dispatch:
+
+jobs:
+  sync-simulations:
+    name: Sincronizar Catálogo VR al Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Validar sintaxis de simulations.json
+        run: |
+          if [ ! -f "Assets/Resources/simulations.json" ]; then
+            echo "::error::No se encontró el archivo Assets/Resources/simulations.json"
+            exit 1
+          fi
+          jq empty Assets/Resources/simulations.json
+          echo "JSON sintácticamente válido."
+
+      - name: 3. Iniciar sesión como SysAdmin en el Backend
+        id: auth
+        env:
+          BACKEND_URL: ${{ secrets.SAFEMINING_BACKEND_URL }}
+          ADMIN_USER: ${{ secrets.SAFEMINING_ADMIN_USERNAME }}
+          ADMIN_PASS: ${{ secrets.SAFEMINING_ADMIN_PASSWORD }}
+        run: |
+          if [ -z "$BACKEND_URL" ] || [ -z "$ADMIN_USER" ] || [ -z "$ADMIN_PASS" ]; then
+            echo "::error::Faltan secretos requeridos: SAFEMINING_BACKEND_URL, SAFEMINING_ADMIN_USERNAME o SAFEMINING_ADMIN_PASSWORD"
+            exit 1
+          fi
+          echo "Autenticando contra ${BACKEND_URL}/api/v1/auth/login..."
+          LOGIN_RESP=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST "${BACKEND_URL}/api/v1/auth/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\":\"${ADMIN_USER}\",\"password\":\"${ADMIN_PASS}\"}")
+          
+          HTTP_CODE=$(echo "$LOGIN_RESP" | grep "HTTP_CODE:" | cut -d':' -f2)
+          BODY=$(echo "$LOGIN_RESP" | grep -v "HTTP_CODE:")
+          
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::error::Error al autenticar como SysAdmin (HTTP $HTTP_CODE): $BODY"
+            exit 1
+          fi
+
+          TOKEN=$(echo "$BODY" | jq -r .token)
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "::error::No se recibió token JWT válido."
+            exit 1
+          fi
+
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+          echo "Autenticación exitosa como SysAdmin."
+
+      - name: 4. Enviar catálogo de simulaciones al Backend
+        env:
+          BACKEND_URL: ${{ secrets.SAFEMINING_BACKEND_URL }}
+          TOKEN: ${{ steps.auth.outputs.token }}
+        run: |
+          echo "Enviando Assets/Resources/simulations.json a ${BACKEND_URL}/api/v1/simulaciones/webhook..."
+          
+          RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST "${BACKEND_URL}/api/v1/simulaciones/webhook" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d @Assets/Resources/simulations.json)
+
+          HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d':' -f2)
+          BODY=$(echo "$RESPONSE" | grep -v "HTTP_CODE:")
+
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::error::Error en la sincronización del catálogo (HTTP $HTTP_CODE): $BODY"
+            exit 1
+          fi
+
+          echo "=============================================="
+          echo "Resultado de la Sincronización en SafeMining:"
+          echo "$BODY" | jq .
+          echo "=============================================="
