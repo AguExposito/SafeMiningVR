@@ -406,7 +406,6 @@ public class LotoVrLoginController : MonoBehaviour
             loginView.pin_panel.SetActive(false);
         }
 
-        ApplyOnlineLoginLayout();
         EnsurePlayerFloorTracking();
         EnsureHandUiRaycast();
         EnsureLoginUiRaycasters();
@@ -468,35 +467,8 @@ public class LotoVrLoginController : MonoBehaviour
             loginView.passwordField.interactable = true;
         }
 
-        ApplyOnlineLoginLayout();
         EnsurePlayerFloorTracking();
         EnsureHandUiRaycast();
-    }
-
-    private void ApplyOnlineLoginLayout()
-    {
-        if (loginView == null)
-        {
-            return;
-        }
-
-        PlaceLoginControl(loginView.usernameField != null ? loginView.usernameField.GetComponent<RectTransform>() : null, 0.78f, Vector2.zero, new Vector2(640f, 80f));
-        PlaceLoginControl(loginView.passwordField != null ? loginView.passwordField.GetComponent<RectTransform>() : null, 0.78f, new Vector2(0f, -95f), new Vector2(640f, 80f));
-        PlaceLoginControl(loginView.confirmLoginBtn != null ? loginView.confirmLoginBtn.GetComponent<RectTransform>() : null, 0.52f, Vector2.zero, new Vector2(320f, 80f));
-    }
-
-    private static void PlaceLoginControl(RectTransform rect, float anchorY, Vector2 anchoredPos, Vector2 size)
-    {
-        if (rect == null)
-        {
-            return;
-        }
-
-        rect.anchorMin = new Vector2(0.5f, anchorY);
-        rect.anchorMax = new Vector2(0.5f, anchorY);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = anchoredPos;
-        rect.sizeDelta = size;
     }
 
     private void EnsureHandUiRaycast()
